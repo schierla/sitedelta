@@ -4,10 +4,10 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>sitedelta@schierla.de</em:id>
     <em:name>SiteDelta</em:name>
-    <em:version>0.1</em:version>
+    <em:version>0.2</em:version>
     <em:creator>Andreas Schierl</em:creator>
     <em:description>Erweiterung zum Hervorheben von Webseiten-Änderungen</em:description>
-    <em:homepageURL>http://sitedelta.schierla.de/</em:homepageURL>
+    <em:homepageURL>http://sitedelta.schierla.de/</em:homepageURL>f
     <em:iconURL>chrome://sitedelta/content/sitedeltaGross.gif</em:iconURL>
     <em:targetApplication>
       <Description>

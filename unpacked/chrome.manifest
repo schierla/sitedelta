@@ -1,3 +1,4 @@
 content	sitedelta	jar:chrome/sitedelta.jar!/content/
-locale	sitedelta	en	jar:chrome/sitedelta.jar!/locale/en-US/
+locale	sitedelta	en-US	jar:chrome/sitedelta.jar!/locale/en-US/
+skin	sitedelta	classic/1.0	jar:chrome/sitedelta.jar!/skin/
 overlay	chrome://browser/content/browser.xul	chrome://sitedelta/content/firefoxOverlay.xul

@@ -2,7 +2,7 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://sitedelta/skin/sitedelta.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
-<window id="sitedeltaPreset" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&sitedelta.preset.title;" onload="sitedeltaPreset.onLoad()">
+<dialog id="sitedeltaPreset" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" persist="screenX screenY width height" title="&sitedelta.preset.title;" onload="sitedeltaPreset.onLoad()" buttons="accept" buttonlabelaccept="&sitedelta.manager.close;">
 <script src="chrome://sitedelta/content/sitedelta.js"/>
 <script src="chrome://sitedelta/content/sitedeltaPreset.js" />
 <vbox flex="1">
@@ -30,6 +30,6 @@
 <hbox flex="1"><label label=" " /><textbox id="exclude" multiline="true" readonly="true" class="plain" wrap="off" flex="1" /></hbox>
 </groupbox>
 </vbox>
-</hbox><hbox flex="0"><spacer flex="1"/><button label="&sitedelta.manager.close;" oncommand="window.close();" dlgType="accept" /></hbox>
+</hbox>
 </vbox>
-</window>
+</dialog>

@@ -1,5 +1,7 @@
 <!ENTITY sitedelta.highlight "Änderungen hervorheben">
 <!ENTITY sitedelta.removehighlight "Hervorhebungen entfernen">
+<!ENTITY sitedelta.backups "Archivierte Versionen">
+<!ENTITY sitedelta.createbackup "Aktuelle Seite archivieren">
 <!ENTITY sitedelta.regions "Bereiche">
 <!ENTITY sitedelta.loadpreset "Bereiche laden">
 <!ENTITY sitedelta.manager.savepreset "Als Voreinstellung speichern...">
@@ -8,8 +10,10 @@
 <!ENTITY sitedelta.ignoreregion "+ Bereich ignorieren">
 <!ENTITY sitedelta.manager "Seiten verwalten...">
 <!ENTITY sitedelta.checkall "Alle Seiten prüfen...">
+<!ENTITY sitedelta.openwatches "Alle in Tabs öffnen...">
 <!ENTITY sitedelta.manager.title "SiteDelta - Seiten verwalten">
-<!ENTITY sitedelta.manager.updateall "Auf Änderungen prüfen">
+<!ENTITY sitedelta.manager.update "Auf Änderungen prüfen">
+<!ENTITY sitedelta.manager.updateall "Alle auf Änderungen prüfen">
 <!ENTITY sitedelta.manager.delete "Löschen">
 <!ENTITY sitedelta.manager.deleteall "Alle löschen">
 <!ENTITY sitedelta.manager.lblname "Name:">
@@ -17,6 +21,10 @@
 <!ENTITY sitedelta.manager.lblurl "Adresse:">
 <!ENTITY sitedelta.manager.lblcheck "Letzter Besuch:">
 <!ENTITY sitedelta.manager.close "Schließen">
+<!ENTITY sitedelta.manager.default "Standard">
+<!ENTITY sitedelta.manager.on "An">
+<!ENTITY sitedelta.manager.off "Aus">
+<!ENTITY sitedelta.manager.uselogin "Benutzername und Kennwort verwenden">
 <!ENTITY sitedelta.preset.title "Voreinstellungen bearbeiten">
 <!ENTITY sitedelta.preset.descname "Bitte geben Sie einen Namen für die Bereichs-Voreinstellung ein:">
 <!ENTITY sitedelta.preset.descurl "Adressen, für die diese Voreinstellung verwendet werden soll (* und ? als Platzhalter):">
@@ -36,7 +44,16 @@
 <!ENTITY sitedelta.prefs.scanregion "Farbe für überwachte Bereiche: ">
 <!ENTITY sitedelta.prefs.ignoreregion "Farbe für ignorierte Bereiche: ">
 <!ENTITY sitedelta.prefs.showregions "Bereiche hervorheben">
-<!ENTITY sitedelta.prefs.features "Überprüfungseinstellungen">
 <!ENTITY sitedelta.prefs.scanimages "Bilderadressen auf Änderungen prüfen">
 <!ENTITY sitedelta.prefs.scandeleted "Auch Löschungen und Verschiebungen suchen">
-<!ENTITY sitedelta.prefs.openchanged "Alle Seiten mit Änderungen öffnen">
+<!ENTITY sitedelta.prefs.openchanged "Seiten verwalten: Beim Überprüfen Seiten mit Änderungen öffnen">
+<!ENTITY sitedelta.prefs.settings "Einstellungen">
+<!ENTITY sitedelta.prefs.appearance "Hervorhebung">
+<!ENTITY sitedelta.prefs.watch "Seitenüberwachung">
+<!ENTITY sitedelta.prefs.backuppages "Geänderte Seiten archivieren">
+<!ENTITY sitedelta.prefs.sitesettings "Seitenspezifische Einstellungen erlauben">
+<!ENTITY sitedelta.prefs.scanonload "Bekannte Seiten beim Besuch automatisch prüfen">
+<!ENTITY sitedelta.prefs.enablewatch "Seitenüberwachung aktivieren">
+<!ENTITY sitedelta.prefs.watchpagetimeout "Zeitlimit für Laden der Seite (sec)">
+<!ENTITY sitedelta.prefs.watchpagedelay "Pause nach Überprüfen einer Seite (sec)">
+<!ENTITY sitedelta.prefs.watchscandelay "Überprüfungshäufigkeit (min)">

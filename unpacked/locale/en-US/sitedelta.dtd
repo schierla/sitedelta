@@ -1,5 +1,7 @@
 <!ENTITY sitedelta.highlight "Highlight changes">
 <!ENTITY sitedelta.removehighlight "Remove highlights">
+<!ENTITY sitedelta.backups "Archived versions">
+<!ENTITY sitedelta.createbackup "Archive current version">
 <!ENTITY sitedelta.regions "Regions">
 <!ENTITY sitedelta.loadpreset "Load preset">
 <!ENTITY sitedelta.manager.savepreset "Save as preset...">
@@ -8,8 +10,10 @@
 <!ENTITY sitedelta.ignoreregion "+ Add ignore region">
 <!ENTITY sitedelta.manager "Manage sites...">
 <!ENTITY sitedelta.checkall "Check all sites...">
+<!ENTITY sitedelta.openwatches "Open all in tabs...">
 <!ENTITY sitedelta.manager.title "SiteDelta - Manage sites">
-<!ENTITY sitedelta.manager.updateall "Check for updates">
+<!ENTITY sitedelta.manager.update "Check for updates">
+<!ENTITY sitedelta.manager.updateall "Check all for updates">
 <!ENTITY sitedelta.manager.delete "Delete">
 <!ENTITY sitedelta.manager.deleteall "Delete all">
 <!ENTITY sitedelta.manager.lblname "Name:">
@@ -17,6 +21,10 @@
 <!ENTITY sitedelta.manager.lblurl "URL:">
 <!ENTITY sitedelta.manager.lblcheck "Last check:">
 <!ENTITY sitedelta.manager.close "Close">
+<!ENTITY sitedelta.manager.default "Default">
+<!ENTITY sitedelta.manager.on "On">
+<!ENTITY sitedelta.manager.off "Off">
+<!ENTITY sitedelta.manager.uselogin "Use login data">
 <!ENTITY sitedelta.preset.title "Manage presets">
 <!ENTITY sitedelta.preset.descname "Please enter a name for the region preset:">
 <!ENTITY sitedelta.preset.descurl "URLs to apply this region to (use * and ? as wildcards):">
@@ -36,7 +44,16 @@
 <!ENTITY sitedelta.prefs.scanregion "Scanned region color: ">
 <!ENTITY sitedelta.prefs.ignoreregion "Ignored region color: ">
 <!ENTITY sitedelta.prefs.showregions "Outline regions">
-<!ENTITY sitedelta.prefs.features "Scan preferences">
 <!ENTITY sitedelta.prefs.scanimages "Check for changed image addresses">
 <!ENTITY sitedelta.prefs.scandeleted "Check for moved and deleted text">
 <!ENTITY sitedelta.prefs.openchanged "Open changed sites when checking for updates">
+<!ENTITY sitedelta.prefs.settings "Settings">
+<!ENTITY sitedelta.prefs.appearance "Appearance">
+<!ENTITY sitedelta.prefs.watch "Site Watch">
+<!ENTITY sitedelta.prefs.backuppages "Archive changed pages">
+<!ENTITY sitedelta.prefs.sitesettings "Allow site-specific settings">
+<!ENTITY sitedelta.prefs.scanonload "Automatically scan known pages on visit">
+<!ENTITY sitedelta.prefs.enablewatch "Enable Site Watch">
+<!ENTITY sitedelta.prefs.watchpagetimeout "Time limit for loading the page (sec)">
+<!ENTITY sitedelta.prefs.watchpagedelay "Delay after checking the page (sec)">
+<!ENTITY sitedelta.prefs.watchscandelay "Time between two scan runs (min)">

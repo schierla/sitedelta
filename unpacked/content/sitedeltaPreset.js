@@ -5,9 +5,9 @@ onLoad: function() {
 listPresets: function() {
  var list=document.getElementById("presets");
  while(list.getRowCount()>0) list.removeItemAt(0);
- var presets=sitedelta.presetFiles();
+ var presets=sitedeltaService.listPresets();
  for(var i=0; i<presets.length; i++) {
-  var preset=sitedelta.readFile(presets[i]);
+  var preset=sitedeltaService.getPreset(presets[i]);
   var item=list.appendItem(preset.name,presets[i]);
   if(window.arguments[0]==presets[i]) list.selectItem(item);
  }
@@ -16,8 +16,7 @@ showDetails: function() {
  var file=document.getElementById("presets").getSelectedItem(0);
  var url=""; var include=""; var exclude=""; var name="";
  if(file) {
-  var fn=file.value;
-  var result=sitedelta.readFile(fn);
+  var result=sitedeltaService.getPreset(file.value);
   url=result.url; 
   for(var i=0; i<result.includes.length; i++) include+=result.includes[i]+"\n";
   for(var i=0; i<result.excludes.length; i++) exclude+=result.excludes[i]+"\n";
@@ -33,35 +32,25 @@ showDetails: function() {
 saveData: function() {
  var file=document.getElementById("presets").getSelectedItem(0);
  if(file) {
-  var fn=file.value;
-  var result=sitedelta.readFile(fn);
+  var result=sitedeltaService.getPreset(file.value);
   result.url= document.getElementById("url").value;
   result.name = document.getElementById("name").value;
-  sitedelta.saveFile(fn, result);
+  sitedeltaService.putPreset(result, file.value);
   file.setAttribute("label", result.name);
  }
 },
 duplicate: function() {
  var file=document.getElementById("presets").getSelectedItem(0);
  if(!file) return;
- var fn=file.value;
- var result=sitedelta.readFile(fn);
- sitedelta.newPreset(result);
+ var result=sitedeltaService.getPreset(file.value);
+ sitedeltaService.newPreset(result);
  sitedeltaPreset.listPresets();
 }, 
 delete: function() {
  var file=document.getElementById("presets").getSelectedItem(0);
  if(!file) return;
  var fn=file.value;
- file = sitedelta.sitedeltaDir(); file.append(fn); file.remove(false);
+ sitedeltaService.deletePreset(fn);
  sitedeltaPreset.listPresets();
-},
-selectFile: function(fn) {
- var list=document.getElementById("presets");
- for(var i=0; i<list.getRowCount(); i++) {
-  var item=list.getItemAtIndex(i);
-  if(item.value==fn) {list.selectItem(item); break; }
- }
 }
-
 };

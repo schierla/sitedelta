@@ -1,3 +1,4 @@
+<!ENTITY sitedelta.title "SiteDelta">
 <!ENTITY sitedelta.highlight "Highlight changes">
 <!ENTITY sitedelta.removehighlight "Remove highlights">
 <!ENTITY sitedelta.backups "Archived versions">
@@ -8,7 +9,11 @@
 <!ENTITY sitedelta.manager.managepresets "Manage presets...">
 <!ENTITY sitedelta.scanregion "+ Add scan region">
 <!ENTITY sitedelta.ignoreregion "+ Add ignore region">
+<!ENTITY sitedelta.pages "Sites">
+<!ENTITY sitedelta.openpage "Open">
 <!ENTITY sitedelta.manager "Manage sites...">
+<!ENTITY sitedelta.pagesettings "Properties">
+<!ENTITY sitedelta.checkbg "Check in background">
 <!ENTITY sitedelta.checkall "Check all sites...">
 <!ENTITY sitedelta.openwatches "Open all in tabs...">
 <!ENTITY sitedelta.manager.title "SiteDelta - Manage sites">
@@ -46,6 +51,8 @@
 <!ENTITY sitedelta.prefs.showregions "Outline regions">
 <!ENTITY sitedelta.prefs.scanimages "Check for changed image addresses">
 <!ENTITY sitedelta.prefs.scandeleted "Check for moved and deleted text">
+<!ENTITY sitedelta.prefs.ignorenumbers "Ignore changed numbers">
+<!ENTITY sitedelta.prefs.ignorecase "Ignore case">
 <!ENTITY sitedelta.prefs.openchanged "Open changed sites when checking for updates">
 <!ENTITY sitedelta.prefs.settings "Settings">
 <!ENTITY sitedelta.prefs.appearance "Appearance">
@@ -55,5 +62,5 @@
 <!ENTITY sitedelta.prefs.scanonload "Automatically scan known pages on visit">
 <!ENTITY sitedelta.prefs.enablewatch "Enable Site Watch">
 <!ENTITY sitedelta.prefs.watchpagetimeout "Time limit for loading the page (sec)">
-<!ENTITY sitedelta.prefs.watchpagedelay "Delay after checking the page (sec)">
-<!ENTITY sitedelta.prefs.watchscandelay "Time between two scan runs (min)">
+<!ENTITY sitedelta.prefs.watchpagedelay "Delay after checking a page (sec)">
+<!ENTITY sitedelta.prefs.watchscandelay "Time between two page scans (min)">

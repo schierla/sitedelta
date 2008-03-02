@@ -29,6 +29,14 @@
 <label class="header">&sitedelta.preset.descexclude;</label>
 <hbox flex="1"><label label=" " /><textbox id="exclude" multiline="true" readonly="true" class="plain" wrap="off" flex="1" /></hbox>
 </groupbox>
+<groupbox id="extra" collapsed="false">
+<grid><columns><column flex="2"/><column  flex="1"/></columns><rows>
+<row align="center"><label class="header">&sitedelta.prefs.scanimages;</label><radiogroup orient="horizontal" id="checkimages" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.scandeleted;</label><radiogroup orient="horizontal" id="checkdeleted" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.ignorecase;</label><radiogroup orient="horizontal" id="ignorecase" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.ignorenumbers;</label><radiogroup orient="horizontal" id="ignorenumbers" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
+</rows></grid>
+</groupbox>
 </vbox>
 </hbox>
 </vbox>

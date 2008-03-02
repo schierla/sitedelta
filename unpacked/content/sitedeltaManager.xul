@@ -4,10 +4,15 @@
 <!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
 <dialog id="sitedeltaManager" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&sitedelta.manager.title;" persist="screenX screenY width height" buttons="accept" buttonlabelaccept="&sitedelta.manager.close;" ondialogaccept="sitedeltaManager.save();">
 <script src="chrome://sitedelta/content/sitedelta.js"/>
-<script src="chrome://sitedelta/content/sitedeltaManager.js" />
+<script src="chrome://sitedelta/content/sitedeltaManager.js"/>
+<stringbundleset id="stringbundleset"><stringbundle id="sitedelta-strings" src="chrome://sitedelta/locale/sitedelta.properties"/></stringbundleset>
 <vbox flex="1">
 <hbox flex="1">
-<listbox flex="0" id="pages" seltype="single" context="page-context" onselect="sitedeltaManager.showDetails();" ondblclick="sitedeltaManager.updateCurrent();"><listitem label="asdf" class="listitem-iconic" status="changed"/><listitem label="asdf"/></listbox>
+<listbox flex="0" id="sitedeltaPages" seltype="single" context="page-context" onselect="sitedeltaManager.showDetails();" ondblclick="sitedeltaManager.updateCurrent();" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending">
+<template>
+<rule><conditions><content uri="?uri" /><triple subject="?uri" predicate="http://home.netscape.com/NC-rdf#links" object="?links" /><member container="?links" child="?child" /><triple subject="?child" predicate="http://home.netscape.com/NC-rdf#name" object="?name" /></conditions><bindings><binding subject="?child" predicate="http://sitedelta.schierla.de/SD-rdf#status" object="?status" /></bindings><action><listitem label="?name" class="listitem-iconic" status="?status" uri="?child" /></action></rule>
+</template>
+</listbox>
 <splitter/>
 <vbox flex="1" collapsed="true" id="right">
 <groupbox flex="1">
@@ -34,7 +39,9 @@
 <grid><columns><column flex="2"/><column  flex="1"/></columns><rows>
 <row align="center"><label class="header">&sitedelta.prefs.scanimages;</label><radiogroup orient="horizontal" id="checkimages" onselect="sitedeltaManager.updateCheckboxes();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
 <row align="center"><label class="header">&sitedelta.prefs.scandeleted;</label><radiogroup orient="horizontal" id="checkdeleted" onselect="sitedeltaManager.updateCheckboxes();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
-<row align="center"><label class="header">&sitedelta.prefs.enablewatch;</label><radiogroup orient="horizontal" id="enablewatch" onselect="sitedeltaManager.updateCheckboxes();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.ignorecase;</label><radiogroup orient="horizontal" id="ignorecase" onselect="sitedeltaManager.updateCheckboxes();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.ignorenumbers;</label><radiogroup orient="horizontal" id="ignorenumbers" onselect="sitedeltaManager.updateCheckboxes();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
+<row align="center"><hbox flex="1"><label class="header" flex="1">&sitedelta.prefs.watchscandelay;</label><textbox id="watchdelay" class="plain" value="" size="4" flex="0" onchange="sitedeltaManager.updateCheckboxes();"/></hbox><radiogroup orient="horizontal" id="enablewatch" onselect="sitedeltaManager.updateCheckboxes();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
 <row align="center"><label class="header">&sitedelta.prefs.backuppages;</label><radiogroup orient="horizontal" id="enablebackup" onselect="sitedeltaManager.updateCheckboxes();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
 <row align="center"><checkbox class="header" label="&sitedelta.manager.uselogin;" id="login" oncommand="if(this.checked==false) {document.getElementById('user').value=''; document.getElementById('pass').value=''; }"/><hbox><textbox id="user" oninput="sitedeltaManager.updateUserPass();" value="" size="6"  flex="1" onchange="document.getElementById('login').checked=true;" /><textbox id="pass" oninput="sitedeltaManager.updateUserPass();" type="password" value=""  size="6"  flex="1" onchange="document.getElementById('login').checked=true;" /></hbox></row>
 </rows></grid>

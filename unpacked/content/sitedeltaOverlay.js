@@ -1,19 +1,20 @@
 var sitedeltaOverlay= {
  strings: null,
-
+ onPageLoad: function(evt) {
+  var doc=evt.originalTarget;
+  if(doc.nodeName == "#document") {
+   if(doc.sitedeltaMatch) return;  	
+   var result=sitedeltaService.getPage(doc.URL); 
+   if(result.status==sitedeltaService.RESULT_UNCHANGED || result.status==sitedeltaService.RESULT_UNCHECKED) sitedeltaService.scanPage(doc);
+  }
+ },
  onLocationChange: function(awp, ar, al) {
   setTimeout(sitedeltaOverlay.pageChanged, 100);
- },
- onStateChange: function(ap, ar, af, as){
-  if((af & Components.interfaces.nsIWebProgressListener.STATE_STOP) && sitedeltaService.scanOnLoad) {
-   if(ap.DOMWindow.document.sitedeltaMatch) return;  	
-   var result=sitedeltaService.getPage(ap.DOMWindow.document.URL); 
-   if(result.status==sitedeltaService.RESULT_UNCHANGED || result.status==sitedeltaService.RESULT_UNCHECKED) sitedeltaService.scanPage(ap.DOMWindow.document);
-  }
  },
  onProgressChange: function(aWebProgress, aRequest, aCurSelfProgress, aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {
   return 0;
  },
+ onStateChange: function(ap, ar, af, as){return 0; },
  onStatusChange: function() {return 0;},
  onSecurityChange: function() {return 0;},
  onLinkIconAvailable: function() {return 0;},
@@ -38,59 +39,32 @@ var sitedeltaOverlay= {
  },
  onLoad: function() {
   sitedeltaOverlay.strings = document.getElementById("sitedelta-strings");
-  gBrowser.addProgressListener(sitedeltaOverlay, Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT | Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
-  if(sitedeltaService.enableWatch) sitedeltaOverlay.listWatches();
+  gBrowser.addProgressListener(sitedeltaOverlay, Components.interfaces.nsIWebProgress.NOTIFY_LOCATION); // Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT 
+  document.getElementById("appcontent").addEventListener("load", sitedeltaOverlay.onPageLoad, true);
   sitedeltaService.addObserver(sitedeltaOverlay);
+  var list=document.getElementById("sitedelta-watch-popup");
+  list.database.AddDataSource(sitedeltaService.RDF);
+  list.builder.rebuild(); 
+  sitedeltaOverlay.observe("","sitedelta","");
  },
  observe: function(aSubject, aTopic, aData) {
   if (aTopic == "sitedelta") {
+   var watches=document.getElementById("sitedelta-watch-popup").firstChild;
+   var found=false;
+   while((watches=watches.nextSibling)!=null) if(watches.id!="") found=true;
+   document.getElementById("sitedelta-watch").setAttribute("hidden", (found?"false":"true"));
    sitedeltaOverlay.pageChanged();
-   if(!sitedeltaService.enableWatch) return;
-   var result=sitedeltaService.getPage(aData);
-   if(result.status<=0) sitedeltaOverlay.removeWatch(result.url);
-   else if(result.status>0) sitedeltaOverlay.addWatch(result.url);
   }
  },
- listWatches: function() {
-  var menu=document.getElementById("sitedelta-watch-popup");
-  if(!menu.done) {
-   var pages=sitedeltaService.listPages(); var entries=0;
-   for(var i=0; i<pages.length; i++) {
-   	var result=sitedeltaService.getPage(pages[i]);
-   	if(result.status>0) {
-   	 entries++;
-     var item = menu.ownerDocument.createElement("menuitem");
-     item.setAttribute("label", result.url); item.value=result.url; item.watchEntry=1; 
-     item.addEventListener("command", sitedeltaOverlay.openWatch, false);
-     menu.appendChild(item);
-   	}
-   }
-   document.getElementById("sitedelta-watch").setAttribute("hidden", (entries>0?"false":"true"));
-   menu.done=true;
-  }
- },
- removeWatch: function(url) {
-  var menu=document.getElementById("sitedelta-watch-popup");
-  if(!menu.done) sitedeltaOverlay.listWatches(); var entries=0;
-  var cur=menu.firstChild; while(cur) {last=cur; cur=cur.nextSibling; if(last.watchEntry && last.value==url) menu.removeChild(last); else if(last.watchEntry==1) entries++; }  
-  if(entries==0) document.getElementById("sitedelta-watch").setAttribute("hidden", "true");
+ openPage: function(pg) {
+  gBrowser.selectedTab = gBrowser.addTab(pg.id);
  }, 
- addWatch: function(url) {
-  var menu=document.getElementById("sitedelta-watch-popup");
-  if(!menu.done) sitedeltaOverlay.listWatches();
-  document.getElementById("sitedelta-watch").setAttribute("hidden", "false");
-  var cur=menu.firstChild; while(cur) {if(cur.watchEntry && cur.value==url) return; cur=cur.nextSibling;}  
-  var item = menu.ownerDocument.createElement("menuitem");
-  item.setAttribute("label", url); item.value=url; item.watchEntry=1; 
-  item.addEventListener("command", sitedeltaOverlay.openWatch, false);
-  menu.appendChild(item);
- },
- openWatch: function() {
-  gBrowser.addTab(this.value);
+ openWatch: function(pg) {
+  gBrowser.selectedTab = gBrowser.addTab(pg.id);
  },
  openAllWatches: function() {
   var menu=document.getElementById("sitedelta-watch-popup");
-  var cur=menu.firstChild; while(cur) {if(cur.watchEntry) gBrowser.addTab(cur.value); cur=cur.nextSibling; }
+  var cur=menu.firstChild; while(cur) {if(cur.id!="") gBrowser.selectedTab=gBrowser.addTab(cur.id); cur=cur.nextSibling; }
  }, 
  openBackup: function() {
   gBrowser.selectedTab=gBrowser.addTab(this.value);
@@ -100,6 +74,7 @@ var sitedeltaOverlay= {
  },
  onUnLoad: function() {
   gBrowser.removeProgressListener(sitedeltaOverlay);
+  document.getElementById("appcontent").removeEventListener("load", sitedeltaOverlay.onPageLoad, true);  
   window.removeEventListener("load", sitedeltaOverlay.onLoad, false);
   sitedeltaService.removeObserver(sitedeltaOverlay);
  },
@@ -130,19 +105,26 @@ var sitedeltaOverlay= {
   var parser = new DOMParser(); var dom=false; dom = parser.parseFromString(req.responseText, "text/xml");
   if(!dom || dom.firstChild.nodeName!="sitedelta") return;
   var preset={}; preset.includes=new Array(); preset.excludes=new Array();
+  preset.checkDeleted=null; preset.scanImages=null; preset.ignoreCase=null; preset.ignoreNumbers=null;
   var elem=dom.firstChild.firstChild; while(elem) {
    if(elem.firstChild) {
     if(elem.nodeName=="url") preset.url=elem.firstChild.data;
     else if(elem.nodeName=="include") preset.includes.push(elem.firstChild.data);
     else if(elem.nodeName=="exclude") preset.excludes.push(elem.firstChild.data);
     else if(elem.nodeName=="name") preset.name=elem.firstChild.data;
+    else if(elem.nodeName=="settings") {
+     if(elem.hasAttribute("checkDeleted")) preset.checkDeleted=elem.attributes.getNamedItem("checkDeleted").firstChild.data=="true";
+     if(elem.hasAttribute("scanImages")) preset.scanImages=elem.attributes.getNamedItem("scanImages").firstChild.data=="true";
+     if(elem.hasAttribute("ignoreCase")) preset.ignoreCase=elem.attributes.getNamedItem("ignoreCase").firstChild.data=="true";
+     if(elem.hasAttribute("ignoreNumbers")) preset.ignoreNumbers=elem.attributes.getNamedItem("ignoreNumbers").firstChild.data=="true";
+    }    
    }
    elem=elem.nextSibling;
   }
   var noB=gBrowser.getNotificationBox();
   if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("presetFoundDone").replace(/%s/,preset.url), "sitedelta-install", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_HIGH);
   var fn=sitedeltaService.newPreset(preset);
-  window.openDialog("chrome://sitedelta/content/sitedeltaPreset.xul", "sitedelta-preset", "width=600,height=400,resizable=yes,centerscreen", fn);
+  sitedelta.showPresets(fn);
  },
  mouseover: function(e) {
   if(sitedeltaOverlay.needText && !e.target.firstChild.data && (!e.target.id || e.target.id.substr(0,16)=="sitedelta-change")) return;
@@ -233,11 +215,16 @@ var sitedeltaOverlay= {
   sitedelta.regionAction=2;
   sitedeltaOverlay.selectRegion();
  },
- showManager: function(e) {
-  return window.openDialog("chrome://sitedelta/content/sitedeltaManager.xul", "sitedelta-manager", "width=600,height=400,resizable=yes,centerscreen", "");
+ showProperties: function(e) {
+  var result=sitedeltaService.getPage(content.document.URL);
+  if(result.status==sitedeltaService.RESULT_NEW) {
+   toggleSidebar('viewSitedeltaSidebar');
+  } else {
+   return sitedelta.showProperties(result.url)
+  }
  },
- showManagerAndCheck: function(e) {
-  return window.openDialog("chrome://sitedelta/content/sitedeltaManager.xul", "sitedelta-manager", "width=600,height=400,resizable=yes,centerscreen", "check");
+ checkBg: function() {
+  sitedeltaService.notify();
  },
  changePassword: function(e) {
   sitedelta.changePassword(content.window.location.href);
@@ -258,6 +245,7 @@ var sitedeltaOverlay= {
  },
  highlightChanges: function(e) {
   if(e.button && e.button!=0) return;
+  if(e.ctrlKey) {sitedeltaOverlay.showProperties(e); return; }
   if(content.document.sitedeltaMatch) {
    if(!content.document.getElementById("sitedelta-change"+content.document.sitedeltaMatch))
     content.document.sitedeltaMatch=0;
@@ -266,15 +254,15 @@ var sitedeltaOverlay= {
    return;
   }
   var url=content.window.location.href;
-  if(url=="about:blank") return sitedeltaOverlay.showManager();
+  if(url=="about:blank") {sitedeltaOverlay.showProperties(); return; }
 
   var noB=false;
   if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();
   if(noB && noB.getNotificationWithValue("sitedelta")) noB.removeNotification(noB.getNotificationWithValue("sitedelta"));
 
   var changes=sitedeltaService.highlightPage(content.document);   
-  if(changes==sitedeltaService.RESULT_NOTFOUND) {
-   if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("noContentMessage"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_HIGH, {}); return; 
+  if(changes==sitedeltaService.RESULT_ERROR) {
+   if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("noContentMessage"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_HIGH, {});
   } else if(changes==sitedeltaService.RESULT_NEW) {
    if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("firstScanMessage"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {}); 
   } else if(changes==sitedeltaService.RESULT_UNCHANGED) {

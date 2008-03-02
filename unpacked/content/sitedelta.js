@@ -18,11 +18,12 @@ var sitedelta = {
    menu.url=url;
    var presets=sitedeltaService.listPresets();
    var cur=menu.firstChild; while(cur) {last=cur; cur=cur.nextSibling; if(last.presetEntry) menu.removeChild(last); }
+   var item=menu.ownerDocument.createElement("menuseparator"); item.presetEntry=1; menu.appendChild(item);
    for(var i=0; i<presets.length; i++) {
     var preset=sitedeltaService.getPreset(presets[i]);
-    var item=menu.ownerDocument.createElement("menuitem");
+    item=menu.ownerDocument.createElement("menuitem");
     item.setAttribute("label", preset.name);
-    if(sitedeltaService.isPresetPreferred(preset, url)) item.setAttribute("default", true);
+    if(sitedeltaService.isPresetPreferred(preset, url)) item.setAttribute("style","font-style: italic;");
     item.presetEntry=1; 
     item.value=presets[i]; item.addEventListener("command", sitedelta.applyPreset, false);
     menu.appendChild(item);
@@ -90,4 +91,13 @@ var sitedelta = {
    if(result.includes.length==0) result.includes[0]="/html/body[1]";
    sitedeltaService.putPage(result);
   },
-};
+  showPresets: function(fn) {
+   window.openDialog("chrome://sitedelta/content/sitedeltaPreset.xul", "sitedelta-preset", "width=640,height=480,resizable=yes,centerscreen", fn);
+  },
+  showPrefs: function() {
+   window.openDialog("chrome://sitedelta/content/sitedeltaPrefs.xul", "sitedelta-prefs", "width=700,height=550,resizable=yes,centerscreen");
+  },
+  showProperties: function(url) {
+   return window.openDialog("chrome://sitedelta/content/sitedeltaProperties.xul", "sitedelta-properties", "width=640,height=480,resizable=yes,centerscreen", url);
+  },
+}

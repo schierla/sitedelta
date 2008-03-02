@@ -1,6 +1,5 @@
-#sitedeltaManager #pages listitem[status="changed"] {list-style-image: url(changed.gif); }
-#sitedeltaManager #pages listitem[status="unchanged"] {list-style-image: url(unchanged.gif); }
-#sitedeltaManager #pages listitem[status="loading"] {list-style-image: url(loading.gif); }
-#sitedeltaManager #pages listitem[status="error"] {list-style-image: url(error.gif); }
-#sitedeltaManager #pages listitem[status="checking"] {list-style-image: url(checking.gif); }
-#sitedeltaManager #pages listitem {list-style-image: url(unchecked.gif); }
+#sitedeltaPages listitem[status="1"] {list-style-image: url(changed.gif); }
+#sitedeltaPages listitem[status="0"] {list-style-image: url(unchanged.gif); }
+#sitedeltaPages listitem[status="-3"] {list-style-image: url(loading.gif); }
+#sitedeltaPages listitem[status="-2"] {list-style-image: url(error.gif); }
+#sitedeltaPages listitem {list-style-image: url(unchecked.gif); }

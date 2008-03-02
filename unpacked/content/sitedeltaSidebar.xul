@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type"text/css" ?>
+<?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://sitedelta/skin/sitedelta.css" type="text/css"?>
+
+<!DOCTYPE page SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
+<page id="sbSitedelta" title="&sitedelta.sidebar.title;"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
+	
+<script src="chrome://sitedelta/content/sitedelta.js"/>
+<script src="chrome://sitedelta/content/sitedeltaSidebar.js"/>
+<vbox flex="1">
+<hbox align="center">
+<label>&sitedelta.sidebar.search;</label>
+<textbox flex="1" id="sitedelta-search" oninput="sitedeltaSidebar.doSearch(this.value);"/>
+<button type="menu" label="&sitedelta.sidebar.pages;">
+<menupopup onpopupshowing="sitedeltaSidebar.updatePopup(this);">
+<menuitem id="sitedelta-updateall" label="&sitedelta.sidebar.updateall;" oncommand="sitedeltaSidebar.updateAll();"/>
+<menuitem label="&sitedelta.sidebar.openall;" oncommand="sitedeltaSidebar.openChanged();"/>
+<menuseparator/>
+<menuitem label="&sitedelta.sidebar.showpresets;" oncommand="sitedeltaSidebar.showPresets();"/>
+<menuitem label="&sitedelta.sidebar.showprefs;" oncommand="sitedeltaSidebar.showPrefs();"/>
+<menuseparator/>
+<menuitem type="checkbox" autocheck="false" id="sitedelta-enablewatch" label="&sitedelta.prefs.enablewatch;" oncommand="sitedeltaSidebar.toggleEnableWatch();"/>
+</menupopup></button></hbox>
+
+
+<listbox flex="1" id="sitedeltaPages" seltype="multiple" context="sitedelta-context" ondblclick="sitedeltaSidebar.openCurrent();" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending">
+<template>
+<rule><conditions><content uri="?uri" /><triple subject="?uri" predicate="http://home.netscape.com/NC-rdf#links" object="?links" /><member container="?links" child="?child" /><triple subject="?child" predicate="http://home.netscape.com/NC-rdf#name" object="?name" /></conditions><bindings><binding subject="?child" predicate="http://sitedelta.schierla.de/SD-rdf#status" object="?status" /></bindings><action><listitem label="?name" class="listitem-iconic" status="?status" uri="?child" /></action></rule>
+</template>
+</listbox>
+</vbox>
+
+<popupset><menupopup id="sitedelta-context">
+<menuitem label="&sitedelta.sidebar.openpage;" default="true" oncommand="sitedeltaSidebar.openCurrent();"/>
+<menuseparator/>
+<menuitem label="&sitedelta.sidebar.update;" oncommand="sitedeltaSidebar.updateCurrent();"/>
+<menuitem label="&sitedelta.sidebar.delete;" oncommand="sitedeltaSidebar.deletePage();"/>
+<menuseparator/>
+<menuitem label="&sitedelta.sidebar.pagesettings;" oncommand="sitedeltaSidebar.showManager();" />
+</menupopup></popupset>
+
+</page>

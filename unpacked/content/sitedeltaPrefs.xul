@@ -2,185 +2,183 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
 <prefwindow id="sitedelta-prefs"
-						title="&sitedelta.prefs.title;"
-						xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="previewColors();">
-	<prefpane id="sitedelta-pref-pane" label="SiteDelta" image="chrome://sitedelta/content/sitedeltaGross.gif">
-		<preferences>
-			<preference id="p_addbackground" name="extensions.sitedelta@schierla.de.addBackground" type="string"/>
-			<preference id="p_addborder" name="extensions.sitedelta@schierla.de.addBorder" type="string"/>
-			<preference id="p_movebackground" name="extensions.sitedelta@schierla.de.moveBackground" type="string"/>
-			<preference id="p_moveborder" name="extensions.sitedelta@schierla.de.moveBorder" type="string"/>
-			<preference id="p_removebackground" name="extensions.sitedelta@schierla.de.removeBackground" type="string"/>
-			<preference id="p_removeborder" name="extensions.sitedelta@schierla.de.removeBorder" type="string"/>
-			<preference id="p_includeregion" name="extensions.sitedelta@schierla.de.includeRegion" type="string"/>
-			<preference id="p_excluderegion" name="extensions.sitedelta@schierla.de.excludeRegion" type="string"/>
-			<preference id="p_showregions" name="extensions.sitedelta@schierla.de.showRegions" type="bool"/>
-			<preference id="p_scanimages" name="extensions.sitedelta@schierla.de.scanImages" type="bool"/>
-			<preference id="p_checkdeleted" name="extensions.sitedelta@schierla.de.checkDeleted" type="bool"/>
-			<preference id="p_openchanged" name="extensions.sitedelta@schierla.de.openChanged" type="bool"/>
-			<preference id="p_enablewatch" name="extensions.sitedelta@schierla.de.enableWatch" type="bool"/>
-			<preference id="p_backuppages" name="extensions.sitedelta@schierla.de.backupPages" type="bool"/>
-			<preference id="p_sitesettings" name="extensions.sitedelta@schierla.de.siteSettings" type="bool"/>
-			<preference id="p_scanonload" name="extensions.sitedelta@schierla.de.scanOnLoad" type="bool"/>
-			<preference id="p_watchpagedelay" name="extensions.sitedelta@schierla.de.watchPageDelay" type="int"/>
-			<preference id="p_watchscandelay" name="extensions.sitedelta@schierla.de.watchScanDelay" type="int"/>
-			<preference id="p_watchpagetimeout" name="extensions.sitedelta@schierla.de.watchPageTimeout" type="int"/>
-		</preferences>
-		<tabbox>
-			<tabs>
-				<tab label="&sitedelta.prefs.settings;" />
-				<tab label="&sitedelta.prefs.appearance;" />
-				<tab label="&sitedelta.prefs.watch;" />
-			</tabs>
-			<tabpanels>
-				<tabpanel id="settings" orient="vertical">
-					<groupbox>
-						<checkbox preference="p_scanimages" label="&sitedelta.prefs.scanimages;"/>
-						<checkbox preference="p_checkdeleted" label="&sitedelta.prefs.scandeleted;"/>
-						<checkbox preference="p_scanonload" label="&sitedelta.prefs.scanonload;"/>
-						<checkbox preference="p_openchanged" label="&sitedelta.prefs.openchanged;"/>
-						<checkbox preference="p_backuppages" label="&sitedelta.prefs.backuppages;"/>
-						<checkbox preference="p_sitesettings" label="&sitedelta.prefs.sitesettings;"/>
-					</groupbox>
-				</tabpanel>
-				<tabpanel id="appearance" orient="vertical">
-					<hbox>
-						<vbox flex="1">
-							<groupbox flex="">
-								<caption label="&sitedelta.prefs.add;"/>
-								<grid flex="1">
-									<columns>
-										<column flex="1"/>
-										<column/>
-										<column/>
-									</columns>
-									<rows>
-										<row align="center">
-											<label control="changebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/>
-											<textbox preference="p_addbackground" id="addbackground" maxlength="4" oninput="previewColors();" size="4"/>
-											<label value="		 " id="abg"/>
-										</row>
-										<row align="center">
-											<label control="addborder" value="&sitedelta.prefs.bordercolor;" flex="1"/>
-											<textbox preference="p_addborder" id="addborder" oninput="previewColors();" maxlength="4" size="4"/>
-											<label value="		 " id="abo" style="border: dotted 1px;"/>
-										</row>
-									</rows>
-								</grid>
-							</groupbox>
-							<groupbox flex="1">
-								<caption label="&sitedelta.prefs.remove;"/>
-								<grid flex="1">
-									<columns>
-										<column flex="1"/>
-										<column/>
-										<column/>
-									</columns>
-									<rows>
-										<row align="center">
-											<label control="removebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/>
-											<textbox preference="p_removebackground" id="removebackground" maxlength="4" oninput="previewColors();" size="4"/>
-											<label value="		 " id="rbg"/>
-										</row>
-										<row align="center">
-											<label control="removeborder" value="&sitedelta.prefs.bordercolor;" flex="1"/>
-											<textbox preference="p_removeborder" id="removeborder" oninput="previewColors();" maxlength="4" size="4"/>
-											<label value="		 " id="rbo" style="border: dotted 1px;"/>
-										</row>
-									</rows>
-								</grid>
-							</groupbox>
-						</vbox>
-						<vbox flex="1">
-							<groupbox flex="">
-								<caption label="&sitedelta.prefs.move;"/>
-								<grid flex="1">
-									<columns>
-										<column flex="1"/>
-										<column/>
-										<column/>
-									</columns>
-									<rows>
-										<row align="center">
-											<label control="movebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/>
-											<textbox preference="p_movebackground" id="movebackground" maxlength="4" oninput="previewColors();" size="4"/>
-											<label value="		 " id="mbg"/>
-										</row>
-										<row align="center">
-											<label control="moveborder" value="&sitedelta.prefs.bordercolor;" flex="1"/>
-											<textbox preference="p_moveborder" id="moveborder" oninput="previewColors();" maxlength="4" size="4"/>
-											<label value="		 " id="mbo" style="border: dotted 1px;"/>
-										</row>
-									</rows>
-								</grid>
-							</groupbox>
-							<groupbox flex="1">
-								<caption label="&sitedelta.prefs.regions;"/>
-								<grid flex="1">
-									<columns>
-										<column flex="1"/>
-										<column/>
-										<column/>
-									</columns>
-									<rows>
-										<row align="center">
-											<label control="includeregion" value="&sitedelta.prefs.scanregion;" flex="1"/>
-											<textbox preference="p_includeregion" id="includeregion" maxlength="4" oninput="previewColors();" size="4"/>
-											<label value="		 " id="ir" style="border: dotted 2px;"/>
-										</row>
-										<row align="center">
-											<label control="excluderegion" value="&sitedelta.prefs.ignoreregion;" flex="1"/>
-											<textbox preference="p_excluderegion" id="excluderegion" maxlength="4" oninput="previewColors();" size="4"/>
-											<label value="		 " id="xr" style="border: dotted 2px;"/>
-										</row>
-										<checkbox preference="p_showregions" label="&sitedelta.prefs.showregions;"/>
-									</rows>
-								</grid>
-							</groupbox>
-						</vbox>
-					</hbox>
-				</tabpanel>
-				<tabpanel id="watch" orient="vertical">
-					<groupbox>
-						<checkbox preference="p_enablewatch" label="&sitedelta.prefs.enablewatch;"/>
-						<grid flex="1">
-							<columns>
-								<column flex=""/>
-								<column/>
-							</columns>
-							<rows>
-								<row align="center">
-									<label control="watchpagetimeout" value="&sitedelta.prefs.watchpagetimeout;" flex="1"/>
-									<textbox preference="p_watchpagetimeout" id="watchpagetimeout" size="4"/>
-								</row>
-								<row align="center">
-									<label control="watchpagedelay" value="&sitedelta.prefs.watchpagedelay;" flex="1"/>
-									<textbox preference="p_watchpagedelay" id="watchpagedelay" size="4"/>
-								</row>
-								<row align="center">
-									<label control="watchscandelay" value="&sitedelta.prefs.watchscandelay;" flex="1"/>
-									<textbox preference="p_watchscandelay" id="watchscandelay" size="4"/>
-								</row>
-							</rows>
-						</grid>
-					</groupbox>
-				</tabpanel>
-			</tabpanels>
-		</tabbox>
-	</prefpane>
-	<prefpane id="sitedelta-pref-pane2"/>
-	<script type="text/javascript">
-		<![CDATA[
-		function previewColors() {
-		 g('abg').style.background=g('addbackground').value;
-		 g('abo').style.borderColor=g('addborder').value;
-		 g('rbg').style.background=g('removebackground').value;
-		 g('rbo').style.borderColor=g('removeborder').value;
-		 g('mbg').style.background=g('movebackground').value;
-		 g('mbo').style.borderColor=g('moveborder').value;
-		 g('ir').style.borderColor=g('includeregion').value;
-		 g('xr').style.borderColor=g('excluderegion').value;
-		}
-		function g(name) {return document.getElementById(name); }
-	]]></script>
+     title="&sitedelta.prefs.title;"
+     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" ondialogaccept="accept();" onload="previewColors();">
+<script type="text/javascript" src="sitedelta.js"/>
+<script type="text/javascript">
+<![CDATA[
+  function accept() {
+   var notifysound="";
+   switch(g('notifySound').selectedIndex) {
+    case 0: notifysound=""; break;
+    case 1: notifysound="beep"; break;
+    case 2: notifysound="SystemNotification"; break;
+    case 3: notifysound="MailBeep"; break;
+    case 4: notifysound = g('notifySoundText').value; break;
+   }
+   var watchDelay=0;
+   switch(g('watchdelay').selectedIndex) {
+    case 0: watchDelay=0; break;
+    case 1: watchDelay=-1; break; 
+    case 2: watchDelay=10080; break;
+    case 3: watchDelay=1440; break;
+    case 4: watchDelay=60; break;
+    case 5: watchDelay= g("watchvalue").value; break;
+   }
+   sitedeltaService.watchScanDelay = watchDelay;
+   sitedeltaService.notifySound = notifysound;
+   sitedeltaService.savePrefs();
+   return true;
+  }
+
+  function previewColors() {
+   g('abg').style.background=g('addbackground').value;
+   g('abo').style.borderColor=g('addborder').value;
+   g('rbg').style.background=g('removebackground').value;
+   g('rbo').style.borderColor=g('removeborder').value;
+   g('mbg').style.background=g('movebackground').value;
+   g('mbo').style.borderColor=g('moveborder').value;
+   g('ir').style.borderColor=g('includeregion').value;
+   g('xr').style.borderColor=g('excluderegion').value;
+   
+   switch(sitedeltaService.watchScanDelay) {
+    case 0: g('watchdelay').selectedIndex=0; break;
+    case -1: g('watchdelay').selectedIndex=1; break;
+    case 10080: g('watchdelay').selectedIndex=2; break;
+    case 1440: g('watchdelay').selectedIndex=3; break;
+    case 60: g('watchdelay').selectedIndex=4; break;
+    default: g('watchdelay').selectedIndex=5; g('watchvalue').value=sitedeltaService.watchDelay;
+   }
+   switch(sitedeltaService.notifySound) {
+    case "": g('notifySound').selectedIndex=0; break;
+    case "beep": g('notifySound').selectedIndex=1; break;
+    case "SystemNotification": g('notifySound').selectedIndex=2; break;
+    case "MailBeep": g('notifySound').selectedIndex=3; break;
+    default: g('notifySound').selectedIndex=4; g('notifySoundText').value = g(sitedeltaService.notifySound); break;
+   }
+  }
+ function g(name) {return document.getElementById(name); }
+]]>
+</script>
+<prefpane flex="1" id="sitedelta-pref-pane" label="SiteDelta" image="chrome://sitedelta/content/sitedeltaGross.gif">
+  <preferences>
+    <preference id="p_addbackground" name="extensions.sitedelta@schierla.de.addBackground" type="string"/>
+    <preference id="p_addborder" name="extensions.sitedelta@schierla.de.addBorder" type="string"/>
+    <preference id="p_movebackground" name="extensions.sitedelta@schierla.de.moveBackground" type="string"/>
+    <preference id="p_moveborder" name="extensions.sitedelta@schierla.de.moveBorder" type="string"/>
+    <preference id="p_removebackground" name="extensions.sitedelta@schierla.de.removeBackground" type="string"/>
+    <preference id="p_removeborder" name="extensions.sitedelta@schierla.de.removeBorder" type="string"/>
+    <preference id="p_includeregion" name="extensions.sitedelta@schierla.de.includeRegion" type="string"/>
+    <preference id="p_excluderegion" name="extensions.sitedelta@schierla.de.excludeRegion" type="string"/>
+    <preference id="p_showregions" name="extensions.sitedelta@schierla.de.showRegions" type="bool"/>
+    <preference id="p_scanimages" name="extensions.sitedelta@schierla.de.scanImages" type="bool"/>
+    <preference id="p_checkdeleted" name="extensions.sitedelta@schierla.de.checkDeleted" type="bool"/>
+    <preference id="p_openchanged" name="extensions.sitedelta@schierla.de.openChanged" type="bool"/>
+    <preference id="p_enablewatch" name="extensions.sitedelta@schierla.de.enableWatch" type="bool"/>
+    <preference id="p_backuppages" name="extensions.sitedelta@schierla.de.backupPages" type="bool"/>
+    <preference id="p_sitesettings" name="extensions.sitedelta@schierla.de.siteSettings" type="bool"/>
+    <preference id="p_scanonload" name="extensions.sitedelta@schierla.de.scanOnLoad" type="bool"/>
+    <preference id="p_watchpagedelay" name="extensions.sitedelta@schierla.de.watchPageDelay" type="int"/>
+    <preference id="p_watchscandelay" name="extensions.sitedelta@schierla.de.watchScanDelay" type="int"/>
+    <preference id="p_watchpagetimeout" name="extensions.sitedelta@schierla.de.watchPageTimeout" type="int"/>
+    <preference id="p_ignorenumbers" name="extensions.sitedelta@schierla.de.ignoreNumbers" type="bool"/>
+    <preference id="p_ignorecase" name="extensions.sitedelta@schierla.de.ignoreCase" type="bool"/>
+    <preference id="p_notifysound" name="extensions.sitedelta@schierla.de.notifysound" type="char"/>
+   </preferences>
+   <vbox flex="1">
+<tabbox flex="1">
+<tabs>
+<tab label="&sitedelta.prefs.about;" />
+<tab label="&sitedelta.prefs.whattoscan;" />
+<tab label="&sitedelta.prefs.whentoscan;" />
+<tab label="&sitedelta.prefs.reaction;" />
+<tab label="&sitedelta.prefs.appearance;" />
+</tabs>
+
+<tabpanels>
+<tabpanel id="about" orient="vertical">
+<label class="header">&sitedelta.prefs.about.title;</label>
+<label>&sitedelta.prefs.about.text;</label>
+</tabpanel>
+
+<tabpanel id="whattoscan" orient="vertical">
+<groupbox>
+<checkbox preference="p_checkdeleted" class="header" label="&sitedelta.prefs.scandeleted;" id="checkdeleted" />
+<label>&sitedelta.prefs.scandeleted.desc;</label>
+<checkbox preference="p_scanimages" class="header" label="&sitedelta.prefs.scanimages;" id="checkimages" />
+<label>&sitedelta.prefs.scanimages.desc;</label>
+<checkbox preference="p_ignorecase" class="header" label="&sitedelta.prefs.ignorecase;" id="ignorecase" />
+<label>&sitedelta.prefs.scanimages.desc;</label>
+<checkbox preference="p_ignorenumbers" class="header" label="&sitedelta.prefs.ignorenumbers;" id="ignorenumbers" />
+<label>&sitedelta.prefs.ignorenumbers.desc;</label>
+</groupbox>
+<groupbox>
+<checkbox preference="p_scanonload" class="header" label="&sitedelta.prefs.scanonload;"/>
+<label>&sitedelta.prefs.scanonload.desc;</label>
+</groupbox>
+</tabpanel>
+
+<tabpanel id="whentoscan" orient="vertical">
+<radiogroup id="watchdelay" flex="1" onselect="if(this.selectedIndex!=5)document.getElementById('watchvalue').disabled=true; else {document.getElementById('watchvalue').disabled=false; document.getElementById('watchvalue').focus(); document.getElementById('watchvalue').select(); }">
+<groupbox>
+<checkbox class="header" preference="p_enablewatch" label="&sitedelta.prefs.enablewatch;"/>
+<label>&sitedelta.prefs.enablewatch.desc;</label>
+</groupbox>
+<groupbox>
+<radio class="header" label="&sitedelta.prefs.frequency.never;"/>
+<label>&sitedelta.prefs.frequency.never.desc;</label>
+<radio class="header" label="&sitedelta.prefs.frequency.auto;"/>
+<label>&sitedelta.prefs.frequency.auto.desc;</label>
+</groupbox>
+<groupbox><caption><label class="header">&sitedelta.prefs.frequency.desc;</label></caption>
+<radio class="header" label="&sitedelta.prefs.frequency.weekly;"/>
+<radio class="header" label="&sitedelta.prefs.frequency.daily;"/>
+<radio class="header" label="&sitedelta.prefs.frequency.hourly;"/>
+<hbox align="center"><radio class="header" label="&sitedelta.prefs.frequency.custom;" /><textbox size="4" id="watchvalue" disabled="true" value=""/><label class="header">&sitedelta.prefs.frequency.minutes;</label></hbox>
+</groupbox>
+</radiogroup>
+<groupbox>
+<grid flex="1"><columns><column flex="1"/><column/></columns><rows>
+<row align="center"><label control="watchpagetimeout" class="header" value="&sitedelta.prefs.watchpagetimeout;" flex="1"/> <textbox preference="p_watchpagetimeout" id="watchpagetimeout" size="4"/></row>
+<label>&sitedelta.prefs.watchpagetimeout.desc;</label>
+<row align="center"><label control="watchpagedelay" class="header" value="&sitedelta.prefs.watchpagedelay;" flex="1"/> <textbox preference="p_watchpagedelay" id="watchpagedelay" size="4"/></row>
+<label>&sitedelta.prefs.watchpagedelay.desc;</label>
+</rows></grid>
+</groupbox>
+</tabpanel>
+
+<tabpanel id="reaction" orient="vertical">
+<groupbox>
+<checkbox preference="p_backuppages" class="header" label="&sitedelta.prefs.backuppages;" id="enablebackup" />
+<label>&sitedelta.prefs.backuppages.desc;</label>
+</groupbox>
+<groupbox>
+<checkbox preference="p_notifyalert" class="header" label="&sitedelta.prefs.notifyalert;" />
+<label>&sitedelta.prefs.notifyalert.desc;</label>
+</groupbox>
+<groupbox>
+<caption><label class="header">&sitedelta.prefs.notifysound;</label></caption>
+<radiogroup id="notifySound" flex="1" onselect="if(this.selectedIndex!=4)document.getElementById('notifySoundText').disabled=true; else {document.getElementById('notifySoundText').disabled=false; document.getElementById('watchvalue').focus(); document.getElementById('notifySoundText').select(); }">
+<radio class="header" label="&sitedelta.prefs.notifysound.none;"/>
+<radio class="header" label="&sitedelta.prefs.notifysound.beep;"/>
+<radio class="header" label="&sitedelta.prefs.notifysound.alert;"/>
+<radio class="header" label="&sitedelta.prefs.notifysound.newmail;"/>
+<radio class="header" label="&sitedelta.prefs.notifysound.custom;"/>
+<textbox id="notifySoundText" disabled="true"/>
+</radiogroup>
+</groupbox>
+</tabpanel>
+
+<tabpanel id="appearance" orient="vertical">
+    <groupbox flex="1"><caption label="&sitedelta.prefs.add;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows><row><label control="changebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_addbackground" id="addbackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="abg"/></row><row><label control="addborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_addborder" id="addborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="abo" style="border: dotted 1px;"/></row></rows></grid></groupbox>
+    <groupbox flex="1"><caption label="&sitedelta.prefs.remove;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows><row><label control="removebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_removebackground" id="removebackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="rbg"/></row><row><label control="removeborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_removeborder" id="removeborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="rbo" style="border: dotted 1px;"/></row></rows></grid></groupbox>
+    <groupbox flex="1"><caption label="&sitedelta.prefs.move;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows><row><label control="movebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_movebackground" id="movebackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="mbg"/></row><row><label control="moveborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_moveborder" id="moveborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="mbo" style="border: dotted 1px;"/></row></rows></grid></groupbox>
+    <groupbox flex="1"><caption label="&sitedelta.prefs.regions;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows><row><label control="includeregion" value="&sitedelta.prefs.scanregion;" flex="1"/> <textbox preference="p_includeregion" id="includeregion" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="ir" style="border: dotted 2px;"/></row><row><label control="excluderegion" value="&sitedelta.prefs.ignoreregion;" flex="1"/> <textbox preference="p_excluderegion" id="excluderegion" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="xr" style="border: dotted 2px;"/></row><checkbox preference="p_showregions" label="&sitedelta.prefs.showregions;"/></rows></grid></groupbox>
+</tabpanel>
+
+</tabpanels>
+</tabbox>
+</vbox>
+</prefpane>
+ 
 </prefwindow>

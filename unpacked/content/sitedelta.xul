@@ -9,16 +9,24 @@
     <stringbundle id="sitedelta-strings" src="chrome://sitedelta/locale/sitedelta.properties"/>
   </stringbundleset>
 
+  <menupopup id="viewSidebarMenu">
+    <menuitem key="" observes="viewSitedeltaSidebar"  />
+  </menupopup>
+
+  <broadcasterset id="mainBroadcasterSet"> 
+    <broadcaster id="viewSitedeltaSidebar" label="&sitedelta.title;" autoCheck="false" type="checkbox" group="sidebar" sidebarurl="chrome://sitedelta/content/sitedeltaSidebar.xul" sidebarTitle="&sitedelta.title;" oncommand="toggleSidebar('viewSitedeltaSidebar');" />
+  </broadcasterset>
+
   <statusbar id="status-bar">
     <statusbarpanel insertafter="livemark-button">
     <image id="sitedelta-status" onclick="sitedeltaOverlay.highlightChanges(event)" context="sitedelta-popup" src="chrome://sitedelta/skin/sitedelta.gif" />
     <image id="sitedelta-watch" menu="sitedelta-watch-popup" ondblclick="sitedeltaOverlay.openAllWatches();" context="sitedelta-watch-popup" src="chrome://sitedelta/skin/watch.gif" hidden="true" style="margin-left: 3px;"/>
     </statusbarpanel>
-    <popupset><menupopup id="sitedelta-watch-popup" position="before_start"><menuitem label="&sitedelta.openwatches;" default="true" oncommand="sitedeltaOverlay.openAllWatches();" /><menuseparator/></menupopup></popupset> 
+    <popupset><menupopup id="sitedelta-watch-popup" position="before_start" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending"><menuitem label="&sitedelta.openwatches;" default="true" oncommand="sitedeltaOverlay.openAllWatches();" /><menuseparator/><template><rule><conditions><content uri="?uri" /><triple subject="?uri" predicate="http://home.netscape.com/NC-rdf#links" object="?links" /><member container="?links" child="?child" /><triple subject="?child" predicate="http://home.netscape.com/NC-rdf#name" object="?name" /><triple subject="?child" predicate="http://sitedelta.schierla.de/SD-rdf#status" object="1" /></conditions><action><menuitem label="?name" uri="?child" oncommand="sitedeltaOverlay.openWatch(this)" /></action></rule></template></menupopup></popupset> 
     <popupset><menupopup id="sitedelta-popup" position="before_start">
     <menuitem label="&sitedelta.highlight;" oncommand="sitedeltaOverlay.highlightChanges(event)" default="true" />
-    <menu label="&sitedelta.backups;" id="sitedelta-backups"><menupopup onpopupshowing="sitedeltaOverlay.listBackups(this)"><menuitem label="&sitedelta.createbackup;" oncommand="sitedeltaOverlay.createBackup();"/><menuseparator/></menupopup></menu>
     <menuseparator />
+    <menu label="&sitedelta.backups;" id="sitedelta-backups"><menupopup onpopupshowing="sitedeltaOverlay.listBackups(this)"><menuitem label="&sitedelta.createbackup;" oncommand="sitedeltaOverlay.createBackup();"/><menuseparator/></menupopup></menu>
     <menu label="&sitedelta.regions;" id="sitedelta-regions"><menupopup onpopupshowing="sitedeltaOverlay.listRegions(this)">
       <menuitem label="&sitedelta.scanregion;" oncommand="sitedeltaOverlay.includeRegion()" />
       <menuseparator id="sitedelta-scanregions" />
@@ -27,9 +35,7 @@
       <menu label="&sitedelta.loadpreset;" id="sitedelta-load-preset"><menupopup onpopupshowing="sitedeltaOverlay.listPresets(this)" /></menu>
       </menupopup></menu>
     <menuseparator />
-    <menuitem label="&sitedelta.checkall;" oncommand="sitedeltaOverlay.showManagerAndCheck()" />
-    <menuitem label="&sitedelta.manager;" oncommand="sitedeltaOverlay.showManager()" />
+    <menuitem label="&sitedelta.togglesidebar;" oncommand="toggleSidebar('viewSitedeltaSidebar');" />
     </menupopup></popupset>
-
   </statusbar>
 </overlay>

@@ -12,14 +12,20 @@ var sitedelta = {
       file.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
     }
   },
-  onStatusBarButton: function(e) {
+  removeHighlight: function(e) {
+   for(var i=0;i<this.changes;i++) {
+    var c=content.document.getElementById("sitedelta-change"+i);
+    if(c) c.parentNode.replaceChild(c.firstChild, c);
+   }
+   this.changes=0; this.lastURL="";
+  },
+  highlightChanges: function(e) {
    var url=content.window.location.href; 
    url=url.replace(/^.*:\/\//, "");
    url=url.replace(/#.*$/, "");
    url=url.replace(/\./g,'-');
    url=url.replace(/\%[0-9A-Fa-f]{2}/g, "_");
-   url=url.replace(/[^a-zA-Z0-9\.]/g, "_");
-   url=url.replace(/_+/g,'_');
+   url=url.replace(/[^a-zA-Z0-9\.]+/g, "_");
    url=url.replace(/_$/, "");
    url=url.replace(/^_/, "");
    if(url=='') url='_default_';
@@ -29,7 +35,7 @@ var sitedelta = {
     return;
    }
    var body=content.document.getElementsByTagName("body")[0];
-   if(!body) {alert("No content found"); return; }
+   if(!body) {alert("No content found."); return; }
 
    var file = Components.classes["@mozilla.org/file/directory_service;1"].getService(Components.interfaces.nsIProperties).get("ProfD", Components.interfaces.nsIFile);
    file.append("sitedelta"); file.append(url+".dat");

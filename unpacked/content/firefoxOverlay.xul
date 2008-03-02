@@ -10,7 +10,7 @@
 
   <statusbar id="status-bar">
     <statusbarpanel id="sitedelta-status" insertafter="livemark-button">
-     <image id="sitedelta-statusbar-button" src="chrome://sitedelta/content/sitedelta.gif" width="16" height="16" style="margin:0 1px" onclick="sitedelta.onStatusBarButton()"/>
+     <image id="sitedelta-statusbar-button" src="chrome://sitedelta/content/sitedelta.gif" width="16" height="16" style="margin:0 1px" onclick="sitedelta.highlightChanges()" oncontextmenu="sitedelta.removeHighlight()"/>
     </statusbarpanel>
   </statusbar>
 </overlay>

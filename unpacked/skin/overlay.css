@@ -1,0 +1,3 @@
+#sitedeltaManager #pages listitem[status="changed"] {list-style-image: url(changed.gif); }
+#sitedeltaManager #pages listitem[status="unchanged"] {list-style-image: url(unchanged.gif); }
+#sitedeltaManager #pages listitem {list-style-image: url(unchecked.gif); }

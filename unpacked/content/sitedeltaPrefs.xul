@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<prefwindow id="sitedelta-prefs"
+     title="SiteDelta Settings"
+     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="previewColors();">
+
+<script type="text/javascript">
+<![CDATA[
+  function previewColors() {
+   g('cbg').style.background=g('changebackground').value;
+   g('cbo').style.borderColor=g('changeborder').value;
+   g('ir').style.borderColor=g('includeregion').value;
+   g('xr').style.borderColor=g('excluderegion').value;
+  }
+ function g(name) {return document.getElementById(name); }
+]]>
+</script>
+
+<prefpane id="sitedelta-pref-pane" label="SiteDelta" image="chrome://sitedelta/content/sitedeltaGross.gif">
+  <preferences>
+    <preference id="p_changebackground" name="extensions.sitedelta@schierla.de.changeBackground" type="string"/>
+    <preference id="p_changeborder" name="extensions.sitedelta@schierla.de.changeBorder" type="string"/>
+    <preference id="p_includeregion" name="extensions.sitedelta@schierla.de.includeRegion" type="string"/>
+    <preference id="p_excluderegion" name="extensions.sitedelta@schierla.de.excludeRegion" type="string"/>
+    <preference id="p_showregions" name="extensions.sitedelta@schierla.de.showRegions" type="bool"/>
+   </preferences>
+ 
+  <vbox>
+    <groupbox flex="1"><caption label="Changes"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
+    <row><label control="changebackground" value="Background color: " flex="1"/><textbox preference="p_changebackground" id="changebackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="cbg"/></row>
+    <row><label control="changeborder" value="Border color: " flex="1"/> <textbox preference="p_changeborder" id="changeborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="cbo" style="border: dotted 1px;"/></row>
+   </rows></grid></groupbox>
+
+    <groupbox flex="1"><caption label="Regions"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
+    <row><label control="includeregion" value="Scanned region color: " flex="1"/> <textbox preference="p_includeregion" id="includeregion" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="ir" style="border: dotted 2px;"/></row>
+    <row><label control="excluderegion" value="Ignored region color: " flex="1"/> <textbox preference="p_excluderegion" id="excluderegion" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="xr" style="border: dotted 2px;"/></row>
+   <checkbox preference="p_showregions" label="Outline regions"/>
+   </rows></grid></groupbox>
+  </vbox>
+</prefpane>
+ 
+</prefwindow>

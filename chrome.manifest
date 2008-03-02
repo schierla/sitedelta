@@ -1,4 +1,4 @@
-content	sitedelta	unpacked/content/
-locale	sitedelta	en-US	unpacked/locale/en-US/
-skin	sitedelta	classic/1.0	unpacked/skin/
+content	sitedelta	content/
+locale	sitedelta	en-US	locale/en-US/
+skin	sitedelta	classic/1.0	skin/
 overlay	chrome://browser/content/browser.xul	chrome://sitedelta/content/firefoxOverlay.xul

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://sitedelta/skin/sitedelta.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
+<window id="sitedeltaPreset" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&sitedelta.preset.title;" onload="sitedeltaPreset.onLoad()">
+<script src="chrome://sitedelta/content/sitedelta.js"/>
+<script src="chrome://sitedelta/content/sitedeltaPreset.js" />
+<vbox flex="1">
+<hbox flex="1">
+<vbox flex="1"> 
+<listbox flex="1" id="presets" onselect="sitedeltaPreset.showDetails();"></listbox>
+<hbox><button label="&sitedelta.preset.delete;" flex="1" oncommand="sitedeltaPreset.delete();" /><button label="&sitedelta.preset.duplicate;" flex="1" oncommand="sitedeltaPreset.duplicate();"/></hbox>
+</vbox>
+<splitter/>
+<vbox flex="3">
+<groupbox>
+<label class="header">&sitedelta.preset.descname;</label>
+<hbox><label>&sitedelta.preset.lblname;</label><textbox name="name" id="name" class="plain" disabled="true" onchange="sitedeltaPreset.saveData();" onblur="sitedeltaPreset.saveData();" flex="1"/></hbox>
+</groupbox>
+<groupbox>
+<label class="header">&sitedelta.preset.descurl;</label>
+<hbox><label>&sitedelta.preset.lblurl;</label><textbox id="url" class="plain" flex="1" disabled="true" onchange="sitedeltaPreset.saveData();" /></hbox>
+</groupbox>
+<groupbox flex="1">
+<label class="header">&sitedelta.preset.descinclude;</label>
+<hbox flex="1"><label label=" "/><textbox id="include" multiline="true" readonly="true" class="plain" wrap="off" flex="1" /></hbox>
+</groupbox>
+<groupbox flex="1">
+<label class="header">&sitedelta.preset.descexclude;</label>
+<hbox flex="1"><label label=" " /><textbox id="exclude" multiline="true" readonly="true" class="plain" wrap="off" flex="1" /></hbox>
+</groupbox>
+</vbox>
+</hbox><hbox flex="0"><spacer flex="1"/><button label="&sitedelta.manager.close;" oncommand="window.close();" dlgType="accept" /></hbox>
+</vbox>
+</window>

@@ -1,23 +1,37 @@
 <!ENTITY sitedelta.highlight "Highlight changes">
 <!ENTITY sitedelta.removehighlight "Remove highlights">
 <!ENTITY sitedelta.regions "Regions">
+<!ENTITY sitedelta.loadpreset "Load preset">
+<!ENTITY sitedelta.manager.savepreset "Save as preset...">
+<!ENTITY sitedelta.manager.managepresets "Manage presets...">
 <!ENTITY sitedelta.scanregion "+ Add scan region">
 <!ENTITY sitedelta.ignoreregion "+ Add ignore region">
-<!ENTITY sitedelta.manager "Manage sites">
+<!ENTITY sitedelta.manager "Manage sites...">
+<!ENTITY sitedelta.checkall "Check all sites...">
 <!ENTITY sitedelta.manager.title "SiteDelta - Manage sites">
 <!ENTITY sitedelta.manager.updateall "Check for updates">
 <!ENTITY sitedelta.manager.delete "Delete">
 <!ENTITY sitedelta.manager.deleteall "Delete all">
+<!ENTITY sitedelta.manager.lblname "Name:">
 <!ENTITY sitedelta.manager.lbltitle "Title:">
 <!ENTITY sitedelta.manager.lblurl "URL:">
 <!ENTITY sitedelta.manager.lblcheck "Last check:">
 <!ENTITY sitedelta.manager.close "Close">
+<!ENTITY sitedelta.preset.descname "Please enter a name for the region preset:">
+<!ENTITY sitedelta.preset.descurl "URLs to apply this region to (use * and ? as wildcards):">
+<!ENTITY sitedelta.preset.descinclude "Regions scanned: ">
+<!ENTITY sitedelta.preset.descexclude "Regions ignored: ">
+<!ENTITY sitedelta.preset.delete "Delete">
+<!ENTITY sitedelta.preset.duplicate "Duplicate">
+<!ENTITY sitedelta.preset.lblname "Name:">
+<!ENTITY sitedelta.preset.lblurl "URL:">
 <!ENTITY sitedelta.prefs.title "SiteDelta - Settings">
-<!ENTITY sitedelta.prefs.changes "Changes">
+<!ENTITY sitedelta.prefs.add "Added text">
+<!ENTITY sitedelta.prefs.remove "Removed text">
+<!ENTITY sitedelta.prefs.move "Moved text">
 <!ENTITY sitedelta.prefs.bgcolor "Background color: ">
 <!ENTITY sitedelta.prefs.bordercolor "Border color: ">
 <!ENTITY sitedelta.prefs.regions "Regions">
 <!ENTITY sitedelta.prefs.scanregion "Scanned region color: ">
 <!ENTITY sitedelta.prefs.ignoreregion "Ignored region color: ">
 <!ENTITY sitedelta.prefs.showregions "Outline regions">
-

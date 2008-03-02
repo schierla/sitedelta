@@ -8,8 +8,12 @@
 <script type="text/javascript">
 <![CDATA[
   function previewColors() {
-   g('cbg').style.background=g('changebackground').value;
-   g('cbo').style.borderColor=g('changeborder').value;
+   g('abg').style.background=g('addbackground').value;
+   g('abo').style.borderColor=g('addborder').value;
+   g('rbg').style.background=g('removebackground').value;
+   g('rbo').style.borderColor=g('removeborder').value;
+   g('mbg').style.background=g('movebackground').value;
+   g('mbo').style.borderColor=g('moveborder').value;
    g('ir').style.borderColor=g('includeregion').value;
    g('xr').style.borderColor=g('excluderegion').value;
   }
@@ -19,17 +23,29 @@
 
 <prefpane id="sitedelta-pref-pane" label="SiteDelta" image="chrome://sitedelta/content/sitedeltaGross.gif">
   <preferences>
-    <preference id="p_changebackground" name="extensions.sitedelta@schierla.de.changeBackground" type="string"/>
-    <preference id="p_changeborder" name="extensions.sitedelta@schierla.de.changeBorder" type="string"/>
+    <preference id="p_addbackground" name="extensions.sitedelta@schierla.de.addBackground" type="string"/>
+    <preference id="p_addborder" name="extensions.sitedelta@schierla.de.addBorder" type="string"/>
+    <preference id="p_movebackground" name="extensions.sitedelta@schierla.de.moveBackground" type="string"/>
+    <preference id="p_moveborder" name="extensions.sitedelta@schierla.de.moveBorder" type="string"/>
+    <preference id="p_removebackground" name="extensions.sitedelta@schierla.de.removeBackground" type="string"/>
+    <preference id="p_removeborder" name="extensions.sitedelta@schierla.de.removeBorder" type="string"/>
     <preference id="p_includeregion" name="extensions.sitedelta@schierla.de.includeRegion" type="string"/>
     <preference id="p_excluderegion" name="extensions.sitedelta@schierla.de.excludeRegion" type="string"/>
     <preference id="p_showregions" name="extensions.sitedelta@schierla.de.showRegions" type="bool"/>
    </preferences>
  
   <vbox>
-    <groupbox flex="1"><caption label="&sitedelta.prefs.changes;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
-    <row><label control="changebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_changebackground" id="changebackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="cbg"/></row>
-    <row><label control="changeborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_changeborder" id="changeborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="cbo" style="border: dotted 1px;"/></row>
+    <groupbox flex="1"><caption label="&sitedelta.prefs.add;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
+    <row><label control="changebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_addbackground" id="addbackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="abg"/></row>
+    <row><label control="addborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_addborder" id="addborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="abo" style="border: dotted 1px;"/></row>
+   </rows></grid></groupbox>
+    <groupbox flex="1"><caption label="&sitedelta.prefs.remove;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
+    <row><label control="removebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_removebackground" id="removebackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="rbg"/></row>
+    <row><label control="removeborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_removeborder" id="removeborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="rbo" style="border: dotted 1px;"/></row>
+   </rows></grid></groupbox>
+    <groupbox flex="1"><caption label="&sitedelta.prefs.move;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
+    <row><label control="movebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_movebackground" id="movebackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="mbg"/></row>
+    <row><label control="moveborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_moveborder" id="moveborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="mbo" style="border: dotted 1px;"/></row>
    </rows></grid></groupbox>
 
     <groupbox flex="1"><caption label="&sitedelta.prefs.regions;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>

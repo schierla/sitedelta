@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="chrome://sitedelta/skin/overlay.css" type="text/css"?>
+<?xml-stylesheet href="chrome://sitedelta/skin/sitedelta.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
 <overlay id="sitedelta-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script src="overlay.js"/>
+  <script src="sitedelta.js"/>
   <stringbundleset id="stringbundleset">
     <stringbundle id="sitedelta-strings" src="chrome://sitedelta/locale/sitedelta.properties"/>
   </stringbundleset>
 
   <statusbar id="status-bar">
-    <statusbarpanel id="sitedelta-status" insertafter="livemark-button">
-     <image id="sitedelta-statusbar-button" onclick="sitedelta.highlightChanges(event)" context="sitedelta-popup" src="chrome://sitedelta/content/sitedelta.gif" width="16" height="16" style="margin:0 1px"/>
-    </statusbarpanel>
+    <statusbarpanel id="sitedelta-status" insertafter="livemark-button" onclick="sitedelta.highlightChanges(event)" context="sitedelta-popup" class="statusbarpanel-iconic" src="chrome://sitedelta/skin/sitedelta.gif" />
     <popupset><menupopup id="sitedelta-popup" position="before_start">
-    <menuitem label="&sitedelta.highlight;" oncommand="sitedelta.highlightChanges(event)" />
+    <menuitem label="&sitedelta.highlight;" oncommand="sitedelta.highlightChanges(event)" default="true" />
     <menuitem label="&sitedelta.removehighlight;" oncommand="sitedelta.removeHighlight()" />
     <menuseparator />
     <menu label="&sitedelta.regions;" id="sitedelta-regions"><menupopup onpopupshowing="sitedelta.listRegions(this)">
@@ -21,8 +19,10 @@
       <menuseparator id="sitedelta-scanregions" />
       <menuitem label="&sitedelta.ignoreregion;" oncommand="sitedelta.excludeRegion()" />
       <menuseparator id="sitedelta-ignoreregions" />
+      <menu label="&sitedelta.loadpreset;" id="sitedelta-load-preset"><menupopup onpopupshowing="sitedelta.listPresets(this)" /></menu>
       </menupopup></menu>
     <menuseparator />
+    <menuitem label="&sitedelta.checkall;" oncommand="sitedelta.showManagerAndCheck()" />
     <menuitem label="&sitedelta.manager;" oncommand="sitedelta.showManager()" />
     </menupopup></popupset>
 

@@ -1,23 +1,38 @@
 <!ENTITY sitedelta.highlight "Änderungen hervorheben">
 <!ENTITY sitedelta.removehighlight "Hervorhebungen entfernen">
 <!ENTITY sitedelta.regions "Bereiche">
+<!ENTITY sitedelta.loadpreset "Bereiche laden">
+<!ENTITY sitedelta.manager.savepreset "Als Voreinstellung speichern...">
+<!ENTITY sitedelta.manager.managepresets "Voreinstellungen bearbeiten...">
 <!ENTITY sitedelta.scanregion "+ Bereich überwachen">
 <!ENTITY sitedelta.ignoreregion "+ Bereich ignorieren">
-<!ENTITY sitedelta.manager "Seiten verwalten">
+<!ENTITY sitedelta.manager "Seiten verwalten...">
+<!ENTITY sitedelta.checkall "Alle Seiten prüfen...">
 <!ENTITY sitedelta.manager.title "SiteDelta - Seiten verwalten">
 <!ENTITY sitedelta.manager.updateall "Auf Änderungen prüfen">
 <!ENTITY sitedelta.manager.delete "Löschen">
 <!ENTITY sitedelta.manager.deleteall "Alle löschen">
+<!ENTITY sitedelta.manager.lblname "Name:">
 <!ENTITY sitedelta.manager.lbltitle "Titel:">
 <!ENTITY sitedelta.manager.lblurl "Adresse:">
 <!ENTITY sitedelta.manager.lblcheck "Letzter Besuch:">
 <!ENTITY sitedelta.manager.close "Schließen">
+<!ENTITY sitedelta.preset.title "Voreinstellungen bearbeiten">
+<!ENTITY sitedelta.preset.descname "Bitte geben Sie einen Namen für die Bereichs-Voreinstellung ein:">
+<!ENTITY sitedelta.preset.descurl "Adressen, für die diese Voreinstellung verwendet werden soll (* und ? als Platzhalter):">
+<!ENTITY sitedelta.preset.descinclude "Überwachte Bereiche: ">
+<!ENTITY sitedelta.preset.descexclude "Ignorierte Bereiche: ">
+<!ENTITY sitedelta.preset.delete "Löschen">
+<!ENTITY sitedelta.preset.duplicate "Kopieren">
+<!ENTITY sitedelta.preset.lblname "Name:">
+<!ENTITY sitedelta.preset.lblurl "Adresse:">
 <!ENTITY sitedelta.prefs.title "SiteDelta - Einstellungen">
-<!ENTITY sitedelta.prefs.changes "Änderungen">
+<!ENTITY sitedelta.prefs.add "Hinzugefügter Text">
+<!ENTITY sitedelta.prefs.remove "Entfernter Text">
+<!ENTITY sitedelta.prefs.move "Verschobener Text">
 <!ENTITY sitedelta.prefs.bgcolor "Hindergrundfarbe: ">
 <!ENTITY sitedelta.prefs.bordercolor "Rahmenfarbe: ">
 <!ENTITY sitedelta.prefs.regions "Bereiche">
 <!ENTITY sitedelta.prefs.scanregion "Farbe für überwachte Bereiche: ">
 <!ENTITY sitedelta.prefs.ignoreregion "Farbe für ignorierte Bereiche: ">
 <!ENTITY sitedelta.prefs.showregions "Bereiche anzeigen">
-

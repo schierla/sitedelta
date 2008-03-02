@@ -1,0 +1,6 @@
+#sitedeltaManager #pages listitem[status="changed"] {list-style-image: url(changed.gif); }
+#sitedeltaManager #pages listitem[status="unchanged"] {list-style-image: url(unchanged.gif); }
+#sitedeltaManager #pages listitem[status="loading"] {list-style-image: url(loading.gif); }
+#sitedeltaManager #pages listitem[status="error"] {list-style-image: url(error.gif); }
+#sitedeltaManager #pages listitem[status="checking"] {list-style-image: url(checking.gif); }
+#sitedeltaManager #pages listitem {list-style-image: url(unchecked.gif); }

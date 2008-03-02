@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://sitedelta/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
+<overlay id="sitedelta-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="overlay.js"/>
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="sitedelta-strings" src="chrome://sitedelta/locale/sitedelta.properties"/>
+  </stringbundleset>
+
+  <statusbar id="status-bar">
+    <statusbarpanel id="sitedelta-status" insertafter="livemark-button">
+     <image id="sitedelta-statusbar-button" src="chrome://sitedelta/content/sitedelta.gif" width="16" height="16" style="margin:0 1px" onclick="sitedelta.onStatusBarButton()"/>
+    </statusbarpanel>
+  </statusbar>
+</overlay>

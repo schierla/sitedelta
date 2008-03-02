@@ -296,14 +296,14 @@ SiteDelta.prototype = {
         this._excludes = [];
         for (var i = 0; i < result.excludes.length; i++) {
             this._excludes.push(doc.evaluate(result.excludes[i], doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext());
-            if (this._excludes[i] && this.showRegions) this._excludes[i].style.ôutline = "dotted " + this.excludeRegion + " 2px;";
+            if (this._excludes[i] && this.showRegions) this._excludes[i].style.MozOutline = this.excludeRegion + " dotted 2px";
         }
         var regions = [];
         for (var i = 0; i < result.includes.length; i++) {
             var xpath = result.includes[i];
             var startElement = doc.evaluate(xpath, doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext();
             if (!startElement) return this.RESULT_NOTFOUND;
-            if (this.showRegions) startElement.style.outline = "dotted " + this.includeRegion + " 2px;";
+            if (this.showRegions) startElement.style.MozOutline = this.includeRegion + " dotted 2px";
             regions.push(startElement);
         }
         var pos = 0;
@@ -361,7 +361,7 @@ SiteDelta.prototype = {
         for (var i = 0; i < result.excludes.length; i ++ ) {
             this._excludes.push(doc.evaluate(result.excludes[i], doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext());
             if (this._excludes[i] && this.showRegions)
-                this._excludes[i].style.outline = "dotted " + this.excludeRegion + " 2px;";
+                this._excludes[i].style.outline = this.excludeRegion + " dotted 2px";
         }
         var regions = [];
         for (var i = 0; i < result.includes.length; i ++ ) {
@@ -370,7 +370,7 @@ SiteDelta.prototype = {
             if ( ! startElement)
                 return this.RESULT_ERROR;
             if (this.showRegions)
-                startElement.style.outline = "dotted " + this.includeRegion + " 2px;";
+                startElement.style.outline = this.includeRegion + " dotted 2px";
             regions.push(startElement);
         }
         for (var i = 0; i < regions.length; i ++ ) {
@@ -566,19 +566,47 @@ SiteDelta.prototype = {
         }
         return uri;
     },
+    hasPass: function(url) {
+        var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+        var uri = ioService.newURI(url, null, null);
+
+        if (Cc["@mozilla.org/passwordmanager;1"]) {
+			var passwordManager = Cc["@mozilla.org/passwordmanager;1"].getService(Ci.nsIPasswordManager);
+			var e = passwordManager.enumerator;
+			while (e.hasMoreElements()) {
+	    		try {
+	        		var pass = e.getNext().QueryInterface(Components.interfaces.nsIPassword);
+	        		if(uri.hostPort.length<=pass.host.length && pass.host.substr(0,uri.hostPort.length)==uri.hostPort) return true;
+	    		} catch (ex) {}
+	 		}
+        } else if (Cc["@mozilla.org/login-manager;1"]) {
+        	var loginManager = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
+        	if(loginManager.countLogins(uri.prePath, null, "")>0) return true;
+		}
+		return false;
+    },
     getPass: function(url) {
-    	if(!Cc["@mozilla.org/passwordmanager;1"]) return null;
-		var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
-		var uri = ioService.newURI(url, null, null);
-		var passwordManager = Cc["@mozilla.org/passwordmanager;1"].getService(Ci.nsIPasswordManager);
-		var e = passwordManager.enumerator;
-		while (e.hasMoreElements()) {
-    		try {
-        		var pass = e.getNext().QueryInterface(Components.interfaces.nsIPassword);
-        		if(uri.hostPort.length<=pass.host.length && pass.host.substr(0,uri.hostPort.length)==uri.hostPort) return pass;
-    		} catch (ex) {}
- 		}
- 		return null;    	
+    	var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+        var uri = ioService.newURI(url, null, null);
+
+        if (Cc["@mozilla.org/passwordmanager;1"]) {
+			var passwordManager = Cc["@mozilla.org/passwordmanager;1"].getService(Ci.nsIPasswordManager);
+			var e = passwordManager.enumerator;
+			while (e.hasMoreElements()) {
+	    		try {
+	        		var pass = e.getNext().QueryInterface(Components.interfaces.nsIPassword);
+	        		if(uri.hostPort.length<=pass.host.length && pass.host.substr(0,uri.hostPort.length)==uri.hostPort) return {user: pass.user, password: pass.password};
+	    		} catch (ex) {}
+	 		}
+        } else if (Cc["@mozilla.org/login-manager;1"]) {
+        	var loginManager = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
+        	var logins = loginManager.getAllLogins({});
+        	for(var i=0; i<logins.length; i++) {
+        		var login = logins[i];
+        		if(uri.prePath == login.hostname && login.formSubmitURL==null) return {user: login.username, password: login.password}
+        	}
+		}
+		return null;	
     },
     updatePage: function(url) {
     	var result=this.getPage(url); 

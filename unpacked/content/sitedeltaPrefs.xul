@@ -47,7 +47,7 @@
     case 10080: g('watchdelay').selectedIndex=2; break;
     case 1440: g('watchdelay').selectedIndex=3; break;
     case 60: g('watchdelay').selectedIndex=4; break;
-    default: g('watchdelay').selectedIndex=5; g('watchvalue').value=sitedeltaService.watchDelay;
+    default: g('watchdelay').selectedIndex=5; g('watchvalue').value=sitedeltaService.watchScanDelay;
    }
    switch(sitedeltaService.notifySound) {
     case "": g('notifySound').selectedIndex=0; break;
@@ -83,7 +83,8 @@
     <preference id="p_watchpagetimeout" name="extensions.sitedelta@schierla.de.watchPageTimeout" type="int"/>
     <preference id="p_ignorenumbers" name="extensions.sitedelta@schierla.de.ignoreNumbers" type="bool"/>
     <preference id="p_ignorecase" name="extensions.sitedelta@schierla.de.ignoreCase" type="bool"/>
-    <preference id="p_notifysound" name="extensions.sitedelta@schierla.de.notifysound" type="char"/>
+    <preference id="p_notifysound" name="extensions.sitedelta@schierla.de.notifySound" type="char"/>
+    <preference id="p_notifyalert" name="extensions.sitedelta@schierla.de.notifyAlert" type="bool"/>
    </preferences>
    <vbox flex="1">
 <tabbox flex="1">

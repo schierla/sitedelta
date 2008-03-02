@@ -5,14 +5,9 @@
 <!ENTITY sitedelta.createbackup "Aktuelle Seite archivieren">
 <!ENTITY sitedelta.regions "Bereiche">
 <!ENTITY sitedelta.loadpreset "Bereiche laden">
-<!ENTITY sitedelta.manager.savepreset "Als Voreinstellung speichern...">
-<!ENTITY sitedelta.manager.managepresets "Voreinstellungen bearbeiten...">
 <!ENTITY sitedelta.scanregion "+ Bereich überwachen">
 <!ENTITY sitedelta.ignoreregion "+ Bereich ignorieren">
 <!ENTITY sitedelta.pages "Seiten">
-<!ENTITY sitedelta.manager "Seiten verwalten...">
-<!ENTITY sitedelta.checkbg "Im Hintergrund prüfen">
-<!ENTITY sitedelta.checkall "Alle Seiten prüfen...">
 <!ENTITY sitedelta.openwatches "Alle in Tabs öffnen...">
 <!ENTITY sitedelta.togglesidebar "SiteDelta Sidebar">
 
@@ -46,21 +41,10 @@
 <!ENTITY sitedelta.properties.savepreset "Als Voreinstellung speichern">
 <!ENTITY sitedelta.properties.editpresets "Voreinstellungen bearbeiten">
 
-<!ENTITY sitedelta.manager.title "SiteDelta - Seiten verwalten">
-<!ENTITY sitedelta.manager.update "Auf Änderungen prüfen">
-<!ENTITY sitedelta.manager.updateall "Alle auf Änderungen prüfen">
-<!ENTITY sitedelta.manager.delete "Löschen">
-<!ENTITY sitedelta.manager.deleteall "Alle löschen">
-<!ENTITY sitedelta.manager.lblname "Name:">
-<!ENTITY sitedelta.manager.lbltitle "Titel:">
-<!ENTITY sitedelta.manager.lblurl "Adresse:">
-<!ENTITY sitedelta.manager.lblcheck "Letzter Besuch:">
-<!ENTITY sitedelta.manager.close "Schließen">
-<!ENTITY sitedelta.manager.default "Standard">
-<!ENTITY sitedelta.manager.on "An">
-<!ENTITY sitedelta.manager.off "Aus">
-<!ENTITY sitedelta.manager.uselogin "Benutzername und Passwort verwenden">
-
+<!ENTITY sitedelta.preset.close "Schließen">
+<!ENTITY sitedelta.preset.default "Standard">
+<!ENTITY sitedelta.preset.on "An">
+<!ENTITY sitedelta.preset.off "Aus">
 <!ENTITY sitedelta.preset.title "Voreinstellungen bearbeiten">
 <!ENTITY sitedelta.preset.descname "Bitte geben Sie einen Namen für die Bereichs-Voreinstellung ein:">
 <!ENTITY sitedelta.preset.descurl "Adressen, für die diese Voreinstellung verwendet werden soll (* und ? als Platzhalter):">

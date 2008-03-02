@@ -34,8 +34,8 @@ showDetails: function() {
  document.getElementById("login").checked=(result.user!="");
  document.getElementById("login").disabled=true;
  
- var pass=sitedeltaService.getPass(result.url);
- if(pass!=null) document.getElementById("login").disabled=false;
+ var pass=sitedeltaService.hasPass(result.url);
+ if(pass) document.getElementById("login").disabled=false;
  
 },
 showPresets: function() {

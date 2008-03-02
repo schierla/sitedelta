@@ -10,57 +10,128 @@
 <!ENTITY sitedelta.scanregion "+ Add scan region">
 <!ENTITY sitedelta.ignoreregion "+ Add ignore region">
 <!ENTITY sitedelta.pages "Sites">
-<!ENTITY sitedelta.openpage "Open">
-<!ENTITY sitedelta.manager "Manage sites...">
-<!ENTITY sitedelta.pagesettings "Properties">
-<!ENTITY sitedelta.checkbg "Check in background">
-<!ENTITY sitedelta.checkall "Check all sites...">
-<!ENTITY sitedelta.openwatches "Open all in tabs...">
-<!ENTITY sitedelta.manager.title "SiteDelta - Manage sites">
-<!ENTITY sitedelta.manager.update "Check for updates">
-<!ENTITY sitedelta.manager.updateall "Check all for updates">
-<!ENTITY sitedelta.manager.delete "Delete">
-<!ENTITY sitedelta.manager.deleteall "Delete all">
+<!ENTITY sitedelta.manager "Seiten verwalten...">
+<!ENTITY sitedelta.checkbg "Im Hintergrund prüfen">
+<!ENTITY sitedelta.checkall "Alle Seiten prüfen...">
+<!ENTITY sitedelta.openwatches "Alle in Tabs öffnen...">
+<!ENTITY sitedelta.togglesidebar "SiteDelta Sidebar">
+
+<!ENTITY sitedelta.sidebar.pagesettings "Eigenschaften">
+<!ENTITY sitedelta.sidebar.update "Auf Änderungen prüfen">
+<!ENTITY sitedelta.sidebar.delete "Löschen">
+<!ENTITY sitedelta.sidebar.title "SiteDelta">
+<!ENTITY sitedelta.sidebar.openpage "Seite öffnen">
+<!ENTITY sitedelta.sidebar.pages "Seiten">
+<!ENTITY sitedelta.sidebar.search "Suchen: ">
+<!ENTITY sitedelta.sidebar.updateall "Alle auf Änderungen prüfen">
+<!ENTITY sitedelta.sidebar.openall "Alle geänderten Seiten öffnen">
+<!ENTITY sitedelta.sidebar.showprefs "SiteDelta-Einstellungen">
+<!ENTITY sitedelta.sidebar.showpresets "Voreinstellungen verwalten">
+
+<!ENTITY sitedelta.properties.savepreset "Als Voreinstellung speichern...">
+<!ENTITY sitedelta.properties.title "Seiteneigenschaften">
+<!ENTITY sitedelta.properties.lblname "Name:">
+<!ENTITY sitedelta.properties.lbltitle "Titel:">
+<!ENTITY sitedelta.properties.lblurl "Adresse:">
+<!ENTITY sitedelta.properties.lblcheck "Letzter Besuch:">
+<!ENTITY sitedelta.properties.uselogin "Gespeichertes Passwort verwenden">
+<!ENTITY sitedelta.properties.pageinfo "Seiteninformation">
+<!ENTITY sitedelta.properties.whattoscan "Überprüfungseinstellungen">
+<!ENTITY sitedelta.properties.whentoscan "Überprüfungszeitplan">
+<!ENTITY sitedelta.properties.loadsettings "Einstellungen laden">
+<!ENTITY sitedelta.properties.loaddefault "Auf Standardwerte zurücksetzen">
+<!ENTITY sitedelta.properties.savesettings "Einstellungen speichern">
+<!ENTITY sitedelta.properties.savedefault "Als Standardwerte speichern">
+<!ENTITY sitedelta.properties.editdefault "Standardwerte bearbeiten">
+<!ENTITY sitedelta.properties.savepreset "Als Voreinstellung speichern">
+<!ENTITY sitedelta.properties.editpresets "Voreinstellungen bearbeiten">
+
+<!ENTITY sitedelta.manager.title "SiteDelta - Seiten verwalten">
+<!ENTITY sitedelta.manager.update "Auf Änderungen prüfen">
+<!ENTITY sitedelta.manager.updateall "Alle auf Änderungen prüfen">
+<!ENTITY sitedelta.manager.delete "Löschen">
+<!ENTITY sitedelta.manager.deleteall "Alle löschen">
 <!ENTITY sitedelta.manager.lblname "Name:">
-<!ENTITY sitedelta.manager.lbltitle "Title:">
-<!ENTITY sitedelta.manager.lblurl "URL:">
-<!ENTITY sitedelta.manager.lblcheck "Last check:">
-<!ENTITY sitedelta.manager.close "Close">
-<!ENTITY sitedelta.manager.default "Default">
-<!ENTITY sitedelta.manager.on "On">
-<!ENTITY sitedelta.manager.off "Off">
-<!ENTITY sitedelta.manager.uselogin "Use login data">
-<!ENTITY sitedelta.preset.title "Manage presets">
-<!ENTITY sitedelta.preset.descname "Please enter a name for the region preset:">
-<!ENTITY sitedelta.preset.descurl "URLs to apply this region to (use * and ? as wildcards):">
-<!ENTITY sitedelta.preset.descinclude "Regions scanned: ">
-<!ENTITY sitedelta.preset.descexclude "Regions ignored: ">
-<!ENTITY sitedelta.preset.delete "Delete">
-<!ENTITY sitedelta.preset.duplicate "Duplicate">
+<!ENTITY sitedelta.manager.lbltitle "Titel:">
+<!ENTITY sitedelta.manager.lblurl "Adresse:">
+<!ENTITY sitedelta.manager.lblcheck "Letzter Besuch:">
+<!ENTITY sitedelta.manager.close "Schließen">
+<!ENTITY sitedelta.manager.default "Standard">
+<!ENTITY sitedelta.manager.on "An">
+<!ENTITY sitedelta.manager.off "Aus">
+<!ENTITY sitedelta.manager.uselogin "Benutzername und Passwort verwenden">
+
+<!ENTITY sitedelta.preset.title "Voreinstellungen bearbeiten">
+<!ENTITY sitedelta.preset.descname "Bitte geben Sie einen Namen für die Bereichs-Voreinstellung ein:">
+<!ENTITY sitedelta.preset.descurl "Adressen, für die diese Voreinstellung verwendet werden soll (* und ? als Platzhalter):">
+<!ENTITY sitedelta.preset.descinclude "Überwachte Bereiche: ">
+<!ENTITY sitedelta.preset.descexclude "Ignorierte Bereiche: ">
+<!ENTITY sitedelta.preset.delete "Löschen">
+<!ENTITY sitedelta.preset.duplicate "Kopieren">
 <!ENTITY sitedelta.preset.lblname "Name:">
-<!ENTITY sitedelta.preset.lblurl "URL:">
-<!ENTITY sitedelta.prefs.title "SiteDelta - Settings">
-<!ENTITY sitedelta.prefs.add "Added text">
-<!ENTITY sitedelta.prefs.remove "Removed text">
-<!ENTITY sitedelta.prefs.move "Moved text">
-<!ENTITY sitedelta.prefs.bgcolor "Background color: ">
-<!ENTITY sitedelta.prefs.bordercolor "Border color: ">
-<!ENTITY sitedelta.prefs.regions "Regions">
-<!ENTITY sitedelta.prefs.scanregion "Scanned region color: ">
-<!ENTITY sitedelta.prefs.ignoreregion "Ignored region color: ">
-<!ENTITY sitedelta.prefs.showregions "Outline regions">
-<!ENTITY sitedelta.prefs.scanimages "Check for changed image addresses">
-<!ENTITY sitedelta.prefs.scandeleted "Check for moved and deleted text">
-<!ENTITY sitedelta.prefs.ignorenumbers "Ignore changed numbers">
-<!ENTITY sitedelta.prefs.ignorecase "Ignore case">
-<!ENTITY sitedelta.prefs.openchanged "Open changed sites when checking for updates">
-<!ENTITY sitedelta.prefs.settings "Settings">
-<!ENTITY sitedelta.prefs.appearance "Appearance">
-<!ENTITY sitedelta.prefs.watch "Site Watch">
-<!ENTITY sitedelta.prefs.backuppages "Archive changed pages">
-<!ENTITY sitedelta.prefs.sitesettings "Allow site-specific settings">
-<!ENTITY sitedelta.prefs.scanonload "Automatically scan known pages on visit">
-<!ENTITY sitedelta.prefs.enablewatch "Enable Site Watch">
-<!ENTITY sitedelta.prefs.watchpagetimeout "Time limit for loading the page (sec)">
-<!ENTITY sitedelta.prefs.watchpagedelay "Delay after checking a page (sec)">
-<!ENTITY sitedelta.prefs.watchscandelay "Time between two page scans (min)">
+<!ENTITY sitedelta.preset.lblurl "Adresse:">
+
+<!ENTITY sitedelta.prefs.about "Über SiteDelta">
+<!ENTITY sitedelta.prefs.about.title "SiteDelta">
+<!ENTITY sitedelta.prefs.about.text "Informiert über Änderungen an Webseiten und hebt die Änderungen am Text seit dem letzten Besuch farblich hervor.">
+<!ENTITY sitedelta.prefs.whattoscan "Überprüfungseinstellungen">
+<!ENTITY sitedelta.prefs.whentoscan "Automatische Überprüfung">
+<!ENTITY sitedelta.prefs.reaction "Aktion bei Änderungen">
+<!ENTITY sitedelta.prefs.title "SiteDelta - Einstellungen">
+<!ENTITY sitedelta.prefs.add "Hinzugefügter Text">
+<!ENTITY sitedelta.prefs.remove "Entfernter Text">
+<!ENTITY sitedelta.prefs.move "Verschobener Text">
+<!ENTITY sitedelta.prefs.bgcolor "Hindergrundfarbe: ">
+<!ENTITY sitedelta.prefs.bordercolor "Rahmenfarbe: ">
+<!ENTITY sitedelta.prefs.regions "Bereiche">
+<!ENTITY sitedelta.prefs.scanregion "Farbe für überwachte Bereiche: ">
+<!ENTITY sitedelta.prefs.ignoreregion "Farbe für ignorierte Bereiche: ">
+<!ENTITY sitedelta.prefs.showregions.desc "Zur besseren Übersicht können Sie die überwachten und ignorierten Bereiche hervorheben lassen.">
+<!ENTITY sitedelta.prefs.showregions "Bereiche hervorheben">
+<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta kann Sie über hinzugefügte oder entfernte Bilder informieren. (Geänderte Bilder werden nur erkannt, wenn sie einen anderen Dateinamen haben)">
+<!ENTITY sitedelta.prefs.scanimages "Bilderadressen auf Änderungen prüfen">
+<!ENTITY sitedelta.prefs.scandeleted.desc "Auf Wunsch kann auf gelöschte Texte hingewiesen werden. (Das macht möglicherweise die Darstellung bei komplexeren Seiten unübersichtlich)">
+<!ENTITY sitedelta.prefs.scandeleted "Auch Löschungen hervorheben">
+<!ENTITY sitedelta.prefs.ignorenumbers.desc "Wenn sich auf einer Seite oft unbedeutende Zahlen ändern (z.B. bei Foren), so können diese ignoriert werden.">
+<!ENTITY sitedelta.prefs.ignorenumbers "Geänderte Zahlen ignorieren">
+<!ENTITY sitedelta.prefs.ignorecase.desc "Auch Änderungen bei der Groß/Kleinschreibung können ignoriert werden.">
+<!ENTITY sitedelta.prefs.ignorecase "Groß-/Kleinschreibung ignorieren">
+<!ENTITY sitedelta.prefs.openchanged.desc "">
+<!ENTITY sitedelta.prefs.openchanged "Seiten verwalten: Beim Überprüfen Seiten mit Änderungen öffnen">
+<!ENTITY sitedelta.prefs.settings "Einstellungen">
+<!ENTITY sitedelta.prefs.appearance "Hervorhebung">
+<!ENTITY sitedelta.prefs.watch "Seitenüberwachung">
+<!ENTITY sitedelta.prefs.backuppages.desc "Wenn auf einer Seite Änderungen gefunden werden, so kann automatisch eine Kopie der Seite zu Dokumentationszwecken gespeichert werden.">
+<!ENTITY sitedelta.prefs.backuppages "Geänderte Seiten archivieren">
+<!ENTITY sitedelta.prefs.sitesettings.desc "">
+<!ENTITY sitedelta.prefs.sitesettings "Seitenspezifische Einstellungen erlauben">
+<!ENTITY sitedelta.prefs.scanonload.desc "Beim Besuch von bekannten Seiten kann SiteDelta automatisch nach Änderungen suchen.">
+<!ENTITY sitedelta.prefs.scanonload "Beim Besuch automatisch prüfen">
+<!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta kann die bekannten Seiten in regelmäßigen Abständen auf Änderungen prüfen und Sie darüber informieren.">
+<!ENTITY sitedelta.prefs.enablewatch "Seitenüberwachung aktivieren">
+<!ENTITY sitedelta.prefs.watchpagetimeout.desc "Wenn das Laden der Seite länger als die angegebene Zeit benötigt, wird der Ladevorgang als fehlerhaft abgebrochen.">
+<!ENTITY sitedelta.prefs.watchpagetimeout "Zeitlimit für Laden der Seite (in Sek.)">
+<!ENTITY sitedelta.prefs.watchpagedelay.desc "Diese Zeit wird zwischen der Überprüfung zweier Seiten mindestens gewartet (um die Serverlast zu schonen)">
+<!ENTITY sitedelta.prefs.watchpagedelay "Pause nach Überprüfen einer Seite (in Sek.)">
+<!ENTITY sitedelta.prefs.watchscandelay.desc "">
+<!ENTITY sitedelta.prefs.watchscandelay "Überprüfungshäufigkeit (in Min.)">
+<!ENTITY sitedelta.prefs.frequency.default.desc "Standardeinstellung verwenden (benutzt die im Einstellungsdialog angegebene Häufigkeit)">
+<!ENTITY sitedelta.prefs.frequency.default "Standard">
+<!ENTITY sitedelta.prefs.frequency.never.desc "Nutzen Sie diese Option, wenn Sie eine Seite von der automatischen Prüfung ausschließen wollen">
+<!ENTITY sitedelta.prefs.frequency.never "Nur manuell">
+<!ENTITY sitedelta.prefs.frequency.auto.desc "Sie können SiteDelta die Auswahl der Häufigkeit überlassen. SiteDelta prüft die Seite anfangs oft, reduziert aber die Häufigkeit, wenn sich lange nichts ändert.">
+<!ENTITY sitedelta.prefs.frequency.auto "Automatisch">
+<!ENTITY sitedelta.prefs.frequency.desc "Sie können die Häufigkeit auch genau festlegen.">
+<!ENTITY sitedelta.prefs.frequency.weekly "Wöchentlich">
+<!ENTITY sitedelta.prefs.frequency.daily "Täglich">
+<!ENTITY sitedelta.prefs.frequency.hourly "Stündlich">
+<!ENTITY sitedelta.prefs.frequency.custom "Benutzerdefiniert: alle ">
+<!ENTITY sitedelta.prefs.frequency.minutes "Minuten">
+<!ENTITY sitedelta.prefs.notifyalert "Hinweisfenster zeigen">
+<!ENTITY sitedelta.prefs.notifyalert.desc "In der rechten unteren Bildschirmecke erscheint ein Hinweisfenster, wenn Seiten geändert wurden.">
+<!ENTITY sitedelta.prefs.notifysound "Akustisches Signal">
+<!ENTITY sitedelta.prefs.notifysound.none "Keines">
+<!ENTITY sitedelta.prefs.notifysound.beep "Piepton">
+<!ENTITY sitedelta.prefs.notifysound.alert "Systemhinweis">
+<!ENTITY sitedelta.prefs.notifysound.newmail "Benachrichtigung über neue E-Mail">
+<!ENTITY sitedelta.prefs.notifysound.custom "Benutzerdefiniert">

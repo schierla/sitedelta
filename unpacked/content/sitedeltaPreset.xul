@@ -2,7 +2,7 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://sitedelta/skin/sitedelta.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
-<dialog id="sitedeltaPreset" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" persist="screenX screenY width height" title="&sitedelta.preset.title;" onload="sitedeltaPreset.onLoad()" buttons="accept" buttonlabelaccept="&sitedelta.manager.close;">
+<dialog id="sitedeltaPreset" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" persist="screenX screenY width height" title="&sitedelta.preset.title;" onload="sitedeltaPreset.onLoad()" buttons="accept" buttonlabelaccept="&sitedelta.preset.close;">
 <script src="chrome://sitedelta/content/sitedelta.js"/>
 <script src="chrome://sitedelta/content/sitedeltaPreset.js" />
 <vbox flex="1">
@@ -31,10 +31,10 @@
 </groupbox>
 <groupbox id="extra" collapsed="false">
 <grid><columns><column flex="2"/><column  flex="1"/></columns><rows>
-<row align="center"><label class="header">&sitedelta.prefs.scanimages;</label><radiogroup orient="horizontal" id="checkimages" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
-<row align="center"><label class="header">&sitedelta.prefs.scandeleted;</label><radiogroup orient="horizontal" id="checkdeleted" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
-<row align="center"><label class="header">&sitedelta.prefs.ignorecase;</label><radiogroup orient="horizontal" id="ignorecase" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
-<row align="center"><label class="header">&sitedelta.prefs.ignorenumbers;</label><radiogroup orient="horizontal" id="ignorenumbers" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.manager.default;" flex="1" /><radio label="&sitedelta.manager.on;" flex="1"/><radio label="&sitedelta.manager.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.scanimages;</label><radiogroup orient="horizontal" id="checkimages" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.preset.default;" flex="1" /><radio label="&sitedelta.preset.on;" flex="1"/><radio label="&sitedelta.preset.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.scandeleted;</label><radiogroup orient="horizontal" id="checkdeleted" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.preset.default;" flex="1" /><radio label="&sitedelta.preset.on;" flex="1"/><radio label="&sitedelta.preset.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.ignorecase;</label><radiogroup orient="horizontal" id="ignorecase" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.preset.default;" flex="1" /><radio label="&sitedelta.preset.on;" flex="1"/><radio label="&sitedelta.preset.off;" flex="1"/></radiogroup></row>
+<row align="center"><label class="header">&sitedelta.prefs.ignorenumbers;</label><radiogroup orient="horizontal" id="ignorenumbers" onselect="sitedeltaPreset.saveData();"><radio label="&sitedelta.preset.default;" flex="1" /><radio label="&sitedelta.preset.on;" flex="1"/><radio label="&sitedelta.preset.off;" flex="1"/></radiogroup></row>
 </rows></grid>
 </groupbox>
 </vbox>

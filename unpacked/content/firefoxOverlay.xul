@@ -10,7 +10,14 @@
 
   <statusbar id="status-bar">
     <statusbarpanel id="sitedelta-status" insertafter="livemark-button">
-     <image id="sitedelta-statusbar-button" src="chrome://sitedelta/content/sitedelta.gif" width="16" height="16" style="margin:0 1px" onclick="sitedelta.highlightChanges()" oncontextmenu="sitedelta.removeHighlight()"/>
+     <image id="sitedelta-statusbar-button" src="chrome://sitedelta/content/sitedelta.gif" width="16" height="16" style="margin:0 1px" context="sitedelta-popup" onclick="sitedelta.highlightChanges(event)" />
     </statusbarpanel>
+    <popupset><menupopup id="sitedelta-popup" position="before_start">
+    <menuitem label="Highlight changes" oncommand="sitedelta.highlightChanges()" />
+    <menuitem label="Remove highlights" oncommand="sitedelta.removeHighlight()" />
+    <menuitem label="Select region to scan" oncommand="sitedelta.selectRegion()" />
+    <menuitem label="Manage sites" oncommand="sitedelta.showManager()" />
+    </menupopup></popupset>
+
   </statusbar>
 </overlay>

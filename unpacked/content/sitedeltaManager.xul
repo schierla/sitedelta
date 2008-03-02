@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://sitedelta/skin/overlay.css" type="text/css"?>
-<window id="sitedeltaManager" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="Manage SiteDelta" onload="sitedeltaManager.onLoad()">
+<!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
+<window id="sitedeltaManager" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&sitedelta.manager.title;" onload="sitedeltaManager.onLoad()">
 <script src="chrome://sitedelta/content/overlay.js"/>
 <script src="chrome://sitedelta/content/sitedeltaManager.js" />
 <vbox flex="1">
 <hbox flex="1">
 <vbox flex="0">
 <listbox flex="1" id="pages" seltype="multiple" onselect="sitedeltaManager.showDetails();"><listitem label="asdf" class="listitem-iconic" status="changed"/><listitem label="asdf"/></listbox>
-<hbox flex="0"><button label="Check for updates" flex="1" oncommand="sitedeltaManager.updateAll()"/></hbox>
-<hbox flex="0"><button label="Delete" flex="1" oncommand="sitedeltaManager.deletePage();"/><button label="Delete all" flex="1" oncommand="sitedeltaManager.deleteAll();"/></hbox>
+<hbox flex="0"><button label="&sitedelta.manager.updateall;" flex="1" oncommand="sitedeltaManager.updateAll()"/></hbox>
+<hbox flex="0"><button label="&sitedelta.manager.delete;" flex="1" oncommand="sitedeltaManager.deletePage();"/><button label="&sitedelta.manager.deleteall;" flex="1" oncommand="sitedeltaManager.deleteAll();"/></hbox>
 </vbox>
 <splitter/>
 <groupbox flex="1">
@@ -18,9 +19,9 @@
 <grid>
 <columns><column flex="0"/><column flex="1"/></columns>
 <rows>
-<row><label class="header">Title:</label><label id="title" crop="right"/></row>
-<row><label class="header">URL:</label><label id="url" class="text-link" crop="right" onclick="if(this.value!='') window.open(this.value);"/></row>
-<row><label class="header">Last check:</label><label id="date" crop="right"/></row>
+<row><label class="header">&sitedelta.manager.lbltitle;</label><label id="title" crop="right"/></row>
+<row><label class="header">&sitedelta.manager.lblurl;</label><label id="url" class="text-link" crop="right" onclick="if(this.value!='') window.open(this.value);"/></row>
+<row><label class="header">&sitedelta.manager.lblcheck;</label><label id="date" crop="right"/></row>
 </rows>
 </grid>
 <textbox multiline="true" readonly="true" flex="1" border="0" id="content"></textbox>
@@ -29,6 +30,6 @@
 
 </hbox>
 <iframe type="content" id="preview" collapsed="true"/>
-<hbox><spacer flex="1"/><button label="Close" oncommand="window.close();"/></hbox>
+<hbox><spacer flex="1"/><button label="&sitedelta.manager.close;" oncommand="window.close();"/></hbox>
 </vbox>
 </window>

@@ -13,17 +13,17 @@
      <image id="sitedelta-statusbar-button" onclick="sitedelta.highlightChanges(event)" context="sitedelta-popup" src="chrome://sitedelta/content/sitedelta.gif" width="16" height="16" style="margin:0 1px"/>
     </statusbarpanel>
     <popupset><menupopup id="sitedelta-popup" position="before_start">
-    <menuitem label="Highlight changes" oncommand="sitedelta.highlightChanges(event)" />
-    <menuitem label="Remove highlights" oncommand="sitedelta.removeHighlight()" />
+    <menuitem label="&sitedelta.highlight;" oncommand="sitedelta.highlightChanges(event)" />
+    <menuitem label="&sitedelta.removehighlight;" oncommand="sitedelta.removeHighlight()" />
     <menuseparator />
-    <menu label="Regions" id="sitedelta-regions"><menupopup onpopupshowing="sitedelta.listRegions(this)">
-      <menuitem label="+ Add scan region" oncommand="sitedelta.includeRegion()" />
+    <menu label="&sitedelta.regions;" id="sitedelta-regions"><menupopup onpopupshowing="sitedelta.listRegions(this)">
+      <menuitem label="&sitedelta.scanregion;" oncommand="sitedelta.includeRegion()" />
       <menuseparator id="sitedelta-scanregions" />
-      <menuitem label="+ Add ignore region" oncommand="sitedelta.excludeRegion()" />
+      <menuitem label="&sitedelta.ignoreregion;" oncommand="sitedelta.excludeRegion()" />
       <menuseparator id="sitedelta-ignoreregions" />
       </menupopup></menu>
     <menuseparator />
-    <menuitem label="Manage sites" oncommand="sitedelta.showManager()" />
+    <menuitem label="&sitedelta.manager;" oncommand="sitedelta.showManager()" />
     </menupopup></popupset>
 
   </statusbar>

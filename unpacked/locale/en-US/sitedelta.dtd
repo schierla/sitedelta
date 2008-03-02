@@ -17,6 +17,7 @@
 <!ENTITY sitedelta.manager.lblurl "URL:">
 <!ENTITY sitedelta.manager.lblcheck "Last check:">
 <!ENTITY sitedelta.manager.close "Close">
+<!ENTITY sitedelta.preset.title "Manage presets">
 <!ENTITY sitedelta.preset.descname "Please enter a name for the region preset:">
 <!ENTITY sitedelta.preset.descurl "URLs to apply this region to (use * and ? as wildcards):">
 <!ENTITY sitedelta.preset.descinclude "Regions scanned: ">
@@ -35,3 +36,7 @@
 <!ENTITY sitedelta.prefs.scanregion "Scanned region color: ">
 <!ENTITY sitedelta.prefs.ignoreregion "Ignored region color: ">
 <!ENTITY sitedelta.prefs.showregions "Outline regions">
+<!ENTITY sitedelta.prefs.features "Scan preferences">
+<!ENTITY sitedelta.prefs.scanimages "Check for changed image addresses">
+<!ENTITY sitedelta.prefs.scandeleted "Check for moved and deleted text">
+<!ENTITY sitedelta.prefs.openchanged "Open changed sites when checking for updates">

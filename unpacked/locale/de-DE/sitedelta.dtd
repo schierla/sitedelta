@@ -35,4 +35,8 @@
 <!ENTITY sitedelta.prefs.regions "Bereiche">
 <!ENTITY sitedelta.prefs.scanregion "Farbe für überwachte Bereiche: ">
 <!ENTITY sitedelta.prefs.ignoreregion "Farbe für ignorierte Bereiche: ">
-<!ENTITY sitedelta.prefs.showregions "Bereiche anzeigen">
+<!ENTITY sitedelta.prefs.showregions "Bereiche hervorheben">
+<!ENTITY sitedelta.prefs.features "Überprüfungseinstellungen">
+<!ENTITY sitedelta.prefs.scanimages "Bilderadressen auf Änderungen prüfen">
+<!ENTITY sitedelta.prefs.scandeleted "Auch Löschungen und Verschiebungen suchen">
+<!ENTITY sitedelta.prefs.openchanged "Alle Seiten mit Änderungen öffnen">

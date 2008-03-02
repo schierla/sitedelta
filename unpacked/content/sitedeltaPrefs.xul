@@ -32,9 +32,12 @@
     <preference id="p_includeregion" name="extensions.sitedelta@schierla.de.includeRegion" type="string"/>
     <preference id="p_excluderegion" name="extensions.sitedelta@schierla.de.excludeRegion" type="string"/>
     <preference id="p_showregions" name="extensions.sitedelta@schierla.de.showRegions" type="bool"/>
+    <preference id="p_scanimages" name="extensions.sitedelta@schierla.de.scanImages" type="bool"/>
+    <preference id="p_checkdeleted" name="extensions.sitedelta@schierla.de.checkDeleted" type="bool"/>
+    <preference id="p_openchanged" name="extensions.sitedelta@schierla.de.openChanged" type="bool"/>
    </preferences>
- 
-  <vbox>
+<hbox> 
+  <vbox flex="1">
     <groupbox flex="1"><caption label="&sitedelta.prefs.add;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
     <row><label control="changebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_addbackground" id="addbackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="abg"/></row>
     <row><label control="addborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_addborder" id="addborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="abo" style="border: dotted 1px;"/></row>
@@ -43,6 +46,7 @@
     <row><label control="removebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_removebackground" id="removebackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="rbg"/></row>
     <row><label control="removeborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_removeborder" id="removeborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="rbo" style="border: dotted 1px;"/></row>
    </rows></grid></groupbox>
+</vbox><vbox flex="1">
     <groupbox flex="1"><caption label="&sitedelta.prefs.move;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
     <row><label control="movebackground" value="&sitedelta.prefs.bgcolor;" flex="1"/><textbox preference="p_movebackground" id="movebackground" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="mbg"/></row>
     <row><label control="moveborder" value="&sitedelta.prefs.bordercolor;" flex="1"/> <textbox preference="p_moveborder" id="moveborder" oninput="previewColors();" maxlength="4" size="4"/><label value="     " id="mbo" style="border: dotted 1px;"/></row>
@@ -51,9 +55,16 @@
     <groupbox flex="1"><caption label="&sitedelta.prefs.regions;"/><grid flex="1"><columns><column flex="1"/><column/><column/></columns><rows>
     <row><label control="includeregion" value="&sitedelta.prefs.scanregion;" flex="1"/> <textbox preference="p_includeregion" id="includeregion" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="ir" style="border: dotted 2px;"/></row>
     <row><label control="excluderegion" value="&sitedelta.prefs.ignoreregion;" flex="1"/> <textbox preference="p_excluderegion" id="excluderegion" maxlength="4" oninput="previewColors();" size="4"/><label value="     " id="xr" style="border: dotted 2px;"/></row>
-   <checkbox preference="p_showregions" label="&sitedelta.prefs.showregions;"/>
    </rows></grid></groupbox>
-  </vbox>
+</vbox>
+  </hbox>
+   <groupbox flex="1"><caption label="&sitedelta.prefs.features;"/><vbox>
+   <checkbox preference="p_showregions" label="&sitedelta.prefs.showregions;"/>
+   <checkbox preference="p_scanimages" label="&sitedelta.prefs.scanimages;"/>
+   <checkbox preference="p_checkdeleted" label="&sitedelta.prefs.scandeleted;"/>
+   <checkbox preference="p_openchanged" label="&sitedelta.prefs.openchanged;"/></vbox>
+   </groupbox>
+
 </prefpane>
  
 </prefwindow>

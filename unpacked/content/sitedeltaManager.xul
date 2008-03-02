@@ -8,7 +8,7 @@
 <vbox flex="1">
 <hbox flex="1">
 <vbox flex="0">
-<listbox flex="1" id="pages" seltype="single" onselect="sitedeltaManager.showDetails();"><listitem label="asdf" class="listitem-iconic" status="changed"/><listitem label="asdf"/></listbox>
+<listbox flex="1" id="pages" seltype="single" onselect="sitedeltaManager.showDetails();" ondblclick="sitedeltaManager.updateCurrent();"><listitem label="asdf" class="listitem-iconic" status="changed"/><listitem label="asdf"/></listbox>
 <hbox flex="0"><button label="&sitedelta.manager.updateall;" flex="1" oncommand="sitedeltaManager.updateAll()"/></hbox>
 <hbox flex="0"><button label="&sitedelta.manager.delete;" flex="1" oncommand="sitedeltaManager.deletePage();"/><button label="&sitedelta.manager.deleteall;" flex="1" oncommand="sitedeltaManager.deleteAll();"/></hbox>
 </vbox>
@@ -27,7 +27,7 @@
 </rows>
 </grid>
 <button label="&sitedelta.regions;" flex="0" type="menu" id="regions" disabled="true">
-<menupopup onpopupshowing="sitedelta.listPresets(this);"><menuitem label="&sitedelta.manager.savepreset;" oncommand="sitedeltaManager.savePreset();" /><menuitem label="&sitedelta.manager.managepresets;" oncommand="sitedeltaManager.showPresets();" /><menuseparator/></menupopup>
+<menupopup onpopupshowing="sitedeltaManager.listPresets(this);"><menuitem label="&sitedelta.manager.savepreset;" oncommand="sitedeltaManager.savePreset();" /><menuitem label="&sitedelta.manager.managepresets;" oncommand="sitedeltaManager.showPresets();" /><menuseparator/></menupopup>
 </button>
 </hbox>
 <textbox multiline="true" readonly="true" flex="1" border="0" id="content"></textbox>

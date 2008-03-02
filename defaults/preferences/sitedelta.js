@@ -9,3 +9,6 @@ pref("extensions.sitedelta@schierla.de.moveBackground", "#efe");
 pref("extensions.sitedelta@schierla.de.moveBorder", "#ff0");
 pref("extensions.sitedelta@schierla.de.removeBackground", "#fee");
 pref("extensions.sitedelta@schierla.de.removeBorder", "#ff0");
+pref("extensions.sitedelta@schierla.de.checkDeleted", true);
+pref("extensions.sitedelta@schierla.de.scanImages", true);
+pref("extensions.sitedelta@schierla.de.openChanged", false);

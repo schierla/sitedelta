@@ -5,33 +5,6 @@ var sitedelta = {
    file.append("sitedelta");
    return file; 
   },
-  showOutline: function() {
-   var xpath=this.label;
-   if(sitedelta.outlinedElement) removeOutline();
-   var element=content.document.evaluate(xpath,content.document,null,XPathResult.ANY_TYPE,null).iterateNext();
-   if(!element) return;
-   sitedelta.outlinedElement=element; sitedelta.outlinedElementStyle=element.style.MozOutline;
-   element.style.MozOutline= (this.regionEntry==1?"dotted "+sitedelta.prefs.getCharPref("includeRegion")+" 2px;":"dotted "+sitedelta.prefs.getCharPref("excludeRegion")+" 2px;");
-  },
-  removeOutline: function() {
-   if(sitedelta.outlinedElement) sitedelta.outlinedElement.style.MozOutline = sitedelta.outlinedElementStyle;
-   sitedelta.outlinedElement=false;
-  },
-  removeRegion: function() {
-   url=content.window.location.href; fn=sitedelta._getFilename(url);
-   var file = sitedelta.sitedeltaDir(); file.append(fn+".dat");
-   var result=sitedelta.readFile(fn+".dat");
-   result.url=url.replace(/#.*$/,'');
-   if(this.regionEntry==1) {
-    for(var i=this.value; i<result.includes.length-1; i++) result.includes[i]=result.includes[i+1];
-    result.includes.pop();
-   } else {
-    for(var i=this.value; i<result.excludes.length-1; i++) result.excludes[i]=result.excludes[i+1];
-    result.excludes.pop();
-   }
-
-   sitedelta.saveFile(fn+".dat", result);
-  },
   saveFile: function(fn, data) {
    var file = sitedelta.sitedeltaDir(); file.append(fn);
    var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance(Components.interfaces.nsIFileOutputStream);
@@ -106,7 +79,6 @@ var sitedelta = {
      }
     }
    }
-   if(name=="" && url!=fn) name=url.replace(/^https?:\/\//i,"");
    if(includes.length==0) includes.push("/html/body[1]");
    var result=new Object();
    result.includes=includes; result.name=name; result.excludes=excludes; 
@@ -179,95 +151,6 @@ var sitedelta = {
     if( !file.exists() || !file.isDirectory() ) {
       file.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
     }
-    gBrowser.addEventListener("load", sitedelta.pageLoad, true);
-    var panel=gBrowser.mPanelContainer; panel.addEventListener("select", sitedelta.pageLoad, false);
-  },
-  pageLoad: function() {
-   setTimeout(sitedelta.pageSelected, 100);
-  },
-  pageSelected: function() {
-   var url=content.window.location.href; fn=sitedelta._getFilename(url);
-   var file = sitedelta.sitedeltaDir(); file.append(fn+".dat");
-   var icon=document.getElementById("sitedelta-status");
-   if(file.exists()) icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta-known.gif"); else icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta.gif");
-  },
-  mouseover: function(e) {
-   if(sitedelta.needText && !e.target.firstChild.data && (!e.target.id || e.target.id.substr(0,16)=="sitedelta-change")) return;
-   e.target.style.MozOutline="dotted red 2px";
-   e.preventDefault();
-   e.stopPropagation();
-  },
-  mouseout: function(e) {
-   if(e.target!=sitedelta.destelement) e.target.style.MozOutline="none";
-   e.preventDefault();
-   e.stopPropagation();
-  },
-  mousedown: function(e) {
-   sitedelta.needText=true;
-   sitedelta.destelement=e.target;
-   e.target.style.MozOutline="solid green 2px;";
-   e.preventDefault();
-   e.stopPropagation();
-  },
-  mouseup: function(e) {
-   sitedelta.mouseout(e);
-   e.preventDefault();
-   e.stopPropagation();
-   
-   sitedelta.destelement.style.MozOutline="none";
-
-   content.document.removeEventListener("mouseover", sitedelta.mouseover, true);
-   content.document.removeEventListener("mousedown", sitedelta.mousedown, true);
-   content.document.removeEventListener("mouseup", sitedelta.mouseup, true);
-   content.document.removeEventListener("mouseout", sitedelta.mouseout, true);
-   content.document.removeEventListener("click", sitedelta.mouseclick, true);
-
-   if(e.button!=0) return;
-
-   sitedelta.needText=false;
-
-   if(e.target!=sitedelta.destelement && (e.target.firstChild.data || e.target.id)) {
-
-    var to=sitedelta.buildPath(sitedelta.destelement).split("/");
-    var from=sitedelta.buildPath(e.target).split("/");
-    var common="";
-    for(var i=0; i<Math.min(to.length,from.length); i++) {common+="/"+to[i]; if(to[i]!=from[i]) break; }  
-    common=common.substr(1);   
-
-    if(e.target.id) {
-     var xpath="//*[@id=\""+ e.target.id +"\"]";    
-    } else {
-     var data=new String(e.target.firstChild.data); var func="text()";
-     if(data.replace(/[ \n\t\r]+/g," ").replace(/^ /,"").replace(/ $/,"") != data) {
-      data=data.replace(/[ \n\t\r]+/g," ").replace(/^ /,"").replace(/ $/,""); func="normalize-space("+func+")";
-     }
-     if(data.replace(/"/,"'")!=data) {
-      data=data.replace(/"/,"'"); func="translate("+func+",'\"',\"'\")";
-     }
-      
-     var xpath="//"+e.target.nodeName+'['+func+'="' + data +'"]';
-    }
-
-    for(var j=i+1; j<from.length; j++) xpath+="/..";
-    if(i<from.length) {
-     var dest=content.document.evaluate(common, content.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-     var e=content.document.evaluate(xpath, content.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-     var j=1; var f=null;
-     if(e!=dest) for(var j=1; j>0; j++) {
-      var e=content.document.evaluate(xpath+"/following-sibling::"+dest.nodeName+"[position()="+j+"]", content.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-      if(e==dest) {xpath+="/following-sibling::"+dest.nodeName+"[position()="+j+"]"; break; }
-      var f=content.document.evaluate(xpath+"/preceding-sibling::"+dest.nodeName+"[position()="+j+"]", content.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-      if(f==dest) {xpath+="/preceding-sibling::"+dest.nodeName+"[position()="+j+"]"; break; }
-      if(!e && !f) {break;}
-     }
-    } else {
-     i--; 
-    }
-    for(i=i+1; i<to.length; i++) xpath+="/"+to[i];
-    sitedelta.addXPathRegion(xpath);
-   } else {
-    sitedelta.addXPathRegion(sitedelta.buildPath(sitedelta.destelement));
-   }
   },
   buildPath: function(t) {
    var path="";
@@ -288,17 +171,8 @@ var sitedelta = {
    e.preventDefault();
    e.stopPropagation();
   },
-  selectRegion: function(e) {
-   sitedelta.needText=false; sitedelta.destelement=null;
-   content.document.addEventListener("mouseover", sitedelta.mouseover, true);
-   content.document.addEventListener("mousedown", sitedelta.mousedown, true);
-   content.document.addEventListener("mouseup", sitedelta.mouseup, true);
-   content.document.addEventListener("mouseout", sitedelta.mouseout, true);
-   content.document.addEventListener("click", sitedelta.preventevent, true);
-   return false;
-  },
-  listPresets: function(menu) {
-   var presets=sitedelta.presetFiles(); var url=menu.url; 
+  listPresets: function(menu, url) {
+   var presets=sitedelta.presetFiles();
    var cur=menu.firstChild; while(cur) {last=cur; cur=cur.nextSibling; if(last.presetEntry) menu.removeChild(last); }
    for(var i=0; i<presets.length; i++) {
     var preset=sitedelta.readFile(presets[i]);
@@ -320,8 +194,8 @@ var sitedelta = {
    result.includes=preset.includes; result.excludes=preset.excludes;
    sitedelta.saveFile(fn+".dat", result);
   },
-  listRegions: function(menu) {
-   var url=content.window.location.href; var fn=sitedelta._getFilename(url);
+  listRegions: function(menu, url) {
+   var fn=sitedelta._getFilename(url);
    var file = sitedelta.sitedeltaDir(); file.append(fn+".dat");
    var result=sitedelta.readFile(fn+".dat");
    var cur=menu.firstChild;
@@ -331,9 +205,9 @@ var sitedelta = {
    for(var i=0; i<result.includes.length; i++) {
     var item = document.createElement("menuitem");
     item.setAttribute("label", result.includes[i]);
-    item.value=i; item.regionEntry=1; item.addEventListener("mouseover", sitedelta.showOutline, false);
-    item.addEventListener("mouseout", sitedelta.removeOutline, false);
-    item.addEventListener("command", sitedelta.removeRegion, false);
+    item.value=i; item.regionEntry=1; item.addEventListener("mouseover", sitedeltaOverlay.showOutline, false);
+    item.addEventListener("mouseout", sitedeltaOverlay.removeOutline, false);
+    item.addEventListener("command", sitedeltaOverlay.removeRegion, false);
     menu.insertBefore(item, includeSeparator);
    }
 
@@ -341,28 +215,21 @@ var sitedelta = {
    for(var i=0; i<result.excludes.length; i++) {
     var item = document.createElement("menuitem");
     item.setAttribute("label", result.excludes[i]);
-    item.value=i; item.regionEntry=2; item.addEventListener("mouseover", sitedelta.showOutline, false);
-    item.addEventListener("mouseout", sitedelta.removeOutline, false);
-    item.addEventListener("command", sitedelta.removeRegion, false);
+    item.value=i; item.regionEntry=2; item.addEventListener("mouseover", sitedeltaOverlay.showOutline, false);
+    item.addEventListener("mouseout", sitedeltaOverlay.removeOutline, false);
+    item.addEventListener("command", sitedeltaOverlay.removeRegion, false);
     menu.insertBefore(item, excludeSeparator);
    }
 
    var loadRegion=document.getElementById('sitedelta-load-preset');
    loadRegion.firstChild.url=url;
   },
-  includeRegion: function(e) {
-   sitedelta.regionAction=1; 
-   sitedelta.selectRegion();
-  },
-  excludeRegion: function(e) {
-   sitedelta.regionAction=2;
-   sitedelta.selectRegion();
-  },
   addXPathRegion: function(path) {
    url=content.window.location.href; fn=sitedelta._getFilename(url);
    var file = sitedelta.sitedeltaDir(); file.append(fn+".dat");
    var result=sitedelta.readFile(fn+".dat");
    result.url=url.replace(/#.*$/,'');
+   if(result.name=="") result.name=content.document.title.replace(/[\n\r]/g,' ');
    if(sitedelta.regionAction==1) {
     if(result.includes.length==1 && result.includes[0]=="/html/body[1]") result.includes.pop();
     result.includes.push(path);
@@ -380,15 +247,13 @@ var sitedelta = {
    var i=0; var c;
    while((c=content.document.getElementById("sitedelta-change"+(i++)))!=null) c.parentNode.replaceChild(c.firstChild, c);
 
+   var noB=false;
+   if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();
+   if(noB && noB.getNotificationWithValue("sitedelta")) noB.removeNotification(noB.getNotificationWithValue("sitedelta"));
+
    if(!sitedelta.prefs.getBoolPref("showRegions")) return;
    for(var i=0; i<result.includes.length; i++) content.document.evaluate(result.includes[i], content.document, null, XPathResult.ANY_TYPE, null).iterateNext().style.MozOutline="";
    for(var i=0; i<result.excludes.length; i++) content.document.evaluate(result.excludes[i], content.document, null, XPathResult.ANY_TYPE, null).iterateNext().style.MozOutline="";
-  },
-  showManager: function(e) {
-   window.openDialog("chrome://sitedelta/content/sitedeltaManager.xul", "sitedelta-manager", "width=600,height=400,resizable=yes,centerscreen", "");
-  },
-  showManagerAndCheck: function(e) {
-   window.openDialog("chrome://sitedelta/content/sitedeltaManager.xul", "sitedelta-manager", "width=600,height=400,resizable=yes,centerscreen", "check");
   },
   _getFilename: function(url) {
    var fn=url; 
@@ -402,63 +267,11 @@ var sitedelta = {
    if(fn=='') fn='_default_';
    return fn;
   },
-  highlightChanges: function(e) {
-   if(e.button && e.button!=0) return;
-   if(content.document.sitedeltaMatch) {
-    if(!content.document.getElementById("sitedelta-change"+content.document.sitedeltaMatch))
-     content.document.sitedeltaMatch=0;
-    content.window.location.hash="#sitedelta-change"+content.document.sitedeltaMatch;
-    content.document.sitedeltaMatch++;
-    return;
-   }
-   var url=content.window.location.href;
-   var fn=sitedelta._getFilename(url);
-
-   var result=sitedelta.readFile(fn+".dat");
-   sitedelta.last = result.content;
-
-   var text="";
-   
-   var showRegions=sitedelta.prefs.getBoolPref("showRegions");
-
-   sitedelta.excludes=new Array();
-   for(var i=0;i<result.excludes.length; i++) {
-    sitedelta.excludes.push(content.document.evaluate(result.excludes[i], content.document, null, XPathResult.ANY_TYPE, null).iterateNext());
-    if(sitedelta.excludes[i] && showRegions) sitedelta.excludes[i].style.MozOutline="dotted "+sitedelta.prefs.getCharPref("excludeRegion")+" 2px;";
-   }
-   var regions=new Array();
-   for(var i=0; i<result.includes.length; i++) {
-    var xpath=result.includes[i];
-    var startElement=content.document.evaluate(xpath,content.document,null,XPathResult.ANY_TYPE,null).iterateNext();
-    if(!startElement) {
-     if(xpath!="/html/body[1]") xpath="/html/body[1]";
-     startElement=content.document.evaluate(xpath,content.document,null,XPathResult.ANY_TYPE,null).iterateNext();
-    }
-    if(!startElement) {alert("Content not found."); return; }
-
-    if(showRegions) startElement.style.MozOutline="dotted "+sitedelta.prefs.getCharPref("includeRegion")+" 2px;";
-    regions.push(startElement);
-   }
-   sitedelta.changes=0; sitedelta.pos=0; sitedelta.currentpos=-1; 
-   for(var i=0; i<regions.length; i++) 
-    text+=sitedelta.walkTree(regions[i], false);
-   sitedelta.current = text; sitedelta.changes=0; sitedelta.pos=0; 
-   sitedelta.currentpos=1; sitedelta.insertElement=false;
-   for(var i=0; i<regions.length; i++) 
-    sitedelta.walkTree(regions[i], true);
-   
-   if(sitedelta.changes>0) {
-    content.window.location.hash="#sitedelta-change0";
-    content.document.sitedeltaMatch = 1; 
-   }
-   
-   result.url=url.replace(/#.*$/,''); result.title=content.document.title.replace(/[\n\r]/g,' ');
-   var date=new Date(); result.date=date.toLocaleString(); result.content = text;
-   sitedelta.saveFile(fn+".dat", result);
-  },
   walkTree: function(node, highlight) {
    var ret="";
    for(var i=0;i<sitedelta.excludes.length; i++) if(sitedelta.excludes[i]==node) return "";
+   var scanImages=sitedelta.prefs.getBoolPref("scanImages");
+   var checkDeleted=sitedelta.prefs.getBoolPref("checkDeleted");
 
    var cur=node.firstChild;
    while(cur) {
@@ -468,48 +281,51 @@ var sitedelta = {
      ret+=text;
     }
     var next=cur.nextSibling;
-    if(cur.nodeType==3 || cur.nodeName=='IMG') {
-     if(cur.nodeName=='IMG') text="["+cur.getAttribute("src") + "] "; else text=cur.data+" ";
+    if(cur.nodeType==3 || (scanImages && cur.nodeName=='IMG')) {
+     if(cur.nodeName=='IMG') text="["+cur.getAttribute("src") + "] "; else text=cur.data.replace(/\[/,"[ ")+" ";
      text=text.replace(/[ \t\n\r]+/g,' ');
-     text=text.replace(/\</g,'< ');
      text=text.replace(/^ +/,'');
      text=text.replace(/ +$/,' ');
      ret+=text; 
      if(text!="" && text!=" ") {
-      while(sitedelta.last.charAt(sitedelta.pos)==' ' || sitedelta.last.charAt(sitedelta.pos)=="\n") sitedelta.pos++;
-      if(sitedelta.last.indexOf(text)==-1) { 
-       // new text
-       cur=sitedelta.DOMAdded(cur, highlight);
-       if(!sitedelta.insertElement) sitedelta.insertElement=cur;
-      } else if(sitedelta.last.indexOf(text,sitedelta.pos)==sitedelta.pos) { 
-       // text unchanged
-       sitedelta.pos+=text.length;
-       sitedelta.insertElement=false;
-      } else if(sitedelta.last.indexOf(text,sitedelta.pos)>sitedelta.pos) { 
-       var missingtext= sitedelta.last.substring(sitedelta.pos, sitedelta.last.indexOf(text,sitedelta.pos));
-       if(sitedelta.currentpos > 0 && 
-          sitedelta.current.indexOf(missingtext,sitedelta.currentpos) > 0 && 
-          !(sitedelta.last.indexOf(sitedelta.current.substr(sitedelta.currentpos, missingtext.length+1), sitedelta.pos) > sitedelta.pos)) {
-        // moved upwards
-        cur=sitedelta.DOMMoved(cur, highlight);
+      if(!checkDeleted) {
+       if(sitedelta.last.indexOf(text)==-1) cur=sitedelta.DOMAdded(cur, highlight);
+      } else {
+       while(sitedelta.last.charAt(sitedelta.pos)==' ' || sitedelta.last.charAt(sitedelta.pos)=="\n") sitedelta.pos++;
+       if(sitedelta.last.indexOf(text)==-1) { 
+        // new text
+        cur=sitedelta.DOMAdded(cur, highlight);
         if(!sitedelta.insertElement) sitedelta.insertElement=cur;
-       } else {
-        // text removed
-        if(missingtext.replace(/[ \t\n]/g,"")!="") {
-         sitedelta.DOMRemoved((sitedelta.insertElement?sitedelta.insertElement:cur), missingtext, highlight);
-         sitedelta.pos+=missingtext.length+text.length; sitedelta.insertElement=false;
+       } else if(sitedelta.last.indexOf(text,sitedelta.pos)==sitedelta.pos) { 
+        // text unchanged
+        sitedelta.pos+=text.length;
+        sitedelta.insertElement=false;
+       } else if(sitedelta.last.indexOf(text,sitedelta.pos)>sitedelta.pos) { 
+        var missingtext= sitedelta.last.substring(sitedelta.pos, sitedelta.last.indexOf(text,sitedelta.pos));
+        if(sitedelta.currentpos > 0 && 
+           sitedelta.current.indexOf(missingtext,sitedelta.currentpos) > 0 && 
+           !(sitedelta.last.indexOf(sitedelta.current.substr(sitedelta.currentpos, missingtext.length+1), sitedelta.pos) > sitedelta.pos)) {
+         // moved upwards
+         cur=sitedelta.DOMMoved(cur, highlight);
+         if(!sitedelta.insertElement) sitedelta.insertElement=cur;
+        } else {
+         // text removed
+         if(missingtext.replace(/[ \t\n]/g,"")!="") {
+          sitedelta.DOMRemoved((sitedelta.insertElement?sitedelta.insertElement:cur), missingtext, highlight);
+          sitedelta.pos+=missingtext.length+text.length; sitedelta.insertElement=false;
+         }
         }
+       } else if(sitedelta.last.indexOf(text)<sitedelta.pos) { 
+        // new text is already known before
+        if(sitedelta.currentpos>0 && sitedelta.current.indexOf(text)<sitedelta.currentpos) {
+         // copied
+         cur=sitedelta.DOMAdded(cur, highlight); 
+        } else {
+         // moved
+         cur=sitedelta.DOMMoved(cur, highlight);
+        }
+        sitedelta.insertElement=cur;     
        }
-      } else if(sitedelta.last.indexOf(text)<sitedelta.pos) { 
-       // new text is already known before
-       if(sitedelta.currentpos>0 && sitedelta.current.indexOf(text)<sitedelta.currentpos) {
-        // copied
-        cur=sitedelta.DOMAdded(cur, highlight); 
-       } else {
-        // moved
-        cur=sitedelta.DOMMoved(cur, highlight);
-       }
-       sitedelta.insertElement=cur;     
       }
      } else {
       sitedelta.pos+=text.length;
@@ -518,7 +334,7 @@ var sitedelta = {
     }
     cur=next;
    }
-   if(sitedelta.currentpos>0) {
+   if(sitedelta.currentpos>0 && checkDeleted) {
     if(sitedelta.currentpos>sitedelta.current.length) {
      if(sitedelta.pos+1<sitedelta.last.length) {
       var missingtext=sitedelta.last.substring(sitedelta.pos,sitedelta.last.length-1);
@@ -563,6 +379,17 @@ var sitedelta = {
     var del=content.document.createElement("DEL");
     del.setAttribute("style","-moz-outline: dotted "+sitedelta.prefs.getCharPref("removeBorder")+" 1px; background: "+sitedelta.prefs.getCharPref("removeBackground")+"; color: #000;");
     del.id="sitedelta-change" + (sitedelta.changes-1);
+    while(text.indexOf("[")!=-1) {
+     del.appendChild(content.document.createTextNode(text.substring(0,text.indexOf("["))));
+     text=text.substr(text.indexOf("[")+1);
+     if(text.charAt(0)==" ") {
+      del.appendChild(content.document.createTextNode("["));
+     } else {
+      var img=content.document.createElement("IMG"); img.setAttribute("src", text.substring(0, text.indexOf("]")));
+      img.style.MozOpacity="0.3"; del.appendChild(img);     
+      text=text.substr(text.indexOf("]")+1);
+     }
+    }
     del.appendChild(content.document.createTextNode(text));
     hil.appendChild(del);
     hil.appendChild(cur.cloneNode(true));
@@ -572,4 +399,4 @@ var sitedelta = {
    return cur;
   }
 };
-window.addEventListener("load", function(e) { sitedelta.onLoad(e); }, false);
+window.addEventListener("load", sitedelta.onLoad, false);

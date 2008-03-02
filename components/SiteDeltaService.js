@@ -286,6 +286,57 @@ SiteDelta.prototype = {
         path = "/" + t.nodeName.toLowerCase() + path;
         return path;
     },
+    highlightPageOld: function(doc) {
+        var url = doc.URL,
+        changes = this.RESULT_UNCHANGED;
+        url = url.replace(/http:\/\/[^\/]+@/i, "http://").replace(/https:\/\/[^\/]+@/i, "https://").replace(/#.*$/, "");
+        var result = this.getPage(doc.URL);
+        var text = "";
+
+        this._excludes = [];
+        for (var i = 0; i < result.excludes.length; i++) {
+            this._excludes.push(doc.evaluate(result.excludes[i], doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext());
+            if (this._excludes[i] && this.showRegions) this._excludes[i].style.ôutline = "dotted " + this.excludeRegion + " 2px;";
+        }
+        var regions = [];
+        for (var i = 0; i < result.includes.length; i++) {
+            var xpath = result.includes[i];
+            var startElement = doc.evaluate(xpath, doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext();
+            if (!startElement) return this.RESULT_NOTFOUND;
+            if (this.showRegions) startElement.style.outline = "dotted " + this.includeRegion + " 2px;";
+            regions.push(startElement);
+        }
+        var pos = 0;
+        for (var i = 0; i < regions.length; i++) {
+            var r = this._walkTree(regions[i], false, null, pos);
+            text += r.text;
+            pos = r.pos;
+        }
+        if (result.content.replace(/[ \t\n]+/, "") == "" && text.replace(/[ \t\n]+/, "") != "") {
+            changes = this.RESULT_NEW;
+            this._observerService.notifyObservers(null, "sitedelta", result.url);
+        } else {
+            var current = text;
+            pos = 0;
+            for (var i = 0; i < regions.length; i++) {
+                var r = this._walkTree(regions[i], true, current, pos);
+                current = r.current;
+                changes += r.changes;
+                pos = r.pos;
+            }
+        }
+        result.url = url.replace(/#.*$/, '');
+        result.title = doc.title.replace(/[\n\r]/g, ' ');
+        if (result.name == "") result.name = result.title;
+        var date = new Date();
+        result.date = date.toLocaleString();
+        result.content = text;
+        this.putPage(result);
+        var result = this.getPage(doc.URL);
+        result.status = 0;
+        if (changes > 0 && (result.backupPage == true || (result.backupPage == null && this.backupPages))) this.backupPage(doc);
+        return changes;
+    },
     highlightPage: function(doc) {
         var url = doc.URL,
         changes = this.RESULT_UNCHANGED;
@@ -310,7 +361,7 @@ SiteDelta.prototype = {
         for (var i = 0; i < result.excludes.length; i ++ ) {
             this._excludes.push(doc.evaluate(result.excludes[i], doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext());
             if (this._excludes[i] && this.showRegions)
-                this._excludes[i].style.MozOutline = "dotted " + this.excludeRegion + " 2px;";
+                this._excludes[i].style.outline = "dotted " + this.excludeRegion + " 2px;";
         }
         var regions = [];
         for (var i = 0; i < result.includes.length; i ++ ) {
@@ -319,7 +370,7 @@ SiteDelta.prototype = {
             if ( ! startElement)
                 return this.RESULT_ERROR;
             if (this.showRegions)
-                startElement.style.MozOutline = "dotted " + this.includeRegion + " 2px;";
+                startElement.style.outline = "dotted " + this.includeRegion + " 2px;";
             regions.push(startElement);
         }
         for (var i = 0; i < regions.length; i ++ ) {
@@ -916,6 +967,174 @@ SiteDelta.prototype = {
             }
         }
         return ret;
+    },
+    
+    _walkTree: function(node, highlight, current, pos) {
+        var insertElement = false,
+        ret = "",
+        changes = 0,
+        currentpos = 0,
+        text = "";
+        var doc = node.ownerDocument;
+        var page = this.getPage(doc.URL);
+        if (page.checkDeleted != null) this._checkDeleted = page.checkDeleted;
+        else this._checkDeleted = this.checkDeleted;
+        if (page.scanImages != null) this._scanImages = page.scanImages;
+        else this._scanImages = this.scanImages;
+        var last = page.content;
+        if (current != null) {
+            currentpos = 1;
+        } else {
+            current = "";
+            currentpos = -1;
+        }
+
+        var domactions = [];
+        var tw = doc.createTreeWalker(node, Ci.nsIDOMNodeFilter.SHOW_ALL, this, true);
+        while (cur = tw.nextNode()) {
+            if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG')) {
+                if (cur.nodeName == 'IMG') text = "[" + cur.getAttribute("src") + "] ";
+                else text = cur.data.replace(/\[/, "[ ") + " ";
+                text = text.replace(/[ \t\n\r]+/g, ' ');
+                text = text.replace(/^ +/, '');
+                text = text.replace(/ +$/, ' ');
+                ret += text;
+                if (text != "" && text != " ") {
+                    if (!this._checkDeleted) {
+                        if (last.indexOf(text) == -1) domactions.push({
+                            action: "add",
+                            node: cur
+                        });
+                    } else {
+                        while (last.charAt(pos) == ' ' || last.charAt(pos) == "\n" || last.charAt(pos) == "\t") pos++;
+                        if (last.indexOf(text) == -1) {
+                            // new text
+                            domactions.push({
+                                action: "add",
+                                node: cur
+                            });
+                            if (!insertElement) insertElement = cur;
+                        } else if (last.indexOf(text, pos) == pos) {
+                            // text unchanged
+                            pos += text.length;
+                            insertElement = false;
+                        } else if (last.indexOf(text, pos) > pos) {
+                            var missingtext = last.substring(pos, last.indexOf(text, pos));
+                            if (currentpos > 0 && current.indexOf(missingtext, currentpos) > 0 && !(last.indexOf(current.substr(currentpos, missingtext.length + 1), pos) > pos)) {
+                                // moved upwards
+                                domactions.push({
+                                    action: "move",
+                                    node: cur
+                                });
+                                if (!insertElement) insertElement = cur;
+                            } else {
+                                // text removed
+                                domactions.push({
+                                    action: "remove",
+                                    node: (insertElement ? insertElement: cur),
+                                    data: missingtext
+                                });
+                                insertElement = false;
+                                pos += missingtext.length + text.length;
+                            }
+                        } else if (last.indexOf(text) < pos) {
+                            // new text is already known before
+                            if (currentpos > 0 && current.indexOf(text) < currentpos) {
+                                // copied
+                                domactions.push({
+                                    action: "add",
+                                    node: cur
+                                });
+                            } else {
+                                // moved
+                                domactions.push({
+                                    action: "move",
+                                    node: cur
+                                });
+                            }
+                            insertElement = cur;
+                        }
+                    }
+                }
+                if (currentpos > 0) currentpos += text.length;
+            }
+        }
+        if (currentpos > 0 && this._checkDeleted) {
+            if (currentpos > current.length) {
+                if (pos + 1 < last.length) {
+                    var missingtext = last.substring(pos, last.length - 1);
+                    if (missingtext.replace(/[ \t\n]/g, "") != "") {
+                        cur = node.ownerDocument.createElement("SPAN");
+                        node.appendChild(cur);
+                        domactions.push({
+                            action: "remove",
+                            node: cur,
+                            data: missingtext
+                        });
+                        pos = last.length + 1;
+                    }
+                }
+            }
+        }
+
+        if (highlight) {
+            for (var i = 0; i < domactions.length; i++) {
+                if (domactions[i].action == "add") this._DOMAdded(domactions[i].node, highlight, i);
+                if (domactions[i].action == "move") this._DOMMoved(domactions[i].node, highlight, i);
+                if (domactions[i].action == "remove") this._DOMRemoved(domactions[i].node, domactions[i].data, highlight, i);
+            }
+        }
+        changes += domactions.length;
+        return {
+            text: ret,
+            changes: changes,
+            current: (current ? current.substr(currentpos) : null),
+            pos: pos
+        };
+    },
+    _DOMRemoved: function(cur, text, highlight, nr) {
+        while (cur.newElement) cur = cur.newElement;
+        var doc = cur.ownerDocument;
+        var hil = doc.createElement("SPAN");
+        var del = doc.createElement("DEL");
+        del.setAttribute("style", "-moz-outline: dotted " + this.removeBorder + " 1px; background: " + this.removeBackground + "; color: #000;");
+        del.id = "sitedelta-change" + nr;
+        while (text.indexOf("[") != -1) {
+            del.appendChild(doc.createTextNode(text.substring(0, text.indexOf("["))));
+            text = text.substr(text.indexOf("[") + 1);
+            if (text.charAt(0) == " ") {
+                del.appendChild(doc.createTextNode("["));
+            } else {
+                var img = doc.createElement("IMG");
+                img.setAttribute("src", text.substring(0, text.indexOf("]")));
+                img.style.MozOpacity = "0.3";
+                del.appendChild(img);
+                text = text.substr(text.indexOf("]") + 1);
+            }
+        }
+        del.appendChild(doc.createTextNode(text));
+        hil.appendChild(del);
+        hil.appendChild(cur.cloneNode(true));
+        cur.parentNode.replaceChild(hil, cur);
+        cur.newElement = hil;
+    },
+    _DOMMoved: function(cur, highlight, nr) {
+        while (cur.newElement) cur = cur.newElement;
+        var hil = cur.ownerDocument.createElement("SPAN");
+        hil.setAttribute("style", "-moz-outline: dotted " + this.moveBorder + " 1px; background: " + this.moveBackground + "; color: #000;");
+        hil.id = "sitedelta-change" + nr;
+        hil.appendChild(cur.cloneNode(true));
+        cur.parentNode.replaceChild(hil, cur);
+        cur.newElement = hil;
+    },
+    _DOMAdded: function(cur, highlight, nr) {
+        while (cur.newElement) cur = cur.newElement;
+        var hil = cur.ownerDocument.createElement("SPAN");
+        hil.setAttribute("style", "-moz-outline: dotted " + this.addBorder + " 1px; background: " + this.addBackground + "; color: #000;");
+        hil.id = "sitedelta-change" + nr;
+        hil.appendChild(cur.cloneNode(true));
+        cur.parentNode.replaceChild(hil, cur);
+        cur.newElement = hil;
     },
     _DOMChanged: function(doc, text, nr, type) {
         var del = doc.createElement("SPAN"),

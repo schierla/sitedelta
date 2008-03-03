@@ -20,8 +20,8 @@
 <!ENTITY sitedelta.sidebar.search "Suchen: ">
 <!ENTITY sitedelta.sidebar.updateall "Alle auf Änderungen prüfen">
 <!ENTITY sitedelta.sidebar.openall "Alle geänderten Seiten öffnen">
-<!ENTITY sitedelta.sidebar.showprefs "SiteDelta-Einstellungen">
-<!ENTITY sitedelta.sidebar.showpresets "Voreinstellungen verwalten">
+<!ENTITY sitedelta.sidebar.showprefs "SiteDelta-Einstellungen...">
+<!ENTITY sitedelta.sidebar.showpresets "Voreinstellungen verwalten...">
 
 <!ENTITY sitedelta.properties.savepreset "Als Voreinstellung speichern...">
 <!ENTITY sitedelta.properties.title "Seiteneigenschaften">
@@ -80,15 +80,11 @@
 <!ENTITY sitedelta.prefs.ignorenumbers "Geänderte Zahlen ignorieren">
 <!ENTITY sitedelta.prefs.ignorecase.desc "Auch Änderungen bei der Groß/Kleinschreibung können ignoriert werden.">
 <!ENTITY sitedelta.prefs.ignorecase "Groß-/Kleinschreibung ignorieren">
-<!ENTITY sitedelta.prefs.openchanged.desc "">
-<!ENTITY sitedelta.prefs.openchanged "Seiten verwalten: Beim Überprüfen Seiten mit Änderungen öffnen">
 <!ENTITY sitedelta.prefs.settings "Einstellungen">
 <!ENTITY sitedelta.prefs.appearance "Hervorhebung">
 <!ENTITY sitedelta.prefs.watch "Seitenüberwachung">
 <!ENTITY sitedelta.prefs.backuppages.desc "Wenn auf einer Seite Änderungen gefunden werden, so kann automatisch eine Kopie der Seite zu Dokumentationszwecken gespeichert werden.">
 <!ENTITY sitedelta.prefs.backuppages "Geänderte Seiten archivieren">
-<!ENTITY sitedelta.prefs.sitesettings.desc "">
-<!ENTITY sitedelta.prefs.sitesettings "Seitenspezifische Einstellungen erlauben">
 <!ENTITY sitedelta.prefs.scanonload.desc "Beim Besuch von bekannten Seiten kann SiteDelta automatisch nach Änderungen suchen.">
 <!ENTITY sitedelta.prefs.scanonload "Beim Besuch automatisch prüfen">
 <!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta kann die bekannten Seiten in regelmäßigen Abständen auf Änderungen prüfen und Sie darüber informieren.">

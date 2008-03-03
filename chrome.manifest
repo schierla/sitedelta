@@ -1,4 +1,7 @@
 content	sitedelta	unpacked/content/
 locale	sitedelta	de	unpacked/locale/de-DE/
+locale	sitedelta	de-DE	unpacked/locale/de-DE/
+locale	sitedelta	en	unpacked/locale/en-US/
+locale	sitedelta	en-US	unpacked/locale/en-US/
 skin	sitedelta	classic/1.0	unpacked/skin/
 overlay	chrome://browser/content/browser.xul	chrome://sitedelta/content/sitedelta.xul

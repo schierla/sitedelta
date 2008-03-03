@@ -4,62 +4,6 @@
 <prefwindow id="sitedelta-prefs"
      title="&sitedelta.prefs.title;"
      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" ondialogaccept="accept();" onload="previewColors();">
-<script type="text/javascript" src="sitedelta.js"/>
-<script type="text/javascript">
-<![CDATA[
-  function accept() {
-   var notifysound="";
-   switch(g('notifySound').selectedIndex) {
-    case 0: notifysound=""; break;
-    case 1: notifysound="beep"; break;
-    case 2: notifysound="SystemNotification"; break;
-    case 3: notifysound="MailBeep"; break;
-    case 4: notifysound = g('notifySoundText').value; break;
-   }
-   var watchDelay=0;
-   switch(g('watchdelay').selectedIndex) {
-    case 0: watchDelay=0; break;
-    case 1: watchDelay=-1; break; 
-    case 2: watchDelay=10080; break;
-    case 3: watchDelay=1440; break;
-    case 4: watchDelay=60; break;
-    case 5: watchDelay= g("watchvalue").value; break;
-   }
-   sitedeltaService.watchScanDelay = watchDelay;
-   sitedeltaService.notifySound = notifysound;
-   sitedeltaService.savePrefs();
-   return true;
-  }
-
-  function previewColors() {
-   g('abg').style.background=g('addbackground').value;
-   g('abo').style.borderColor=g('addborder').value;
-   g('rbg').style.background=g('removebackground').value;
-   g('rbo').style.borderColor=g('removeborder').value;
-   g('mbg').style.background=g('movebackground').value;
-   g('mbo').style.borderColor=g('moveborder').value;
-   g('ir').style.borderColor=g('includeregion').value;
-   g('xr').style.borderColor=g('excluderegion').value;
-   
-   switch(sitedeltaService.watchScanDelay) {
-    case 0: g('watchdelay').selectedIndex=0; break;
-    case -1: g('watchdelay').selectedIndex=1; break;
-    case 10080: g('watchdelay').selectedIndex=2; break;
-    case 1440: g('watchdelay').selectedIndex=3; break;
-    case 60: g('watchdelay').selectedIndex=4; break;
-    default: g('watchdelay').selectedIndex=5; g('watchvalue').value=sitedeltaService.watchScanDelay;
-   }
-   switch(sitedeltaService.notifySound) {
-    case "": g('notifySound').selectedIndex=0; break;
-    case "beep": g('notifySound').selectedIndex=1; break;
-    case "SystemNotification": g('notifySound').selectedIndex=2; break;
-    case "MailBeep": g('notifySound').selectedIndex=3; break;
-    default: g('notifySound').selectedIndex=4; g('notifySoundText').value = g(sitedeltaService.notifySound); break;
-   }
-  }
- function g(name) {return document.getElementById(name); }
-]]>
-</script>
 <prefpane flex="1" id="sitedelta-pref-pane" label="SiteDelta" image="chrome://sitedelta/content/sitedeltaGross.gif">
   <preferences>
     <preference id="p_addbackground" name="extensions.sitedelta@schierla.de.addBackground" type="string"/>
@@ -181,5 +125,60 @@
 </tabbox>
 </vbox>
 </prefpane>
- 
+<script type="text/javascript" src="sitedelta.js"/>
+<script type="text/javascript">
+<![CDATA[
+  function accept() {
+   var notifysound="";
+   switch(g('notifySound').selectedIndex) {
+    case 0: notifysound=""; break;
+    case 1: notifysound="beep"; break;
+    case 2: notifysound="SystemNotification"; break;
+    case 3: notifysound="MailBeep"; break;
+    case 4: notifysound = g('notifySoundText').value; break;
+   }
+   var watchDelay=0;
+   switch(g('watchdelay').selectedIndex) {
+    case 0: watchDelay=0; break;
+    case 1: watchDelay=-1; break; 
+    case 2: watchDelay=10080; break;
+    case 3: watchDelay=1440; break;
+    case 4: watchDelay=60; break;
+    case 5: watchDelay= g("watchvalue").value; break;
+   }
+   sitedeltaService.watchScanDelay = watchDelay;
+   sitedeltaService.notifySound = notifysound;
+   sitedeltaService.savePrefs();
+   return true;
+  }
+
+  function previewColors() {
+   g('abg').style.background=g('addbackground').value;
+   g('abo').style.borderColor=g('addborder').value;
+   g('rbg').style.background=g('removebackground').value;
+   g('rbo').style.borderColor=g('removeborder').value;
+   g('mbg').style.background=g('movebackground').value;
+   g('mbo').style.borderColor=g('moveborder').value;
+   g('ir').style.borderColor=g('includeregion').value;
+   g('xr').style.borderColor=g('excluderegion').value;
+   
+   switch(sitedeltaService.watchScanDelay) {
+    case 0: g('watchdelay').selectedIndex=0; break;
+    case -1: g('watchdelay').selectedIndex=1; break;
+    case 10080: g('watchdelay').selectedIndex=2; break;
+    case 1440: g('watchdelay').selectedIndex=3; break;
+    case 60: g('watchdelay').selectedIndex=4; break;
+    default: g('watchdelay').selectedIndex=5; g('watchvalue').value=sitedeltaService.watchScanDelay;
+   }
+   switch(sitedeltaService.notifySound) {
+    case "": g('notifySound').selectedIndex=0; break;
+    case "beep": g('notifySound').selectedIndex=1; break;
+    case "SystemNotification": g('notifySound').selectedIndex=2; break;
+    case "MailBeep": g('notifySound').selectedIndex=3; break;
+    default: g('notifySound').selectedIndex=4; g('notifySoundText').value = g(sitedeltaService.notifySound); break;
+   }
+  }
+ function g(name) {return document.getElementById(name); }
+]]>
+</script> 
 </prefwindow>

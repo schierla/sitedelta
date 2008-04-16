@@ -13,6 +13,7 @@
 
 <!ENTITY sitedelta.sidebar.pagesettings "Eigenschaften">
 <!ENTITY sitedelta.sidebar.update "Auf Änderungen prüfen">
+<!ENTITY sitedelta.sidebar.markseen "Änderung als gesehen markieren">
 <!ENTITY sitedelta.sidebar.delete "Löschen">
 <!ENTITY sitedelta.sidebar.title "SiteDelta">
 <!ENTITY sitedelta.sidebar.openpage "Seite öffnen">
@@ -95,6 +96,8 @@
 <!ENTITY sitedelta.prefs.watchpagedelay "Pause nach Überprüfen einer Seite (in Sek.)">
 <!ENTITY sitedelta.prefs.watchscandelay.desc "">
 <!ENTITY sitedelta.prefs.watchscandelay "Überprüfungshäufigkeit (in Min.)">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "Dadurch wird SiteDelta etwas langsamer, dafür gibt es seltener falschen Alarm.">
+<!ENTITY sitedelta.prefs.watchenablescript "Bei Seitenüberwachung JavaScript aktivieren">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Standardeinstellung verwenden (benutzt die im Einstellungsdialog angegebene Häufigkeit)">
 <!ENTITY sitedelta.prefs.frequency.default "Standard">
 <!ENTITY sitedelta.prefs.frequency.never.desc "Nutzen Sie diese Option, wenn Sie eine Seite von der automatischen Prüfung ausschließen wollen">

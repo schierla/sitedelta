@@ -45,6 +45,7 @@ SiteDelta.prototype = {
     scanOnLoad: null,
     siteSettings: null,
     enableWatch: false,
+    watchEnableScript: false,
     watchPageDelay: null,
     watchScanDelay: null,
     watchPageTimeout: null,
@@ -225,6 +226,21 @@ SiteDelta.prototype = {
         for (var i = 0; i < regions.length; i ++ ) {
             text += this._getText(regions[i]);
         }
+        
+        if (result.date == "") {
+        	result.current = text;
+        	result.url = url.replace(/#.*$/, '');
+        	result.title = doc.title.replace(/[\n\r]/g, ' ');
+        	if (result.name == "") result.name = result.title;
+        	var date = new Date();
+        	result.date = date.toLocaleString();
+        	result.content = text;
+        	this.putPage(result);
+        	var result = this.getPage(doc.URL);
+        	result.status = 0;
+            return 0;
+        }
+        
         if (this._clean(text) != this._clean(result.content.substr(1)))
             changes = 1;
         result.status=changes;
@@ -312,7 +328,7 @@ SiteDelta.prototype = {
             text += r.text;
             pos = r.pos;
         }
-        if (result.content.replace(/[ \t\n]+/, "") == "" && text.replace(/[ \t\n]+/, "") != "") {
+        if (result.date == "") {
             changes = this.RESULT_NEW;
             this._observerService.notifyObservers(null, "sitedelta", result.url);
         } else {
@@ -376,7 +392,7 @@ SiteDelta.prototype = {
         for (var i = 0; i < regions.length; i ++ ) {
             text += this._getText(regions[i])
             }
-        if (result.content.replace(/\s+/, "") == "" && text.replace(/\s+/, "") != "") {
+        if (result.date == "") {
             changes = this.RESULT_NEW;
             current = text;
             this._observerService.notifyObservers(null, "sitedelta", result.url);
@@ -608,6 +624,24 @@ SiteDelta.prototype = {
 		}
 		return null;	
     },
+    markSeen: function(url) {
+    	var result=this.getPage(url); 
+        if (this.RDF.GetTarget(this._rr(result.url), this._rr(NS_RDF + "name"), true)) {
+	    	result.status=this.RESULT_UNCHECKED;
+			result.date = "";
+			this.putPage(result);
+			
+	        var time = Date.now();
+	        if (this.RDF.GetTarget(this._rr(result.url), this._rr(SD_RDF + "nextScan"), true))
+	            this.RDF.Change(this._rr(result.url), this._rr(SD_RDF + "nextScan"), this.RDF.GetTarget(this._rr(result.url), this._rr(SD_RDF + "nextScan"), true).QueryInterface(Ci.nsIRDFLiteral), this._rl(time));
+	        else this.RDF.Assert(this._rr(result.url), this._rr(SD_RDF + "nextScan"), this._rl(time), true);
+	        
+	        if(this._watchUrl == null) {
+	        	this._timer.cancel();
+            	this._timer.initWithCallback(this, 1000, this._timer.TYPE_ONE_SHOT);
+			}
+        }    	
+    },
     updatePage: function(url) {
     	var result=this.getPage(url); 
         if (this.RDF.GetTarget(this._rr(result.url), this._rr(NS_RDF + "name"), true)) {
@@ -663,6 +697,7 @@ SiteDelta.prototype = {
         this._prefs.setIntPref("watchPageDelay",this.watchPageDelay/1000);
         this._prefs.setIntPref("watchScanDelay",this.watchScanDelay);
         this._prefs.setIntPref("watchPageTimeout",this.watchPageTimeout/1000);
+        this._prefs.setBoolPref("watchEnableScript",this.watchEnableScript);
         this._prefs.setBoolPref("enableWatch",this.enableWatch);
         this._prefs.setBoolPref("siteSettings",this.siteSettings);
         if(this._watchUrl == null) {
@@ -693,6 +728,7 @@ SiteDelta.prototype = {
         this.watchScanDelay = this._prefs.getIntPref("watchScanDelay");
         this.watchPageTimeout = this._prefs.getIntPref("watchPageTimeout") * 1000 + 1;
         this.enableWatch = this._prefs.getBoolPref("enableWatch");
+        this.watchEnableScript = this._prefs.getBoolPref("watchEnableScript");
         this.siteSettings = this._prefs.getBoolPref("siteSettings");
 		if(this._watchUrl == null) {
 	        this._timer.cancel();
@@ -716,12 +752,6 @@ SiteDelta.prototype = {
         this.rdfService = Cc["@mozilla.org/rdf/rdf-service;1"].getService(Ci.nsIRDFService);
         var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
         file.append("sitedelta.rdf");
-        var ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
-        if (file.exists()) {
-            this.RDF = this.rdfService.GetDataSourceBlocking(ios.newFileURI(file).spec);
-        } else {
-            this._buildRDF();
-        }
         
         this.wrappedJSObject = this;
         this._observerService = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
@@ -729,6 +759,13 @@ SiteDelta.prototype = {
         
 		var sbs = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
 		this._strings = sbs.createBundle("chrome://sitedelta/locale/sitedelta.properties");        
+
+        var ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+        if (file.exists()) {
+            this.RDF = this.rdfService.GetDataSourceBlocking(ios.newFileURI(file).spec);
+        } else {
+            this._buildRDF();
+        }
     },
     _unload: function() {
     	if(this._iframe) this._watchEndCheck();
@@ -815,6 +852,7 @@ SiteDelta.prototype = {
         for (var i = 0; i < files.length; i ++ ) {
             var result = this.getPage(files[i]);
             this._rdfAdd(result);
+            if(result.date == "") this.markSeen(result.url);
         }
         this.RDF.QueryInterface(Ci.nsIRDFRemoteDataSource).Flush();
     },
@@ -880,6 +918,11 @@ SiteDelta.prototype = {
         if (data.watchDelay != null) {
             var attr = doc.createAttribute("watchDelay");
             attr.value = data.watchDelay;
+            elem.attributes.setNamedItem(attr);
+        }
+        if (data.watchEnableScript != null) {
+            var attr = doc.createAttribute("watchEnableScript");
+            attr.value = data.watchEnableScript ? "true": "false";
             elem.attributes.setNamedItem(attr);
         }
         if (data.ignoreCase != null) {
@@ -1198,9 +1241,9 @@ SiteDelta.prototype = {
             del = doc.createElement("INS");
             ret = del;
             if(type=="I")
-	            del.setAttribute("style", "-moz-outline: dotted " + this.addBorder + " 1px; background: " + this.addBackground + "; color: #000;");
+	            del.setAttribute("style", "outline: " + this.addBorder + " dotted 1px; background: " + this.addBackground + "; color: #000;");
 	        else
-	            del.setAttribute("style", "-moz-outline: dotted " + this.moveBorder + " 1px; background: " + this.moveBackground + "; color: #000;");
+	            del.setAttribute("style", "outline: " + this.moveBorder + " dotted 1px; background: " + this.moveBackground + "; color: #000;");
         }
         if (nr !=- 1 & type != "K")
             ret.id = "sitedelta-change" + nr;
@@ -1272,7 +1315,7 @@ SiteDelta.prototype = {
         rootElement.appendChild(_svc._iframe);
         var webNav = _svc._iframe.docShell.QueryInterface(Ci.nsIWebNavigation);
         webNav.stop(Ci.nsIWebNavigation.STOP_NETWORK);
-        _svc._iframe.docShell.allowJavascript = false;
+        _svc._iframe.docShell.allowJavascript = (result.watchEnableScript!=null?result.watchEnableScript:_svc.watchEnableScript); 
         _svc._iframe.docShell.allowAuth = false;
         _svc._iframe.docShell.allowPlugins = false;
         _svc._iframe.docShell.allowMetaRedirects = false;
@@ -1589,6 +1632,8 @@ SiteDelta.prototype = {
                             result.checkDeleted = elem.attributes.getNamedItem("checkDeleted").firstChild.data == "true";
                         if (elem.hasAttribute("scanImages"))
                             result.scanImages = elem.attributes.getNamedItem("scanImages").firstChild.data == "true";
+                        if (elem.hasAttribute("watchEnableScript"))
+                            result.backupPage = elem.attributes.getNamedItem("watchEnableScript").firstChild.data == "true";
                         if (elem.hasAttribute("backupPage"))
                             result.backupPage = elem.attributes.getNamedItem("backupPage").firstChild.data == "true";
                         if (elem.hasAttribute("watchDelay"))

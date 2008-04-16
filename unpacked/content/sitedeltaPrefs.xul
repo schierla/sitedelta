@@ -23,6 +23,7 @@
     <preference id="p_sitesettings" name="extensions.sitedelta@schierla.de.siteSettings" type="bool"/>
     <preference id="p_scanonload" name="extensions.sitedelta@schierla.de.scanOnLoad" type="bool"/>
     <preference id="p_watchpagedelay" name="extensions.sitedelta@schierla.de.watchPageDelay" type="int"/>
+    <preference id="p_watchenablescript" name="extensions.sitedelta@schierla.de.watchEnableScript" type="bool" />
     <preference id="p_watchscandelay" name="extensions.sitedelta@schierla.de.watchScanDelay" type="int"/>
     <preference id="p_watchpagetimeout" name="extensions.sitedelta@schierla.de.watchPageTimeout" type="int"/>
     <preference id="p_ignorenumbers" name="extensions.sitedelta@schierla.de.ignoreNumbers" type="bool"/>
@@ -56,10 +57,13 @@
 <label>&sitedelta.prefs.scanimages.desc;</label>
 <checkbox preference="p_ignorenumbers" class="header" label="&sitedelta.prefs.ignorenumbers;" id="ignorenumbers" />
 <label>&sitedelta.prefs.ignorenumbers.desc;</label>
+</groupbox><groupbox>
+<checkbox preference="p_scanonload" class="header" label="&sitedelta.prefs.scanonload;" />
+<label>&sitedelta.prefs.scanonload.desc;</label>
 </groupbox>
 <groupbox>
-<checkbox preference="p_scanonload" class="header" label="&sitedelta.prefs.scanonload;"/>
-<label>&sitedelta.prefs.scanonload.desc;</label>
+<checkbox preference="p_watchenablescript" class="header" label="&sitedelta.prefs.watchenablescript;"/>
+<label>&sitedelta.prefs.watchenablescript.desc;</label>
 </groupbox>
 </tabpanel>
 

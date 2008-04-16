@@ -24,11 +24,11 @@ var sitedeltaOverlay= {
   if(sitedeltaOverlay.outlinedElement) sitedeltaOverlay.removeOutline();
   var element=content.document.evaluate(xpath,content.document,null,XPathResult.ANY_TYPE,null).iterateNext();
   if(!element) return;
-  sitedeltaOverlay.outlinedElement=element; sitedeltaOverlay.outlinedElementStyle=element.style.MozOutline;
-  element.style.MozOutline= (this.regionEntry==1?"dotted "+sitedeltaService.includeRegion+" 2px;":"dotted "+sitedeltaService.excludeRegion+" 2px;");
+  sitedeltaOverlay.outlinedElement=element; sitedeltaOverlay.outlinedElementStyle=element.style.outline;
+  element.style.outline= (this.regionEntry==1?sitedeltaService.includeRegion+" dotted 2px":sitedeltaService.excludeRegion+" dotted 2px");
  },
  removeOutline: function() {
-  if(sitedeltaOverlay.outlinedElement) sitedeltaOverlay.outlinedElement.style.MozOutline = sitedeltaOverlay.outlinedElementStyle;
+  if(sitedeltaOverlay.outlinedElement) sitedeltaOverlay.outlinedElement.style.outline = sitedeltaOverlay.outlinedElementStyle;
   sitedeltaOverlay.outlinedElement=false;
  },
  removeIncludeRegion: function() {
@@ -128,19 +128,19 @@ var sitedeltaOverlay= {
  },
  mouseover: function(e) {
   if(sitedeltaOverlay.needText && !e.target.firstChild.data && (!e.target.id || e.target.id.substr(0,16)=="sitedelta-change")) return;
-  e.target.style.MozOutline="dotted red 2px";
+  e.target.style.outline="red dotted 2px";
   e.preventDefault();
   e.stopPropagation();
  },
  mouseout: function(e) {
-  if(e.target!=sitedeltaOverlay.destelement) e.target.style.MozOutline="none";
+  if(e.target!=sitedeltaOverlay.destelement) e.target.style.outline="none";
   e.preventDefault();
   e.stopPropagation();
  },
  mousedown: function(e) {
   sitedeltaOverlay.needText=true;
   sitedeltaOverlay.destelement=e.target;
-  e.target.style.MozOutline="solid green 2px;";
+  e.target.style.outline="green solid 2px;";
   e.preventDefault();
   e.stopPropagation();
  },
@@ -149,7 +149,7 @@ var sitedeltaOverlay= {
   e.preventDefault();
   e.stopPropagation();
   
-  sitedeltaOverlay.destelement.style.MozOutline="none";
+  sitedeltaOverlay.destelement.style.outline="none";
   content.document.removeEventListener("mouseover", sitedeltaOverlay.mouseover, true);
   content.document.removeEventListener("mousedown", sitedeltaOverlay.mousedown, true);
   content.document.removeEventListener("mouseup", sitedeltaOverlay.mouseup, true);
@@ -164,7 +164,7 @@ var sitedeltaOverlay= {
    var common="";
    for(var i=0; i<Math.min(to.length,from.length); i++) {common+="/"+to[i]; if(to[i]!=from[i]) break; }  
    common=common.substr(1);   
-    if(e.target.id) {
+   if(e.target.id) {
     var xpath="//*[@id=\""+ e.target.id +"\"]";    
    } else {
     var data=new String(e.target.firstChild.data); var func="text()";
@@ -177,22 +177,8 @@ var sitedeltaOverlay= {
      
     var xpath="//"+e.target.nodeName+'['+func+'="' + data +'"]';
    }
-   for(var j=i+1; j<from.length; j++) xpath+="/..";
-   if(i<from.length) {
-    var dest=content.document.evaluate(common, content.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-    var el=content.document.evaluate(xpath, content.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-    var j=1; var f=null;
-    if(el!=dest) for(var j=1; j>0; j++) {
-     el=content.document.evaluate(xpath+"/following-sibling::"+dest.nodeName+"[position()="+j+"]", content.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-     if(el==dest) {xpath+="/following-sibling::"+dest.nodeName+"[position()="+j+"]"; break; }
-     var f=content.document.evaluate(xpath+"/preceding-sibling::"+dest.nodeName+"[position()="+j+"]", content.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-     if(f==dest) {xpath+="/preceding-sibling::"+dest.nodeName+"[position()="+j+"]"; break; }
-     if(!el && !f) {break;}
-    }
-   } else {
-    i--; 
-   }
-   for(i=i+1; i<to.length; i++) xpath+="/"+to[i];
+   for(var j=i; j<from.length; j++) xpath+="/..";
+   for(i=i; i<to.length; i++) xpath+="/"+to[i];
    sitedelta.addRegion(xpath, sitedelta.regionAction==1);
   } else {
    sitedelta.addRegion(sitedeltaService.buildXPath(sitedeltaOverlay.destelement), sitedelta.regionAction==1);

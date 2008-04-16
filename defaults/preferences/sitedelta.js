@@ -18,6 +18,7 @@ pref("extensions.sitedelta@schierla.de.backupPages", false);
 pref("extensions.sitedelta@schierla.de.scanOnLoad", true);
 pref("extensions.sitedelta@schierla.de.siteSettings", false);
 pref("extensions.sitedelta@schierla.de.enableWatch", false);
+pref("extensions.sitedelta@schierla.de.watchEnableScript", false);
 pref("extensions.sitedelta@schierla.de.watchPageDelay", 1);
 pref("extensions.sitedelta@schierla.de.watchPageTimeout", 15);
 pref("extensions.sitedelta@schierla.de.watchScanDelay", 60);

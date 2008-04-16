@@ -13,6 +13,7 @@
 
 <!ENTITY sitedelta.sidebar.pagesettings "Page properties">
 <!ENTITY sitedelta.sidebar.update "Check for changes">
+<!ENTITY sitedelta.sidebar.markseen "Mark changes as seen">
 <!ENTITY sitedelta.sidebar.delete "Delete">
 <!ENTITY sitedelta.sidebar.title "SiteDelta">
 <!ENTITY sitedelta.sidebar.openpage "Open page">
@@ -95,6 +96,8 @@
 <!ENTITY sitedelta.prefs.watchpagedelay "Delay after checking the page (sec.)">
 <!ENTITY sitedelta.prefs.watchscandelay.desc "">
 <!ENTITY sitedelta.prefs.watchscandelay "Scan frequency (min.)">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "Makes SiteDelta a bit slower, but avoids some false alerts.">
+<!ENTITY sitedelta.prefs.watchenablescript "Enable JavaScript for site watch">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Use default setting (set in the preferences dialog)">
 <!ENTITY sitedelta.prefs.frequency.default "Default">
 <!ENTITY sitedelta.prefs.frequency.never.desc "Use this option to exclude this page from automatic checking">

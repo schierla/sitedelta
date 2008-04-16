@@ -37,6 +37,7 @@
 <menuitem label="&sitedelta.sidebar.openpage;" default="true" oncommand="sitedeltaSidebar.openCurrent();"/>
 <menuseparator/>
 <menuitem label="&sitedelta.sidebar.update;" oncommand="sitedeltaSidebar.updateCurrent();"/>
+<menuitem label="&sitedelta.sidebar.markseen;" oncommand="sitedeltaSidebar.markSeen();" />
 <menuitem label="&sitedelta.sidebar.delete;" oncommand="sitedeltaSidebar.deletePage();"/>
 <menuseparator/>
 <menuitem label="&sitedelta.sidebar.pagesettings;" oncommand="sitedeltaSidebar.showManager();" />

@@ -13,6 +13,10 @@ updateCurrent: function() {
  for(var i=0; i<document.getElementById("sitedeltaPages").selectedCount; i++)
   sitedeltaService.updatePage(document.getElementById("sitedeltaPages").getSelectedItem(i).id);
 },
+markSeen: function() {
+ for(var i=0; i<document.getElementById("sitedeltaPages").selectedCount; i++)
+  sitedeltaService.markSeen(document.getElementById("sitedeltaPages").getSelectedItem(i).id);
+},
 openChanged: function() {
  var gBrowser = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIWebNavigation).QueryInterface(Components.interfaces.nsIDocShellTreeItem).rootTreeItem.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIDOMWindow).getBrowser();
  for(var i=0; i<document.getElementById("sitedeltaPages").getRowCount(); i++)

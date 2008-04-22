@@ -148,14 +148,21 @@ var sitedeltaOverlay= {
   sitedeltaOverlay.mouseout(e);
   e.preventDefault();
   e.stopPropagation();
-  
   sitedeltaOverlay.destelement.style.outline="none";
-  content.document.removeEventListener("mouseover", sitedeltaOverlay.mouseover, true);
-  content.document.removeEventListener("mousedown", sitedeltaOverlay.mousedown, true);
-  content.document.removeEventListener("mouseup", sitedeltaOverlay.mouseup, true);
-  content.document.removeEventListener("mouseout", sitedeltaOverlay.mouseout, true);
-  content.document.removeEventListener("click", sitedeltaOverlay.mouseclick, true);
-  if(e.button!=0) return;
+
+  var noB=false;
+  if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();
+  if(noB && noB.getNotificationWithValue("sitedelta")) noB.removeNotification(noB.getNotificationWithValue("sitedelta"));
+  
+  if(e.button!=0) {
+   content.document.removeEventListener("mouseover", sitedeltaOverlay.mouseover, true);
+   content.document.removeEventListener("mousedown", sitedeltaOverlay.mousedown, true);
+   content.document.removeEventListener("mouseup", sitedeltaOverlay.mouseup, true);
+   content.document.removeEventListener("mouseout", sitedeltaOverlay.mouseout, true);
+   content.document.removeEventListener("click", sitedeltaOverlay.mouseclick, true);
+   return;
+  }
+  if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("regionAdded"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {});
 
   sitedeltaOverlay.needText=false;
   if(e.target!=sitedeltaOverlay.destelement && (e.target.firstChild.data || e.target.id)) {
@@ -183,6 +190,8 @@ var sitedeltaOverlay= {
   } else {
    sitedelta.addRegion(sitedeltaService.buildXPath(sitedeltaOverlay.destelement), sitedelta.regionAction==1);
   }
+  
+  sitedeltaOverlay.needText=false; sitedeltaOverlay.destelement=null;
  },
  selectRegion: function(e) {
   sitedeltaOverlay.needText=false; sitedeltaOverlay.destelement=null;
@@ -196,10 +205,20 @@ var sitedeltaOverlay= {
  includeRegion: function(e) {
   sitedelta.regionAction=1; 
   sitedeltaOverlay.selectRegion();
+  
+  var noB=false;
+  if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();
+  if(noB && noB.getNotificationWithValue("sitedelta")) noB.removeNotification(noB.getNotificationWithValue("sitedelta"));
+  if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("includeRegionMessage"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {});
  },
  excludeRegion: function(e) {
   sitedelta.regionAction=2;
   sitedeltaOverlay.selectRegion();
+  
+  var noB=false;
+  if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();
+  if(noB && noB.getNotificationWithValue("sitedelta")) noB.removeNotification(noB.getNotificationWithValue("sitedelta"));
+  if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("excludeRegionMessage"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {});
  },
  showProperties: function(e) {
   var result=sitedeltaService.getPage(content.document.URL);

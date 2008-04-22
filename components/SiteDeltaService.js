@@ -215,9 +215,9 @@ SiteDelta.prototype = {
             var xpath = result.includes[i];
             var startElement = doc.evaluate(xpath, doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext();
             if ( ! startElement) {
-                result.status=this.RESULT_ERROR;
+                result.status=1;
                 this._observerService.notifyObservers(null, "sitedelta", result.url);
-                return this.RESULT_ERROR;
+                return 1;
             }
             regions.push(startElement);
         }
@@ -391,10 +391,10 @@ SiteDelta.prototype = {
         }
         for (var i = 0; i < regions.length; i ++ ) {
             text += this._getText(regions[i])
-            }
+        }
+        current = text;
         if (result.date == "") {
             changes = this.RESULT_NEW;
-            current = text;
             this._observerService.notifyObservers(null, "sitedelta", result.url);
         } else {
             var oldt = this._split(this._clean(result.content.substring(1))),
@@ -439,12 +439,11 @@ SiteDelta.prototype = {
             for (var i = 0; i < regions.length; i ++ ) {
                 
                 var changes = 0,
-                current = text,
                 ot = "",
                 nt = "",
                 wc = 0;
                 var doc = regions[i].ownerDocument;
-                
+
                 var domactions = [],
                 last = "",
                 action = "";
@@ -501,7 +500,7 @@ SiteDelta.prototype = {
 							else action="K";
                     	}
                         
-                        if ((last != action && txt != "") || ((replace != null || last != "K") && wpos >= words.length && action != "D") || ((replace != null || last != "K") && wpos < words.length && words[wpos].length < newt[npos].length)) {
+                        if ((last != action && txt != "") || ((replace != null || last != "K") && wpos >= words.length && action != "D") || ((replace != null || last != "K") && wpos < words.length && npos < newt.length && words[wpos].length < newt[npos].length)) {
                             if (replace == null)
                                 replace = doc.createElement("SPAN");
                             if (last == "K") {
@@ -549,10 +548,10 @@ SiteDelta.prototype = {
                         });
                     }
                 }
-                for (var i = 0; i < domactions.length; i ++ ) {
-                    for (var j = 0; j < domactions[i].drop.length; j ++ )
-                        domactions[i].drop[j].parentNode.removeChild(domactions[i].drop[j]);
-                    domactions[i].elem.parentNode.replaceChild(domactions[i].repl, domactions[i].elem);
+                for (var ii = 0; ii < domactions.length; ii ++ ) {
+                    for (var j = 0; j < domactions[ii].drop.length; j ++ )
+                        domactions[ii].drop[j].parentNode.removeChild(domactions[ii].drop[j]);
+                    domactions[ii].elem.parentNode.replaceChild(domactions[ii].repl, domactions[ii].elem);
                 }
             }
         }

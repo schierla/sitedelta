@@ -1,4 +1,4 @@
-<!ENTITY sitedelta.title "SiteDelta">
+﻿<!ENTITY sitedelta.title "SiteDelta">
 <!ENTITY sitedelta.highlight "Änderungen hervorheben">
 <!ENTITY sitedelta.removehighlight "Hervorhebungen entfernen">
 <!ENTITY sitedelta.backups "Archivierte Versionen">
@@ -11,6 +11,8 @@
 <!ENTITY sitedelta.openwatches "Alle in Tabs öffnen...">
 <!ENTITY sitedelta.togglesidebar "SiteDelta Sidebar">
 
+<!ENTITY sitedelta.sidebar.commandkey "S">
+<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
 <!ENTITY sitedelta.sidebar.pagesettings "Eigenschaften">
 <!ENTITY sitedelta.sidebar.update "Auf Änderungen prüfen">
 <!ENTITY sitedelta.sidebar.markseen "Änderung als gesehen markieren">
@@ -59,6 +61,7 @@
 <!ENTITY sitedelta.prefs.about "Über SiteDelta">
 <!ENTITY sitedelta.prefs.about.title "SiteDelta">
 <!ENTITY sitedelta.prefs.about.text "Informiert über Änderungen an Webseiten und hebt die Änderungen am Text seit dem letzten Besuch farblich hervor.">
+<!ENTITY sitedelta.prefs.about.translation "Deutsche Übersetzung: Andreas Schierl">
 <!ENTITY sitedelta.prefs.whattoscan "Überprüfungseinstellungen">
 <!ENTITY sitedelta.prefs.whentoscan "Automatische Überprüfung">
 <!ENTITY sitedelta.prefs.reaction "Aktion bei Änderungen">

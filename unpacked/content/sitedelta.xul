@@ -10,9 +10,13 @@
   </stringbundleset>
 
   <menupopup id="viewSidebarMenu">
-    <menuitem key="" observes="viewSitedeltaSidebar"  />
+    <menuitem key="key_sitedeltaSidebar" observes="viewSitedeltaSidebar" image="chrome://sitedelta/skin/sitedelta.gif" />
   </menupopup>
 
+  <keyset id="mainKeyset">
+    <key id="key_sitedeltaSidebar" command="viewSitedeltaSidebar" key="&sitedelta.sidebar.commandkey;" modifiers="&sitedelta.sidebar.modifierskey;" />
+  </keyset>
+  
   <broadcasterset id="mainBroadcasterSet"> 
     <broadcaster id="viewSitedeltaSidebar" label="&sitedelta.title;" autoCheck="false" type="checkbox" group="sidebar" sidebarurl="chrome://sitedelta/content/sitedeltaSidebar.xul" sidebarTitle="&sitedelta.title;" oncommand="toggleSidebar('viewSitedeltaSidebar');" />
   </broadcasterset>

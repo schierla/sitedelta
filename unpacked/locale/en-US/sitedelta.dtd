@@ -11,6 +11,8 @@
 <!ENTITY sitedelta.openwatches "Open all in tabs...">
 <!ENTITY sitedelta.togglesidebar "SiteDelta Sidebar">
 
+<!ENTITY sitedelta.sidebar.commandkey "S">
+<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
 <!ENTITY sitedelta.sidebar.pagesettings "Page properties">
 <!ENTITY sitedelta.sidebar.update "Check for changes">
 <!ENTITY sitedelta.sidebar.markseen "Mark changes as seen">
@@ -59,6 +61,7 @@
 <!ENTITY sitedelta.prefs.about "About SiteDelta">
 <!ENTITY sitedelta.prefs.about.title "SiteDelta">
 <!ENTITY sitedelta.prefs.about.text "Informs about changed webpages and highlights the changes since the last visit.">
+<!ENTITY sitedelta.prefs.about.translation "English translation: Andreas Schierl">
 <!ENTITY sitedelta.prefs.whattoscan "Scan settings">
 <!ENTITY sitedelta.prefs.whentoscan "Scan schedule">
 <!ENTITY sitedelta.prefs.reaction "Scan notification">

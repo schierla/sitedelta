@@ -5,7 +5,7 @@ var sitedeltaOverlay= {
   if(doc.nodeName == "#document") {
    if(doc.sitedeltaMatch) return;  	
    var result=sitedeltaService.getPage(doc.URL); 
-   if(result.status==sitedeltaService.RESULT_UNCHANGED || result.status==sitedeltaService.RESULT_UNCHECKED) sitedeltaService.scanPage(doc);
+   if(result.status!=sitedeltaService.RESULT_NEW) sitedeltaService.scanPage(doc);
   }
  },
  onLocationChange: function(awp, ar, al) {

@@ -44,7 +44,8 @@
 <tabpanels>
 <tabpanel id="about" orient="vertical">
 <label class="header">&sitedelta.prefs.about.title;</label>
-<label>&sitedelta.prefs.about.text;</label>
+<label flex="1">&sitedelta.prefs.about.text;</label>
+<label>&sitedelta.prefs.about.translation;</label>
 </tabpanel>
 
 <tabpanel id="whattoscan" orient="vertical">

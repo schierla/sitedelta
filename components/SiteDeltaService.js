@@ -87,7 +87,7 @@ SiteDelta.prototype = {
         } else if(aTopic == "alertclickcallback") {
 			var wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
 			var wnd = wm.getMostRecentWindow("navigator:browser"); 
-			if(wnd) wnd.getBrowser().addTab(aData); else window.open(aData);  
+			if(wnd) wnd.getBrowser().selectedTab=wnd.getBrowser().addTab(aData); else window.open(aData);  
         }
     },
     notify: function() {
@@ -1333,7 +1333,8 @@ SiteDelta.prototype = {
     	var _svc=(this._svc?this._svc:this);
         _svc._timer.cancel();
         if(_svc._iframe) {
-        	if(_svc.scanPage(_svc._iframe.contentDocument)>0) {
+	        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
+		if(result.status != _svc.RESULT_NEW && _svc.scanPage(_svc._iframe.contentDocument)>0) {
 		        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
         		if(_svc.notifyAlert) {
 					var alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);

@@ -1495,7 +1495,11 @@ SiteDelta.prototype = {
             }
         }
         //
+        var cs = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
+
         for (var i = newEnd - 1; i > newStart; i -- ) {
+            cs.logStringMessage("SiteDelta: " + i);
+        	
             if ((j = text.newToOld[i]) != null) {
                 if ((text.newToOld[i - 1] == null) && (text.oldToNew[j - 1] == null)) {
                     if (text.newWords[i - 1] == text.oldWords[j - 1]) {
@@ -1546,14 +1550,14 @@ SiteDelta.prototype = {
             }
             if ((text.newToOld[i] == null) && (text.oldToNew[j] == null)) {
                 var iStart = i;
-                var iEnd = i + 1;
-                while ((text.newToOld[iStart - 1] == null) && (iStart >= newStart)) {
+                var iEnd = i;
+                while ((text.newToOld[iStart] == null) && (iStart >= newStart)) {
                     iStart -- ;
                 }
                 var iLength = iEnd - iStart;
                 var jStart = j;
-                var jEnd = j + 1;
-                while ((text.oldToNew[jStart - 1] == null) && (jStart >= oldStart)) {
+                var jEnd = j;
+                while ((text.oldToNew[jStart] == null) && (jStart >= oldStart)) {
                     jStart -- ;
                 }
                 var jLength = jEnd - jStart;

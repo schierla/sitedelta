@@ -222,11 +222,7 @@ var sitedeltaOverlay= {
  },
  showProperties: function(e) {
   var result=sitedeltaService.getPage(content.document.URL);
-  if(result.status==sitedeltaService.RESULT_NEW) {
-   toggleSidebar('viewSitedeltaSidebar');
-  } else {
-   return sitedelta.showProperties(result.url)
-  }
+  return sitedelta.showProperties(result.url)
  },
  checkBg: function() {
   sitedeltaService.notify();
@@ -250,7 +246,11 @@ var sitedeltaOverlay= {
  },
  highlightChanges: function(e) {
   if(e.button && e.button!=0) return;
-  if(e.ctrlKey) {sitedeltaOverlay.showProperties(e); return; }
+  if(e.ctrlKey) {
+   var result=sitedeltaService.getPage(content.document.URL);
+   if(result.status==sitedeltaService.RESULT_NEW) toggleSidebar('viewSitedeltaSidebar'); else sitedeltaOverlay.showProperties(e);
+   return;
+  }
   if(content.document.sitedeltaMatch) {
    if(!content.document.getElementById("sitedelta-change"+content.document.sitedeltaMatch))
     content.document.sitedeltaMatch=0;

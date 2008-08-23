@@ -5,3 +5,4 @@ locale	sitedelta	de-DE	jar:chrome/sitedelta.jar!/locale/de-DE/
 locale	sitedelta	fr-FR	jar:chrome/sitedelta.jar!/locale/fr-FR/
 skin	sitedelta	classic/1.0	jar:chrome/sitedelta.jar!/skin/
 overlay	chrome://browser/content/browser.xul	chrome://sitedelta/content/sitedelta.xul
+style	chrome://global/content/customizeToolbar.xul	chrome://sitedelta/skin/sitedelta.css

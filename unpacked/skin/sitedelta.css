@@ -3,3 +3,6 @@
 #sitedeltaPages listitem[status="-3"] {list-style-image: url(loading.gif); }
 #sitedeltaPages listitem[status="-2"] {list-style-image: url(error.gif); }
 #sitedeltaPages listitem {list-style-image: url(unchecked.gif); }
+
+#sitedeltaButton { list-style-image: url("chrome://sitedelta/skin/sitedeltaMedium.png"); }
+toolbar[iconsize="small"] #sitedeltaButton { list-style-image: url("chrome://sitedelta/skin/sitedeltaSmall.png"); }

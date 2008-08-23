@@ -17,6 +17,10 @@
     <key id="key_sitedeltaSidebar" command="viewSitedeltaSidebar" key="&sitedelta.sidebar.commandkey;" modifiers="&sitedelta.sidebar.modifierskey;" />
   </keyset>
   
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton id="sitedeltaButton" class="toolbarbutton-1" label="&sitedelta.title;" tooltiptext="&sitedelta.togglesidebar;" oncommand="toggleSidebar('viewSitedeltaSidebar');"/>
+  </toolbarpalette>
+
   <broadcasterset id="mainBroadcasterSet"> 
     <broadcaster id="viewSitedeltaSidebar" label="&sitedelta.title;" autoCheck="false" type="checkbox" group="sidebar" sidebarurl="chrome://sitedelta/content/sitedeltaSidebar.xul" sidebarTitle="&sitedelta.title;" oncommand="toggleSidebar('viewSitedeltaSidebar');" />
   </broadcasterset>
@@ -38,6 +42,7 @@
       <menuseparator id="sitedelta-ignoreregions" />
       <menu label="&sitedelta.loadpreset;" id="sitedelta-load-preset"><menupopup onpopupshowing="sitedeltaOverlay.listPresets(this)" /></menu>
       </menupopup></menu>
+    <menuitem label="&sitedelta.sidebar.pagesettings;" oncommand="sitedeltaOverlay.showProperties();" />
     <menuseparator />
     <menuitem label="&sitedelta.togglesidebar;" oncommand="toggleSidebar('viewSitedeltaSidebar');" />
     </menupopup></popupset>

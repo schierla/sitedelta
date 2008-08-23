@@ -1,0 +1,39 @@
+<!ENTITY sitedelta.highlight "Surligner les changements">
+<!ENTITY sitedelta.removehighlight "Retirer le surlignage">
+<!ENTITY sitedelta.backups "Versions archivées">
+<!ENTITY sitedelta.createbackup "Archiver la version courante">
+<!ENTITY sitedelta.regions "Régions">
+<!ENTITY sitedelta.loadpreset "Charger présélection">
+<!ENTITY sitedelta.scanregion "+ Ajouter une région à scanner">
+<!ENTITY sitedelta.ignoreregion "+ Ajouter une région à ignorer">
+<!ENTITY sitedelta.openwatches "Tout ouvrir dans des onglets">
+<!ENTITY sitedelta.preset.title "Organiser les présélections">
+<!ENTITY sitedelta.preset.descname "Entrer un nom pour la présélection de région :">
+<!ENTITY sitedelta.preset.descurl "URLs où appliquer cette région (jokers: * et ?) :">
+<!ENTITY sitedelta.preset.descinclude "Régions scannées :">
+<!ENTITY sitedelta.preset.descexclude "Régions ignorées :">
+<!ENTITY sitedelta.preset.delete "Effacer">
+<!ENTITY sitedelta.preset.duplicate "Dupliquer">
+<!ENTITY sitedelta.preset.lblname "Nom :">
+<!ENTITY sitedelta.preset.lblurl "URL :">
+<!ENTITY sitedelta.prefs.title "SiteDelta - Préférences">
+<!ENTITY sitedelta.prefs.add "Texte ajouté">
+<!ENTITY sitedelta.prefs.remove "Texte retiré">
+<!ENTITY sitedelta.prefs.move "Texte déplacé">
+<!ENTITY sitedelta.prefs.bgcolor "Couleur de fond :">
+<!ENTITY sitedelta.prefs.bordercolor "Couleur de bordure :">
+<!ENTITY sitedelta.prefs.regions "Régions">
+<!ENTITY sitedelta.prefs.scanregion "Couleur de région scannée :">
+<!ENTITY sitedelta.prefs.ignoreregion "Couleur de région ignorée :">
+<!ENTITY sitedelta.prefs.showregions "Encadrer les régions">
+<!ENTITY sitedelta.prefs.scanimages "Chercher des changements d&apos;adresse d&apos;images">
+<!ENTITY sitedelta.prefs.scandeleted "Chercher du texte déplacé et effacé">
+<!ENTITY sitedelta.prefs.settings "Préférences">
+<!ENTITY sitedelta.prefs.appearance "Apparence">
+<!ENTITY sitedelta.prefs.watch "Surveillance de sites">
+<!ENTITY sitedelta.prefs.backuppages "Archiver les pages modifiées">
+<!ENTITY sitedelta.prefs.scanonload "Scanner automatiquement les pages connues lors des visites">
+<!ENTITY sitedelta.prefs.enablewatch "Activer la surveillance de site">
+<!ENTITY sitedelta.prefs.watchpagetimeout "Temps maximum de chargement de page (sec)">
+<!ENTITY sitedelta.prefs.watchpagedelay "Délai après vérification de page (sec)">
+<!ENTITY sitedelta.prefs.watchscandelay "Intervalle entre les scans (min)">

@@ -500,7 +500,9 @@ SiteDelta.prototype = {
 							else action="K";
                     	}
                         
-                        if ((last != action && txt != "") || ((replace != null || last != "K") && wpos >= words.length && action != "D") || ((replace != null || last != "K") && wpos < words.length && npos < newt.length && words[wpos].length < newt[npos].length)) {
+                        if ((last != action && txt != "") || 
+                        		((replace != null || last != "K") && wpos >= words.length && action != "D") || 
+                        		((replace != null || last != "K") && wpos < words.length && npos < newt.length && this._clean(words[wpos]).length < newt[npos].length)) {
                             if (replace == null)
                                 replace = doc.createElement("SPAN");
                             if (last == "K") {
@@ -521,7 +523,7 @@ SiteDelta.prototype = {
                         }
                         if (wpos >= words.length && action != "D" && action != "m")
                             break;
-                        if (wpos < words.length && words[wpos].length < newt[npos].length) {
+                        if (wpos < words.length && this._clean(words[wpos]).length < newt[npos].length) {
                             ret = words[wpos];
                             break;
                         }
@@ -1237,12 +1239,12 @@ SiteDelta.prototype = {
             }, false);
             ret.appendChild(del);
         } else if (type == "I" || type=="M") {
-            del = doc.createElement("INS");
+            del = doc.createElement("SPAN");
             ret = del;
             if(type=="I")
-	            del.setAttribute("style", "outline: " + this.addBorder + " dotted 1px; background: " + this.addBackground + "; color: #000;");
+	            del.setAttribute("style", "display: inline; outline: " + this.addBorder + " dotted 1px; background: " + this.addBackground + "; color: #000;");
 	        else
-	            del.setAttribute("style", "outline: " + this.moveBorder + " dotted 1px; background: " + this.moveBackground + "; color: #000;");
+	            del.setAttribute("style", "display: inline; outline: " + this.moveBorder + " dotted 1px; background: " + this.moveBackground + "; color: #000;");
         }
         if (nr !=- 1 & type != "K")
             ret.id = "sitedelta-change" + nr;
@@ -1495,11 +1497,7 @@ SiteDelta.prototype = {
             }
         }
         //
-        var cs = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
-
         for (var i = newEnd - 1; i > newStart; i -- ) {
-            cs.logStringMessage("SiteDelta: " + i);
-        	
             if ((j = text.newToOld[i]) != null) {
                 if ((text.newToOld[i - 1] == null) && (text.oldToNew[j - 1] == null)) {
                     if (text.newWords[i - 1] == text.oldWords[j - 1]) {

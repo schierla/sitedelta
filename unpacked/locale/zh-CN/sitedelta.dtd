@@ -1,0 +1,118 @@
+<!ENTITY sitedelta.title "SiteDelta">
+<!ENTITY sitedelta.highlight "高亮更改">
+<!ENTITY sitedelta.removehighlight "去除高亮">
+<!ENTITY sitedelta.backups "备份版本">
+<!ENTITY sitedelta.createbackup "备份当前版本">
+<!ENTITY sitedelta.regions "区域">
+<!ENTITY sitedelta.loadpreset "载入区域">
+<!ENTITY sitedelta.scanregion "+ 监视区域">
+<!ENTITY sitedelta.ignoreregion "+ 忽略区域">
+<!ENTITY sitedelta.pages "页面">
+<!ENTITY sitedelta.openwatches "在标签页中打开所有...">
+<!ENTITY sitedelta.togglesidebar "SiteDelta 侧栏">
+<!ENTITY sitedelta.sidebar.commandkey "S">
+<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
+<!ENTITY sitedelta.sidebar.pagesettings "页面属性">
+<!ENTITY sitedelta.sidebar.update "扫描更改">
+<!ENTITY sitedelta.sidebar.markseen "标记更改为已读">
+<!ENTITY sitedelta.sidebar.delete "删除">
+<!ENTITY sitedelta.sidebar.title "SiteDelta">
+<!ENTITY sitedelta.sidebar.openpage "打开页面">
+<!ENTITY sitedelta.sidebar.pages "页面">
+<!ENTITY sitedelta.sidebar.search "搜索:">
+<!ENTITY sitedelta.sidebar.updateall "扫描所有页面的更改">
+<!ENTITY sitedelta.sidebar.openall "打开更改的页面">
+<!ENTITY sitedelta.sidebar.showprefs "SiteDelta 选项...">
+<!ENTITY sitedelta.sidebar.showpresets "管理预设...">
+<!ENTITY sitedelta.properties.savepreset "保存为预设">
+<!ENTITY sitedelta.properties.title "页面属性">
+<!ENTITY sitedelta.properties.lblname "名称:">
+<!ENTITY sitedelta.properties.lbltitle "标题:">
+<!ENTITY sitedelta.properties.lblurl "链接:">
+<!ENTITY sitedelta.properties.lblcheck "上次访问:">
+<!ENTITY sitedelta.properties.uselogin "使用保存的密码(从密码管理器)">
+<!ENTITY sitedelta.properties.pageinfo "页面信息">
+<!ENTITY sitedelta.properties.whattoscan "扫描内容">
+<!ENTITY sitedelta.properties.whentoscan "扫描时间">
+<!ENTITY sitedelta.properties.loadsettings "载入设置">
+<!ENTITY sitedelta.properties.loaddefault "恢复默认">
+<!ENTITY sitedelta.properties.savesettings "保存设置">
+<!ENTITY sitedelta.properties.savedefault "保存为默认">
+<!ENTITY sitedelta.properties.editdefault "编辑默认...">
+<!ENTITY sitedelta.properties.editpresets "编辑预设...">
+<!ENTITY sitedelta.preset.close "关闭">
+<!ENTITY sitedelta.preset.default "默认">
+<!ENTITY sitedelta.preset.on "启用">
+<!ENTITY sitedelta.preset.off "禁用">
+<!ENTITY sitedelta.preset.title "编辑预设">
+<!ENTITY sitedelta.preset.descname "输入预设区域的名称:">
+<!ENTITY sitedelta.preset.descurl "应用此预设的地址(可以使用 * 和 ? 作为通配符):">
+<!ENTITY sitedelta.preset.descinclude "监视区域:">
+<!ENTITY sitedelta.preset.descexclude "忽略区域:">
+<!ENTITY sitedelta.preset.delete "删除">
+<!ENTITY sitedelta.preset.duplicate "创建副本">
+<!ENTITY sitedelta.preset.lblname "名称:">
+<!ENTITY sitedelta.preset.lblurl "链接:">
+<!ENTITY sitedelta.prefs.about "关于 SiteDelta">
+<!ENTITY sitedelta.prefs.about.title "SiteDelta">
+<!ENTITY sitedelta.prefs.about.text "报告页面更改并高亮显示自上次访问后更改的内容">
+<!ENTITY sitedelta.prefs.about.translation "简体中文语言: WangKing">
+<!ENTITY sitedelta.prefs.whattoscan "扫描设置">
+<!ENTITY sitedelta.prefs.whentoscan "定时扫描">
+<!ENTITY sitedelta.prefs.reaction "信息提示">
+<!ENTITY sitedelta.prefs.title "SiteDelta - 选项">
+<!ENTITY sitedelta.prefs.add "增加的文字">
+<!ENTITY sitedelta.prefs.remove "删除的文字">
+<!ENTITY sitedelta.prefs.move "移动的文字">
+<!ENTITY sitedelta.prefs.bgcolor "背景颜色:">
+<!ENTITY sitedelta.prefs.bordercolor "边框颜色:">
+<!ENTITY sitedelta.prefs.regions "区域">
+<!ENTITY sitedelta.prefs.scanregion "监视区域颜色:">
+<!ENTITY sitedelta.prefs.ignoreregion "忽略区域颜色:">
+<!ENTITY sitedelta.prefs.showregions.desc "高亮显示更改时突出监视和忽略的区域.">
+<!ENTITY sitedelta.prefs.showregions "突出区域">
+<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta 可以报告添加或删除的图片(或者图片文件名的更改)">
+<!ENTITY sitedelta.prefs.scanimages "检查图片地址">
+<!ENTITY sitedelta.prefs.scandeleted.desc "启用后, SiteDelta 会报告页面中删除的文字(可能会使显示比较杂乱)">
+<!ENTITY sitedelta.prefs.scandeleted "检查删除的文字">
+<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta 可以忽略更改频繁的数字(比如论坛中的帖子数统计)">
+<!ENTITY sitedelta.prefs.ignorenumbers "忽略数字更改">
+<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta 可以忽略字幕大小写的更改">
+<!ENTITY sitedelta.prefs.ignorecase "忽略大小写">
+<!ENTITY sitedelta.prefs.settings "设置">
+<!ENTITY sitedelta.prefs.appearance "外观">
+<!ENTITY sitedelta.prefs.watch "站点监视">
+<!ENTITY sitedelta.prefs.backuppages.desc "当检测到页面更改时, SiteDelta 可以自动保存一个备份.">
+<!ENTITY sitedelta.prefs.backuppages "备份更改的页面">
+<!ENTITY sitedelta.prefs.scanonload.desc "当访问监视的页面时, SiteDelta 可以自动扫描更改内容.">
+<!ENTITY sitedelta.prefs.scanonload "访问监视页面时自动扫描">
+<!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta 可以定期的扫描监视的页面并报告页面更改.">
+<!ENTITY sitedelta.prefs.enablewatch "启用站点监视">
+<!ENTITY sitedelta.prefs.watchpagetimeout.desc "当页面载入时间过长, SiteDelta 会取消载入此页面.">
+<!ENTITY sitedelta.prefs.watchpagetimeout "超时时间(秒)">
+<!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta 在扫描两个页面之间会间隔一定时间以减轻服务器压力.">
+<!ENTITY sitedelta.prefs.watchpagedelay "扫描页面后延迟时间(秒)">
+<!ENTITY sitedelta.prefs.watchscandelay.desc "">
+<!ENTITY sitedelta.prefs.watchscandelay "扫描频率(分钟)">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "会使 SiteDelta 缓慢一些, 但可以避免一些错误提示.">
+<!ENTITY sitedelta.prefs.watchenablescript "站点监视启用 JavaScript">
+<!ENTITY sitedelta.prefs.frequency.default.desc "使用默认设置(选项中的设置)">
+<!ENTITY sitedelta.prefs.frequency.default "默认">
+<!ENTITY sitedelta.prefs.frequency.never.desc "使用此项将此页面从自动扫描中排除">
+<!ENTITY sitedelta.prefs.frequency.never "不扫描">
+<!ENTITY sitedelta.prefs.frequency.auto.desc "由 SiteDelta 自动控制扫描频率, 一开始 SiteDelta 会比较频繁的进行扫描, 如果页面长时间没有更改, 扫描频率则会自动降低.">
+<!ENTITY sitedelta.prefs.frequency.auto "自动">
+<!ENTITY sitedelta.prefs.frequency.desc "指定频率:">
+<!ENTITY sitedelta.prefs.frequency.weekly "每周一次">
+<!ENTITY sitedelta.prefs.frequency.daily "每天一次">
+<!ENTITY sitedelta.prefs.frequency.hourly "每小时一次">
+<!ENTITY sitedelta.prefs.frequency.custom "自定义: 每">
+<!ENTITY sitedelta.prefs.frequency.minutes "分钟一次">
+<!ENTITY sitedelta.prefs.notifyalert "显示通知窗口">
+<!ENTITY sitedelta.prefs.notifyalert.desc "当检测到页面更改时在屏幕右下方显示通知窗口.">
+<!ENTITY sitedelta.prefs.notifysound "提示声音">
+<!ENTITY sitedelta.prefs.notifysound.none "无">
+<!ENTITY sitedelta.prefs.notifysound.beep "系统蜂鸣">
+<!ENTITY sitedelta.prefs.notifysound.alert "系统警报">
+<!ENTITY sitedelta.prefs.notifysound.newmail "系统新邮件通知">
+<!ENTITY sitedelta.prefs.notifysound.custom "自定义">

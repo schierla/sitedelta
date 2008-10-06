@@ -2,6 +2,10 @@ content	sitedelta	jar:chrome/sitedelta.jar!/content/
 content	sitedelta	jar:chrome/sitedelta.jar!/content/ contentaccessible=yes
 locale	sitedelta	en-US	jar:chrome/sitedelta.jar!/locale/en-US/
 locale	sitedelta	de-DE	jar:chrome/sitedelta.jar!/locale/de-DE/
+locale	sitedelta	fr-FR	jar:chrome/sitedelta.jar!/locale/fr-FR/
+locale	sitedelta	pl-PL	jar:chrome/sitedelta.jar!/locale/pl-PL/
+locale	sitedelta	pt-BR	jar:chrome/sitedelta.jar!/locale/pt-BR/
+locale	sitedelta	zh-CN	jar:chrome/sitedelta.jar!/locale/zh-CN/
 skin	sitedelta	classic/1.0	jar:chrome/sitedelta.jar!/skin/
 overlay	chrome://browser/content/browser.xul	chrome://sitedelta/content/sitedelta.xul
 style	chrome://global/content/customizeToolbar.xul	chrome://sitedelta/skin/sitedelta.css

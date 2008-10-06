@@ -1,4 +1,4 @@
-﻿<!ENTITY sitedelta.title "SiteDelta">
+<!ENTITY sitedelta.title "SiteDelta">
 <!ENTITY sitedelta.highlight "Änderungen hervorheben">
 <!ENTITY sitedelta.removehighlight "Hervorhebungen entfernen">
 <!ENTITY sitedelta.backups "Archivierte Versionen">
@@ -10,7 +10,6 @@
 <!ENTITY sitedelta.pages "Seiten">
 <!ENTITY sitedelta.openwatches "Alle in Tabs öffnen...">
 <!ENTITY sitedelta.togglesidebar "SiteDelta Sidebar">
-
 <!ENTITY sitedelta.sidebar.commandkey "S">
 <!ENTITY sitedelta.sidebar.modifierskey "alt accel">
 <!ENTITY sitedelta.sidebar.pagesettings "Eigenschaften">
@@ -25,8 +24,7 @@
 <!ENTITY sitedelta.sidebar.openall "Alle geänderten Seiten öffnen">
 <!ENTITY sitedelta.sidebar.showprefs "SiteDelta-Einstellungen...">
 <!ENTITY sitedelta.sidebar.showpresets "Voreinstellungen verwalten...">
-
-<!ENTITY sitedelta.properties.savepreset "Als Voreinstellung speichern...">
+<!ENTITY sitedelta.properties.savepreset "Als Voreinstellung speichern">
 <!ENTITY sitedelta.properties.title "Seiteneigenschaften">
 <!ENTITY sitedelta.properties.lblname "Name:">
 <!ENTITY sitedelta.properties.lbltitle "Titel:">
@@ -41,9 +39,7 @@
 <!ENTITY sitedelta.properties.savesettings "Einstellungen speichern">
 <!ENTITY sitedelta.properties.savedefault "Als Standardwerte speichern">
 <!ENTITY sitedelta.properties.editdefault "Standardwerte bearbeiten">
-<!ENTITY sitedelta.properties.savepreset "Als Voreinstellung speichern">
 <!ENTITY sitedelta.properties.editpresets "Voreinstellungen bearbeiten">
-
 <!ENTITY sitedelta.preset.close "Schließen">
 <!ENTITY sitedelta.preset.default "Standard">
 <!ENTITY sitedelta.preset.on "An">
@@ -57,7 +53,6 @@
 <!ENTITY sitedelta.preset.duplicate "Kopieren">
 <!ENTITY sitedelta.preset.lblname "Name:">
 <!ENTITY sitedelta.preset.lblurl "Adresse:">
-
 <!ENTITY sitedelta.prefs.about "Über SiteDelta">
 <!ENTITY sitedelta.prefs.about.title "SiteDelta">
 <!ENTITY sitedelta.prefs.about.text "Informiert über Änderungen an Webseiten und hebt die Änderungen am Text seit dem letzten Besuch farblich hervor.">

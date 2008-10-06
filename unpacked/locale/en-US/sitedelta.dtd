@@ -10,7 +10,6 @@
 <!ENTITY sitedelta.pages "Pages">
 <!ENTITY sitedelta.openwatches "Open all in tabs...">
 <!ENTITY sitedelta.togglesidebar "SiteDelta Sidebar">
-
 <!ENTITY sitedelta.sidebar.commandkey "S">
 <!ENTITY sitedelta.sidebar.modifierskey "alt accel">
 <!ENTITY sitedelta.sidebar.pagesettings "Page properties">
@@ -25,8 +24,7 @@
 <!ENTITY sitedelta.sidebar.openall "Open changed pages">
 <!ENTITY sitedelta.sidebar.showprefs "SiteDelta settings...">
 <!ENTITY sitedelta.sidebar.showpresets "Manage presets...">
-
-<!ENTITY sitedelta.properties.savepreset "Save as preset...">
+<!ENTITY sitedelta.properties.savepreset "Save as preset">
 <!ENTITY sitedelta.properties.title "Page properties">
 <!ENTITY sitedelta.properties.lblname "Name:">
 <!ENTITY sitedelta.properties.lbltitle "Title:">
@@ -41,9 +39,7 @@
 <!ENTITY sitedelta.properties.savesettings "Save settings">
 <!ENTITY sitedelta.properties.savedefault "Save as default">
 <!ENTITY sitedelta.properties.editdefault "Edit defaults...">
-<!ENTITY sitedelta.properties.savepreset "Save as preset">
 <!ENTITY sitedelta.properties.editpresets "Edit presets...">
-
 <!ENTITY sitedelta.preset.close "Close">
 <!ENTITY sitedelta.preset.default "Default">
 <!ENTITY sitedelta.preset.on "On">
@@ -57,7 +53,6 @@
 <!ENTITY sitedelta.preset.duplicate "Duplicate">
 <!ENTITY sitedelta.preset.lblname "Name:">
 <!ENTITY sitedelta.preset.lblurl "URL:">
-
 <!ENTITY sitedelta.prefs.about "About SiteDelta">
 <!ENTITY sitedelta.prefs.about.title "SiteDelta">
 <!ENTITY sitedelta.prefs.about.text "Informs about changed webpages and highlights the changes since the last visit.">

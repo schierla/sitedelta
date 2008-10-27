@@ -1269,38 +1269,9 @@ SiteDelta.prototype = {
     
     // hidden page load
     _watchCheckPage: function (result) {
-      result.status=this.RESULT_CHECKING;
-      this._watchUrl = result.url;
-      var _svc=this;
-//      var request = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
-//      this._timer.initWithCallback(this, this.watchPageTimeout, this._timer.TYPE_ONE_SHOT);
-//      request = request.QueryInterface(Ci.nsIDOMEventTarget);
-//      this._request=request;
-//      request._svc = this;
-//      request.addEventListener("load", this._watchPageLoad, false);
-//      request.addEventListener("error", this._watchEndCheck, false);
-//      request = request.QueryInterface(Ci.nsIXMLHttpRequest);
-//      var user=null, pass=null;
-//      if(result.user!="") { pass=this.getPass(result.url); user=pass.user; pass=pass.password; }
-//      request.open("GET", result.url, true, user, pass);
-//      request.send(null);
-//    },
-//    _watchPageLoad: function() {
-//      var req = this;
-//      var _svc = req._svc;
-//      if (_svc._iframe)
-//        _svc._watchEndCheck();
-//      _svc._timer.cancel();
-//      _svc._request.removeEventListener("load", _svc._watchPageLoad, false);
-//      _svc._request.removeEventListener("error", _svc._watchEndCheck, false);
-//      _svc._request._svc=null;
-//      _svc._request=null;
-//      if(this.status==304) {
-//      	var result = _svc.getPage(_svc._watchUrl);
-//        result.status= _svc.RESULT_UNCHANGED;
-//        _svc.alert("Unchanged: "+req.channel.originalURI.spec);
-//      	_svc._watchEndCheck();
-//      } else {
+		result.status=this.RESULT_CHECKING;
+		this._watchUrl = result.url;
+		var _svc=this;
         var windowMediator = Cc['@mozilla.org/appshell/window-mediator;1'].
                              getService(Ci.nsIWindowMediator);
         var window = windowMediator.getMostRecentWindow("navigator:browser");
@@ -1329,7 +1300,6 @@ SiteDelta.prototype = {
         request.loadFlags |= Ci.nsIRequest.LOAD_BACKGROUND;
         var uriLoader = Cc["@mozilla.org/uriloader;1"].getService(Ci.nsIURILoader);
         uriLoader.openURI(channel, true, _svc._iframe.docShell);
-//      }
     },
     _watchPageLoaded: function() {
     	var _svc=(this._svc?this._svc:this);

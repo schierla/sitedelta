@@ -3,9 +3,12 @@ var sitedeltaOverlay= {
  onPageLoad: function(evt) {
   var doc=evt.originalTarget;
   if(doc.nodeName == "#document") {
-   if(doc.sitedeltaMatch) return;  	
+   if(doc.sitedeltaMatch) return; 
    var result=sitedeltaService.getPage(doc.URL); 
-   if(result.status!=sitedeltaService.RESULT_NEW) sitedeltaService.scanPage(doc);
+   if(result.status!=sitedeltaService.RESULT_NEW) {
+	if(sitedeltaService.highlightOnLoad) sitedeltaOverlay.highlightChanges({});
+	else if(sitedeltaService.scanOnLoad) sitedeltaService.scanPage(doc);
+   }
   }
  },
  onLocationChange: function(awp, ar, al) {

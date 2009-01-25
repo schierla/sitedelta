@@ -1,0 +1,118 @@
+<!ENTITY sitedelta.title "SiteDelta">
+<!ENTITY sitedelta.highlight "Подсветить изменения">
+<!ENTITY sitedelta.removehighlight "Убрать подсвечивание">
+<!ENTITY sitedelta.backups "Резервные копии">
+<!ENTITY sitedelta.createbackup "Создать резервную копию этой версии">
+<!ENTITY sitedelta.regions "Области">
+<!ENTITY sitedelta.loadpreset "Загрузить области">
+<!ENTITY sitedelta.scanregion "+ Отслеживаемая область">
+<!ENTITY sitedelta.ignoreregion "+ Игнорируемая область">
+<!ENTITY sitedelta.pages "Страницы">
+<!ENTITY sitedelta.openwatches "Открыть всё во вкладках...">
+<!ENTITY sitedelta.togglesidebar "Боковая панель SiteDelta">
+<!ENTITY sitedelta.sidebar.commandkey "S">
+<!ENTITY sitedelta.sidebar.modifierskey "Alt">
+<!ENTITY sitedelta.sidebar.pagesettings "Свойства страницы">
+<!ENTITY sitedelta.sidebar.update "Проверить изменения">
+<!ENTITY sitedelta.sidebar.markseen "Пометить изменения как просмотренные">
+<!ENTITY sitedelta.sidebar.delete "Удалить">
+<!ENTITY sitedelta.sidebar.title "SiteDelta">
+<!ENTITY sitedelta.sidebar.openpage "Открыть страницу">
+<!ENTITY sitedelta.sidebar.pages "Страницы">
+<!ENTITY sitedelta.sidebar.search "Поиск">
+<!ENTITY sitedelta.sidebar.updateall "Проверить все на изменения">
+<!ENTITY sitedelta.sidebar.openall "Открыть измененные страницы">
+<!ENTITY sitedelta.sidebar.showprefs "Настройки SiteDelta...">
+<!ENTITY sitedelta.sidebar.showpresets "Настроить установки...">
+<!ENTITY sitedelta.properties.savepreset "Сохранить как установку">
+<!ENTITY sitedelta.properties.title "Свойства страницы">
+<!ENTITY sitedelta.properties.lblname "Имя">
+<!ENTITY sitedelta.properties.lbltitle "Заголовок">
+<!ENTITY sitedelta.properties.lblurl "URL:">
+<!ENTITY sitedelta.properties.lblcheck "Последнее посещение:">
+<!ENTITY sitedelta.properties.uselogin "Использовать сохраненный пароль (из менеджера паролей)">
+<!ENTITY sitedelta.properties.pageinfo "Информация о странице">
+<!ENTITY sitedelta.properties.whattoscan "Что сканировать">
+<!ENTITY sitedelta.properties.whentoscan "Когда сканировать">
+<!ENTITY sitedelta.properties.loadsettings "Загрузить настройки">
+<!ENTITY sitedelta.properties.loaddefault "По умолчанию">
+<!ENTITY sitedelta.properties.savesettings "Сохранить настройки">
+<!ENTITY sitedelta.properties.savedefault "Сохранить как по умолчанию">
+<!ENTITY sitedelta.properties.editdefault "Редактировать настройки по умолчанию...">
+<!ENTITY sitedelta.properties.editpresets "Редактировать установки...">
+<!ENTITY sitedelta.preset.close "Закрыть">
+<!ENTITY sitedelta.preset.default "По умолчанию">
+<!ENTITY sitedelta.preset.on "Вкл.">
+<!ENTITY sitedelta.preset.off "Выкл.">
+<!ENTITY sitedelta.preset.title "Редактировать установки">
+<!ENTITY sitedelta.preset.descname "Пожалуйста введите имя для области установок:">
+<!ENTITY sitedelta.preset.descurl "Адреса, привязанные к установке (используйте маски * и ?):">
+<!ENTITY sitedelta.preset.descinclude "Отслеживаемые области:">
+<!ENTITY sitedelta.preset.descexclude "Игнорируемые области:">
+<!ENTITY sitedelta.preset.delete "Удалить">
+<!ENTITY sitedelta.preset.duplicate "Дублировать">
+<!ENTITY sitedelta.preset.lblname "Имя">
+<!ENTITY sitedelta.preset.lblurl "URL:">
+<!ENTITY sitedelta.prefs.about "О SiteDelta">
+<!ENTITY sitedelta.prefs.about.title "SiteDelta">
+<!ENTITY sitedelta.prefs.about.text "Информирует об изменениях на страницах и подсвечивает их.">
+<!ENTITY sitedelta.prefs.about.translation "Перевод на русский язык: Руслан Мустаков">
+<!ENTITY sitedelta.prefs.whattoscan "Настройки сканирования">
+<!ENTITY sitedelta.prefs.whentoscan "Запланировать сканирование">
+<!ENTITY sitedelta.prefs.reaction "Уведомление о сканировании">
+<!ENTITY sitedelta.prefs.title "SiteDelta - Настройки">
+<!ENTITY sitedelta.prefs.add "Новый текст">
+<!ENTITY sitedelta.prefs.remove "Удаленный текст">
+<!ENTITY sitedelta.prefs.move "Перемещенный текст">
+<!ENTITY sitedelta.prefs.bgcolor "Цвет фона:">
+<!ENTITY sitedelta.prefs.bordercolor "Цвет рамки:">
+<!ENTITY sitedelta.prefs.regions "Области">
+<!ENTITY sitedelta.prefs.scanregion "Цвет отслеживаемых областей:">
+<!ENTITY sitedelta.prefs.ignoreregion "Цвет игнорируемых областей:">
+<!ENTITY sitedelta.prefs.showregions.desc "Разделять отслеживаемые и игнорируемые области при подсвечивании изменений.">
+<!ENTITY sitedelta.prefs.showregions "Разделять области">
+<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta может уведомлять вас о добавленных или удаленных рисунках (или измененных рисунках, в случае если имя файла было изменено)">
+<!ENTITY sitedelta.prefs.scanimages "Проверять адреса картинок">
+<!ENTITY sitedelta.prefs.scandeleted.desc "Если активно, SiteDelta будет уведомлять об удаленном тексте на страницах (может выглядеть загроможденно на больших страницах)">
+<!ENTITY sitedelta.prefs.scandeleted "Проверять удаленный текст">
+<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta может игнорировать числа, если они часто меняются (например, число сообщений на форуме)">
+<!ENTITY sitedelta.prefs.ignorenumbers "Игнорировать изменения чисел">
+<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta может игнорировать изменение нижнего регистра на верхний и наоборот.">
+<!ENTITY sitedelta.prefs.ignorecase "Игнорировать регистр">
+<!ENTITY sitedelta.prefs.settings "Настройки">
+<!ENTITY sitedelta.prefs.appearance "Внешний вид">
+<!ENTITY sitedelta.prefs.watch "Отслеживание сайта">
+<!ENTITY sitedelta.prefs.backuppages.desc "При обнаружении изменений на странице, SiteDelta может автоматически сохранить резеврную копию (например, для документации).">
+<!ENTITY sitedelta.prefs.backuppages "Делать резервную копию измененных страниц">
+<!ENTITY sitedelta.prefs.scanonload.desc "При посещении просмотренных ранее страниц, SiteDelta может автоматически сканировать их.">
+<!ENTITY sitedelta.prefs.scanonload "Сканировать известные страницы при посещении">
+<!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta может проверять известные страницы регулярно и сообщать об изменениях.">
+<!ENTITY sitedelta.prefs.enablewatch "Отслеживание страниц">
+<!ENTITY sitedelta.prefs.watchpagetimeout.desc "Если загрузка страницы длится дольше, SiteDelta её отменяет.">
+<!ENTITY sitedelta.prefs.watchpagetimeout "Ограничение времени для загрузки страниц (сек.)">
+<!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta ждет столько времени между двумя проверками (чтобы уменьшить нагрузку).">
+<!ENTITY sitedelta.prefs.watchpagedelay "Ожидание после проверки страницы (сек.)">
+<!ENTITY sitedelta.prefs.watchscandelay.desc "empty">
+<!ENTITY sitedelta.prefs.watchscandelay "Частота сканирования (мин.)">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "Делает SiteDelta немного медленнее, но устраняет некоторые ложные предупреждения.">
+<!ENTITY sitedelta.prefs.watchenablescript "Разрешить JavaScript для отслеживания сайтов">
+<!ENTITY sitedelta.prefs.frequency.default.desc "Использовать настройки по умолчанию">
+<!ENTITY sitedelta.prefs.frequency.default "По умолчанию">
+<!ENTITY sitedelta.prefs.frequency.never.desc "Используйте эту опцию для исключения страницы из автоматической проверки.">
+<!ENTITY sitedelta.prefs.frequency.never "Никогда">
+<!ENTITY sitedelta.prefs.frequency.auto.desc "Оставьте частоту для SiteDelta. SiteDelta начнет проверять с высокой частотой, но будет её понижать, если изменений не происходит длительное время.">
+<!ENTITY sitedelta.prefs.frequency.auto "Автоматически">
+<!ENTITY sitedelta.prefs.frequency.desc "Или установите частоту вручную:">
+<!ENTITY sitedelta.prefs.frequency.weekly "Еженедельно">
+<!ENTITY sitedelta.prefs.frequency.daily "Ежедневно">
+<!ENTITY sitedelta.prefs.frequency.hourly "Каждый час">
+<!ENTITY sitedelta.prefs.frequency.custom "Каждые">
+<!ENTITY sitedelta.prefs.frequency.minutes "минут">
+<!ENTITY sitedelta.prefs.notifyalert "Показывать окно уведомления">
+<!ENTITY sitedelta.prefs.notifyalert.desc "Показывает окно уведомления в нижней правой части экрана, если на странице найдены изменения.">
+<!ENTITY sitedelta.prefs.notifysound "Звук уведомления">
+<!ENTITY sitedelta.prefs.notifysound.none "Отсутствует">
+<!ENTITY sitedelta.prefs.notifysound.beep "Бип">
+<!ENTITY sitedelta.prefs.notifysound.alert "Системное предупреждение">
+<!ENTITY sitedelta.prefs.notifysound.newmail "Уведомление о новом письме">
+<!ENTITY sitedelta.prefs.notifysound.custom "Заданный">

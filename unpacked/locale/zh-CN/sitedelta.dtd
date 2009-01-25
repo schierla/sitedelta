@@ -30,7 +30,7 @@
 <!ENTITY sitedelta.properties.lbltitle "标题:">
 <!ENTITY sitedelta.properties.lblurl "链接:">
 <!ENTITY sitedelta.properties.lblcheck "上次访问:">
-<!ENTITY sitedelta.properties.uselogin "使用保存的密码(从密码管理器)">
+<!ENTITY sitedelta.properties.uselogin "使用保存的密码 (从密码管理器)">
 <!ENTITY sitedelta.properties.pageinfo "页面信息">
 <!ENTITY sitedelta.properties.whattoscan "扫描内容">
 <!ENTITY sitedelta.properties.whentoscan "扫描时间">
@@ -46,7 +46,7 @@
 <!ENTITY sitedelta.preset.off "禁用">
 <!ENTITY sitedelta.preset.title "编辑预设">
 <!ENTITY sitedelta.preset.descname "输入预设区域的名称:">
-<!ENTITY sitedelta.preset.descurl "应用此预设的地址(可以使用 * 和 ? 作为通配符):">
+<!ENTITY sitedelta.preset.descurl "应用此预设的地址 (可以使用 * 和 ? 作为通配符):">
 <!ENTITY sitedelta.preset.descinclude "监视区域:">
 <!ENTITY sitedelta.preset.descexclude "忽略区域:">
 <!ENTITY sitedelta.preset.delete "删除">
@@ -55,7 +55,7 @@
 <!ENTITY sitedelta.preset.lblurl "链接:">
 <!ENTITY sitedelta.prefs.about "关于 SiteDelta">
 <!ENTITY sitedelta.prefs.about.title "SiteDelta">
-<!ENTITY sitedelta.prefs.about.text "报告页面更改并高亮显示自上次访问后更改的内容">
+<!ENTITY sitedelta.prefs.about.text "报告页面更改并高亮显示自上次访问后更改的内容.">
 <!ENTITY sitedelta.prefs.about.translation "简体中文语言: WangKing">
 <!ENTITY sitedelta.prefs.whattoscan "扫描设置">
 <!ENTITY sitedelta.prefs.whentoscan "定时扫描">
@@ -71,18 +71,18 @@
 <!ENTITY sitedelta.prefs.ignoreregion "忽略区域颜色:">
 <!ENTITY sitedelta.prefs.showregions.desc "高亮显示更改时突出监视和忽略的区域.">
 <!ENTITY sitedelta.prefs.showregions "突出区域">
-<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta 可以报告添加或删除的图片(或者图片文件名的更改)">
+<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta 可以报告添加或删除的图片 (或者图片文件名的更改)">
 <!ENTITY sitedelta.prefs.scanimages "检查图片地址">
-<!ENTITY sitedelta.prefs.scandeleted.desc "启用后, SiteDelta 会报告页面中删除的文字(可能会使显示比较杂乱)">
+<!ENTITY sitedelta.prefs.scandeleted.desc "启用后, SiteDelta 会报告页面中删除的文字 (可能会使显示比较杂乱)">
 <!ENTITY sitedelta.prefs.scandeleted "检查删除的文字">
-<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta 可以忽略更改频繁的数字(比如论坛中的帖子数统计)">
+<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta 可以忽略更改频繁的数字 (比如论坛中的帖子数统计)">
 <!ENTITY sitedelta.prefs.ignorenumbers "忽略数字更改">
-<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta 可以忽略字幕大小写的更改">
+<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta 可以忽略字母大小写的更改">
 <!ENTITY sitedelta.prefs.ignorecase "忽略大小写">
 <!ENTITY sitedelta.prefs.settings "设置">
 <!ENTITY sitedelta.prefs.appearance "外观">
 <!ENTITY sitedelta.prefs.watch "站点监视">
-<!ENTITY sitedelta.prefs.backuppages.desc "当检测到页面更改时, SiteDelta 可以自动保存一个备份.">
+<!ENTITY sitedelta.prefs.backuppages.desc "当检测到页面更改时, SiteDelta 可以自动保存一个页面备份.">
 <!ENTITY sitedelta.prefs.backuppages "备份更改的页面">
 <!ENTITY sitedelta.prefs.scanonload.desc "当访问监视的页面时, SiteDelta 可以自动扫描更改内容.">
 <!ENTITY sitedelta.prefs.scanonload "访问监视页面时自动扫描">
@@ -96,7 +96,7 @@
 <!ENTITY sitedelta.prefs.watchscandelay "扫描频率(分钟)">
 <!ENTITY sitedelta.prefs.watchenablescript.desc "会使 SiteDelta 缓慢一些, 但可以避免一些错误提示.">
 <!ENTITY sitedelta.prefs.watchenablescript "站点监视启用 JavaScript">
-<!ENTITY sitedelta.prefs.frequency.default.desc "使用默认设置(选项中的设置)">
+<!ENTITY sitedelta.prefs.frequency.default.desc "使用默认设置 (选项中的设置)">
 <!ENTITY sitedelta.prefs.frequency.default "默认">
 <!ENTITY sitedelta.prefs.frequency.never.desc "使用此项将此页面从自动扫描中排除">
 <!ENTITY sitedelta.prefs.frequency.never "不扫描">

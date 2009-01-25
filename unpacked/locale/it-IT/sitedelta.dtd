@@ -1,0 +1,118 @@
+<!ENTITY sitedelta.title "SiteDelta">
+<!ENTITY sitedelta.highlight "Evidenzia cambiamenti">
+<!ENTITY sitedelta.removehighlight "Rimuovi evidenziazioni">
+<!ENTITY sitedelta.backups "Backup delle versioni precedenti">
+<!ENTITY sitedelta.createbackup "Esegui il backup della versione corrente">
+<!ENTITY sitedelta.regions "Regioni">
+<!ENTITY sitedelta.loadpreset "Carica regioni">
+<!ENTITY sitedelta.scanregion "Aggiungi una regione da controllare">
+<!ENTITY sitedelta.ignoreregion "Aggiungi una regione da ignorare">
+<!ENTITY sitedelta.pages "Pagine">
+<!ENTITY sitedelta.openwatches "Apri tutte le pagine elencate in nuove schede...">
+<!ENTITY sitedelta.togglesidebar "Barra laterale di SiteDelta">
+<!ENTITY sitedelta.sidebar.commandkey "S">
+<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
+<!ENTITY sitedelta.sidebar.pagesettings "Proprietà della pagina">
+<!ENTITY sitedelta.sidebar.update "Controlla cambiamenti">
+<!ENTITY sitedelta.sidebar.markseen "Marca cambiamenti come visti">
+<!ENTITY sitedelta.sidebar.delete "Cancella">
+<!ENTITY sitedelta.sidebar.title "SiteDelta">
+<!ENTITY sitedelta.sidebar.openpage "Apri pagina">
+<!ENTITY sitedelta.sidebar.pages "Pagine">
+<!ENTITY sitedelta.sidebar.search "Cerca: ">
+<!ENTITY sitedelta.sidebar.updateall "Controlla cambiamenti per tutte le pagine">
+<!ENTITY sitedelta.sidebar.openall "Apri pagine cambiate">
+<!ENTITY sitedelta.sidebar.showprefs "Impostazioni di SiteDelta...">
+<!ENTITY sitedelta.sidebar.showpresets "Gestione profili...">
+<!ENTITY sitedelta.properties.savepreset "Salva come profilo">
+<!ENTITY sitedelta.properties.title "Proprietà della pagina">
+<!ENTITY sitedelta.properties.lblname "Nome:">
+<!ENTITY sitedelta.properties.lbltitle "Titolo:">
+<!ENTITY sitedelta.properties.lblurl "URL:">
+<!ENTITY sitedelta.properties.lblcheck "Ultima visita:">
+<!ENTITY sitedelta.properties.uselogin "Usa password salvata (dal gestore password di Firefox)">
+<!ENTITY sitedelta.properties.pageinfo "Informazioni sulla pagina">
+<!ENTITY sitedelta.properties.whattoscan "Cosa controllare">
+<!ENTITY sitedelta.properties.whentoscan "Quando controllare">
+<!ENTITY sitedelta.properties.loadsettings "Carica impostazioni">
+<!ENTITY sitedelta.properties.loaddefault "Ripristina impostazioni di default">
+<!ENTITY sitedelta.properties.savesettings "Salva impostazioni">
+<!ENTITY sitedelta.properties.savedefault "Salva come impostazioni predefinite">
+<!ENTITY sitedelta.properties.editdefault "Modifica impostazioni predefinite...">
+<!ENTITY sitedelta.properties.editpresets "Modifica profili...">
+<!ENTITY sitedelta.preset.close "Chiudi">
+<!ENTITY sitedelta.preset.default "Predefinito">
+<!ENTITY sitedelta.preset.on "On">
+<!ENTITY sitedelta.preset.off "Off">
+<!ENTITY sitedelta.preset.title "Modifica profili">
+<!ENTITY sitedelta.preset.descname "Inserisci un nome per il profilo regione:">
+<!ENTITY sitedelta.preset.descurl "Indirizzi ai quali applicare il profilo (utilizza * e ? come simboli jolly):">
+<!ENTITY sitedelta.preset.descinclude "Regioni controllate: ">
+<!ENTITY sitedelta.preset.descexclude "Regioni ignorate: ">
+<!ENTITY sitedelta.preset.delete "Cancella">
+<!ENTITY sitedelta.preset.duplicate "Duplica">
+<!ENTITY sitedelta.preset.lblname "Nome:">
+<!ENTITY sitedelta.preset.lblurl "URL:">
+<!ENTITY sitedelta.prefs.about "A proposito di SiteDelta">
+<!ENTITY sitedelta.prefs.about.title "SiteDelta">
+<!ENTITY sitedelta.prefs.about.text "Informa riguardo pagine web cambiate ed evidenzia i cambiamenti rispetto all'ultima visita.">
+<!ENTITY sitedelta.prefs.about.translation "Traduzione italiana: Marco C.">
+<!ENTITY sitedelta.prefs.whattoscan "Impostazioni di controllo">
+<!ENTITY sitedelta.prefs.whentoscan "Pianificazione del controllo">
+<!ENTITY sitedelta.prefs.reaction "Notifica del controllo">
+<!ENTITY sitedelta.prefs.title "SiteDelta - impostazioni">
+<!ENTITY sitedelta.prefs.add "Testo aggiunto">
+<!ENTITY sitedelta.prefs.remove "Testo rimosso">
+<!ENTITY sitedelta.prefs.move "Testo spostato">
+<!ENTITY sitedelta.prefs.bgcolor "Colore di sfondo: ">
+<!ENTITY sitedelta.prefs.bordercolor "Colore del bordo: ">
+<!ENTITY sitedelta.prefs.regions "Regioni">
+<!ENTITY sitedelta.prefs.scanregion "Colore delle regioni controllate: ">
+<!ENTITY sitedelta.prefs.ignoreregion "Colore delle regioni ignorate: ">
+<!ENTITY sitedelta.prefs.showregions.desc "Traccia il bordo delle regioni controllate ed ignorate quando vengono evidenziati i cambiamenti.">
+<!ENTITY sitedelta.prefs.showregions "Traccia il bordo delle regioni">
+<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta può informare riguardo immagini aggiunte o rimosse (o immagini modificate se è stato modificato il nome del file)">
+<!ENTITY sitedelta.prefs.scanimages "Controlla gli indirizzi delle immagini">
+<!ENTITY sitedelta.prefs.scandeleted.desc "SiteDelta può informare riguardo testo rimosso dalle pagine (può apparire poco chiaro su pagine complesse)">
+<!ENTITY sitedelta.prefs.scandeleted "Controlla testo rimosso">
+<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta può ignorare i numeri se cambiano frequentemente (es. conteggio dei post in un forum)">
+<!ENTITY sitedelta.prefs.ignorenumbers "Ignora numeri cambiati">
+<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta può ignorare i cambiamenti tra maiuscolo e minuscolo.">
+<!ENTITY sitedelta.prefs.ignorecase "Ignora la distinzione tra maiuscolo e minuscolo">
+<!ENTITY sitedelta.prefs.settings "Impostazioni">
+<!ENTITY sitedelta.prefs.appearance "Aspetto">
+<!ENTITY sitedelta.prefs.watch "SiteWatch">
+<!ENTITY sitedelta.prefs.backuppages.desc "Quando vengono trovati cambiamenti in una pagina SiteDelta può automaticamente salvare una copia di backup (es. per archiviazioni).">
+<!ENTITY sitedelta.prefs.backuppages "Esegui il backup di pagine cambiate">
+<!ENTITY sitedelta.prefs.scanonload.desc "When visiting watched pages, SiteDelta can automatically scan for changes.">
+<!ENTITY sitedelta.prefs.scanonload "Controlla pagine conosciute quando vengono visitate">
+<!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta può controllare le pagine conosciute regolarmente e avvertire se avvengono cambiamenti.">
+<!ENTITY sitedelta.prefs.enablewatch "Abilita SiteWatch">
+<!ENTITY sitedelta.prefs.watchpagetimeout.desc "Se il caricamento di una pagina richiede più tempo SiteDelta ne interrompe il caricamento.">
+<!ENTITY sitedelta.prefs.watchpagetimeout "Limite di tempo per il caricamento di una pagina (sec.)">
+<!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta attende per questo intervallo di tempo tra il caricamento di una pagina e l'altra (per ridurre il carico dei server).">
+<!ENTITY sitedelta.prefs.watchpagedelay "Intervallo di tempo tra il caricamento di una pagina e l'altra (sec.)">
+<!ENTITY sitedelta.prefs.watchscandelay.desc "">
+<!ENTITY sitedelta.prefs.watchscandelay "Frquenza di controllo (min.)">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "Rende SiteDelta leggermente più lento, ma evita alcuni falsi positivi.">
+<!ENTITY sitedelta.prefs.watchenablescript "Abilita JavaScript per SiteWatch">
+<!ENTITY sitedelta.prefs.frequency.default.desc "Usa impostazioni predefinite (impostate nella scheda Preferenze)">
+<!ENTITY sitedelta.prefs.frequency.default "Predefinito">
+<!ENTITY sitedelta.prefs.frequency.never.desc "Utilizza questa opzione per ecludere questa pagina dal controllo automatico">
+<!ENTITY sitedelta.prefs.frequency.never "Mai">
+<!ENTITY sitedelta.prefs.frequency.auto.desc "Lascia il controllo della frequenza a SiteDelta. SiteDelta controllerà frquentemente ma ridurrà la frequenza se non verranno registrati cambiamenti per un lungo periodo.">
+<!ENTITY sitedelta.prefs.frequency.auto "Automatica">
+<!ENTITY sitedelta.prefs.frequency.desc "Frequenza impostata:">
+<!ENTITY sitedelta.prefs.frequency.weekly "Ogni settimana">
+<!ENTITY sitedelta.prefs.frequency.daily "Ogni giorno">
+<!ENTITY sitedelta.prefs.frequency.hourly "Ogni ora">
+<!ENTITY sitedelta.prefs.frequency.custom "Personalizzata: ogni ">
+<!ENTITY sitedelta.prefs.frequency.minutes "minuti">
+<!ENTITY sitedelta.prefs.notifyalert "Mostra finestra di notifica">
+<!ENTITY sitedelta.prefs.notifyalert.desc "Mostra una finestra di notifica in basso a destra sullo schermo quando viene trovata una pagina cambiata.">
+<!ENTITY sitedelta.prefs.notifysound "Notifica sonora">
+<!ENTITY sitedelta.prefs.notifysound.none "Nessuna">
+<!ENTITY sitedelta.prefs.notifysound.beep "Bip">
+<!ENTITY sitedelta.prefs.notifysound.alert "Notifica di sistema">
+<!ENTITY sitedelta.prefs.notifysound.newmail "Notifica tramite email">
+<!ENTITY sitedelta.prefs.notifysound.custom "Personalizzata">

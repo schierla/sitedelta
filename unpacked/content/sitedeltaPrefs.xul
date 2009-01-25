@@ -28,7 +28,7 @@
     <preference id="p_watchpagetimeout" name="extensions.sitedelta@schierla.de.watchPageTimeout" type="int"/>
     <preference id="p_ignorenumbers" name="extensions.sitedelta@schierla.de.ignoreNumbers" type="bool"/>
     <preference id="p_ignorecase" name="extensions.sitedelta@schierla.de.ignoreCase" type="bool"/>
-    <preference id="p_notifysound" name="extensions.sitedelta@schierla.de.notifySound" type="char"/>
+    <preference id="p_notifysound" name="extensions.sitedelta@schierla.de.notifySound" type="string"/>
     <preference id="p_notifyalert" name="extensions.sitedelta@schierla.de.notifyAlert" type="bool"/>
    </preferences>
    <vbox flex="1">
@@ -108,7 +108,7 @@
 </groupbox>
 <groupbox>
 <caption><label class="header">&sitedelta.prefs.notifysound;</label></caption>
-<radiogroup id="notifySound" flex="1" onselect="if(this.selectedIndex!=4)document.getElementById('notifySoundText').disabled=true; else {document.getElementById('notifySoundText').disabled=false; document.getElementById('watchvalue').focus(); document.getElementById('notifySoundText').select(); }">
+<radiogroup id="notifySound" flex="1" onclick="previewSound();" onselect="if(this.selectedIndex!=4)document.getElementById('notifySoundText').disabled=true; else {document.getElementById('notifySoundText').disabled=false; document.getElementById('watchvalue').focus(); document.getElementById('notifySoundText').select(); }">
 <radio class="header" label="&sitedelta.prefs.notifysound.none;"/>
 <radio class="header" label="&sitedelta.prefs.notifysound.beep;"/>
 <radio class="header" label="&sitedelta.prefs.notifysound.alert;"/>
@@ -133,15 +133,22 @@
 <script type="text/javascript" src="sitedelta.js"/>
 <script type="text/javascript">
 <![CDATA[
-  function accept() {
-   var notifysound="";
+  function selectedSound() {
    switch(g('notifySound').selectedIndex) {
-    case 0: notifysound=""; break;
-    case 1: notifysound="beep"; break;
-    case 2: notifysound="SystemNotification"; break;
-    case 3: notifysound="MailBeep"; break;
-    case 4: notifysound = g('notifySoundText').value; break;
+    case 0: return ""; 
+    case 1: return "beep"; 
+    case 2: return "SystemNotification"; 
+    case 3: return "MailBeep"; 
+    case 4: return g('notifySoundText').value; 
    }
+   return "";
+  }
+  function previewSound() {
+   sitedeltaService._playSound(selectedSound());
+  }
+  function accept() {
+   var notifysound=selectedSound();
+
    var watchDelay=0;
    switch(g('watchdelay').selectedIndex) {
     case 0: watchDelay=0; break;
@@ -180,7 +187,7 @@
     case "beep": g('notifySound').selectedIndex=1; break;
     case "SystemNotification": g('notifySound').selectedIndex=2; break;
     case "MailBeep": g('notifySound').selectedIndex=3; break;
-    default: g('notifySound').selectedIndex=4; g('notifySoundText').value = g(sitedeltaService.notifySound); break;
+    default: g('notifySound').selectedIndex=4; g('notifySoundText').value = sitedeltaService.notifySound; break;
    }
   }
  function g(name) {return document.getElementById(name); }

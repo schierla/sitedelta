@@ -16,6 +16,7 @@ pref("extensions.sitedelta@schierla.de.scanImages", true);
 pref("extensions.sitedelta@schierla.de.openChanged", false);
 pref("extensions.sitedelta@schierla.de.backupPages", false);
 pref("extensions.sitedelta@schierla.de.scanOnLoad", true);
+pref("extensions.sitedelta@schierla.de.highlightOnLoad", false);
 pref("extensions.sitedelta@schierla.de.siteSettings", false);
 pref("extensions.sitedelta@schierla.de.enableWatch", false);
 pref("extensions.sitedelta@schierla.de.watchEnableScript", false);

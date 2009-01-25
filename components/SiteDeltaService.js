@@ -43,6 +43,7 @@ SiteDelta.prototype = {
     includeRegion: null,
     backupPages: null,
     scanOnLoad: null,
+    highlightOnLoad: null,
     siteSettings: null,
     enableWatch: false,
     watchEnableScript: false,
@@ -408,26 +409,42 @@ SiteDelta.prototype = {
                 };
             this._diff(diff);
            	if(this._checkDeleted) {    
-            for(opos=0, npos=0; opos<=oldt.length && npos<=newt.length; ) {
-                if(opos == diff.oldWords.length) 
-                	diff.newToOld[npos++]=null;
-                else if(npos == diff.newWords.length)
-                	diff.oldToNew[opos++]=null;
-                else if (diff.newToOld[npos] == null)
-                	npos++;
-                else if (diff.oldToNew[opos] == null)
-                	opos++;
-                else if (diff.oldToNew[opos] == npos) {
-                    opos++; npos++; 
-                } else if (diff.oldToNew[opos] - npos < 0) 
-                	diff.oldToNew[opos++]=null;
-                else if (diff.newToOld[npos] - opos < 0) 
-                	diff.newToOld[npos++]=null;
-                else if (diff.oldToNew[opos] - npos <= diff.newToOld[npos] - opos) 
-                    diff.oldToNew[opos++]=null; 
-                else 
-                	diff.newToOld[npos++]=null; 
-            }
+	            for(opos=0, npos=0; opos<=oldt.length && npos<=newt.length; ) {
+	                if(opos == diff.oldWords.length) 
+	                	diff.newToOld[npos++]=null;
+	                else if(npos == diff.newWords.length)
+	                	diff.oldToNew[opos++]=null;
+	                else if (diff.newToOld[npos] == null)
+	                	npos++;
+	                else if (diff.oldToNew[opos] == null)
+	                	opos++;
+	                else if (diff.oldToNew[opos] == npos) {
+	                    opos++; npos++; 
+	                } else if (diff.oldToNew[opos] - npos < 0) 
+	                	diff.oldToNew[opos++]=null;
+	                else if (diff.newToOld[npos] - opos < 0) 
+	                	diff.newToOld[npos++]=null;
+	                else {
+	                	for(var i = 1; opos + i < oldt.length && npos + i < newt.length; i++) {
+	                		if(diff.oldToNew[opos + i] != diff.oldToNew[opos] + i) {
+	                			for(var j = opos; j < opos+i; j++) 
+	                				diff.oldToNew[j] = null;
+	                			opos = opos + i - 1;
+	                			break;
+	                		} 
+	                		if(diff.newToOld[npos + i] != diff.newToOld[npos] + i) {
+	                			for(var j = npos; j < npos+i; j++) 
+	                				diff.newToOld[j] = null;
+	                			npos = npos + i - 1;
+	                			break;
+	                		}
+	                	}
+//	                else if (diff.oldToNew[opos] - npos <= diff.newToOld[npos] - opos) 
+//	                    diff.oldToNew[opos++]=null; 
+//	                else 
+//	                	diff.newToOld[npos++]=null;
+	                }
+	            }
            	}
             pos = 0,
             wpos = 0,
@@ -693,6 +710,7 @@ SiteDelta.prototype = {
         this._prefs.setBoolPref("showRegions",this.showRegions);
         this._prefs.setBoolPref("backupPages",this.backupPages);
         this._prefs.setBoolPref("scanOnLoad",this.scanOnLoad);
+        this._prefs.setBoolPref("highlightOnLoad",this.highlightOnLoad);
         this._prefs.setCharPref("notifySound",this.notifySound);
         this._prefs.setBoolPref("notifyAlert",this.notifyAlert);
         this._prefs.setIntPref("watchPageDelay",this.watchPageDelay/1000);
@@ -723,6 +741,7 @@ SiteDelta.prototype = {
         this.excludeRegion = this._prefs.getCharPref("excludeRegion");
         this.backupPages = this._prefs.getBoolPref("backupPages");
         this.scanOnLoad = this._prefs.getBoolPref("scanOnLoad");
+        this.highlightOnLoad = this._prefs.getBoolPref("highlightOnLoad");
         this.notifySound = this._prefs.getCharPref("notifySound");
         this.notifyAlert = this._prefs.getBoolPref("notifyAlert");
         this.watchPageDelay = this._prefs.getIntPref("watchPageDelay") * 1000 + 1;
@@ -792,6 +811,7 @@ SiteDelta.prototype = {
         if (this.RDF.GetTarget(this._rr(result.url), this._rr(NS_RDF + "name"), true)) {
 		var delay= (result.watchDelay==0?this.watchScanDelay:result.watchDelay);
         var time = Date.now();
+        var nextScan = this._getNextScan(result.url);
         if (delay == -1 || delay == 0)
             time = 0;
         else if (result.status == 1)
@@ -801,6 +821,7 @@ SiteDelta.prototype = {
             delay*=1.5; if(delay<-10080) delay=-10080; result.watchDelay=delay; this.putPage(result);
         } else if (delay > 0)
             time += delay*60000+1;
+        if(time > nextScan && nextScan > Date.now()) time = nextScan;
         if (this.RDF.GetTarget(this._rr(result.url), this._rr(SD_RDF + "nextScan"), true))
             this.RDF.Change(this._rr(result.url), this._rr(SD_RDF + "nextScan"), this.RDF.GetTarget(this._rr(result.url), this._rr(SD_RDF + "nextScan"), true).QueryInterface(Ci.nsIRDFLiteral), this._rl(time));
         else this.RDF.Assert(this._rr(result.url), this._rr(SD_RDF + "nextScan"), this._rl(time), true);
@@ -811,7 +832,8 @@ SiteDelta.prototype = {
 		}
     },
     _getNextScan: function(url) {
-        return this.RDF.GetTarget(this._rr(url), this._rr(SD_RDF + "nextScan"), true).QueryInterface(Ci.nsIRDFLiteral).Value;
+    	var nextScan = this.RDF.GetTarget(this._rr(url), this._rr(SD_RDF + "nextScan"), true);
+    	if(nextScan == null) return 0; else return nextScan.QueryInterface(Ci.nsIRDFLiteral).Value;
     },
     _rdfDel: function(result) {
     	if(!this.RDF.GetTarget(this._rr(result.url), this._rr(NS_RDF + "name"), true)) return;
@@ -827,7 +849,8 @@ SiteDelta.prototype = {
     _rdfAdd: function(result) {
     	if(this.RDF.GetTarget(this._rr(result.url), this._rr(NS_RDF + "name"), true)) {
 	        this.RDF.Change(this._rr(result.url), this._rr(NS_RDF + "name"), this.RDF.GetTarget(this._rr(result.url), this._rr(NS_RDF + "name"), true), this._rl(result.name));
-    		return;
+	        this._scheduleNextScan(result);	        
+	        return;
     	} 
     	var rootbag = this._rr("urn:root:bag");
         var bag = Cc["@mozilla.org/rdf/container;1"].createInstance(Ci.nsIRDFContainer);
@@ -1275,18 +1298,23 @@ SiteDelta.prototype = {
         var windowMediator = Cc['@mozilla.org/appshell/window-mediator;1'].
                              getService(Ci.nsIWindowMediator);
         var window = windowMediator.getMostRecentWindow("navigator:browser");
-        if (!window) {_svc.watchEndCheck(); return; }
+        if (!window) {_svc._watchEndCheck(); return; }
         var document = window.document;
         var rootElement = document.documentElement;
-	    _svc._timer.cancel();      
+	    _svc._timer.cancel();
+
+	    var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+        var channel = ioService.newChannelFromURI(_svc.getURI(result));  
+
         _svc._iframe = document.createElement('iframe');
         _svc._timer.initWithCallback(_svc, _svc.watchPageTimeout, _svc._timer.TYPE_ONE_SHOT);
         _svc._iframe._svc = _svc;
+        _svc._iframe._reloaded = false;
         _svc._iframe.setAttribute("collapsed", true);
         _svc._iframe.setAttribute("type", "content");
         rootElement.appendChild(_svc._iframe);
         var webNav = _svc._iframe.docShell.QueryInterface(Ci.nsIWebNavigation);
-        webNav.stop(Ci.nsIWebNavigation.STOP_NETWORK);
+        webNav.stop(Ci.nsIWebNavigation.STOP_ALL);
         _svc._iframe.docShell.allowJavascript = (result.watchEnableScript!=null?result.watchEnableScript:_svc.watchEnableScript); 
         _svc._iframe.docShell.allowAuth = false;
         _svc._iframe.docShell.allowPlugins = false;
@@ -1294,34 +1322,52 @@ SiteDelta.prototype = {
         _svc._iframe.docShell.allowSubframes = false;
         _svc._iframe.docShell.allowImages = false;
         _svc._iframe.addEventListener("DOMContentLoaded", _svc._watchPageLoaded, true);
-        var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
-        var channel = ioService.newChannelFromURI(_svc.getURI(result));  
         var request = channel.QueryInterface(Ci.nsIRequest);
-        request.loadFlags |= Ci.nsIRequest.LOAD_BACKGROUND;
+        request.loadFlags |= Ci.nsIRequest.LOAD_BACKGROUND | Ci.nsIRequest.VALIDATE_ALWAYS;
         var uriLoader = Cc["@mozilla.org/uriloader;1"].getService(Ci.nsIURILoader);
         uriLoader.openURI(channel, true, _svc._iframe.docShell);
     },
+    _playSound: function(soundname) {
+		var sound = Cc["@mozilla.org/sound;1"].createInstance(Ci.nsISound);
+		if(soundname=="beep") {
+			sound.beep();
+		} else if(soundname.indexOf("file:")!=0) {
+			sound.playSystemSound(soundname);
+		} else {
+			sound.play(soundname);
+		}
+    },
     _watchPageLoaded: function() {
+
     	var _svc=(this._svc?this._svc:this);
         _svc._timer.cancel();
         if(_svc._iframe) {
-	        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
-		if(result.status != _svc.RESULT_NEW && _svc.scanPage(_svc._iframe.contentDocument)>0) {
+        	var channel = _svc._iframe.docShell.currentDocumentChannel.QueryInterface(Ci.nsIHttpChannel);
+        	if(channel.responseStatus == 401 && _svc._iframe._reloaded == false) {
+        		_svc._iframe._reloaded = true;
+                var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+                var channel = ioService.newChannelFromURI(channel.URI);  
+                var request = channel.QueryInterface(Ci.nsIRequest);
+                request.loadFlags |= Ci.nsIRequest.LOAD_BACKGROUND | Ci.nsIRequest.VALIDATE_ALWAYS;
+                var uriLoader = Cc["@mozilla.org/uriloader;1"].getService(Ci.nsIURILoader);
+                uriLoader.openURI(channel, true, _svc._iframe.docShell);
+        		return;
+        	} else if(channel.responseStatus == 304) {   
+    	        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
+    	        if(result.status != _svc.RESULT_NEW) result.status = 0;
+    	        _svc._scheduleNextScan(result);
+        	} else {
 		        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
-        		if(_svc.notifyAlert) {
-					var alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
-					alerts.showAlertNotification("chrome://sitedelta/content/sitedeltaGross.gif",  _svc._strings.GetStringFromName("notifyTitle"), result.name, true, result.url, _svc);
-        		}
-        		if(_svc.notifySound!="") {
-        			var sound = Cc["@mozilla.org/sound;1"].createInstance(Ci.nsISound);
-        			if(_svc.notifySound=="beep") {
-        				sound.beep();
-        			} else if(_svc.notifySound.indexOf("file:")!=0) {
-        				sound.playSystemSound(_svc.notifySound);
-        			} else {
-        				sound.play(this.nofiySound);
-        			}
-        		}
+		        if(result.status != _svc.RESULT_NEW && _svc.scanPage(_svc._iframe.contentDocument)>0) {
+			        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
+	        		if(_svc.notifyAlert) {
+						var alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
+						alerts.showAlertNotification("chrome://sitedelta/content/sitedeltaGross.gif",  _svc._strings.GetStringFromName("notifyTitle"), result.name, true, result.url, _svc);
+	        		}
+	        		if(_svc.notifySound!="") {
+	        			_svc._playSound(_svc.notifySound);
+	        		}
+	        	}
         	}
         }
         _svc._watchUrl=null;
@@ -1340,7 +1386,7 @@ SiteDelta.prototype = {
         if (_svc._iframe) {
             var webNav = _svc._iframe.docShell.QueryInterface(Ci.nsIWebNavigation);
 	        _svc._iframe.removeEventListener("DOMContentLoaded", _svc._watchPageLoaded, true);
-            webNav.stop(Ci.nsIWebNavigation.STOP_NETWORK);
+            webNav.stop(Ci.nsIWebNavigation.STOP_ALL);
             if (_svc._iframe.parentNode)
                 _svc._iframe.parentNode.removeChild(_svc._iframe);
             _svc._iframe._svc=null;

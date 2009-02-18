@@ -595,8 +595,10 @@ SiteDelta.prototype = {
 		var uri = ioService.newURI(url, null, null);
         if (result.user != "") {
         	var pass=this.getPass(result.url); 
-        	uri.username=pass.user;
-        	uri.password=pass.password;
+        	if(pass != null) {
+        		uri.username=pass.user;
+        		uri.password=pass.password;
+        	}
         }
         return uri;
     },

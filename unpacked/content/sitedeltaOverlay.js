@@ -136,7 +136,7 @@ var sitedeltaOverlay= {
   e.stopPropagation();
  },
  mouseout: function(e) {
-  if(e.target!=sitedeltaOverlay.destelement) e.target.style.outline="none";
+  if(e.target && e.target!=sitedeltaOverlay.destelement) e.target.style.outline="none";
   e.preventDefault();
   e.stopPropagation();
  },
@@ -147,24 +147,34 @@ var sitedeltaOverlay= {
   e.preventDefault();
   e.stopPropagation();
  },
+ cancel: function(e) {
+  sitedeltaOverlay.mouseout(e);
+  if(sitedeltaOverlay.destelement != null) sitedeltaOverlay.destelement.style.outline="none";
+  if(e.button==0 && !e.ctrlKey) return; 
+  
+  var noB=false;
+  if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();
+  if(noB && noB.getNotificationWithValue("sitedelta")) noB.removeNotification(noB.getNotificationWithValue("sitedelta"));
+
+  content.document.removeEventListener("mouseover", sitedeltaOverlay.mouseover, true);
+  content.document.removeEventListener("mousedown", sitedeltaOverlay.mousedown, true);
+  content.document.removeEventListener("mouseup", sitedeltaOverlay.mouseup, true);
+  content.document.removeEventListener("mouseout", sitedeltaOverlay.mouseout, true);
+  content.document.removeEventListener("click", sitedeltaOverlay.cancel, true);
+ },
  mouseup: function(e) {
+  if(e.button!=0 || e.ctrlKey) {sitedeltaOverlay.cancel(e); return; }
+
   sitedeltaOverlay.mouseout(e);
   e.preventDefault();
   e.stopPropagation();
-  sitedeltaOverlay.destelement.style.outline="none";
 
   var noB=false;
   if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();
   if(noB && noB.getNotificationWithValue("sitedelta")) noB.removeNotification(noB.getNotificationWithValue("sitedelta"));
-  
-  if(e.button!=0) {
-   content.document.removeEventListener("mouseover", sitedeltaOverlay.mouseover, true);
-   content.document.removeEventListener("mousedown", sitedeltaOverlay.mousedown, true);
-   content.document.removeEventListener("mouseup", sitedeltaOverlay.mouseup, true);
-   content.document.removeEventListener("mouseout", sitedeltaOverlay.mouseout, true);
-   content.document.removeEventListener("click", sitedeltaOverlay.mouseclick, true);
-   return;
-  }
+
+  if(sitedeltaOverlay.destelement == null || e.target == null) return; 
+  sitedeltaOverlay.destelement.style.outline="none";
   if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("regionAdded"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {});
 
   sitedeltaOverlay.needText=false;
@@ -202,7 +212,7 @@ var sitedeltaOverlay= {
   content.document.addEventListener("mousedown", sitedeltaOverlay.mousedown, true);
   content.document.addEventListener("mouseup", sitedeltaOverlay.mouseup, true);
   content.document.addEventListener("mouseout", sitedeltaOverlay.mouseout, true);
-  content.document.addEventListener("click", sitedelta.preventevent, true);
+  content.document.addEventListener("click", sitedeltaOverlay.cancel, true);
   return false;
  },
  includeRegion: function(e) {

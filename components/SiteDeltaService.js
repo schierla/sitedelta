@@ -1334,7 +1334,8 @@ SiteDelta.prototype = {
 		} else if(soundname.indexOf("file:")!=0) {
 			sound.playSystemSound(soundname);
 		} else {
-			sound.play(soundname);
+            var ioService =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+            sound.play(ioService.newURI(soundname,null,null));
 		}
     },
     _watchPageLoaded: function() {

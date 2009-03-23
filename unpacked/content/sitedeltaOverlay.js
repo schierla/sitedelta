@@ -6,8 +6,8 @@ var sitedeltaOverlay= {
    if(doc.sitedeltaMatch) return; 
    var result=sitedeltaService.getPage(doc.URL); 
    if(result.status!=sitedeltaService.RESULT_NEW) {
-	if(sitedeltaService.highlightOnLoad) sitedeltaOverlay.highlightChanges({});
-	else if(sitedeltaService.scanOnLoad) sitedeltaService.scanPage(doc);
+	if(sitedeltaService.scanOnLoad) sitedeltaService.scanPage(doc);
+	// if(sitedeltaService.highlightOnLoad) sitedeltaOverlay.highlightPage(doc);
    }
   }
  },
@@ -92,12 +92,14 @@ var sitedeltaOverlay= {
   }
   var page=sitedeltaService.getPage(url);
   var icon=document.getElementById("sitedelta-status");
-  if(page.status==-1)
+  if(page.status==-1) {
    icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta.gif");
-  else if(page.status>0) 
+  } else if(page.status>0) {
    icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta-changed.gif");
-  else 
+   if(sitedeltaService.highlightOnLoad && !content.document.sitedeltaMatch) sitedeltaOverlay.highlightPage(content.document);
+  } else { 
    icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta-known.gif");
+  }
  },
  install: function() {
   var url=content.window.location.href; 
@@ -274,11 +276,17 @@ var sitedeltaOverlay= {
   var url=content.window.location.href;
   if(url=="about:blank") {sitedeltaOverlay.showProperties(); return; }
 
+  sitedeltaOverlay.highlightPage(content.document);
+  content.window.location.hash="#sitedelta-change0";
+  content.document.sitedeltaMatch = 1; 
+ },
+ 
+ highlightPage: function(doc) {
   var noB=false;
   if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();
   if(noB && noB.getNotificationWithValue("sitedelta")) noB.removeNotification(noB.getNotificationWithValue("sitedelta"));
 
-  var changes=sitedeltaService.highlightPage(content.document);   
+  var changes=sitedeltaService.highlightPage(doc);   
   if(changes==sitedeltaService.RESULT_ERROR) {
    if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("noContentMessage"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_HIGH, {});
   } else if(changes==sitedeltaService.RESULT_NEW) {
@@ -287,8 +295,7 @@ var sitedeltaOverlay= {
    if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("noChangesMessage"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {});
   } else {
    if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("changesFoundMessage").replace("%d",changes), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {});
-   content.window.location.hash="#sitedelta-change0";
-   content.document.sitedeltaMatch = 1; 
+   content.document.sitedeltaMatch = -1;
   }
  }
 }

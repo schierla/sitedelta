@@ -662,7 +662,18 @@ SiteDelta.prototype = {
 			}
         }    	
     },
+    updateAll: function() {
+    	var rootbag = this._rr("urn:root:bag");
+        var bag = Cc["@mozilla.org/rdf/container;1"].createInstance(Ci.nsIRDFContainer);
+        bag.Init(this.RDF, rootbag);
+        var pages = bag.GetElements();
+        while(pages.hasMoreElements()) {
+        	var page = pages.getNext();
+        	this.updatePage(page.Value);
+        }
+    },
     updatePage: function(url) {
+    	if(!url) return;
     	var result=this.getPage(url); 
         if (this.RDF.GetTarget(this._rr(result.url), this._rr(NS_RDF + "name"), true)) {
 	    	result.status=this.RESULT_UNCHECKED;
@@ -1345,8 +1356,9 @@ SiteDelta.prototype = {
     	var _svc=(this._svc?this._svc:this);
         _svc._timer.cancel();
         if(_svc._iframe) {
-        	var channel = _svc._iframe.docShell.currentDocumentChannel.QueryInterface(Ci.nsIHttpChannel);
-        	if(channel.responseStatus == 401 && _svc._iframe._reloaded == false) {
+        	var channel = _svc._iframe.docShell.currentDocumentChannel;
+        	if(channel) channel=channel.QueryInterface(Ci.nsIHttpChannel);
+        	if(channel && channel.responseStatus == 401 && _svc._iframe._reloaded == false) {
         		_svc._iframe._reloaded = true;
                 var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
                 var channel = ioService.newChannelFromURI(channel.URI);  
@@ -1355,7 +1367,7 @@ SiteDelta.prototype = {
                 var uriLoader = Cc["@mozilla.org/uriloader;1"].getService(Ci.nsIURILoader);
                 uriLoader.openURI(channel, true, _svc._iframe.docShell);
         		return;
-        	} else if(channel.responseStatus == 304) {   
+        	} else if(channel && channel.responseStatus == 304) {   
     	        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
     	        if(result.status != _svc.RESULT_NEW) result.status = 0;
     	        _svc._scheduleNextScan(result);

@@ -10,8 +10,6 @@
 <!ENTITY sitedelta.pages "Strony">
 <!ENTITY sitedelta.openwatches "Otwórz wszystkie w kartach">
 <!ENTITY sitedelta.togglesidebar "Pasek boczny SiteDelta">
-<!ENTITY sitedelta.sidebar.commandkey "P">
-<!ENTITY sitedelta.sidebar.modifierskey "Alt Accel">
 <!ENTITY sitedelta.sidebar.pagesettings "Właściwości strony">
 <!ENTITY sitedelta.sidebar.update "Sprawdź zmiany">
 <!ENTITY sitedelta.sidebar.markseen "Oznacz zmiany jako sprawdzone">
@@ -92,8 +90,6 @@
 <!ENTITY sitedelta.prefs.watchpagetimeout "Limit czasu wczytywania strony (s)">
 <!ENTITY sitedelta.prefs.watchpagedelay.desc "Aby zmniejszyć obciążenie serwera, SiteDelta odczekuje określony czas pomiędzy sprawdzeniami kolejnej strony.">
 <!ENTITY sitedelta.prefs.watchpagedelay "Interwał po sprawdzeniu strony (s)">
-<!ENTITY sitedelta.prefs.watchscandelay.desc "">
-<!ENTITY sitedelta.prefs.watchscandelay "Czas pomiędzy kolejnymi sprawdzeniami (min)">
 <!ENTITY sitedelta.prefs.watchenablescript.desc "Spowalnia nieznacznie działanie SiteDelta, ale dzięki temu unika się fałszywych powiadomień.">
 <!ENTITY sitedelta.prefs.watchenablescript "Włącz JavaScript">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Zostaną użyte ustawienia domyślne określone w oknie ustawień">
@@ -116,3 +112,8 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Powiadomienie systemowe">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Powiadomienie o nowej wiadomości">
 <!ENTITY sitedelta.prefs.notifysound.custom "Własne">
+
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">

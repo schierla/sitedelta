@@ -39,12 +39,6 @@ showManager: function(e) {
  var result=sitedeltaService.getPage(file.id);
  return sitedelta.showProperties(result.url);
 },
-showPresets: function() {
- sitedelta.showPresets("");
-},
-showPrefs: function() {
- sitedelta.showPrefs();
-},
 doSearch: function(text) {
  var found=null, sp=document.getElementById("sitedeltaPages");
  for(var i=sp.getRowCount()-1; i>=0; i--) {
@@ -57,13 +51,25 @@ doSearch: function(text) {
  }
  if(found!=null) sp.ensureElementIsVisible(found);
 },
-updatePopup: function() {
- document.getElementById("sitedelta-enablewatch").setAttribute("checked",sitedeltaService.enableWatch);
- document.getElementById("sitedelta-updateall").setAttribute("disabled", !sitedeltaService.enableWatch);
-},
-toggleEnableWatch: function() {
- sitedeltaService.enableWatch=!sitedeltaService.enableWatch;
- sitedeltaService.savePrefs();
+keyDown: function(e) {
+ if(e.altKey && e.keyCode==13) {
+  sitedeltaSidebar.showManager();
+ } else if(e.ctrlKey) { 
+  if(e.keyCode==32) {
+   sitedeltaSidebar.updateCurrent();
+  } else if(e.keyCode==13) {
+   sitedeltaSidebar.openCurrent();
+  } else if(e.keyCode==46) {
+   sitedeltaSidebar.deletePage();
+  } else if(e.keyCode==8) {
+   sitedeltaSidebar.markSeen();
+  } else {
+   return;
+  }
+ } else {
+  return;
+ }
+ sitedelta.preventevent(e);
 }
 }
 

@@ -10,9 +10,7 @@
 <!ENTITY sitedelta.pages "Seiten">
 <!ENTITY sitedelta.openwatches "Alle in Tabs öffnen...">
 <!ENTITY sitedelta.togglesidebar "SiteDelta Sidebar">
-<!ENTITY sitedelta.sidebar.commandkey "S">
-<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
-<!ENTITY sitedelta.sidebar.pagesettings "Eigenschaften">
+<!ENTITY sitedelta.sidebar.pagesettings "Seiten-Eigenschaften...">
 <!ENTITY sitedelta.sidebar.update "Auf Änderungen prüfen">
 <!ENTITY sitedelta.sidebar.markseen "Änderung als gesehen markieren">
 <!ENTITY sitedelta.sidebar.delete "Löschen">
@@ -92,8 +90,6 @@
 <!ENTITY sitedelta.prefs.watchpagetimeout "Zeitlimit für Laden der Seite (in Sek.)">
 <!ENTITY sitedelta.prefs.watchpagedelay.desc "Diese Zeit wird zwischen der Überprüfung zweier Seiten mindestens gewartet (um die Serverlast zu schonen)">
 <!ENTITY sitedelta.prefs.watchpagedelay "Pause nach Überprüfen einer Seite (in Sek.)">
-<!ENTITY sitedelta.prefs.watchscandelay.desc "">
-<!ENTITY sitedelta.prefs.watchscandelay "Überprüfungshäufigkeit (in Min.)">
 <!ENTITY sitedelta.prefs.watchenablescript.desc "Dadurch wird SiteDelta etwas langsamer, dafür gibt es seltener falschen Alarm.">
 <!ENTITY sitedelta.prefs.watchenablescript "Bei Seitenüberwachung JavaScript aktivieren">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Standardeinstellung verwenden (benutzt die im Einstellungsdialog angegebene Häufigkeit)">
@@ -116,3 +112,26 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Systemhinweis">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Benachrichtigung über neue E-Mail">
 <!ENTITY sitedelta.prefs.notifysound.custom "Benutzerdefiniert">
+
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">
+<!ENTITY sitedelta.highlight.accesskey "h">
+<!ENTITY sitedelta.backups.accesskey "a">
+<!ENTITY sitedelta.createbackup.accesskey "a">
+<!ENTITY sitedelta.regions.accesskey "b">
+<!ENTITY sitedelta.scanregion.accesskey "ü">
+<!ENTITY sitedelta.ignoreregion.accesskey "i">
+<!ENTITY sitedelta.loadpreset.accesskey "l">
+<!ENTITY sitedelta.sidebar.pagesettings.accesskey "E">
+<!ENTITY sitedelta.togglesidebar.accesskey "D">
+<!ENTITY sitedelta.sidebar.pages.accesskey "s">
+<!ENTITY sitedelta.sidebar.updateall.accesskey "A">
+<!ENTITY sitedelta.sidebar.openall.accesskey "ö">
+<!ENTITY sitedelta.sidebar.showpresets.accesskey "V">
+<!ENTITY sitedelta.sidebar.showprefs.accesskey "E">
+<!ENTITY sitedelta.prefs.enablewatch.accesskey "ü">
+<!ENTITY sitedelta.sidebar.search.accesskey "n">
+<!ENTITY sitedelta.prefs.highlightonload.desc "Beim Besuch von bekannten Seiten kann SiteDelta automatisch die Änderungen hervorheben.">
+<!ENTITY sitedelta.prefs.highlightonload "Änderungen beim Besuch sofort hervorheben">

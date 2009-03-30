@@ -1,0 +1,119 @@
+<!ENTITY sitedelta.title "SiteDelta">
+<!ENTITY sitedelta.highlight "Підсвітити зміни">
+<!ENTITY sitedelta.removehighlight "Прибрати підсвітку">
+<!ENTITY sitedelta.backups "Резервні копії">
+<!ENTITY sitedelta.createbackup "Створити резервну копію цієї версії">
+<!ENTITY sitedelta.regions "Області">
+<!ENTITY sitedelta.loadpreset "Із шаблону">
+<!ENTITY sitedelta.scanregion "+ Слідкувати за областю">
+<!ENTITY sitedelta.ignoreregion "+ Ігнорувати область">
+<!ENTITY sitedelta.pages "Сторінки">
+<!ENTITY sitedelta.openwatches "Відкрити усе у вкладках...">
+<!ENTITY sitedelta.togglesidebar "Список спостереження">
+<!ENTITY sitedelta.sidebar.pagesettings "Властивості сторінки">
+<!ENTITY sitedelta.sidebar.update "Перевірити зміни">
+<!ENTITY sitedelta.sidebar.markseen "Помітити зміни як переглянуті">
+<!ENTITY sitedelta.sidebar.delete "Видалити">
+<!ENTITY sitedelta.sidebar.title "Спостерігати за:">
+<!ENTITY sitedelta.sidebar.openpage "Відкрити сторінку">
+<!ENTITY sitedelta.sidebar.pages "Сторінки">
+<!ENTITY sitedelta.sidebar.search "Пошук">
+<!ENTITY sitedelta.sidebar.updateall "Перевірити усі сторінки">
+<!ENTITY sitedelta.sidebar.openall "Відкрити змінені сторінки">
+<!ENTITY sitedelta.sidebar.showprefs "Налаштування SiteDelta...">
+<!ENTITY sitedelta.sidebar.showpresets "Редагувати шаблони...">
+<!ENTITY sitedelta.properties.savepreset "Зберегти як шаблон">
+<!ENTITY sitedelta.properties.title "Властивості сторінки">
+<!ENTITY sitedelta.properties.lblname "Ім'я">
+<!ENTITY sitedelta.properties.lbltitle "Заголовок">
+<!ENTITY sitedelta.properties.lblurl "URL:">
+<!ENTITY sitedelta.properties.lblcheck "Переглянуто:">
+<!ENTITY sitedelta.properties.uselogin "Використовувати збережений пароль (із менеджера паролів)">
+<!ENTITY sitedelta.properties.pageinfo "Інформація про сторінку">
+<!ENTITY sitedelta.properties.whattoscan "Властивості сканування">
+<!ENTITY sitedelta.properties.whentoscan "Графік сканування">
+<!ENTITY sitedelta.properties.loadsettings "Завантажити налаштування">
+<!ENTITY sitedelta.properties.loaddefault "Стандартні">
+<!ENTITY sitedelta.properties.savesettings "Зберегти налаштування">
+<!ENTITY sitedelta.properties.savedefault "Зберегти як стандартні">
+<!ENTITY sitedelta.properties.editdefault "Редагувати стандартні...">
+<!ENTITY sitedelta.properties.editpresets "Редагувати шаблони...">
+<!ENTITY sitedelta.preset.close "Закрити">
+<!ENTITY sitedelta.preset.default "Стандартні">
+<!ENTITY sitedelta.preset.on "Вкл.">
+<!ENTITY sitedelta.preset.off "Викл.">
+<!ENTITY sitedelta.preset.title "Редгування шаблонів">
+<!ENTITY sitedelta.preset.descname "Будь ласка, введіть назву для шаблону областей:">
+<!ENTITY sitedelta.preset.descurl "Адреса, що відповідає шаблону (використовуйте маски ''*'' і ''?''):">
+<!ENTITY sitedelta.preset.descinclude "Слідкувати за областями:">
+<!ENTITY sitedelta.preset.descexclude "Ігнорувати області:">
+<!ENTITY sitedelta.preset.delete "Видалити">
+<!ENTITY sitedelta.preset.duplicate "Дублювати">
+<!ENTITY sitedelta.preset.lblname "Ім'я">
+<!ENTITY sitedelta.preset.lblurl "URL:">
+<!ENTITY sitedelta.prefs.about "Про SiteDelta">
+<!ENTITY sitedelta.prefs.about.title "SiteDelta">
+<!ENTITY sitedelta.prefs.about.text "Інформує про зміни на сторінках та підсвічує їх.">
+<!ENTITY sitedelta.prefs.about.translation "Переклад на українську мову: Torbins">
+<!ENTITY sitedelta.prefs.whattoscan "Властивості сканування">
+<!ENTITY sitedelta.prefs.whentoscan "Графік сканування">
+<!ENTITY sitedelta.prefs.reaction "Після сканування">
+<!ENTITY sitedelta.prefs.title "SiteDelta - Налаштування">
+<!ENTITY sitedelta.prefs.add "Новий текст">
+<!ENTITY sitedelta.prefs.remove "Видалений текст">
+<!ENTITY sitedelta.prefs.move "Переміщений текст">
+<!ENTITY sitedelta.prefs.bgcolor "Колір фону:">
+<!ENTITY sitedelta.prefs.bordercolor "Колір рамки:">
+<!ENTITY sitedelta.prefs.regions "Області">
+<!ENTITY sitedelta.prefs.scanregion "Колір областей для спостереження:">
+<!ENTITY sitedelta.prefs.ignoreregion "Колір ігнорованих областей:">
+<!ENTITY sitedelta.prefs.showregions.desc "Разом з підсіченим текстом будуть показані контури областей.">
+<!ENTITY sitedelta.prefs.showregions "Показувати області">
+<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta може інформувати вас про додані або видалені малюнки (або змінені малюнки, якщо імена їх файлів були змінені)">
+<!ENTITY sitedelta.prefs.scanimages "Перевіряти адреси малюнків">
+<!ENTITY sitedelta.prefs.scandeleted.desc "Якщо активовано, SiteDelta буде повідомляти про видалений зі сторінки текст (може загромаджувати великі сторінки)">
+<!ENTITY sitedelta.prefs.scandeleted "Перевіряти видалений текст">
+<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta може ігнорувати числа, якщо вони часто міняються (наприклад, число повідомлень на форумі)">
+<!ENTITY sitedelta.prefs.ignorenumbers "Ігнорувати зміни чисел">
+<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta може ігнорувати зміну нижнього регістру на верхній та навпаки.">
+<!ENTITY sitedelta.prefs.ignorecase "Ігнорувати регістр">
+<!ENTITY sitedelta.prefs.settings "Налаштування">
+<!ENTITY sitedelta.prefs.appearance "Зовнішній вигляд">
+<!ENTITY sitedelta.prefs.watch "Спостереження">
+<!ENTITY sitedelta.prefs.backuppages.desc "Якщо сторінка змінилася, SiteDelta може автоматично зберегти резервну копію (наприклад, для документації).">
+<!ENTITY sitedelta.prefs.backuppages "Робити резервні копії змінених сторінок">
+<!ENTITY sitedelta.prefs.scanonload.desc "Під час відвідання сторінок, за якими ведеться спостереження, SiteDelta може автоматично їх сканувати.">
+<!ENTITY sitedelta.prefs.scanonload "Сканувати сторінки під час відвідання">
+<!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta може регулярно сканувати сторінки та повідомляти про зміни.">
+<!ENTITY sitedelta.prefs.enablewatch "Періодично сканувати сторінки">
+<!ENTITY sitedelta.prefs.watchpagetimeout.desc "Якщо завантаження сторінки триває довше, SiteDelta його відмінить.">
+<!ENTITY sitedelta.prefs.watchpagetimeout "Обмеження часу на завантаження сторінки (сек.)">
+<!ENTITY sitedelta.prefs.watchpagedelay.desc "Стільки часу SiteDelta відпочиватиме між двома скануваннями (аби зменшити навантаження на комп'ютер).">
+<!ENTITY sitedelta.prefs.watchpagedelay "Чекати після сканування сторінки (сек.)">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "Робить SiteDelta трохи повільнішим, але усуває деякі помилкові повідомлення.">
+<!ENTITY sitedelta.prefs.watchenablescript "Дозволити JavaScript при скануванні сторінок">
+<!ENTITY sitedelta.prefs.frequency.default.desc "Період сканування, встановлений в діалозі налаштувань">
+<!ENTITY sitedelta.prefs.frequency.default "Загальний графік">
+<!ENTITY sitedelta.prefs.frequency.never.desc "Періодичне сканування цієї сторінки не буде проводитись.">
+<!ENTITY sitedelta.prefs.frequency.never "Ніколи">
+<!ENTITY sitedelta.prefs.frequency.auto.desc "SiteDelta намагатиметься самостійно визначити правильну частоту. Спочатку скануватиме часто, але згодом усе рідше, якщо сторінка не змінюється.">
+<!ENTITY sitedelta.prefs.frequency.auto "Автоматично підбрати">
+<!ENTITY sitedelta.prefs.frequency.desc "Встановити періодичність вручну:">
+<!ENTITY sitedelta.prefs.frequency.weekly "Щотижнево">
+<!ENTITY sitedelta.prefs.frequency.daily "Щоденно">
+<!ENTITY sitedelta.prefs.frequency.hourly "Щогодинно">
+<!ENTITY sitedelta.prefs.frequency.custom "Кожні">
+<!ENTITY sitedelta.prefs.frequency.minutes "хвилин">
+<!ENTITY sitedelta.prefs.notifyalert "Показувати повідомлення">
+<!ENTITY sitedelta.prefs.notifyalert.desc "Показує спливаючі повідомлення в нижній правій частині екрану, якщо на якійсь сторінці знайдені зміни.">
+<!ENTITY sitedelta.prefs.notifysound "Звукове повідомлення:">
+<!ENTITY sitedelta.prefs.notifysound.none "Відсутнє">
+<!ENTITY sitedelta.prefs.notifysound.beep "Біп">
+<!ENTITY sitedelta.prefs.notifysound.alert "Системне ''Попередження''">
+<!ENTITY sitedelta.prefs.notifysound.newmail "Повідомлення ''Новий лист''">
+<!ENTITY sitedelta.prefs.notifysound.custom "Задане:">
+
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">

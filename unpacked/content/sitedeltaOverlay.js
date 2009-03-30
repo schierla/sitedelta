@@ -7,7 +7,9 @@ var sitedeltaOverlay= {
    var result=sitedeltaService.getPage(doc.URL); 
    if(result.status!=sitedeltaService.RESULT_NEW) {
 	if(sitedeltaService.scanOnLoad) sitedeltaService.scanPage(doc);
-	// if(sitedeltaService.highlightOnLoad) sitedeltaOverlay.highlightPage(doc);
+	if(sitedeltaService.highlightOnLoad) {
+     doc.sitedeltaMatch = -2; sitedeltaOverlay.pageChanged();
+    }
    }
   }
  },
@@ -65,7 +67,10 @@ var sitedeltaOverlay= {
  openWatch: function(pg) {
   gBrowser.selectedTab = gBrowser.addTab(pg.id);
  },
- openAllWatches: function() {
+ updateAll: function() {
+  sitedeltaService.updateAll();
+ },
+ openChanged: function() {
   var menu=document.getElementById("sitedelta-watch-popup");
   var cur=menu.firstChild; while(cur) {if(cur.id!="") gBrowser.selectedTab=gBrowser.addTab(cur.id); cur=cur.nextSibling; }
  }, 
@@ -96,9 +101,11 @@ var sitedeltaOverlay= {
    icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta.gif");
   } else if(page.status>0) {
    icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta-changed.gif");
-   if(sitedeltaService.highlightOnLoad && !content.document.sitedeltaMatch) sitedeltaOverlay.highlightPage(content.document);
   } else { 
    icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta-known.gif");
+  }
+  if(content.document.sitedeltaMatch==-2) {
+   content.document.sitedeltaMatch=-1; sitedeltaOverlay.highlightPage(content.document);
   }
  },
  install: function() {
@@ -259,6 +266,10 @@ var sitedeltaOverlay= {
  listBackups: function(menu) {
   sitedelta.menuBackups(menu, content.window.location.href); 	
  },
+ showPopup: function(e) {
+  var popup = document.getElementById("sitedelta-popup");
+  popup.showPopup(document.getElementById("sitedelta-status"), -1, -1, "popup", "bottomleft", "topleft"); 
+ },
  highlightChanges: function(e) {
   if(e.button && e.button!=0) return;
   if(e.ctrlKey) {
@@ -295,8 +306,8 @@ var sitedeltaOverlay= {
    if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("noChangesMessage"), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {});
   } else {
    if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("changesFoundMessage").replace("%d",changes), "sitedelta", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_LOW, {});
-   content.document.sitedeltaMatch = -1;
   }
+  content.document.sitedeltaMatch = -1;
  }
 }
 

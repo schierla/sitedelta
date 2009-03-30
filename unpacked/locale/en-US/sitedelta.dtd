@@ -10,8 +10,6 @@
 <!ENTITY sitedelta.pages "Pages">
 <!ENTITY sitedelta.openwatches "Open all in tabs...">
 <!ENTITY sitedelta.togglesidebar "SiteDelta Sidebar">
-<!ENTITY sitedelta.sidebar.commandkey "S">
-<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
 <!ENTITY sitedelta.sidebar.pagesettings "Page properties">
 <!ENTITY sitedelta.sidebar.update "Check for changes">
 <!ENTITY sitedelta.sidebar.markseen "Mark changes as seen">
@@ -92,8 +90,6 @@
 <!ENTITY sitedelta.prefs.watchpagetimeout "Time limit for loading the page (sec.)">
 <!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta waits this duration between checking two pages (to reduce server load).">
 <!ENTITY sitedelta.prefs.watchpagedelay "Delay after checking the page (sec.)">
-<!ENTITY sitedelta.prefs.watchscandelay.desc "">
-<!ENTITY sitedelta.prefs.watchscandelay "Scan frequency (min.)">
 <!ENTITY sitedelta.prefs.watchenablescript.desc "Makes SiteDelta a bit slower, but avoids some false alerts.">
 <!ENTITY sitedelta.prefs.watchenablescript "Enable JavaScript for site watch">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Use default setting (set in the preferences dialog)">
@@ -116,3 +112,26 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "System alert">
 <!ENTITY sitedelta.prefs.notifysound.newmail "New mail notification">
 <!ENTITY sitedelta.prefs.notifysound.custom "Custom">
+
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">
+<!ENTITY sitedelta.highlight.accesskey "H">
+<!ENTITY sitedelta.backups.accesskey "b">
+<!ENTITY sitedelta.createbackup.accesskey "b">
+<!ENTITY sitedelta.regions.accesskey "r">
+<!ENTITY sitedelta.scanregion.accesskey "W">
+<!ENTITY sitedelta.ignoreregion.accesskey "I">
+<!ENTITY sitedelta.loadpreset.accesskey "l">
+<!ENTITY sitedelta.sidebar.pagesettings.accesskey "a">
+<!ENTITY sitedelta.togglesidebar.accesskey "D">
+<!ENTITY sitedelta.sidebar.pages.accesskey "p">
+<!ENTITY sitedelta.sidebar.updateall.accesskey "C">
+<!ENTITY sitedelta.sidebar.openall.accesskey "O">
+<!ENTITY sitedelta.sidebar.showpresets.accesskey "M">
+<!ENTITY sitedelta.sidebar.showprefs.accesskey "s">
+<!ENTITY sitedelta.prefs.enablewatch.accesskey "e">
+<!ENTITY sitedelta.sidebar.search.accesskey "s">
+<!ENTITY sitedelta.prefs.highlightonload.desc "When visiting watched pages, SiteDelta can automatically highlight the changes.">
+<!ENTITY sitedelta.prefs.highlightonload "Highlight changes on page visit">

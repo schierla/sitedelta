@@ -10,9 +10,7 @@
 <!ENTITY sitedelta.pages "Pagine">
 <!ENTITY sitedelta.openwatches "Apri tutte le pagine elencate in nuove schede...">
 <!ENTITY sitedelta.togglesidebar "Barra laterale di SiteDelta">
-<!ENTITY sitedelta.sidebar.commandkey "S">
-<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
-<!ENTITY sitedelta.sidebar.pagesettings "Proprietà della pagina">
+<!ENTITY sitedelta.sidebar.pagesettings "Proprietï¿½ della pagina">
 <!ENTITY sitedelta.sidebar.update "Controlla cambiamenti">
 <!ENTITY sitedelta.sidebar.markseen "Marca cambiamenti come visti">
 <!ENTITY sitedelta.sidebar.delete "Cancella">
@@ -25,7 +23,7 @@
 <!ENTITY sitedelta.sidebar.showprefs "Impostazioni di SiteDelta...">
 <!ENTITY sitedelta.sidebar.showpresets "Gestione profili...">
 <!ENTITY sitedelta.properties.savepreset "Salva come profilo">
-<!ENTITY sitedelta.properties.title "Proprietà della pagina">
+<!ENTITY sitedelta.properties.title "Proprietï¿½ della pagina">
 <!ENTITY sitedelta.properties.lblname "Nome:">
 <!ENTITY sitedelta.properties.lbltitle "Titolo:">
 <!ENTITY sitedelta.properties.lblurl "URL:">
@@ -71,36 +69,34 @@
 <!ENTITY sitedelta.prefs.ignoreregion "Colore delle regioni ignorate: ">
 <!ENTITY sitedelta.prefs.showregions.desc "Traccia il bordo delle regioni controllate ed ignorate quando vengono evidenziati i cambiamenti.">
 <!ENTITY sitedelta.prefs.showregions "Traccia il bordo delle regioni">
-<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta può informare riguardo immagini aggiunte o rimosse (o immagini modificate se è stato modificato il nome del file)">
+<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta puï¿½ informare riguardo immagini aggiunte o rimosse (o immagini modificate se ï¿½ stato modificato il nome del file)">
 <!ENTITY sitedelta.prefs.scanimages "Controlla gli indirizzi delle immagini">
-<!ENTITY sitedelta.prefs.scandeleted.desc "SiteDelta può informare riguardo testo rimosso dalle pagine (può apparire poco chiaro su pagine complesse)">
+<!ENTITY sitedelta.prefs.scandeleted.desc "SiteDelta puï¿½ informare riguardo testo rimosso dalle pagine (puï¿½ apparire poco chiaro su pagine complesse)">
 <!ENTITY sitedelta.prefs.scandeleted "Controlla testo rimosso">
-<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta può ignorare i numeri se cambiano frequentemente (es. conteggio dei post in un forum)">
+<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta puï¿½ ignorare i numeri se cambiano frequentemente (es. conteggio dei post in un forum)">
 <!ENTITY sitedelta.prefs.ignorenumbers "Ignora numeri cambiati">
-<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta può ignorare i cambiamenti tra maiuscolo e minuscolo.">
+<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta puï¿½ ignorare i cambiamenti tra maiuscolo e minuscolo.">
 <!ENTITY sitedelta.prefs.ignorecase "Ignora la distinzione tra maiuscolo e minuscolo">
 <!ENTITY sitedelta.prefs.settings "Impostazioni">
 <!ENTITY sitedelta.prefs.appearance "Aspetto">
 <!ENTITY sitedelta.prefs.watch "SiteWatch">
-<!ENTITY sitedelta.prefs.backuppages.desc "Quando vengono trovati cambiamenti in una pagina SiteDelta può automaticamente salvare una copia di backup (es. per archiviazioni).">
+<!ENTITY sitedelta.prefs.backuppages.desc "Quando vengono trovati cambiamenti in una pagina SiteDelta puï¿½ automaticamente salvare una copia di backup (es. per archiviazioni).">
 <!ENTITY sitedelta.prefs.backuppages "Esegui il backup di pagine cambiate">
 <!ENTITY sitedelta.prefs.scanonload.desc "When visiting watched pages, SiteDelta can automatically scan for changes.">
 <!ENTITY sitedelta.prefs.scanonload "Controlla pagine conosciute quando vengono visitate">
-<!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta può controllare le pagine conosciute regolarmente e avvertire se avvengono cambiamenti.">
+<!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta puï¿½ controllare le pagine conosciute regolarmente e avvertire se avvengono cambiamenti.">
 <!ENTITY sitedelta.prefs.enablewatch "Abilita SiteWatch">
-<!ENTITY sitedelta.prefs.watchpagetimeout.desc "Se il caricamento di una pagina richiede più tempo SiteDelta ne interrompe il caricamento.">
+<!ENTITY sitedelta.prefs.watchpagetimeout.desc "Se il caricamento di una pagina richiede piï¿½ tempo SiteDelta ne interrompe il caricamento.">
 <!ENTITY sitedelta.prefs.watchpagetimeout "Limite di tempo per il caricamento di una pagina (sec.)">
 <!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta attende per questo intervallo di tempo tra il caricamento di una pagina e l'altra (per ridurre il carico dei server).">
 <!ENTITY sitedelta.prefs.watchpagedelay "Intervallo di tempo tra il caricamento di una pagina e l'altra (sec.)">
-<!ENTITY sitedelta.prefs.watchscandelay.desc "">
-<!ENTITY sitedelta.prefs.watchscandelay "Frquenza di controllo (min.)">
-<!ENTITY sitedelta.prefs.watchenablescript.desc "Rende SiteDelta leggermente più lento, ma evita alcuni falsi positivi.">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "Rende SiteDelta leggermente piï¿½ lento, ma evita alcuni falsi positivi.">
 <!ENTITY sitedelta.prefs.watchenablescript "Abilita JavaScript per SiteWatch">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Usa impostazioni predefinite (impostate nella scheda Preferenze)">
 <!ENTITY sitedelta.prefs.frequency.default "Predefinito">
 <!ENTITY sitedelta.prefs.frequency.never.desc "Utilizza questa opzione per ecludere questa pagina dal controllo automatico">
 <!ENTITY sitedelta.prefs.frequency.never "Mai">
-<!ENTITY sitedelta.prefs.frequency.auto.desc "Lascia il controllo della frequenza a SiteDelta. SiteDelta controllerà frquentemente ma ridurrà la frequenza se non verranno registrati cambiamenti per un lungo periodo.">
+<!ENTITY sitedelta.prefs.frequency.auto.desc "Lascia il controllo della frequenza a SiteDelta. SiteDelta controllerï¿½ frquentemente ma ridurrï¿½ la frequenza se non verranno registrati cambiamenti per un lungo periodo.">
 <!ENTITY sitedelta.prefs.frequency.auto "Automatica">
 <!ENTITY sitedelta.prefs.frequency.desc "Frequenza impostata:">
 <!ENTITY sitedelta.prefs.frequency.weekly "Ogni settimana">
@@ -116,3 +112,8 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Notifica di sistema">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Notifica tramite email">
 <!ENTITY sitedelta.prefs.notifysound.custom "Personalizzata">
+
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">

@@ -22,6 +22,7 @@
     <preference id="p_backuppages" name="extensions.sitedelta@schierla.de.backupPages" type="bool"/>
     <preference id="p_sitesettings" name="extensions.sitedelta@schierla.de.siteSettings" type="bool"/>
     <preference id="p_scanonload" name="extensions.sitedelta@schierla.de.scanOnLoad" type="bool"/>
+    <preference id="p_highlightonload" name="extensions.sitedelta@schierla.de.highlightOnLoad" type="bool"/>
     <preference id="p_watchpagedelay" name="extensions.sitedelta@schierla.de.watchPageDelay" type="int"/>
     <preference id="p_watchenablescript" name="extensions.sitedelta@schierla.de.watchEnableScript" type="bool" />
     <preference id="p_watchscandelay" name="extensions.sitedelta@schierla.de.watchScanDelay" type="int"/>
@@ -61,6 +62,8 @@
 </groupbox><groupbox>
 <checkbox preference="p_scanonload" class="header" label="&sitedelta.prefs.scanonload;" />
 <label>&sitedelta.prefs.scanonload.desc;</label>
+<checkbox preference="p_highlightonload" class="header" label="&sitedelta.prefs.highlightonload;" />
+<label>&sitedelta.prefs.highlightonload.desc;</label>
 </groupbox>
 <groupbox>
 <checkbox preference="p_watchenablescript" class="header" label="&sitedelta.prefs.watchenablescript;"/>

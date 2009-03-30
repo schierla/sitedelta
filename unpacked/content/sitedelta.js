@@ -41,7 +41,9 @@ var sitedelta = {
    var result=sitedeltaService.getPage(url);
    var cur=menu.firstChild; while(cur) {last=cur; cur=cur.nextSibling; if(last.regionEntry) menu.removeChild(last); }
 
-   var includeSeparator=menu.ownerDocument.getElementById('sitedelta-scanregions');
+   
+   var includeSeparator=menu.firstChild.nextSibling;
+   var excludeSeparator=includeSeparator.nextSibling.nextSibling;;
    for(var i=0; i<result.includes.length; i++) {
     var item = menu.ownerDocument.createElement("menuitem");
     item.setAttribute("label", result.includes[i]);
@@ -51,7 +53,6 @@ var sitedelta = {
     menu.insertBefore(item, includeSeparator);
    }
 
-   var excludeSeparator=menu.ownerDocument.getElementById('sitedelta-ignoreregions');
    for(var i=0; i<result.excludes.length; i++) {
     var item = menu.ownerDocument.createElement("menuitem");
     item.setAttribute("label", result.excludes[i]);
@@ -100,4 +101,12 @@ var sitedelta = {
   showProperties: function(url) {
    return window.openDialog("chrome://sitedelta/content/sitedeltaProperties.xul", "sitedelta-properties", "width=640,height=480,resizable=yes,centerscreen", url);
   },
+  toggleEnableWatch: function() {
+   sitedeltaService.enableWatch=!sitedeltaService.enableWatch;
+   sitedeltaService.savePrefs();
+  },
+  updatePagesPopup: function(menu) {
+   menu.lastChild.setAttribute("checked",sitedeltaService.enableWatch);
+   menu.firstChild.setAttribute("disabled", !sitedeltaService.enableWatch);
+  }
 }

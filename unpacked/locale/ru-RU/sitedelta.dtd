@@ -10,8 +10,6 @@
 <!ENTITY sitedelta.pages "Страницы">
 <!ENTITY sitedelta.openwatches "Открыть всё во вкладках...">
 <!ENTITY sitedelta.togglesidebar "Боковая панель SiteDelta">
-<!ENTITY sitedelta.sidebar.commandkey "S">
-<!ENTITY sitedelta.sidebar.modifierskey "Alt">
 <!ENTITY sitedelta.sidebar.pagesettings "Свойства страницы">
 <!ENTITY sitedelta.sidebar.update "Проверить изменения">
 <!ENTITY sitedelta.sidebar.markseen "Пометить изменения как просмотренные">
@@ -92,8 +90,6 @@
 <!ENTITY sitedelta.prefs.watchpagetimeout "Ограничение времени для загрузки страниц (сек.)">
 <!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta ждет столько времени между двумя проверками (чтобы уменьшить нагрузку).">
 <!ENTITY sitedelta.prefs.watchpagedelay "Ожидание после проверки страницы (сек.)">
-<!ENTITY sitedelta.prefs.watchscandelay.desc "empty">
-<!ENTITY sitedelta.prefs.watchscandelay "Частота сканирования (мин.)">
 <!ENTITY sitedelta.prefs.watchenablescript.desc "Делает SiteDelta немного медленнее, но устраняет некоторые ложные предупреждения.">
 <!ENTITY sitedelta.prefs.watchenablescript "Разрешить JavaScript для отслеживания сайтов">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Использовать настройки по умолчанию">
@@ -116,3 +112,8 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Системное предупреждение">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Уведомление о новом письме">
 <!ENTITY sitedelta.prefs.notifysound.custom "Заданный">
+
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">

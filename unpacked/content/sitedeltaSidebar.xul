@@ -10,23 +10,34 @@
 	
 <script src="chrome://sitedelta/content/sitedelta.js"/>
 <script src="chrome://sitedelta/content/sitedeltaSidebar.js"/>
+
+<keyset id="sitedeltaSidebarKeyset">
+ <key id="key_sitedeltaOpenPage" keycode="VK_RETURN" modifiers="control" />
+ <key id="key_sitedeltaUpdate" key=" " modifiers="control" />
+ <key id="key_sitedeltaDelete" keycode="VK_DELETE" modifiers="control" />
+ <key id="key_sitedeltaMarkSeen" keycode="VK_BACK" modifiers="control" />
+ <key id="key_sitedeltaPageSettings" keycode="VK_RETURN" modifiers="alt" />
+</keyset>
+
 <vbox flex="1">
 <hbox align="center">
-<label>&sitedelta.sidebar.search;</label>
-<textbox flex="1" id="sitedelta-search" oninput="sitedeltaSidebar.doSearch(this.value);"/>
-<button type="menu" label="&sitedelta.sidebar.pages;">
-<menupopup onpopupshowing="sitedeltaSidebar.updatePopup(this);">
-<menuitem id="sitedelta-updateall" label="&sitedelta.sidebar.updateall;" oncommand="sitedeltaSidebar.updateAll();"/>
-<menuitem label="&sitedelta.sidebar.openall;" oncommand="sitedeltaSidebar.openChanged();"/>
-<menuseparator/>
-<menuitem label="&sitedelta.sidebar.showpresets;" oncommand="sitedeltaSidebar.showPresets();"/>
-<menuitem label="&sitedelta.sidebar.showprefs;" oncommand="sitedeltaSidebar.showPrefs();"/>
-<menuseparator/>
-<menuitem type="checkbox" autocheck="false" id="sitedelta-enablewatch" label="&sitedelta.prefs.enablewatch;" oncommand="sitedeltaSidebar.toggleEnableWatch();"/>
-</menupopup></button></hbox>
+<label control="sitedelta-search" accesskey="&sitedelta.sidebar.search.accesskey;">&sitedelta.sidebar.search;</label>
+<textbox flex="1" id="sitedelta-search" oninput="sitedeltaSidebar.doSearch(this.value);" />
+<button type="menu" label="&sitedelta.sidebar.pages;" accesskey="&sitedelta.sidebar.pages.accesskey;">
+ <menupopup onpopupshowing="sitedelta.updatePagesPopup(this);" id="sitedelta-pages">
+  <menuitem label="&sitedelta.sidebar.updateall;" accesskey="&sitedelta.sidebar.updateall.accesskey;" oncommand="sitedeltaSidebar.updateAll();"/>
+  <menuitem label="&sitedelta.sidebar.openall;" accesskey="&sitedelta.sidebar.openall.accesskey;" oncommand="sitedeltaSidebar.openChanged();"/>
+  <menuseparator/>
+  <menuitem label="&sitedelta.sidebar.showpresets;" accesskey="&sitedelta.sidebar.showpresets.accesskey;" oncommand="sitedelta.showPresets('');"/>
+  <menuitem label="&sitedelta.sidebar.showprefs;" accesskey="&sitedelta.sidebar.showprefs.accesskey;" oncommand="sitedelta.showPrefs();"/>
+  <menuseparator/>
+  <menuitem type="checkbox" autocheck="false" label="&sitedelta.prefs.enablewatch;" accesskey="&sitedelta.prefs.enablewatch.accesskey;" oncommand="sitedelta.toggleEnableWatch();"/>
+ </menupopup>
+</button>
+</hbox>
 
 
-<listbox flex="1" id="sitedeltaPages" seltype="multiple" context="sitedelta-context" ondblclick="sitedeltaSidebar.openCurrent();" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending">
+<listbox flex="1" id="sitedeltaPages" seltype="multiple" context="sitedelta-context" ondblclick="sitedeltaSidebar.openCurrent();" onkeydown="sitedeltaSidebar.keyDown(event);" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending">
 <template>
 <rule><conditions><content uri="?uri" /><triple subject="?uri" predicate="http://home.netscape.com/NC-rdf#links" object="?links" /><member container="?links" child="?child" /><triple subject="?child" predicate="http://home.netscape.com/NC-rdf#name" object="?name" /></conditions><bindings><binding subject="?child" predicate="http://sitedelta.schierla.de/SD-rdf#status" object="?status" /></bindings><action><listitem label="?name" class="listitem-iconic" status="?status" uri="?child" /></action></rule>
 </template>
@@ -34,13 +45,13 @@
 </vbox>
 
 <popupset><menupopup id="sitedelta-context">
-<menuitem label="&sitedelta.sidebar.openpage;" default="true" oncommand="sitedeltaSidebar.openCurrent();"/>
+<menuitem label="&sitedelta.sidebar.openpage;" key="key_sitedeltaOpenPage" default="true" oncommand="sitedeltaSidebar.openCurrent();"/>
 <menuseparator/>
-<menuitem label="&sitedelta.sidebar.update;" oncommand="sitedeltaSidebar.updateCurrent();"/>
-<menuitem label="&sitedelta.sidebar.markseen;" oncommand="sitedeltaSidebar.markSeen();" />
-<menuitem label="&sitedelta.sidebar.delete;" oncommand="sitedeltaSidebar.deletePage();"/>
+<menuitem label="&sitedelta.sidebar.update;" key="key_sitedeltaUpdate" oncommand="sitedeltaSidebar.updateCurrent();"/>
+<menuitem label="&sitedelta.sidebar.markseen;" key="key_sitedeltaMarkSeen" oncommand="sitedeltaSidebar.markSeen();" />
+<menuitem label="&sitedelta.sidebar.delete;" key="key_sitedeltaDelete" oncommand="sitedeltaSidebar.deletePage();"/>
 <menuseparator/>
-<menuitem label="&sitedelta.sidebar.pagesettings;" oncommand="sitedeltaSidebar.showManager();" />
+<menuitem label="&sitedelta.sidebar.pagesettings;" key="key_sitedeltaPageSettings" oncommand="sitedeltaSidebar.showManager();" />
 </menupopup></popupset>
 
 </page>

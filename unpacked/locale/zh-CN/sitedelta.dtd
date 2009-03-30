@@ -10,8 +10,6 @@
 <!ENTITY sitedelta.pages "页面">
 <!ENTITY sitedelta.openwatches "在标签页中打开所有...">
 <!ENTITY sitedelta.togglesidebar "SiteDelta 侧栏">
-<!ENTITY sitedelta.sidebar.commandkey "S">
-<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
 <!ENTITY sitedelta.sidebar.pagesettings "页面属性">
 <!ENTITY sitedelta.sidebar.update "扫描更改">
 <!ENTITY sitedelta.sidebar.markseen "标记更改为已读">
@@ -92,8 +90,6 @@
 <!ENTITY sitedelta.prefs.watchpagetimeout "超时时间(秒)">
 <!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta 在扫描两个页面之间会间隔一定时间以减轻服务器压力.">
 <!ENTITY sitedelta.prefs.watchpagedelay "扫描页面后延迟时间(秒)">
-<!ENTITY sitedelta.prefs.watchscandelay.desc "">
-<!ENTITY sitedelta.prefs.watchscandelay "扫描频率(分钟)">
 <!ENTITY sitedelta.prefs.watchenablescript.desc "会使 SiteDelta 缓慢一些, 但可以避免一些错误提示.">
 <!ENTITY sitedelta.prefs.watchenablescript "站点监视启用 JavaScript">
 <!ENTITY sitedelta.prefs.frequency.default.desc "使用默认设置 (选项中的设置)">
@@ -116,3 +112,8 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "系统警报">
 <!ENTITY sitedelta.prefs.notifysound.newmail "系统新邮件通知">
 <!ENTITY sitedelta.prefs.notifysound.custom "自定义">
+
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">

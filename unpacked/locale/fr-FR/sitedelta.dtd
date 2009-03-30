@@ -10,8 +10,6 @@
 <!ENTITY sitedelta.pages "Pages">
 <!ENTITY sitedelta.openwatches "Tout ouvrir dans des onglets">
 <!ENTITY sitedelta.togglesidebar "Panneau latéral de SiteDelta">
-<!ENTITY sitedelta.sidebar.commandkey "S">
-<!ENTITY sitedelta.sidebar.modifierskey "alt accel">
 <!ENTITY sitedelta.sidebar.pagesettings "Propriétés de la page">
 <!ENTITY sitedelta.sidebar.update "Vérifier les changements">
 <!ENTITY sitedelta.sidebar.markseen "Marquer les changements comme lus">
@@ -92,8 +90,6 @@
 <!ENTITY sitedelta.prefs.watchpagetimeout "Temps maximum de chargement de page (sec)">
 <!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta patiente tant de temps entre la vérification de deux pages (pour réduire le chargement du serveur).">
 <!ENTITY sitedelta.prefs.watchpagedelay "Délai après vérification de page (sec)">
-<!ENTITY sitedelta.prefs.watchscandelay.desc "Vous pouvez choisir la durée de l&apos;intervalle entre chacune des vérifications de mise à jour">
-<!ENTITY sitedelta.prefs.watchscandelay "Fréquence de scan (min)">
 <!ENTITY sitedelta.prefs.watchenablescript.desc "Rend SiteDelta un peu plus lent, mais évite d&apos;avoir de fausses alertes.">
 <!ENTITY sitedelta.prefs.watchenablescript "Activer JavaScript pour voir le site">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Utiliser les paramètres par défaut">
@@ -116,3 +112,8 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Alerte système">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Signal de nouveau courriel">
 <!ENTITY sitedelta.prefs.notifysound.custom "Personnalisé">
+
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">

@@ -669,7 +669,7 @@ SiteDelta.prototype = {
         var pages = bag.GetElements();
         while(pages.hasMoreElements()) {
         	var page = pages.getNext();
-        	this.updatePage(page.Value);
+        	this.updatePage(page.QueryInterface(Ci.nsIRDFResource).Value);
         }
     },
     updatePage: function(url) {

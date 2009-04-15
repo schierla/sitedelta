@@ -3,7 +3,7 @@
 <!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
 <prefwindow id="sitedelta-prefs"
      title="&sitedelta.prefs.title;"
-     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" ondialogaccept="accept();" onload="previewColors();">
+     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" ondialogaccept="accept();" ondialogcancel="accept();" onload="previewColors();">
 <prefpane flex="1" id="sitedelta-pref-pane" label="SiteDelta" image="chrome://sitedelta/content/sitedeltaGross.gif">
   <preferences>
     <preference id="p_addbackground" name="extensions.sitedelta@schierla.de.addBackground" type="string"/>

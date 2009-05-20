@@ -52,6 +52,9 @@ SiteDelta.prototype = {
     watchPageTimeout: null,
     notifySound: null,
     notifyAlert: null,
+    autoMinDelay: null,
+    autoMaxDelay: null,
+    autoDelayPercent: null,
     RDF: null,
     rdfService: null,
     _strings: null,
@@ -763,6 +766,9 @@ SiteDelta.prototype = {
         this.enableWatch = this._prefs.getBoolPref("enableWatch");
         this.watchEnableScript = this._prefs.getBoolPref("watchEnableScript");
         this.siteSettings = this._prefs.getBoolPref("siteSettings");
+        this.autoMinDelay = this._prefs.getIntPref("autoMinDelay");
+        this.autoMaxDelay = this._prefs.getIntPref("autoMaxDelay");
+        this.autoDelayPercent = this._prefs.getIntPref("autoDelayPercent");
 		if(this._watchUrl == null) {
 	        this._timer.cancel();
             this._timer.initWithCallback(this, 5000, this._timer.TYPE_ONE_SHOT);
@@ -822,22 +828,35 @@ SiteDelta.prototype = {
     },
     _scheduleNextScan: function(result) {
         if (this.RDF.GetTarget(this._rr(result.url), this._rr(NS_RDF + "name"), true)) {
-		var delay= (result.watchDelay==0?this.watchScanDelay:result.watchDelay);
-        var time = Date.now();
-        var nextScan = this._getNextScan(result.url);
-        if (delay == -1 || delay == 0)
-            time = 0;
-        else if (result.status == 1)
-            time = 0;
-        else if (delay < -1) {
-            time -= delay*60000;
-            delay*=1.5; if(delay<-10080) delay=-10080; result.watchDelay=delay; this.putPage(result);
-        } else if (delay > 0)
-            time += delay*60000+1;
-        if(time > nextScan && nextScan > Date.now()) time = nextScan;
-        if (this.RDF.GetTarget(this._rr(result.url), this._rr(SD_RDF + "nextScan"), true))
-            this.RDF.Change(this._rr(result.url), this._rr(SD_RDF + "nextScan"), this.RDF.GetTarget(this._rr(result.url), this._rr(SD_RDF + "nextScan"), true).QueryInterface(Ci.nsIRDFLiteral), this._rl(time));
-        else this.RDF.Assert(this._rr(result.url), this._rr(SD_RDF + "nextScan"), this._rl(time), true);
+			var delay= (result.watchDelay==0?this.watchScanDelay:result.watchDelay);
+	        var time = Date.now();
+	        var nextScan = this._getNextScan(result.url);
+	        if (delay == -1 || delay == 0) {
+	            time = 0;
+	        } else if (result.status == 1) {
+	            time = 0;
+	        } else if (delay < -1) {
+	            time -= delay*60000;
+	        } else if (delay > 0)
+	            time += delay*60000+1;
+	        if(time > nextScan && nextScan > Date.now()) time = nextScan;
+	        if (this.RDF.GetTarget(this._rr(result.url), this._rr(SD_RDF + "nextScan"), true))
+	            this.RDF.Change(this._rr(result.url), this._rr(SD_RDF + "nextScan"), this.RDF.GetTarget(this._rr(result.url), this._rr(SD_RDF + "nextScan"), true).QueryInterface(Ci.nsIRDFLiteral), this._rl(time));
+	        else this.RDF.Assert(this._rr(result.url), this._rr(SD_RDF + "nextScan"), this._rl(time), true);
+	        
+	        if(delay < -1 && time != nextScan) {
+	        	if(result.status == 1) {
+	        		// will be increased twice afterwards
+	        		delay = delay * 100 / this.autoDelayPercent; 
+	        		delay = delay * 100 / this.autoDelayPercent; 
+	        		delay = delay * 100 / this.autoDelayPercent; 
+	        	} else {
+	        		delay = delay * this.autoDelayPercent / 100;
+	        	}
+		        if(delay < -this.autoMaxDelay) delay=-this.autoMaxDelay; 
+		        if(delay > -this.autoMinDelay) delay=-this.autoMinDelay; 
+		        result.watchDelay=delay; this.putPage(result);
+	        }
         }
 		if(this._watchUrl == null) {
 	        this._timer.cancel();

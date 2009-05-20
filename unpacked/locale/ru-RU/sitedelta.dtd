@@ -82,19 +82,19 @@
 <!ENTITY sitedelta.prefs.watch "Отслеживание сайта">
 <!ENTITY sitedelta.prefs.backuppages.desc "При обнаружении изменений на странице, SiteDelta может автоматически сохранить резеврную копию (например, для документации).">
 <!ENTITY sitedelta.prefs.backuppages "Делать резервную копию измененных страниц">
-<!ENTITY sitedelta.prefs.scanonload.desc "При посещении просмотренных ранее страниц, SiteDelta может автоматически сканировать их.">
+<!ENTITY sitedelta.prefs.scanonload.desc "При посещении ранее просмотренных страниц SiteDelta может автоматически сканировать их.">
 <!ENTITY sitedelta.prefs.scanonload "Сканировать известные страницы при посещении">
 <!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta может проверять известные страницы регулярно и сообщать об изменениях.">
-<!ENTITY sitedelta.prefs.enablewatch "Отслеживание страниц">
+<!ENTITY sitedelta.prefs.enablewatch "Включить отслеживание страниц">
 <!ENTITY sitedelta.prefs.watchpagetimeout.desc "Если загрузка страницы длится дольше, SiteDelta её отменяет.">
 <!ENTITY sitedelta.prefs.watchpagetimeout "Ограничение времени для загрузки страниц (сек.)">
 <!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta ждет столько времени между двумя проверками (чтобы уменьшить нагрузку).">
 <!ENTITY sitedelta.prefs.watchpagedelay "Ожидание после проверки страницы (сек.)">
-<!ENTITY sitedelta.prefs.watchenablescript.desc "Делает SiteDelta немного медленнее, но устраняет некоторые ложные предупреждения.">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "Немного замедляет SiteDelta, но устраняет некоторые ложные предупреждения.">
 <!ENTITY sitedelta.prefs.watchenablescript "Разрешить JavaScript для отслеживания сайтов">
 <!ENTITY sitedelta.prefs.frequency.default.desc "Использовать настройки по умолчанию">
 <!ENTITY sitedelta.prefs.frequency.default "По умолчанию">
-<!ENTITY sitedelta.prefs.frequency.never.desc "Используйте эту опцию для исключения страницы из автоматической проверки.">
+<!ENTITY sitedelta.prefs.frequency.never.desc "Используйте эту опцию для отключения автоматической проверки.">
 <!ENTITY sitedelta.prefs.frequency.never "Никогда">
 <!ENTITY sitedelta.prefs.frequency.auto.desc "Оставьте частоту для SiteDelta. SiteDelta начнет проверять с высокой частотой, но будет её понижать, если изменений не происходит длительное время.">
 <!ENTITY sitedelta.prefs.frequency.auto "Автоматически">
@@ -112,8 +112,25 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Системное предупреждение">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Уведомление о новом письме">
 <!ENTITY sitedelta.prefs.notifysound.custom "Заданный">
-
 <!ENTITY sitedelta.sidebar.sidebarkey "S">
 <!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
 <!ENTITY sitedelta.sidebar.menukey "S">
 <!ENTITY sitedelta.sidebar.menumods "shift accel">
+<!ENTITY sitedelta.highlight.accesskey "H">
+<!ENTITY sitedelta.backups.accesskey "b">
+<!ENTITY sitedelta.createbackup.accesskey "b">
+<!ENTITY sitedelta.regions.accesskey "r">
+<!ENTITY sitedelta.scanregion.accesskey "W">
+<!ENTITY sitedelta.ignoreregion.accesskey "I">
+<!ENTITY sitedelta.loadpreset.accesskey "I">
+<!ENTITY sitedelta.sidebar.pagesettings.accesskey "a">
+<!ENTITY sitedelta.togglesidebar.accesskey "D">
+<!ENTITY sitedelta.sidebar.pages.accesskey "p">
+<!ENTITY sitedelta.sidebar.updateall.accesskey "C">
+<!ENTITY sitedelta.sidebar.openall.accesskey "O">
+<!ENTITY sitedelta.sidebar.showpresets.accesskey "M">
+<!ENTITY sitedelta.sidebar.showprefs.accesskey "s">
+<!ENTITY sitedelta.prefs.enablewatch.accesskey "e">
+<!ENTITY sitedelta.sidebar.search.accesskey "s">
+<!ENTITY sitedelta.prefs.highlightonload.desc "При посещении ранее просмотренных страниц SiteDelta может автоматически подсветить изменения.">
+<!ENTITY sitedelta.prefs.highlightonload "Подсвечивать изменения при посещении страницы">

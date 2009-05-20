@@ -2,7 +2,7 @@ var sitedeltaSidebar = {
 onLoad: function() {
  var list=document.getElementById("sitedeltaPages");
  list.database.AddDataSource(sitedeltaService.RDF);
- list.builder.rebuild(); 
+ list.builder.rebuild();
 },
 openCurrent: function() {
  var gBrowser = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIWebNavigation).QueryInterface(Components.interfaces.nsIDocShellTreeItem).rootTreeItem.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIDOMWindow).getBrowser();
@@ -19,12 +19,13 @@ markSeen: function() {
 },
 openChanged: function() {
  var gBrowser = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIWebNavigation).QueryInterface(Components.interfaces.nsIDocShellTreeItem).rootTreeItem.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIDOMWindow).getBrowser();
- for(var i=0; i<document.getElementById("sitedeltaPages").getRowCount(); i++)
+ for(var i=0; getElementById("sitedeltaPages").getItemAtIndex(i); i++)
   if(document.getElementById("sitedeltaPages").getItemAtIndex(i).getAttribute("status")==1)
    gBrowser.selectedTab=gBrowser.addTab(document.getElementById("sitedeltaPages").getItemAtIndex(i).id);
 },
 updateAll: function() {
- for(var i=0; i<document.getElementById("sitedeltaPages").getRowCount(); i++)
+// sitedeltaService.updateAll();
+ for(var i=0; document.getElementById("sitedeltaPages").getItemAtIndex(i); i++)
   sitedeltaService.updatePage(document.getElementById("sitedeltaPages").getItemAtIndex(i).id);	
 },
 deletePage: function() {

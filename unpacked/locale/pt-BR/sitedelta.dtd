@@ -112,8 +112,25 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Alerta do sistema">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Notificação de nova mensagem">
 <!ENTITY sitedelta.prefs.notifysound.custom "Personalizado">
-
 <!ENTITY sitedelta.sidebar.sidebarkey "S">
 <!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
 <!ENTITY sitedelta.sidebar.menukey "S">
 <!ENTITY sitedelta.sidebar.menumods "shift accel">
+<!ENTITY sitedelta.highlight.accesskey "H">
+<!ENTITY sitedelta.backups.accesskey "b">
+<!ENTITY sitedelta.createbackup.accesskey "b">
+<!ENTITY sitedelta.regions.accesskey "r">
+<!ENTITY sitedelta.scanregion.accesskey "W">
+<!ENTITY sitedelta.ignoreregion.accesskey "I">
+<!ENTITY sitedelta.loadpreset.accesskey "l">
+<!ENTITY sitedelta.sidebar.pagesettings.accesskey "a">
+<!ENTITY sitedelta.togglesidebar.accesskey "D">
+<!ENTITY sitedelta.sidebar.pages.accesskey "p">
+<!ENTITY sitedelta.sidebar.updateall.accesskey "C">
+<!ENTITY sitedelta.sidebar.openall.accesskey "O">
+<!ENTITY sitedelta.sidebar.showpresets.accesskey "M">
+<!ENTITY sitedelta.sidebar.showprefs.accesskey "s">
+<!ENTITY sitedelta.prefs.enablewatch.accesskey "e">
+<!ENTITY sitedelta.sidebar.search.accesskey "s">
+<!ENTITY sitedelta.prefs.highlightonload.desc "Quando visitar sites observados SiteDelta poderá automaticamente realçar as mudanças.">
+<!ENTITY sitedelta.prefs.highlightonload "Realçar mudanças na página visitada.">

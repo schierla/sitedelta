@@ -25,3 +25,6 @@ pref("extensions.sitedelta@schierla.de.watchPageTimeout", 15);
 pref("extensions.sitedelta@schierla.de.watchScanDelay", 60);
 pref("extensions.sitedelta@schierla.de.notifySound", "beep");
 pref("extensions.sitedelta@schierla.de.notifyAlert", true);
+pref("extensions.sitedelta@schierla.de.autoDelayPercent", 150);
+pref("extensions.sitedelta@schierla.de.autoMinDelay", 10);
+pref("extensions.sitedelta@schierla.de.autoMaxDelay", 10080);

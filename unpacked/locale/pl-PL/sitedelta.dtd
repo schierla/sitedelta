@@ -36,8 +36,8 @@
 <!ENTITY sitedelta.properties.loaddefault "Przywróć domyślne">
 <!ENTITY sitedelta.properties.savesettings "Zapisz ustawienia">
 <!ENTITY sitedelta.properties.savedefault "Zapisz jako domyślne">
-<!ENTITY sitedelta.properties.editdefault "Edytuj domyślne...">
-<!ENTITY sitedelta.properties.editpresets "Edytuj wzorce...">
+<!ENTITY sitedelta.properties.editdefault "Edytuj domyślne…">
+<!ENTITY sitedelta.properties.editpresets "Edytuj wzorce…">
 <!ENTITY sitedelta.preset.close "Zamknij">
 <!ENTITY sitedelta.preset.default "Domyślne">
 <!ENTITY sitedelta.preset.on "Włącz">
@@ -112,8 +112,25 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Powiadomienie systemowe">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Powiadomienie o nowej wiadomości">
 <!ENTITY sitedelta.prefs.notifysound.custom "Własne">
-
 <!ENTITY sitedelta.sidebar.sidebarkey "S">
 <!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
 <!ENTITY sitedelta.sidebar.menukey "S">
 <!ENTITY sitedelta.sidebar.menumods "shift accel">
+<!ENTITY sitedelta.highlight.accesskey "H">
+<!ENTITY sitedelta.backups.accesskey "b">
+<!ENTITY sitedelta.createbackup.accesskey "b">
+<!ENTITY sitedelta.regions.accesskey "r">
+<!ENTITY sitedelta.scanregion.accesskey "W">
+<!ENTITY sitedelta.ignoreregion.accesskey "I">
+<!ENTITY sitedelta.loadpreset.accesskey "l">
+<!ENTITY sitedelta.sidebar.pagesettings.accesskey "a">
+<!ENTITY sitedelta.togglesidebar.accesskey "D">
+<!ENTITY sitedelta.sidebar.pages.accesskey "p">
+<!ENTITY sitedelta.sidebar.updateall.accesskey "C">
+<!ENTITY sitedelta.sidebar.openall.accesskey "O">
+<!ENTITY sitedelta.sidebar.showpresets.accesskey "M">
+<!ENTITY sitedelta.sidebar.showprefs.accesskey "s">
+<!ENTITY sitedelta.prefs.enablewatch.accesskey "e">
+<!ENTITY sitedelta.sidebar.search.accesskey "s">
+<!ENTITY sitedelta.prefs.highlightonload.desc "Podczas kolejnych odwiedzin oglądanej strony, zmiany będą automatycznie wyróżniane">
+<!ENTITY sitedelta.prefs.highlightonload "Wyróżniaj zmiany podczas kolejnych odwiedzin strony">

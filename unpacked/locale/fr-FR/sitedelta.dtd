@@ -112,8 +112,25 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "Alerte système">
 <!ENTITY sitedelta.prefs.notifysound.newmail "Signal de nouveau courriel">
 <!ENTITY sitedelta.prefs.notifysound.custom "Personnalisé">
-
 <!ENTITY sitedelta.sidebar.sidebarkey "S">
 <!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
 <!ENTITY sitedelta.sidebar.menukey "S">
 <!ENTITY sitedelta.sidebar.menumods "shift accel">
+<!ENTITY sitedelta.highlight.accesskey "u">
+<!ENTITY sitedelta.backups.accesskey "r">
+<!ENTITY sitedelta.createbackup.accesskey "g">
+<!ENTITY sitedelta.regions.accesskey "r">
+<!ENTITY sitedelta.scanregion.accesskey "o">
+<!ENTITY sitedelta.ignoreregion.accesskey "i">
+<!ENTITY sitedelta.loadpreset.accesskey "h">
+<!ENTITY sitedelta.sidebar.pagesettings.accesskey "a">
+<!ENTITY sitedelta.togglesidebar.accesskey "l">
+<!ENTITY sitedelta.sidebar.pages.accesskey "p">
+<!ENTITY sitedelta.sidebar.updateall.accesskey "e">
+<!ENTITY sitedelta.sidebar.openall.accesskey "o">
+<!ENTITY sitedelta.sidebar.showpresets.accesskey "i">
+<!ENTITY sitedelta.sidebar.showprefs.accesskey "f">
+<!ENTITY sitedelta.prefs.enablewatch.accesskey "v">
+<!ENTITY sitedelta.sidebar.search.accesskey "s">
+<!ENTITY sitedelta.prefs.highlightonload.desc "Lors de la visite des pages vues, SiteDelta peut surligner automatiquement les modifications">
+<!ENTITY sitedelta.prefs.highlightonload "Surligner les modifications sur la page visitée">

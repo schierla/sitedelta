@@ -83,7 +83,7 @@
 <!ENTITY sitedelta.prefs.backuppages.desc "当检测到页面更改时, SiteDelta 可以自动保存一个页面备份.">
 <!ENTITY sitedelta.prefs.backuppages "备份更改的页面">
 <!ENTITY sitedelta.prefs.scanonload.desc "当访问监视的页面时, SiteDelta 可以自动扫描更改内容.">
-<!ENTITY sitedelta.prefs.scanonload "访问监视页面时自动扫描">
+<!ENTITY sitedelta.prefs.scanonload "访问时自动扫描">
 <!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta 可以定期的扫描监视的页面并报告页面更改.">
 <!ENTITY sitedelta.prefs.enablewatch "启用站点监视">
 <!ENTITY sitedelta.prefs.watchpagetimeout.desc "当页面载入时间过长, SiteDelta 会取消载入此页面.">
@@ -112,8 +112,25 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "系统警报">
 <!ENTITY sitedelta.prefs.notifysound.newmail "系统新邮件通知">
 <!ENTITY sitedelta.prefs.notifysound.custom "自定义">
-
 <!ENTITY sitedelta.sidebar.sidebarkey "S">
 <!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
 <!ENTITY sitedelta.sidebar.menukey "S">
 <!ENTITY sitedelta.sidebar.menumods "shift accel">
+<!ENTITY sitedelta.highlight.accesskey "H">
+<!ENTITY sitedelta.backups.accesskey "b">
+<!ENTITY sitedelta.createbackup.accesskey "b">
+<!ENTITY sitedelta.regions.accesskey "r">
+<!ENTITY sitedelta.scanregion.accesskey "W">
+<!ENTITY sitedelta.ignoreregion.accesskey "I">
+<!ENTITY sitedelta.loadpreset.accesskey "I">
+<!ENTITY sitedelta.sidebar.pagesettings.accesskey "a">
+<!ENTITY sitedelta.togglesidebar.accesskey "D">
+<!ENTITY sitedelta.sidebar.pages.accesskey "p">
+<!ENTITY sitedelta.sidebar.updateall.accesskey "C">
+<!ENTITY sitedelta.sidebar.openall.accesskey "O">
+<!ENTITY sitedelta.sidebar.showpresets.accesskey "M">
+<!ENTITY sitedelta.sidebar.showprefs.accesskey "s">
+<!ENTITY sitedelta.prefs.enablewatch.accesskey "e">
+<!ENTITY sitedelta.sidebar.search.accesskey "s">
+<!ENTITY sitedelta.prefs.highlightonload.desc "当访问监视的页面时, SiteDelta 可以自动高亮显示页面更改.">
+<!ENTITY sitedelta.prefs.highlightonload "访问时自动高亮">

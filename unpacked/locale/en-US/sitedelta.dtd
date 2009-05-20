@@ -112,7 +112,6 @@
 <!ENTITY sitedelta.prefs.notifysound.alert "System alert">
 <!ENTITY sitedelta.prefs.notifysound.newmail "New mail notification">
 <!ENTITY sitedelta.prefs.notifysound.custom "Custom">
-
 <!ENTITY sitedelta.sidebar.sidebarkey "S">
 <!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
 <!ENTITY sitedelta.sidebar.menukey "S">

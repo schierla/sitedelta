@@ -89,4 +89,8 @@
     </statusbarpanel>
     <popupset><menupopup id="sitedelta-watch-popup" position="before_start" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending"><menuitem label="&sitedelta.openwatches;" default="true" oncommand="sitedeltaOverlay.openChanged();" /><menuseparator/><template><rule><conditions><content uri="?uri" /><triple subject="?uri" predicate="http://home.netscape.com/NC-rdf#links" object="?links" /><member container="?links" child="?child" /><triple subject="?child" predicate="http://home.netscape.com/NC-rdf#name" object="?name" /><triple subject="?child" predicate="http://sitedelta.schierla.de/SD-rdf#status" object="1" /></conditions><action><menuitem label="?name" uri="?child" oncommand="sitedeltaOverlay.openWatch(this)" /></action></rule></template></menupopup></popupset>
   </statusbar>
+  
+  <script src="chrome://sitedelta/content/sitedelta.js"/>
+  <script src="chrome://sitedelta/content/sitedeltaSidebar.js"/>
+  
 </overlay>

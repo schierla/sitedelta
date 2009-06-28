@@ -3,8 +3,8 @@ content	sitedelta	jar:chrome/sitedelta.jar!/content/ contentaccessible=yes
 locale	sitedelta	en-US	jar:chrome/sitedelta.jar!/locale/en-US/
 locale	sitedelta	de-DE	jar:chrome/sitedelta.jar!/locale/de-DE/
 locale	sitedelta	fr-FR	jar:chrome/sitedelta.jar!/locale/fr-FR/
-# locale	sitedelta	pl-PL	jar:chrome/sitedelta.jar!/locale/pl-PL/
-# locale	sitedelta	it-IT	jar:chrome/sitedelta.jar!/locale/it-IT/
+locale	sitedelta	pl-PL	jar:chrome/sitedelta.jar!/locale/pl-PL/
+locale	sitedelta	it-IT	jar:chrome/sitedelta.jar!/locale/it-IT/
 locale	sitedelta	pt-BR	jar:chrome/sitedelta.jar!/locale/pt-BR/
 locale	sitedelta	zh-CN	jar:chrome/sitedelta.jar!/locale/zh-CN/
 locale	sitedelta	ru-RU	jar:chrome/sitedelta.jar!/locale/ru-RU/

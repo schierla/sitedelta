@@ -19,7 +19,7 @@ markSeen: function() {
 },
 openChanged: function() {
  var gBrowser = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIWebNavigation).QueryInterface(Components.interfaces.nsIDocShellTreeItem).rootTreeItem.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIDOMWindow).getBrowser();
- for(var i=0; getElementById("sitedeltaPages").getItemAtIndex(i); i++)
+ for(var i=0; document.getElementById("sitedeltaPages").getItemAtIndex(i); i++)
   if(document.getElementById("sitedeltaPages").getItemAtIndex(i).getAttribute("status")==1)
    gBrowser.selectedTab=gBrowser.addTab(document.getElementById("sitedeltaPages").getItemAtIndex(i).id);
 },

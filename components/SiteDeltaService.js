@@ -71,7 +71,7 @@ SiteDelta.prototype = {
             return Ci.nsIDOMNodeFilter.FILTER_REJECT;
         if (cur.nodeName == 'SCRIPT' || cur.nodeName == 'NOSCRIPT' || cur.nodeName == 'STYLE')
             return Ci.nsIDOMNodeFilter.FILTER_REJECT;
-        if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG'))
+        if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG' && cur.getAttribute("src").indexOf("chrome:") != 0))
             return Ci.nsIDOMNodeFilter.FILTER_ACCEPT;
         return Ci.nsIDOMNodeFilter.FILTER_SKIP;
     },
@@ -290,8 +290,9 @@ SiteDelta.prototype = {
         var wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist);
         wbp.saveDocument(doc, file, dir, null, null, null);
     },
-    buildXPath: function(t) {
+    buildXPath: function(t, allowId) {
         var path = "";
+        if(allowId && t.id != "") return 'id("' + t.id + '")';
         while (t.nodeName != "HTML") {
             c = t.parentNode.firstChild;
             num = 1;
@@ -302,6 +303,7 @@ SiteDelta.prototype = {
             }
             path = "/" + t.nodeName.toLowerCase() + "[" + num + "]" + path;
             t = t.parentNode;
+            if(allowId && t.id != "") return 'id("' + t.id + '")' + path;
         }
         path = "/" + t.nodeName.toLowerCase() + path;
         return path;

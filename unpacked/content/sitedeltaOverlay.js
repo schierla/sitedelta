@@ -279,10 +279,7 @@ var sitedeltaOverlay= {
    return;
   }
   if(content.document.sitedeltaMatch) {
-   if(!content.document.getElementById("sitedelta-change"+content.document.sitedeltaMatch))
-    content.document.sitedeltaMatch=0;
-   content.window.location.hash="#sitedelta-change"+content.document.sitedeltaMatch;
-   content.document.sitedeltaMatch++;
+   sitedeltaOverlay.nextChange();   
    return;
   }
   var url=content.window.location.href;
@@ -292,7 +289,12 @@ var sitedeltaOverlay= {
   content.window.location.hash="#sitedelta-change0";
   content.document.sitedeltaMatch = 1; 
  },
- 
+ nextChange: function() {
+  if(!content.document.getElementById("sitedelta-change"+content.document.sitedeltaMatch))
+   content.document.sitedeltaMatch=0;
+  content.window.location.hash="#sitedelta-change"+content.document.sitedeltaMatch;
+  content.document.sitedeltaMatch++;	 
+ },
  highlightPage: function(doc) {
   var noB=false;
   if(gBrowser.getNotificationBox) noB=gBrowser.getNotificationBox();

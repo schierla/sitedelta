@@ -72,7 +72,7 @@
 <!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta can inform you about added or removed images (or changed images if the filename changed)">
 <!ENTITY sitedelta.prefs.scanimages "Check image addresses">
 <!ENTITY sitedelta.prefs.scandeleted.desc "When enabled, SiteDelta notifies about deleted text on pages (can look cluttered on complex pages)">
-<!ENTITY sitedelta.prefs.scandeleted "Check for deleted text">
+<!ENTITY sitedelta.prefs.scandeleted "Show deleted text">
 <!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta can ignore numbers if they change frequently (e.g. post counts on discussion boards)">
 <!ENTITY sitedelta.prefs.ignorenumbers "Ignore changed numbers">
 <!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta can ignore changes from lower to upper case or vice versa.">

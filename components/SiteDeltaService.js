@@ -214,18 +214,27 @@ SiteDelta.prototype = {
         
         this._excludes = [];
         for (var i = 0; i < result.excludes.length; i ++ ) {
-            this._excludes.push(doc.evaluate(result.excludes[i], doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext());
+        	var elements = doc.evaluate(result.excludes[i], doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null);
+            for(var element = elements.iterateNext(); element!=null; element = elements.iterateNext()) {
+                this._excludes.push(element);
+        	}
         }
         var regions = [];
         for (var i = 0; i < result.includes.length; i ++ ) {
             var xpath = result.includes[i];
-            var startElement = doc.evaluate(xpath, doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext();
-            if ( ! startElement) {
+            var elements = doc.evaluate(xpath, doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null);
+            for(var element = elements.iterateNext(); element!=null; element = elements.iterateNext()) {
+            	regions.push(element); 
+            } 
+        }
+        if(regions.length == 0) {
+        	if(result.content == " ") {
+                result.status=0;        		
+        	} else {
                 result.status=1;
-                this._observerService.notifyObservers(null, "sitedelta", result.url);
-                return 1;
-            }
-            regions.push(startElement);
+        	}
+            this._observerService.notifyObservers(null, "sitedelta", result.url);
+            return result.status;
         }
         var pos = 0,
         text = "";
@@ -383,21 +392,33 @@ SiteDelta.prototype = {
         
         this._excludes = [];
         for (var i = 0; i < result.excludes.length; i ++ ) {
-            this._excludes.push(doc.evaluate(result.excludes[i], doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext());
-            if (this._excludes[i] && this.showRegions)
-                this._excludes[i].style.outline = this.excludeRegion + " dotted 2px";
+        	var elements = doc.evaluate(result.excludes[i], doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null);
+            for(var element = elements.iterateNext(); element!=null; element = elements.iterateNext()) {
+        		this._excludes.push(element);
+        	}
         }
+		if (this.showRegions)
+			for(var i=0; i<this._excludes.length; i++)
+				this._excludes[i].style.outline = this.excludeRegion + " dotted 2px";
+		
         var regions = [];
         for (var i = 0; i < result.includes.length; i ++ ) {
             var xpath = result.includes[i];
-            var startElement = doc.evaluate(xpath, doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null).iterateNext();
-            if ( ! startElement)
-                return this.RESULT_ERROR;
-            if (this.showRegions)
-                startElement.style.outline = this.includeRegion + " dotted 2px";
-            regions.push(startElement);
+            var elements = doc.evaluate(xpath, doc, null, Ci.nsIDOMXPathResult.ANY_TYPE, null);
+            for(var element = elements.iterateNext(); element!=null; element = elements.iterateNext()) {
+	            regions.push(element);
+            }
+        }
+        if(regions.length == 0) {
+        	result.content = "";
+        	result.status = 0;
+            this._scheduleNextScan(result);            
+            this.putPage(result);
+        	return this.RESULT_ERROR;
         }
         for (var i = 0; i < regions.length; i ++ ) {
+            if (this.showRegions)
+            	regions[i].style.outline = this.includeRegion + " dotted 2px";        	
             text += this._getText(regions[i])
         }
         current = text;
@@ -1396,7 +1417,9 @@ SiteDelta.prototype = {
     	        _svc._scheduleNextScan(result);
         	} else {
 		        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
-		        if(result.status != _svc.RESULT_NEW && _svc.scanPage(_svc._iframe.contentDocument)>0) {
+		        if(result.status == _svc.RESULT_NEW) {
+		        	_svc._watchEndCheck(_svc); return;
+		        } else if(_svc.scanPage(_svc._iframe.contentDocument)>0) {
 			        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
 	        		if(_svc.notifyAlert) {
 						var alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);

@@ -549,7 +549,7 @@ SiteDelta.prototype = {
                         		((replace != null || last != "K") && wpos >= words.length && action != "D") || 
                         		((replace != null || last != "K") && wpos < words.length && npos < newt.length && this._clean(words[wpos]).length < newt[npos].length)) {
                             if (replace == null)
-                                replace = doc.createElement("SPAN");
+                                replace = doc.createElement("SITEDELTA_SPAN");
                             if (last == "K") {
                                 replace.appendChild(this._DOMChanged(doc, txt, -1, last));
                                 if (txt.match(/\[[^ ]+\] /))
@@ -1216,7 +1216,7 @@ SiteDelta.prototype = {
                 if (pos + 1 < last.length) {
                     var missingtext = last.substring(pos, last.length - 1);
                     if (missingtext.replace(/[ \t\n]/g, "") != "") {
-                        cur = node.ownerDocument.createElement("SPAN");
+                        cur = node.ownerDocument.createElement("SITEDELTA_SPAN");
                         node.appendChild(cur);
                         domactions.push({
                             action: "remove",
@@ -1289,13 +1289,13 @@ SiteDelta.prototype = {
         cur.newElement = hil;
     },
     _DOMChanged: function(doc, text, nr, type) {
-        var del = doc.createElement("SPAN"),
+        var del = doc.createElement("SITEDLETA_SPAN"),
         ret = del;
         if (type == "D" || type=="m") {
-            ret = doc.createElement("SPAN");
+            ret = doc.createElement("SITEDELTA_SPAN");
             if (text == "")
                 return ret;
-            del = doc.createElement("SPAN");
+            del = doc.createElement("SITEDELTA_DEL");
             var img = doc.createElement("IMG");
             if(type=="D") {
 	            del.setAttribute("style", "border: dotted " + this.removeBorder + " 1px; background: " + this.removeBackground + "; color: #000; display: none; position: absolute; width: auto; left: 0px; top: 0px; padding: 2px; -moz-border-radius: 5px; ");
@@ -1319,7 +1319,7 @@ SiteDelta.prototype = {
             }, false);
             ret.appendChild(del);
         } else if (type == "I" || type=="M") {
-            del = doc.createElement("SPAN");
+            del = doc.createElement("SITEDELTA_INS");
             ret = del;
             if(type=="I")
 	            del.setAttribute("style", "display: inline; outline: " + this.addBorder + " dotted 1px; background: " + this.addBackground + "; color: #000;");

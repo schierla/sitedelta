@@ -73,7 +73,7 @@ SiteDelta.prototype = {
             return Ci.nsIDOMNodeFilter.FILTER_REJECT;
         if (cur.nodeName == 'SCRIPT' || cur.nodeName == 'NOSCRIPT' || cur.nodeName == 'STYLE')
             return Ci.nsIDOMNodeFilter.FILTER_REJECT;
-        if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG' && cur.getAttribute("src").indexOf("chrome:") != 0))
+        if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG' && cur.hasAttribute("src") && cur.getAttribute("src").indexOf("chrome:") != 0))
             return Ci.nsIDOMNodeFilter.FILTER_ACCEPT;
         return Ci.nsIDOMNodeFilter.FILTER_SKIP;
     },
@@ -498,7 +498,7 @@ SiteDelta.prototype = {
                     drop = [];
                     while (cur) {
                         if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG')) {
-                            if (cur.nodeName == 'IMG')
+                            if (cur.nodeName == 'IMG' && cur.hasAttribute("src"))
                                 text = "[" + cur.getAttribute("src") + "] ";
                             else text = cur.data.replace(/\[/, "[ ") + " ";
                             text = text.replace(/\s+/g, ' ').replace(/^ +/, '').replace(/ +$/, ' ');
@@ -1108,12 +1108,13 @@ SiteDelta.prototype = {
         var tw = doc.createTreeWalker(node, Ci.nsIDOMNodeFilter.SHOW_ALL, this, true);
         while (cur = tw.nextNode()) {
             if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG')) {
-                if (cur.nodeName == 'IMG')
+                if (cur.nodeName == 'IMG' && cur.hasAttribute("src"))
                     text = "[" + cur.getAttribute("src") + "] ";
                 else text = cur.data.replace(/\[/, "[ ") + " ";
                 text = text.replace(/\s+/g, ' ');
                 text = text.replace(/^ +/, '');
                 text = text.replace(/ +$/, ' ');
+				text = text.replace(/[\u0000-\u001f]/g, "");
                 if (text != " ")
                     ret += text;
             }
@@ -1145,11 +1146,12 @@ SiteDelta.prototype = {
         var tw = doc.createTreeWalker(node, Ci.nsIDOMNodeFilter.SHOW_ALL, this, true);
         while (cur = tw.nextNode()) {
             if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG')) {
-                if (cur.nodeName == 'IMG') text = "[" + cur.getAttribute("src") + "] ";
+                if (cur.nodeName == 'IMG' && cur.hasAttribute("src")) text = "[" + cur.getAttribute("src") + "] ";
                 else text = cur.data.replace(/\[/, "[ ") + " ";
                 text = text.replace(/[ \t\n\r]+/g, ' ');
                 text = text.replace(/^ +/, '');
                 text = text.replace(/ +$/, ' ');
+				text = text.replace(/[\u0000-\u001f]/g, "");
                 ret += text;
                 if (text != "" && text != " ") {
                     if (!this._checkDeleted) {

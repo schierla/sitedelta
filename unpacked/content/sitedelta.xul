@@ -83,7 +83,7 @@
    </popupset> 
 
   <statusbar id="status-bar">
-    <statusbarpanel insertafter="livemark-button">
+    <statusbarpanel insertafter="livemark-button" id="sitedelta-button">
     <image id="sitedelta-status" onclick="sitedeltaOverlay.highlightChanges(event)" context="sitedelta-popup" src="chrome://sitedelta/skin/sitedelta.gif" />
     <image id="sitedelta-watch" menu="sitedelta-watch-popup" ondblclick="sitedeltaOverlay.openChanged();" context="sitedelta-watch-popup" src="chrome://sitedelta/skin/watch.gif" hidden="true" style="margin-left: 3px;"/>
     </statusbarpanel>

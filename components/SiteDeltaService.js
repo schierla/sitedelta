@@ -1,3 +1,5 @@
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+
 const CLASS_ID = Components.ID("{df5f1305-f0f5-415c-b71e-118e779e0590}");
 const CLASS_NAME = "SiteDelta XPCOM Component";
 const CONTRACT_ID = "@sitedelta.schierla.de/sitedelta;1";
@@ -6,10 +8,13 @@ const Ci = Components.interfaces;
 const SD_RDF = "http://sitedelta.schierla.de/SD-rdf#";
 const NS_RDF = "http://home.netscape.com/NC-rdf#";
 
-function SiteDelta() {
-    this._load();
-};
+function SiteDelta() { this._load(); };
 SiteDelta.prototype = {
+    classDescription: "SiteDelta XPCOM Component",  
+    classID: CLASS_ID,  
+    contractID: CONTRACT_ID,
+    QueryInterface: XPCOMUtils.generateQI([Ci.nsISupports, Ci.nsIObserver, Ci.nsIDOMNodeFilter]),
+
     wrappedJSObject: this,
 //    _spaceRegex: /[\u0030-\u0039\u0041-\u005a\u0061-\u007a\u00aa\u00b5\u00ba\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u01ba\u01bc-\u01bf\u01c4-\u0241\u0250-\u02af\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03ce\u03d0-\u03f5\u03f7-\u0481\u048a-\u04ce\u04d0-\u04f9\u0500-\u050f\u0531-\u0556\u0561-\u0587\u0660-\u0669\u06f0-\u06f9\u0966-\u096f\u09e6-\u09ef\u0a66-\u0a6f\u0ae6-\u0aef\u0b66-\u0b6f\u0be6-\u0bef\u0c66-\u0c6f\u0ce6-\u0cef\u0d66-\u0d6f\u0e50-\u0e59\u0ed0-\u0ed9\u0f20-\u0f29\u1040-\u1049\u10a0-\u10c5\u17e0-\u17e9\u1810-\u1819\u1946-\u194f\u19d0-\u19d9\u1d00-\u1d2b\u1d62-\u1d77\u1d79-\u1d9a\u1e00-\u1e9b\u1ea0-\u1ef9\u1f00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2102\u2107\u210a-\u2113\u2115\u2119-\u211d\u2124\u2126\u2128\u212a-\u212d\u212f-\u2131\u2133\u2134\u2139\u213c-\u213f\u2145-\u2149\u2c00-\u2c2e\u2c30-\u2c5e\u2c80-\u2ce4\u2d00-\u2d25\ufb00-\ufb06\ufb13-\ufb17\uff10-\uff19\uff21-\uff3a\uff41-\uff5a]+| +|[^ \[[\u0030-\u0039\u0041-\u005a\u0061-\u007a\u00aa\u00b5\u00ba\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u01ba\u01bc-\u01bf\u01c4-\u0241\u0250-\u02af\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03ce\u03d0-\u03f5\u03f7-\u0481\u048a-\u04ce\u04d0-\u04f9\u0500-\u050f\u0531-\u0556\u0561-\u0587\u0660-\u0669\u06f0-\u06f9\u0966-\u096f\u09e6-\u09ef\u0a66-\u0a6f\u0ae6-\u0aef\u0b66-\u0b6f\u0be6-\u0bef\u0c66-\u0c6f\u0ce6-\u0cef\u0d66-\u0d6f\u0e50-\u0e59\u0ed0-\u0ed9\u0f20-\u0f29\u1040-\u1049\u10a0-\u10c5\u17e0-\u17e9\u1810-\u1819\u1946-\u194f\u19d0-\u19d9\u1d00-\u1d2b\u1d62-\u1d77\u1d79-\u1d9a\u1e00-\u1e9b\u1ea0-\u1ef9\u1f00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2102\u2107\u210a-\u2113\u2115\u2119-\u211d\u2124\u2126\u2128\u212a-\u212d\u212f-\u2131\u2133\u2134\u2139\u213c-\u213f\u2145-\u2149\u2c00-\u2c2e\u2c30-\u2c5e\u2c80-\u2ce4\u2d00-\u2d25\ufb00-\ufb06\ufb13-\ufb17\uff10-\uff19\uff21-\uff3a\uff41-\uff5a]+|\[ |\[[^ ]+?\]/g,
     _spaceRegex: /[\u0030-\u0039\u0041-\u005a\u0061-\u007a\u00aa\u00b5\u00ba\u00c0-\u00d6\u00d8-\u00f6\u00f8-\uffff]+| +|[^ \[\u0030-\u0039\u0041-\u005a\u0061-\u007a\u00aa\u00b5\u00ba\u00c0-\u00d6\u00d8-\u00f6\u00f8-\uffff]+|\[ |\[[^ ]+?\]/g,
@@ -86,14 +91,16 @@ SiteDelta.prototype = {
         this._observerService.removeObserver(object, "sitedelta");
     },
     observe: function(aSubject, aTopic, aData) {
-        if (aTopic == "app-startup") {} else if (aTopic == "nsPref:changed") {
+        if (aTopic == "profile-after-change") {
+            // this._load();
+        } else if (aTopic == "nsPref:changed") {
             this._loadPrefs();
         } else if (aTopic == "xpcom-shutdown") {
             this._unload();
         } else if(aTopic == "alertclickcallback") {
-			var wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
-			var wnd = wm.getMostRecentWindow("navigator:browser"); 
-			if(wnd) wnd.getBrowser().selectedTab=wnd.getBrowser().addTab(aData); else window.open(aData);  
+            var wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
+            var wnd = wm.getMostRecentWindow("navigator:browser"); 
+            if (wnd) wnd.getBrowser().selectedTab=wnd.getBrowser().addTab(aData); else window.open(aData);  
         }
     },
     notify: function() {
@@ -816,13 +823,13 @@ SiteDelta.prototype = {
         this.rdfService = Cc["@mozilla.org/rdf/rdf-service;1"].getService(Ci.nsIRDFService);
         var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
         file.append("sitedelta.rdf");
-        
         this.wrappedJSObject = this;
+		
         this._observerService = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
         this._observerService.addObserver(this, "xpcom-shutdown", false);
         
-		var sbs = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
-		this._strings = sbs.createBundle("chrome://sitedelta/locale/sitedelta.properties");        
+        var sbs = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
+        this._strings = sbs.createBundle("chrome://sitedelta/locale/sitedelta.properties");        
 
         var ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
         if (file.exists()) {
@@ -1742,48 +1749,10 @@ SiteDelta.prototype = {
     alert: function(text) {
         var cs = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
         cs.logStringMessage("SiteDelta: " + text);
-    },
-    
-    //***************************************************************
-    QueryInterface: function(aIID) {
-        if ( ! aIID.equals(Ci.nsISupports) && !aIID.equals(Ci.nsIObserver) && !aIID.equals(Ci.nsIDOMNodeFilter))
-            throw Components.results.NS_ERROR_NO_INTERFACE;
-        return this;
     }
 };
 
-var SiteDeltaFactory = {
-    createInstance: function(aOuter, aIID) {
-        if (aOuter != null)
-            throw Components.results.NS_ERROR_NO_AGGREGATION;
-        return(new SiteDelta()).QueryInterface(aIID);
-    }
-};
-
-var SiteDeltaModule = {
-    registerSelf: function(aCompMgr, aFileSpec, aLocation, aType) {
-        aCompMgr = aCompMgr.QueryInterface(Ci.nsIComponentRegistrar);
-        aCompMgr.registerFactoryLocation(CLASS_ID, CLASS_NAME, CONTRACT_ID, aFileSpec, aLocation, aType);
-    },
-    
-    unregisterSelf: function(aCompMgr, aLocation, aType) {
-        aCompMgr = aCompMgr.QueryInterface(Ci.nsIComponentRegistrar);
-        aCompMgr.unregisterFactoryLocation(CLASS_ID, aLocation);
-    },
-    
-    getClassObject: function(aCompMgr, aCID, aIID) {
-        if ( ! aIID.equals(Ci.nsIFactory))
-            throw Components.results.NS_ERROR_NOT_IMPLEMENTED;
-        if (aCID.equals(CLASS_ID))
-            return SiteDeltaFactory;
-        throw Components.results.NS_ERROR_NO_INTERFACE;
-    },
-    
-    canUnload: function(aCompMgr) {
-        return true;
-    }
-};
-
-function NSGetModule(aCompMgr, aFileSpec) {
-    return SiteDeltaModule;
-}
+if (XPCOMUtils.generateNSGetFactory)
+    NSGetFactory = XPCOMUtils.generateNSGetFactory([SiteDelta]);
+else
+    NSGetModule = XPCOMUtils.generateNSGetModule([SiteDelta]);

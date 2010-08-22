@@ -5,3 +5,7 @@ locale	sitedelta	en	unpacked/locale/en-US/
 locale	sitedelta	en-US	unpacked/locale/en-US/
 skin	sitedelta	classic/1.0	unpacked/skin/
 overlay	chrome://browser/content/browser.xul	chrome://sitedelta/content/sitedelta.xul
+
+component {df5f1305-f0f5-415c-b71e-118e779e0590} components/SiteDeltaService.js
+contract @sitedelta.schierla.de/sitedelta;1 {df5f1305-f0f5-415c-b71e-118e779e0590}
+category profile-after-change SiteDelta @sitedelta.schierla.de/sitedelta;1

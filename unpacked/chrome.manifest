@@ -1,3 +1,7 @@
+component {df5f1305-f0f5-415c-b71e-118e779e0590} components/SiteDeltaService.js
+contract @sitedelta.schierla.de/sitedelta;1 {df5f1305-f0f5-415c-b71e-118e779e0590}
+category profile-after-change SiteDelta @sitedelta.schierla.de/sitedelta;1
+
 content	sitedelta	jar:chrome/sitedelta.jar!/content/
 content	sitedelta	jar:chrome/sitedelta.jar!/content/ contentaccessible=yes
 locale	sitedelta	en-US	jar:chrome/sitedelta.jar!/locale/en-US/

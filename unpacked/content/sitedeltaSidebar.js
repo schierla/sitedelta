@@ -10,12 +10,16 @@ openCurrent: function() {
   gBrowser.selectedTab=gBrowser.addTab(document.getElementById("sitedeltaPages").getSelectedItem(i).id);
 },
 updateCurrent: function() {
+ var pages = [];
  for(var i=0; i<document.getElementById("sitedeltaPages").selectedCount; i++)
-  sitedeltaService.updatePage(document.getElementById("sitedeltaPages").getSelectedItem(i).id);
+  pages.push(document.getElementById("sitedeltaPages").getSelectedItem(i).id);
+ for(var i=0; i<pages.length; i++) sitedeltaService.updatePage(pages[i]);
 },
 markSeen: function() {
+ var pages = [];
  for(var i=0; i<document.getElementById("sitedeltaPages").selectedCount; i++)
-  sitedeltaService.markSeen(document.getElementById("sitedeltaPages").getSelectedItem(i).id);
+  pages.push(document.getElementById("sitedeltaPages").getSelectedItem(i).id);
+ for(var i=0; i<pages.length; i++) sitedeltaService.markSeen(pages[i]);
 },
 openChanged: function() {
  var gBrowser = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIWebNavigation).QueryInterface(Components.interfaces.nsIDocShellTreeItem).rootTreeItem.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIDOMWindow).getBrowser();
@@ -24,9 +28,10 @@ openChanged: function() {
    gBrowser.selectedTab=gBrowser.addTab(document.getElementById("sitedeltaPages").getItemAtIndex(i).id);
 },
 updateAll: function() {
-// sitedeltaService.updateAll();
- for(var i=0; document.getElementById("sitedeltaPages").getItemAtIndex(i); i++)
-  sitedeltaService.updatePage(document.getElementById("sitedeltaPages").getItemAtIndex(i).id);	
+ var pages = [];
+ for(var i=0; document.getElementById("sitedeltaPages").getItemAtIndex(i); i++) 
+  pages.push(document.getElementById("sitedeltaPages").getItemAtIndex(i).id);
+ for(var i=0; i<pages.length; i++) sitedeltaService.updatePage(pages[i]);	
 },
 deletePage: function() {
  var pages=[]; 

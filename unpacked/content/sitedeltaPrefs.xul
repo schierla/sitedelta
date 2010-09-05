@@ -3,7 +3,7 @@
 <!DOCTYPE overlay SYSTEM "chrome://sitedelta/locale/sitedelta.dtd">
 <prefwindow id="sitedelta-prefs"
      title="&sitedelta.prefs.title;"
-     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" ondialogaccept="accept();" ondialogcancel="accept();" onload="previewColors();">
+     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="previewColors();">
 <prefpane flex="1" id="sitedelta-pref-pane" label="SiteDelta" image="chrome://sitedelta/content/sitedeltaGross.gif">
   <preferences>
     <preference id="p_addbackground" name="extensions.sitedelta@schierla.de.addBackground" type="string"/>
@@ -72,7 +72,7 @@
 </tabpanel>
 
 <tabpanel id="whentoscan" orient="vertical">
-<radiogroup id="watchdelay" flex="1" onselect="if(this.selectedIndex!=5)document.getElementById('watchvalue').disabled=true; else {document.getElementById('watchvalue').disabled=false; document.getElementById('watchvalue').focus(); document.getElementById('watchvalue').select(); }">
+<radiogroup preference-editable="true" preference="p_watchscandelay" onsynctopreference="return selectedDelay();" onsyncfrompreference="g('watchvalue').value=g('p_watchscandelay').value; this.selectedIndex=selectedDelayIndex();" id="watchdelay" flex="1" onselect="g('watchvalue').disabled=(this.selectedIndex!=5);">
 <groupbox>
 <checkbox class="header" preference="p_enablewatch" label="&sitedelta.prefs.enablewatch;"/>
 <label>&sitedelta.prefs.enablewatch.desc;</label>
@@ -111,7 +111,7 @@
 </groupbox>
 <groupbox>
 <caption><label class="header">&sitedelta.prefs.notifysound;</label></caption>
-<radiogroup id="notifySound" flex="1" onclick="previewSound();" onselect="if(this.selectedIndex!=4)document.getElementById('notifySoundText').disabled=true; else {document.getElementById('notifySoundText').disabled=false; document.getElementById('watchvalue').focus(); document.getElementById('notifySoundText').select(); }">
+<radiogroup preference-editable="true" preference="p_notifysound" onsynctopreference="return selectedSound();" onsyncfrompreference="g('notifySoundText').value=g('p_notifysound').value; this.selectedIndex=selectedSoundIndex();"  id="notifySound" flex="1" onclick="previewSound();" onselect="g('notifySoundText').disabled = (this.selectedIndex!=4)">
 <radio class="header" label="&sitedelta.prefs.notifysound.none;"/>
 <radio class="header" label="&sitedelta.prefs.notifysound.beep;"/>
 <radio class="header" label="&sitedelta.prefs.notifysound.alert;"/>
@@ -141,30 +141,43 @@
     case 0: return ""; 
     case 1: return "beep"; 
     case 2: return "SystemNotification"; 
-    case 3: return "MailBeep"; 
+    case 3: return "_moz_mailbeep"; 
     case 4: return g('notifySoundText').value; 
    }
    return "";
   }
+  function selectedSoundIndex() {
+   switch(g('notifySoundText').value) {
+    case "": return 0; 
+    case "beep": return 1;
+    case "SystemNotification": return 2;
+    case "MailBeep": case "_moz_mailbeep": return 3;
+    default: return 4;
+   }
+  }
   function previewSound() {
    sitedeltaService._playSound(selectedSound());
   }
-  function accept() {
-   var notifysound=selectedSound();
-
-   var watchDelay=0;
+  function selectedDelay() {
    switch(g('watchdelay').selectedIndex) {
-    case 0: watchDelay=0; break;
-    case 1: watchDelay=-1; break; 
-    case 2: watchDelay=10080; break;
-    case 3: watchDelay=1440; break;
-    case 4: watchDelay=60; break;
-    case 5: watchDelay= g("watchvalue").value; break;
+    case 0: return 0;
+    case 1: return -1; 
+    case 2: return 10080;
+    case 3: return 1440; 
+    case 4: return 60; 
+    case 5: return g("watchvalue").value;
    }
-   sitedeltaService.watchScanDelay = watchDelay;
-   sitedeltaService.notifySound = notifysound;
-   sitedeltaService.savePrefs();
-   return true;
+   return 0;
+  }
+  function selectedDelayIndex() {
+   switch(g('watchvalue').value) {
+    case "0": return 0;
+    case "-1": return 1;
+    case "10080": return 2;
+    case "1440": return 3; 
+    case "60": return 4;
+    default: return 5; 
+   }
   }
 
   function previewColors() {
@@ -176,22 +189,7 @@
    g('mbo').style.borderColor=g('moveborder').value;
    g('ir').style.borderColor=g('includeregion').value;
    g('xr').style.borderColor=g('excluderegion').value;
-   
-   switch(sitedeltaService.watchScanDelay) {
-    case 0: g('watchdelay').selectedIndex=0; break;
-    case -1: g('watchdelay').selectedIndex=1; break;
-    case 10080: g('watchdelay').selectedIndex=2; break;
-    case 1440: g('watchdelay').selectedIndex=3; break;
-    case 60: g('watchdelay').selectedIndex=4; break;
-    default: g('watchdelay').selectedIndex=5; g('watchvalue').value=sitedeltaService.watchScanDelay;
-   }
-   switch(sitedeltaService.notifySound) {
-    case "": g('notifySound').selectedIndex=0; break;
-    case "beep": g('notifySound').selectedIndex=1; break;
-    case "SystemNotification": g('notifySound').selectedIndex=2; break;
-    case "MailBeep": g('notifySound').selectedIndex=3; break;
-    default: g('notifySound').selectedIndex=4; g('notifySoundText').value = sitedeltaService.notifySound; break;
-   }
+
   }
  function g(name) {return document.getElementById(name); }
 ]]>

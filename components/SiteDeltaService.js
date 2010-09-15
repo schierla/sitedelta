@@ -575,7 +575,7 @@ SiteDelta.prototype = {
                         }
                         if (wpos >= words.length && action != "D" && action != "m")
                             break;
-                        if (wpos < words.length && this._clean(words[wpos]).length < newt[npos].length) {
+                        if (wpos < words.length && (npos >= newt.length || this._clean(words[wpos]).length < newt[npos].length)) {
                             ret = words[wpos];
                             break;
                         }
@@ -1307,26 +1307,27 @@ SiteDelta.prototype = {
             del = doc.createElement("SITEDELTA_DEL");
             var img = doc.createElement("IMG");
             if(type=="D") {
-	            del.setAttribute("style", "border: dotted " + this.removeBorder + " 1px; background: " + this.removeBackground + "; color: #000; display: none; position: absolute; width: auto; left: 0px; top: 0px; padding: 2px; -moz-border-radius: 5px; ");
+	            del.setAttribute("style", "border: dotted " + this.removeBorder + " 1px; background: " + this.removeBackground + "; color: #000; display: none; position: absolute; z-index: 2147483647; width: auto; left: 0px; top: 0px; padding: 2px; -moz-border-radius: 5px; ");
 	            img.setAttribute("src", "chrome://sitedelta/skin/del.png");
             } else {
-	            del.setAttribute("style", "border: dotted " + this.moveBorder + " 1px; background: " + this.moveBackground + "; color: #000; display: none; position: absolute; width: auto; left: 0px; top: 0px; padding: 2px; -moz-border-radius: 5px; ");
+	            del.setAttribute("style", "border: dotted " + this.moveBorder + " 1px; background: " + this.moveBackground + "; color: #000; display: none; position: absolute; z-index: 2147483647; width: auto; left: 0px; top: 0px; padding: 2px; -moz-border-radius: 5px; ");
 	            img.setAttribute("src", "chrome://sitedelta/skin/cut.png");            	
             }
             img.setAttribute("border", "0");
             ret.appendChild(img);
-            img.addEventListener("mouseover", function(event) {
-                this.nextSibling.style.display = 'block';
-                this.nextSibling.style.maxWidth = this.ownerDocument.width / 3;
-            }, false)
-                img.addEventListener("mousemove", function(event) {
-                this.nextSibling.style.left = (event.layerX <= this.ownerDocument.width / 2 ? event.layerX + 4: Math.max(10, event.layerX - 4 - this.nextSibling.clientWidth)) + "px";
-                this.nextSibling.style.top = (event.layerY - this.nextSibling.clientHeight > 0 ? (event.layerY - this.nextSibling.clientHeight): event.layerY + 10) + "px";
-            }, false)
-                img.addEventListener("mouseout", function(event) {
-                this.nextSibling.style.display = 'none';
-            }, false);
-            ret.appendChild(del);
+            img.addEventListener("mouseover", function(del) {return function(event) {
+                del.style.display = 'block';
+                del.style.maxWidth = this.ownerDocument.width / 3;
+            }}(del), false);
+            img.addEventListener("mousemove", function(del) {return function(event) {
+                del.style.left = (event.pageX <= this.ownerDocument.width / 2 ? event.pageX + 4: Math.max(10, event.pageX - 4 - del.clientWidth)) + "px";
+                del.style.top = (event.pageY - del.clientHeight > 0 ? (event.pageY - del.clientHeight): event.pageY + 10) + "px";
+                alert(del.style.left + "/" + del.style.top);
+            }}(del), false);
+            img.addEventListener("mouseout", function(del) {return function(event) {
+                del.style.display = 'none';
+            }}(del), false);
+            doc.body.appendChild(del);
         } else if (type == "I" || type=="M") {
             del = doc.createElement("SITEDELTA_INS");
             ret = del;

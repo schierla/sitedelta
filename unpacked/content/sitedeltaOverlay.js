@@ -1,6 +1,9 @@
 var sitedeltaOverlay= {
  strings: null,
  onPageLoad: function(evt) {
+  setTimeout(function(evt) {return function() {sitedeltaOverlay.onPageLoadDelay(evt);}}(evt), 50);
+ },
+ onPageLoadDelay: function(evt) {
   var doc=evt.originalTarget;
   if(doc.nodeName == "#document") {
    if(doc.sitedeltaMatch) return; 

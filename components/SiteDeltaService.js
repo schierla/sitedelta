@@ -487,11 +487,11 @@ SiteDelta.prototype = {
             opos = 0;
             opos = 0;
             npos = 0;
+			changes = 0;
             var ret = "";
             for (var i = 0; i < regions.length; i ++ ) {
                 
-                var changes = 0,
-                ot = "",
+                var ot = "",
                 nt = "",
                 wc = 0;
                 var doc = regions[i].ownerDocument;
@@ -1406,9 +1406,19 @@ SiteDelta.prototype = {
 		}
     },
     _watchPageLoaded: function() {
-
     	var _svc=(this._svc?this._svc:this);
-        _svc._timer.cancel();
+        _svc._timer.cancel();		
+        if (_svc._iframe) {
+			_svc._iframe.contentWindow.setTimeout(function(){
+				_svc._watchPageLoadedDelay();
+			}, 50);
+	    } else {
+	        _svc._watchUrl=null;
+            _svc._watchEndCheck(_svc);
+        }
+    },
+    _watchPageLoadedDelay: function() {
+        var _svc=(this._svc?this._svc:this);
         if(_svc._iframe) {
         	var channel = _svc._iframe.docShell.currentDocumentChannel;
         	if(channel) channel=channel.QueryInterface(Ci.nsIHttpChannel);

@@ -1,3 +1,4 @@
+"use strict";
 var sitedeltaOverlay= {
  strings: null,
  onPageLoad: function(evt) {

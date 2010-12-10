@@ -1,3 +1,4 @@
+"use strict";
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const CLASS_ID = Components.ID("{df5f1305-f0f5-415c-b71e-118e779e0590}");
@@ -290,20 +291,21 @@ SiteDelta.prototype = {
         return backups;
     },
     backupPage: function(doc) {
+        var filemode = 493; // 0755
         var url = doc.URL;
         var date = new Date();
         url = url.replace(/http:\/\/[^\/]+@/i, "http://").replace(/https:\/\/[^\/]+@/i, "https://").replace(/#.*$/, "");
         var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("Home", Ci.nsIFile);
         file.append("SiteDelta");
         if ( ! file.exists())
-            file.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
+            file.create(Ci.nsIFile.DIRECTORY_TYPE, filemode);
         file.append(this._getFilename(url));
         if ( ! file.exists())
-            file.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
+            file.create(Ci.nsIFile.DIRECTORY_TYPE, filemode);
         date = date.getFullYear() + "-" + ("00" + (date.getMonth() + 1)).substr( - 2) + "-" + ("00" + date.getDate()).substr( - 2) + " " + ("00" + date.getHours()).substr( - 2) + "-" + ("00" + date.getMinutes()).substr( - 2) + "-" + ("00" + date.getSeconds()).substr( - 2);
         var dir = file.clone();
         dir.append(date);
-        dir.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
+        dir.create(Ci.nsIFile.DIRECTORY_TYPE, filemode);
         file.append(date + ".htm");
         var wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1'].createInstance(Ci.nsIWebBrowserPersist);
         wbp.saveDocument(doc, file, dir, null, null, null);
@@ -807,6 +809,7 @@ SiteDelta.prototype = {
 		}        
     },
     _load: function() {
+        var filemode = 493; // 0755
         this._prefManager = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
         this._prefs = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.sitedelta@schierla.de.");
         this._prefs.QueryInterface(Ci.nsIPrefBranch2);
@@ -817,7 +820,7 @@ SiteDelta.prototype = {
         file.append("sitedelta");
         this._dir = file;
         if ( ! file.exists() || !file.isDirectory()) {
-            file.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
+            file.create(Ci.nsIFile.DIRECTORY_TYPE, filemode);
         }
         
         this.rdfService = Cc["@mozilla.org/rdf/rdf-service;1"].getService(Ci.nsIRDFService);
@@ -950,10 +953,11 @@ SiteDelta.prototype = {
         return this._dir.clone();
     },
     _saveFile: function(fn, data) {
+        var filemode = 420; // 0644
         var file = this._sitedeltaDir();
         file.append(fn);
         var foStream = Cc["@mozilla.org/network/file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
-        foStream.init(file, 0x02 | 0x08 | 0x20, 0664, 0);
+        foStream.init(file, 0x02 | 0x08 | 0x20, filemode, 0);
         var document = Cc["@mozilla.org/xul/xul-document;1"].createInstance(Ci.nsIDOMDocument).implementation;
         var doc = document.createDocument("", "", null);
         var root = doc.createElement("sitedelta");
@@ -1764,6 +1768,6 @@ SiteDelta.prototype = {
 };
 
 if (XPCOMUtils.generateNSGetFactory)
-    NSGetFactory = XPCOMUtils.generateNSGetFactory([SiteDelta]);
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([SiteDelta]);
 else
-    NSGetModule = XPCOMUtils.generateNSGetModule([SiteDelta]);
+    var NSGetModule = XPCOMUtils.generateNSGetModule([SiteDelta]);

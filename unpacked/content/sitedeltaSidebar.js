@@ -1,8 +1,11 @@
+"use strict";
 var sitedeltaSidebar = {
 onLoad: function() {
  var list=document.getElementById("sitedeltaPages");
- list.database.AddDataSource(sitedeltaService.RDF);
- list.builder.rebuild();
+ if(list != null) {
+  list.database.AddDataSource(sitedeltaService.RDF);
+  list.builder.rebuild();
+ }
 },
 openCurrent: function() {
  var gBrowser = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIWebNavigation).QueryInterface(Components.interfaces.nsIDocShellTreeItem).rootTreeItem.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIDOMWindow).getBrowser();

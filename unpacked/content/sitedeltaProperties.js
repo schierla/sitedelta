@@ -1,16 +1,14 @@
+"use strict";
 var sitedeltaProperties = {
 strings: null,
 page: null,
 onLoad: function() {
  sitedeltaProperties.strings = document.getElementById("sitedelta-strings");
- page=sitedeltaService.getPage(window.arguments[0]);
+ sitedeltaProperties.page=sitedeltaService.getPage(window.arguments[0]);
  sitedeltaProperties.showDetails();
 },
-listPresets: function(menu) {
- sitedelta.menuPresets(menu, page.url);
-},
 showDetails: function() {
- var result=page;
+ var result = this.page;
  sitedeltaProperties.setCheckbox("enablebackup", result.backupPage==null?sitedeltaService.backupPages:result.backupPage);
  sitedeltaProperties.setCheckbox("checkimages", result.scanImages==null?sitedeltaService.scanImages:result.scanImages);
  sitedeltaProperties.setCheckbox("checkdeleted", result.checkDeleted==null?sitedeltaService.checkDeleted:result.checkDeleted);
@@ -53,7 +51,7 @@ saveDefault: function() {
  sitedeltaService.savePrefs();
 },
 listPresets: function(menu) {
- sitedelta.menuPresets(menu, page.url);
+ sitedelta.menuPresets(menu, this.page.url);
 },
 loadDefault: function() {
  sitedeltaProperties.setCheckbox("ignorenumbers", sitedeltaService.ignoreNumbers);
@@ -63,11 +61,11 @@ loadDefault: function() {
  sitedeltaProperties.setCheckbox("checkdeleted", sitedeltaService.checkDeleted);
 },
 savePreset: function() {
- var result=page;
+ var result=this.page;
  var preset={}; preset.url=result.url; preset.name=result.name; preset.includes=result.includes; preset.excludes=result.excludes; preset.user=""; preset.pass="";
  preset.ignoreCase=result.ignoreCase; preset.ignoreNumbers=result.ignoreNumbers; preset.checkDeleted=result.checkDeleted; preset.scanImages=result.scanImages;
  preset.watchDelay=result.watchDelay; preset.date=""; preset.title=""; preset.content="";
- fn=sitedeltaService.newPreset(preset);
+ var fn=sitedeltaService.newPreset(preset);
  sitedelta.showPresets(fn);
 },
  getItemStatus: function(item,global) {
@@ -79,6 +77,7 @@ savePreset: function() {
   document.getElementById(item).checked=value;
  },
  save: function() {
+  var page = this.page;
   if(document.getElementById("url").value!=page.url) {
    sitedeltaService.deletePage(page.url);
    page.url=document.getElementById("url").value; 

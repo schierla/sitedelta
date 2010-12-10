@@ -1,3 +1,4 @@
+"use strict";
 var sitedeltaPreset = {
 onLoad: function() {
  sitedeltaPreset.listPresets();

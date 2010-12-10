@@ -1,3 +1,4 @@
+"use strict";
 var sitedeltaService = Components.classes["@sitedelta.schierla.de/sitedelta;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
 var sitedelta = {
   preventevent: function(e) {
@@ -6,7 +7,7 @@ var sitedelta = {
   },
   menuBackups: function(menu, url) {
    var backups=sitedeltaService.listBackups(url);
-   var cur=menu.firstChild; while(cur) {last=cur; cur=cur.nextSibling; if(last.backupEntry) menu.removeChild(last); }
+   var cur=menu.firstChild; while(cur) {var last=cur; cur=cur.nextSibling; if(last.backupEntry) menu.removeChild(last); }
    for(var i=0; i<backups.length; i++) {
     var item=menu.ownerDocument.createElement("menuitem");
     item.setAttribute("label", backups[i].name);
@@ -17,7 +18,7 @@ var sitedelta = {
   menuPresets: function(menu, url) {
    menu.url=url;
    var presets=sitedeltaService.listPresets();
-   var cur=menu.firstChild; while(cur) {last=cur; cur=cur.nextSibling; if(last.presetEntry) menu.removeChild(last); }
+   var cur=menu.firstChild; while(cur) {var last=cur; cur=cur.nextSibling; if(last.presetEntry) menu.removeChild(last); }
    var item=menu.ownerDocument.createElement("menuseparator"); item.presetEntry=1; menu.appendChild(item);
    for(var i=0; i<presets.length; i++) {
     var preset=sitedeltaService.getPreset(presets[i]);
@@ -39,7 +40,7 @@ var sitedelta = {
   },
   menuRegions: function(menu, url) {
    var result=sitedeltaService.getPage(url);
-   var cur=menu.firstChild; while(cur) {last=cur; cur=cur.nextSibling; if(last.regionEntry) menu.removeChild(last); }
+   var cur=menu.firstChild; while(cur) {var last=cur; cur=cur.nextSibling; if(last.regionEntry) menu.removeChild(last); }
 
    
    var includeSeparator=menu.firstChild.nextSibling;
@@ -79,7 +80,7 @@ var sitedelta = {
    sitedeltaService.putPage(result);
   },
   removeRegion: function(nr, include) {
-   url=content.window.location.href; var result=sitedeltaService.getPage(url);
+   var url=content.window.location.href; var result=sitedeltaService.getPage(url);
    result.url=url.replace(/#.*$/,'');
    if(result.name=="") result.name=content.document.title.replace(/[\n\r]/g,' ');
    if(include) {

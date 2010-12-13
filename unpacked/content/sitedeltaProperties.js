@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 var sitedeltaProperties = {
 strings: null,
 page: null,

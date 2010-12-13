@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const CLASS_ID = Components.ID("{df5f1305-f0f5-415c-b71e-118e779e0590}");
@@ -23,7 +23,7 @@ SiteDelta.prototype = {
     _parseHandler: null,
     _iframe: null,
     _timer: null,
-    _loadtimer: null,
+    _pageLoaded: false,
     _prefs: null,
     _prefManager: null,
     _dir: null,
@@ -106,7 +106,8 @@ SiteDelta.prototype = {
     },
     notify: function() {
         this._timer.cancel();
-        if (this._watchUrl != null) this._watchEndCheck();
+        if (this._pageLoaded) this._watchPageLoadedDelay();
+        else if (this._watchUrl != null) this._watchEndCheck();
         else if(this.enableWatch) this._watchScanNext();
     },
     
@@ -430,7 +431,7 @@ SiteDelta.prototype = {
             	regions[i].style.outline = this.includeRegion + " dotted 2px";        	
             text += this._getText(regions[i])
         }
-        current = text;
+        var current = text;
         if (result.date == "") {
             changes = this.RESULT_NEW;
             this._observerService.notifyObservers(null, "sitedelta", result.url);
@@ -446,7 +447,7 @@ SiteDelta.prototype = {
                 };
             this._diff(diff);
            	if(this._checkDeleted) {    
-	            for(opos=0, npos=0; opos<=oldt.length && npos<=newt.length; ) {
+	            for(var opos=0, npos=0; opos<=oldt.length && npos<=newt.length; ) {
 	                if(opos == diff.oldWords.length) 
 	                	diff.newToOld[npos++]=null;
 	                else if(npos == diff.newWords.length)
@@ -483,12 +484,10 @@ SiteDelta.prototype = {
 	                }
 	            }
            	}
-            pos = 0,
+            var pos = 0,
             wpos = 0,
             npos = 0,
             opos = 0;
-            opos = 0;
-            npos = 0;
 			changes = 0;
             var ret = "";
             for (var i = 0; i < regions.length; i ++ ) {
@@ -501,10 +500,10 @@ SiteDelta.prototype = {
                 var domactions = [],
                 last = "",
                 action = "";
-                count = true;
-                var tw = doc.createTreeWalker(regions[i], Ci.nsIDOMNodeFilter.SHOW_ALL, this, true);
+                var count = true;
+                var tw = doc.createTreeWalker(regions[i], Ci.nsIDOMNodeFilter.SHOW_ALL, this, true), cur=null;
                 while (cur = tw.nextNode()) {
-                    drop = [];
+                    var drop = [];
                     while (cur) {
                         if (cur.nodeType == 3 || (this._scanImages && cur.nodeName == 'IMG')) {
                             if (cur.nodeName == 'IMG' && cur.hasAttribute("src"))
@@ -1411,41 +1410,36 @@ SiteDelta.prototype = {
     },
     _watchPageLoaded: function() {
     	var _svc=(this._svc?this._svc:this);
-        _svc._timer.cancel();		
-        if (_svc._iframe) {
-			_svc._iframe.contentWindow.setTimeout(function(){
-				_svc._watchPageLoadedDelay();
-			}, 50);
-	    } else {
-	        _svc._watchUrl=null;
-            _svc._watchEndCheck(_svc);
-        }
+        _svc._timer.cancel();
+        _svc._timer.initWithCallback(_svc, 50, _svc._timer.TYPE_ONE_SHOT);
+        _svc._pageLoaded = true;
     },
     _watchPageLoadedDelay: function() {
         var _svc=(this._svc?this._svc:this);
+        _svc._pageLoaded = false;
         if(_svc._iframe) {
-        	var channel = _svc._iframe.docShell.currentDocumentChannel;
-        	if(channel) channel=channel.QueryInterface(Ci.nsIHttpChannel);
-        	if(channel && channel.responseStatus == 401 && _svc._iframe._reloaded == false) {
-        		_svc._iframe._reloaded = true;
+            var channel = _svc._iframe.docShell.currentDocumentChannel;
+            if(channel) channel=channel.QueryInterface(Ci.nsIHttpChannel);
+            if(channel && channel.responseStatus == 401 && _svc._iframe._reloaded == false) {
+                _svc._iframe._reloaded = true;
                 var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
                 var channel = ioService.newChannelFromURI(channel.URI);  
                 var request = channel.QueryInterface(Ci.nsIRequest);
                 request.loadFlags |= Ci.nsIRequest.LOAD_BACKGROUND | Ci.nsIRequest.VALIDATE_ALWAYS;
                 var uriLoader = Cc["@mozilla.org/uriloader;1"].getService(Ci.nsIURILoader);
                 uriLoader.openURI(channel, true, _svc._iframe.docShell);
-        		return;
-        	} else if(channel && channel.responseStatus == 304) {   
-    	        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
-    	        if(result.status != _svc.RESULT_NEW) result.status = 0;
-    	        _svc._scheduleNextScan(result);
-        	} else {
-		        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
-		        if(result.status == _svc.RESULT_NEW) {
-		        	_svc._watchEndCheck(_svc); return;
-		        } else if(_svc.scanPage(_svc._iframe.contentDocument)>0) {
-			        var result = _svc.getPage(_svc._iframe.contentDocument.URL);
-	        		if(_svc.notifyAlert) {
+                return;
+            } else if(channel && channel.responseStatus == 304) {   
+                var result = _svc.getPage(_svc._iframe.contentDocument.URL);
+                if(result.status != _svc.RESULT_NEW) result.status = 0;
+                _svc._scheduleNextScan(result);
+            } else {
+                var result = _svc.getPage(_svc._iframe.contentDocument.URL);
+                if(result.status == _svc.RESULT_NEW) {
+                    _svc._watchEndCheck(_svc); return;
+                } else if(_svc.scanPage(_svc._iframe.contentDocument)>0) {
+                    var result = _svc.getPage(_svc._iframe.contentDocument.URL);
+                    if(_svc.notifyAlert) {
 						var alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
 						alerts.showAlertNotification("chrome://sitedelta/content/sitedeltaGross.gif",  _svc._strings.GetStringFromName("notifyTitle"), result.name, true, result.url, _svc);
 	        		}
@@ -1511,7 +1505,7 @@ SiteDelta.prototype = {
     // diff, based on http://doi.acm.org/10.1145/359460.359467
     // and http://en.wikipedia.org/wiki/User:Cacycle/diff.js
     _diff: function(text, newStart, newEnd, oldStart, oldEnd, recursionLevel) {
-        symbol = {
+        var symbol = {
             newCtr: [],
             oldCtr: [],
             toNew: [],

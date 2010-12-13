@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 var sitedeltaService = Components.classes["@sitedelta.schierla.de/sitedelta;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
 var sitedelta = {
   preventevent: function(e) {

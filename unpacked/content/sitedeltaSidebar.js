@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 var sitedeltaSidebar = {
 onLoad: function() {
  var list=document.getElementById("sitedeltaPages");

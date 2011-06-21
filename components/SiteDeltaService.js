@@ -1039,7 +1039,7 @@ SiteDelta.prototype = {
     },
     _getFilename: function(url) {
         var fn = new String(url);
-        fn = fn.replace(/^.*:\/\//, "");
+        fn = fn.replace(/^[^:]*:\/\//, "");
         fn = fn.replace(/[^\/]*@/, "");
         fn = fn.replace(/#.*$/, "");
         fn = fn.replace(/\./g, '-');

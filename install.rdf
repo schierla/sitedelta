@@ -5,7 +5,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="sitedelta@schierla.de"
                    em:name="SiteDelta"
-                   em:version="0.12.0.20101211"
+                   em:version="0.12.1.20110621"
                    em:creator="Andreas Schierl"
                    em:description="Hightlights changes made to a website since last visit"
                    em:homepageURL="http://sitedelta.schierla.de/"
@@ -16,5 +16,5 @@
   <RDF:Description RDF:about="rdf:#$u2YGH1"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="3.0"
-                   em:maxVersion="4.0b7" />
+                   em:maxVersion="5.*" />
 </RDF:RDF>

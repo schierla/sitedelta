@@ -36,7 +36,7 @@
 <checkbox class="header" label="&sitedelta.prefs.scanimages;" id="checkimages" />
 <label>&sitedelta.prefs.scanimages.desc;</label>
 <checkbox class="header" label="&sitedelta.prefs.ignorecase;" id="ignorecase" />
-<label>&sitedelta.prefs.scanimages.desc;</label>
+<label>&sitedelta.prefs.ignorecase.desc;</label>
 <checkbox class="header" label="&sitedelta.prefs.ignorenumbers;" id="ignorenumbers" />
 <label>&sitedelta.prefs.ignorenumbers.desc;</label>
 </groupbox>

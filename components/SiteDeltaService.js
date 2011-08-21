@@ -176,9 +176,11 @@ SiteDelta.prototype = {
         this._observerService.notifyObservers(null, "sitedelta", url);
     },
     getPage: function(url) {
+      if(url)
         url = url.replace(/http:\/\/[^\/]+@/i, "http://").replace(/https:\/\/[^\/]+@/i, "https://").replace(/#.*$/, "");
+      else 
+        url = "undefined";
         var ret = this._loadFile(this._getFilename(url) + ".dat");
-        
         if (ret.status ==- 1) {
             ret.url = url;
             var presets = this.listPresets();
@@ -1325,7 +1327,6 @@ SiteDelta.prototype = {
             img.addEventListener("mousemove", function(del) {return function(event) {
                 del.style.left = (event.pageX <= this.ownerDocument.width / 2 ? event.pageX + 4: Math.max(10, event.pageX - 4 - del.clientWidth)) + "px";
                 del.style.top = (event.pageY - del.clientHeight > 0 ? (event.pageY - del.clientHeight): event.pageY + 10) + "px";
-                alert(del.style.left + "/" + del.style.top);
             }}(del), false);
             img.addEventListener("mouseout", function(del) {return function(event) {
                 del.style.display = 'none';

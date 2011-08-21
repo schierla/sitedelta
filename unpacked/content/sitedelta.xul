@@ -47,16 +47,8 @@
     <key id="key_sitedeltaMenu" oncommand="sitedeltaOverlay.showPopup();" key="&sitedelta.sidebar.menukey;" modifiers="&sitedelta.sidebar.menumods;" />
   </keyset>
   
-  <toolbarpalette id="BrowserToolbarPalette">
-    <toolbarbutton id="sitedeltaButton" class="toolbarbutton-1" label="&sitedelta.title;" tooltiptext="&sitedelta.togglesidebar;" oncommand="toggleSidebar('viewSitedeltaSidebar');"/>
-  </toolbarpalette>
-
-  <broadcasterset id="mainBroadcasterSet"> 
-    <broadcaster id="viewSitedeltaSidebar" label="&sitedelta.title;" autoCheck="false" type="checkbox" group="sidebar" sidebarurl="chrome://sitedelta/content/sitedeltaSidebar.xul" sidebarTitle="&sitedelta.title;" oncommand="toggleSidebar('viewSitedeltaSidebar');" />
-  </broadcasterset>
-
   <popupset>
-      <menupopup id="sitedelta-popup">
+    <menupopup id="sitedelta-toolbarmenu" position="before_start">
       <menuitem label="&sitedelta.highlight;" accesskey="&sitedelta.highlight.accesskey;" oncommand="sitedeltaOverlay.highlightChanges(event)" default="true" />
       <menuitem label="&sitedelta.sidebar.pagesettings;" accesskey="&sitedelta.sidebar.pagesettings.accesskey;" oncommand="sitedeltaOverlay.showProperties();" />
       <menuseparator />
@@ -80,15 +72,22 @@
       </menu>
       <menuitem label="&sitedelta.togglesidebar;" accesskey="&sitedelta.togglesidebar.accesskey;" oncommand="toggleSidebar('viewSitedeltaSidebar');" />
     </menupopup>
-   </popupset> 
-
-  <statusbar id="status-bar">
-    <statusbarpanel insertafter="livemark-button" id="sitedelta-button">
-    <image id="sitedelta-status" onclick="sitedeltaOverlay.highlightChanges(event)" context="sitedelta-popup" src="chrome://sitedelta/skin/sitedelta.gif" />
-    <image id="sitedelta-watch" menu="sitedelta-watch-popup" ondblclick="sitedeltaOverlay.openChanged();" context="sitedelta-watch-popup" src="chrome://sitedelta/skin/watch.gif" hidden="true" style="margin-left: 3px;"/>
-    </statusbarpanel>
-    <popupset><menupopup id="sitedelta-watch-popup" position="before_start" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending"><menuitem label="&sitedelta.openwatches;" default="true" oncommand="sitedeltaOverlay.openChanged();" /><menuseparator/><template><rule><conditions><content uri="?uri" /><triple subject="?uri" predicate="http://home.netscape.com/NC-rdf#links" object="?links" /><member container="?links" child="?child" /><triple subject="?child" predicate="http://home.netscape.com/NC-rdf#name" object="?name" /><triple subject="?child" predicate="http://sitedelta.schierla.de/SD-rdf#status" object="1" /></conditions><action><menuitem label="?name" uri="?child" oncommand="sitedeltaOverlay.openWatch(this)" /></action></rule></template></menupopup></popupset>
-  </statusbar>
+  </popupset>
+  
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton id="sitedeltaButton" context="sitedelta-toolbarmenu" oncontextmenu="sitedeltaOverlay.showPopup(this); return false;" class="toolbarbutton-1" foundpages="false" pagestatus="-1" label="&sitedelta.title;" tooltiptext="&sitedelta.title;" oncommand="sitedeltaOverlay.highlightChanges(event);" type="menu-button">
+      <menupopup id="sitedelta-watch-popup" position="before_start" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending">
+        <menuitem label="&sitedelta.openwatches;" default="true" oncommand="sitedeltaOverlay.openChanged(); return false;" />
+        <menuseparator/>
+        <template><rule><conditions><content uri="?uri" /><triple subject="?uri" predicate="http://home.netscape.com/NC-rdf#links" object="?links" /><member container="?links" child="?child" /><triple subject="?child" predicate="http://home.netscape.com/NC-rdf#name" object="?name" /><triple subject="?child" predicate="http://sitedelta.schierla.de/SD-rdf#status" object="1" /></conditions><action><menuitem label="?name" uri="?child" oncommand="sitedeltaOverlay.openWatch(this); return false;" /></action></rule></template>
+      </menupopup>
+    </toolbarbutton>
+  </toolbarpalette>
+  
+  
+  <broadcasterset id="mainBroadcasterSet"> 
+    <broadcaster id="viewSitedeltaSidebar" label="&sitedelta.title;" autoCheck="false" type="checkbox" group="sidebar" sidebarurl="chrome://sitedelta/content/sitedeltaSidebar.xul" sidebarTitle="&sitedelta.title;" oncommand="toggleSidebar('viewSitedeltaSidebar');" />
+  </broadcasterset>
   
   <script src="chrome://sitedelta/content/sitedelta.js"/>
   <script src="chrome://sitedelta/content/sitedeltaSidebar.js"/>

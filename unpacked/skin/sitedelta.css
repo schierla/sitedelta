@@ -4,5 +4,6 @@
 #sitedeltaPages listitem[status="-2"] {list-style-image: url(error.gif); }
 #sitedeltaPages listitem {list-style-image: url(unchecked.gif); }
 
-#sitedeltaButton { list-style-image: url("chrome://sitedelta/skin/sitedeltaMedium.png"); }
-toolbar[iconsize="small"] #sitedeltaButton { list-style-image: url("chrome://sitedelta/skin/sitedeltaSmall.png"); }
+#sitedeltaButton {list-style-image: url("chrome://sitedelta/skin/sitedelta.gif"); }
+#sitedeltaButton[pagestatus="0"] { list-style-image: url("chrome://sitedelta/skin/sitedelta-known.gif"); }
+#sitedeltaButton[pagestatus="1"] { list-style-image: url("chrome://sitedelta/skin/sitedelta-changed.gif"); }

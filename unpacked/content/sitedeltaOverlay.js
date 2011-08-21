@@ -49,6 +49,14 @@ var sitedeltaOverlay= {
  onLoad: function() {
   sitedeltaOverlay.strings = document.getElementById("sitedelta-strings");
   gBrowser.addProgressListener(sitedeltaOverlay, Components.interfaces.nsIWebProgress.NOTIFY_LOCATION); // Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT 
+  var addonBar = document.getElementById("addon-bar");
+  if (addonBar) {
+   if (!document.getElementById("sitedeltaButton")) {
+    var addonBarCloseButton = document.getElementById("addonbar-closebutton")
+    addonBar.insertItem("sitedeltaButton", addonBarCloseButton.nextSibling);
+    addonBar.collapsed = false;
+   }
+  }
   document.getElementById("appcontent").addEventListener("load", sitedeltaOverlay.onPageLoad, true);
   sitedeltaService.addObserver(sitedeltaOverlay);
   var list=document.getElementById("sitedelta-watch-popup");
@@ -58,10 +66,6 @@ var sitedeltaOverlay= {
  },
  observe: function(aSubject, aTopic, aData) {
   if (aTopic == "sitedelta") {
-   var watches=document.getElementById("sitedelta-watch-popup").firstChild;
-   var found=false;
-   while((watches=watches.nextSibling)!=null) if(watches.id!="") found=true;
-   document.getElementById("sitedelta-watch").setAttribute("hidden", (found?"false":"true"));
    sitedeltaOverlay.pageChanged();
   }
  },
@@ -100,14 +104,15 @@ var sitedeltaOverlay= {
    if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("presetFoundMessage"), "sitedelta-install", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_HIGH, [{ label: sitedeltaOverlay.strings.getString("presetFoundInstall"), accessKey: "i", popup: null, callback: sitedeltaOverlay.install }]);
   }
   var page=sitedeltaService.getPage(url);
-  var icon=document.getElementById("sitedelta-status");
-  if(page.status==-1) {
-   icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta.gif");
-  } else if(page.status>0) {
-   icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta-changed.gif");
-  } else { 
-   icon.setAttribute("src", "chrome://sitedelta/skin/sitedelta-known.gif");
-  }
+  var button = document.getElementById("sitedeltaButton");
+  if(button) button.setAttribute("pagestatus", page.status > 0 ? "1" : page.status == 0 ? "0" : "-1");
+  
+  var watches=document.getElementById("sitedelta-watch-popup").firstChild;
+  var found=false;
+  while((watches=watches.nextSibling)!=null) if(watches.id!="" && watches.id != url) { found=true; break; }
+  var button = document.getElementById("sitedeltaButton");
+  if(button) button.setAttribute("type", found ? "menu-button" : "button");
+  
   if(content.document.sitedeltaMatch==-2) {
    content.document.sitedeltaMatch=-1; sitedeltaOverlay.highlightPage(content.document);
   }
@@ -272,8 +277,8 @@ var sitedeltaOverlay= {
   sitedelta.menuBackups(menu, content.window.location.href); 	
  },
  showPopup: function(e) {
-  var popup = document.getElementById("sitedelta-popup");
-  popup.showPopup(document.getElementById("sitedelta-status"), -1, -1, "popup", "bottomleft", "topleft"); 
+  var popup = document.getElementById("sitedelta-toolbarmenu");
+  popup.showPopup(document.getElementById("sitedeltaButton"), -1, -1, "popup", "bottomleft", "topleft"); 
  },
  highlightChanges: function(e) {
   if(e.button && e.button!=0) return;
@@ -287,16 +292,28 @@ var sitedeltaOverlay= {
    return;
   }
   var url=content.window.location.href;
-  if(url=="about:blank") {sitedeltaOverlay.showProperties(); return; }
+  if(url=="about:blank") return;
 
   sitedeltaOverlay.highlightPage(content.document);
-  content.window.location.hash="#sitedelta-change0";
+  if(content.document.getElementById("sitedelta-change0")) 
+   content.document.getElementById("sitedelta-change0").scrollIntoView(true);
   content.document.sitedeltaMatch = 1; 
  },
  nextChange: function() {
   if(!content.document.getElementById("sitedelta-change"+content.document.sitedeltaMatch))
    content.document.sitedeltaMatch=0;
-  content.window.location.hash="#sitedelta-change"+content.document.sitedeltaMatch;
+  var elem = content.document.getElementById("sitedelta-change"+content.document.sitedeltaMatch);
+  elem.scrollIntoView(true);
+  var oldopac = elem.style.opacity;
+  setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 10);
+  setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 1), 200);
+  setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 400);
+  setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, oldopac), 600);
+  while(elem) {
+    if(elem.style && elem.style.display == "none") elem.style.display="block";
+    if(elem.style && elem.style.visibility == "hidden") elem.style.visibility="visible";
+    elem = elem.parentNode;
+  }
   content.document.sitedeltaMatch++;	 
  },
  highlightPage: function(doc) {

@@ -280,20 +280,26 @@ var sitedeltaOverlay= {
   var popup = document.getElementById("sitedelta-toolbarmenu");
   popup.showPopup(document.getElementById("sitedeltaButton"), -1, -1, "popup", "bottomleft", "topleft"); 
  },
- highlightChanges: function(e) {
+ clickButton: function(e) {
   if(e.button && e.button!=0) return;
+  var result=sitedeltaService.getPage(content.document.URL);
   if(e.ctrlKey) {
-   var result=sitedeltaService.getPage(content.document.URL);
    if(result.status==sitedeltaService.RESULT_NEW) toggleSidebar('viewSitedeltaSidebar'); else sitedeltaOverlay.showProperties(e);
-   return;
+   return false;
+  }
+  if(result.status==sitedeltaService.RESULT_NEW) {
+   sitedeltaOverlay.showPopup(e); 
+   return false;
   }
   if(content.document.sitedeltaMatch) {
    sitedeltaOverlay.nextChange();   
-   return;
+   return false;
   }
+  sitedeltaOverlay.highlightChanges(e) 
+ },
+ highlightChanges: function(e) {
   var url=content.window.location.href;
   if(url=="about:blank") return;
-
   sitedeltaOverlay.highlightPage(content.document);
   if(content.document.getElementById("sitedelta-change0")) 
    content.document.getElementById("sitedelta-change0").scrollIntoView(true);
@@ -304,15 +310,13 @@ var sitedeltaOverlay= {
    content.document.sitedeltaMatch=0;
   var elem = content.document.getElementById("sitedelta-change"+content.document.sitedeltaMatch);
   elem.scrollIntoView(true);
-  var oldopac = elem.style.opacity;
-  setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 10);
-  setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 1), 200);
-  setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 400);
-  setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, oldopac), 600);
-  while(elem) {
-    if(elem.style && elem.style.display == "none") elem.style.display="block";
-    if(elem.style && elem.style.visibility == "hidden") elem.style.visibility="visible";
-    elem = elem.parentNode;
+  var elems = content.document.getElementsByClassName("sitedelta-change" + content.document.sitedeltaMatch);
+  for(var i=0; i<elems.length; i++) {
+   var elem = elems[i];
+   setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 10);
+   setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 1), 200);
+   setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 400);
+   setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 1), 600);
   }
   content.document.sitedeltaMatch++;	 
  },

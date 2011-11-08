@@ -75,7 +75,7 @@
   </popupset>
   
   <toolbarpalette id="BrowserToolbarPalette">
-    <toolbarbutton id="sitedeltaButton" context="sitedelta-toolbarmenu" oncontextmenu="sitedeltaOverlay.showPopup(this); return false;" class="toolbarbutton-1" foundpages="false" pagestatus="-1" label="&sitedelta.title;" tooltiptext="&sitedelta.title;" oncommand="sitedeltaOverlay.highlightChanges(event);" type="menu-button">
+    <toolbarbutton id="sitedeltaButton" context="sitedelta-toolbarmenu" oncontextmenu="sitedeltaOverlay.showPopup(this); return false;" class="toolbarbutton-1" foundpages="false" pagestatus="-1" label="&sitedelta.title;" tooltiptext="&sitedelta.title;" oncommand="sitedeltaOverlay.clickButton(event); return false;" type="menu-button">
       <menupopup id="sitedelta-watch-popup" position="before_start" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending">
         <menuitem label="&sitedelta.openwatches;" default="true" oncommand="sitedeltaOverlay.openChanged(); return false;" />
         <menuseparator/>

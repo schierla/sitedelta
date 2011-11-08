@@ -561,15 +561,15 @@ SiteDelta.prototype = {
                             if (replace == null)
                                 replace = doc.createElement("SITEDELTA_SPAN");
                             if (last == "K") {
-                                replace.appendChild(this._DOMChanged(doc, txt, -1, last));
+                                replace.appendChild(this._DOMChanged(doc, txt, -changes, last));
                                 if (txt.match(/\[[^ ]+\] /))
                                     replace = null;
                             } else if (last == "D" || last=="m") {
                                 if (txt.replace(/\s+/, "") != "") {
-                                    replace.appendChild(this._DOMChanged(doc, txt, (count ? changes ++:- 1), last));
+                                    replace.appendChild(this._DOMChanged(doc, txt, (count ? changes ++: -changes), last));
                                 }
                             } else if (last == "I" || last == "M") {
-                                replace.appendChild(this._DOMChanged(doc, txt, (count ? changes ++:- 1), last));
+                                replace.appendChild(this._DOMChanged(doc, txt, (count ? changes ++: -changes), last));
                             }
                             if (last == "K")
                                 count = true;
@@ -1264,7 +1264,7 @@ SiteDelta.prototype = {
         var hil = doc.createElement("SPAN");
         var del = doc.createElement("DEL");
         del.setAttribute("style", "-moz-outline: dotted " + this.removeBorder + " 1px; background: " + this.removeBackground + "; color: #000;");
-        del.id = "sitedelta-change" + nr;
+        del.id = "sitedelta-change" + nr; del.className="sitedelta-change" + nr;
         while (text.indexOf("[") != -1) {
             del.appendChild(doc.createTextNode(text.substring(0, text.indexOf("["))));
             text = text.substr(text.indexOf("[") + 1);
@@ -1288,7 +1288,7 @@ SiteDelta.prototype = {
         while (cur.newElement) cur = cur.newElement;
         var hil = cur.ownerDocument.createElement("SPAN");
         hil.setAttribute("style", "-moz-outline: dotted " + this.moveBorder + " 1px; background: " + this.moveBackground + "; color: #000;");
-        hil.id = "sitedelta-change" + nr;
+        hil.id = "sitedelta-change" + nr; hil.className="sitedelta-change" + nr;
         hil.appendChild(cur.cloneNode(true));
         cur.parentNode.replaceChild(hil, cur);
         cur.newElement = hil;
@@ -1297,7 +1297,7 @@ SiteDelta.prototype = {
         while (cur.newElement) cur = cur.newElement;
         var hil = cur.ownerDocument.createElement("SPAN");
         hil.setAttribute("style", "-moz-outline: dotted " + this.addBorder + " 1px; background: " + this.addBackground + "; color: #000;");
-        hil.id = "sitedelta-change" + nr;
+        hil.id = "sitedelta-change" + nr; hil.className="sitedelta-change" + nr;
         hil.appendChild(cur.cloneNode(true));
         cur.parentNode.replaceChild(hil, cur);
         cur.newElement = hil;
@@ -1332,6 +1332,9 @@ SiteDelta.prototype = {
                 del.style.display = 'none';
             }}(del), false);
             doc.body.appendChild(del);
+	        if (nr > -1) del.id = "sitedelta-change" + nr; 
+			del.className="sitedelta-change" + Math.abs(nr);
+
         } else if (type == "I" || type=="M") {
             del = doc.createElement("SITEDELTA_INS");
             ret = del;
@@ -1339,9 +1342,12 @@ SiteDelta.prototype = {
 	            del.setAttribute("style", "display: inline; outline: " + this.addBorder + " dotted 1px; background: " + this.addBackground + "; color: #000;");
 	        else
 	            del.setAttribute("style", "display: inline; outline: " + this.moveBorder + " dotted 1px; background: " + this.moveBackground + "; color: #000;");
+			
+			if (nr > -1) del.id = "sitedelta-change" + nr; 
+			del.className="sitedelta-change" + Math.abs(nr);
+
         }
-        if (nr !=- 1 & type != "K")
-            ret.id = "sitedelta-change" + nr;
+		
         while (text.indexOf("[") !=- 1) {
             del.appendChild(doc.createTextNode(text.substring(0, text.indexOf("["))));
             text = text.substr(text.indexOf("[") + 1);

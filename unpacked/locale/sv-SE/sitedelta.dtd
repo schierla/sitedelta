@@ -1,0 +1,136 @@
+<!ENTITY sitedelta.title "SiteDelta">
+<!ENTITY sitedelta.highlight "Markera ändringar">
+<!ENTITY sitedelta.removehighlight "Ta bort markering">
+<!ENTITY sitedelta.backups "Säkerhetskopierade versioner">
+<!ENTITY sitedelta.createbackup "Säkerhetskopiera aktuell version">
+<!ENTITY sitedelta.regions "Områden">
+<!ENTITY sitedelta.loadpreset "Läs in områden">
+<!ENTITY sitedelta.scanregion "+ Bevaka område">
+<!ENTITY sitedelta.ignoreregion "+ Ignorera område">
+<!ENTITY sitedelta.pages "Sidor">
+<!ENTITY sitedelta.openwatches "Öppna alla i flikar...">
+<!ENTITY sitedelta.togglesidebar "SiteDeltas sidopanel">
+<!ENTITY sitedelta.sidebar.pagesettings "Sidegenskaper">
+<!ENTITY sitedelta.sidebar.update "Sök efter ändringar">
+<!ENTITY sitedelta.sidebar.markseen "Märk ändringar som sedda">
+<!ENTITY sitedelta.sidebar.delete "Ta bort">
+<!ENTITY sitedelta.sidebar.title "SiteDelta">
+<!ENTITY sitedelta.sidebar.openpage "Öppna sida">
+<!ENTITY sitedelta.sidebar.pages "Sidor">
+<!ENTITY sitedelta.sidebar.search "Sök: ">
+<!ENTITY sitedelta.sidebar.updateall "Sök igenom alla efter ändringar">
+<!ENTITY sitedelta.sidebar.openall "Öppna ändrade sidor">
+<!ENTITY sitedelta.sidebar.showprefs "Inställningar för SiteDelta...">
+<!ENTITY sitedelta.sidebar.showpresets "Hantera förval...">
+<!ENTITY sitedelta.properties.savepreset "Spara som förval">
+<!ENTITY sitedelta.properties.title "Sidegenskaper">
+<!ENTITY sitedelta.properties.lblname "Namn:">
+<!ENTITY sitedelta.properties.lbltitle "Rubrik:">
+<!ENTITY sitedelta.properties.lblurl "URL:">
+<!ENTITY sitedelta.properties.lblcheck "Senaste besök:">
+<!ENTITY sitedelta.properties.uselogin "Använd sparat lösenord (från lösenordshanteraren)">
+<!ENTITY sitedelta.properties.pageinfo "Sidinformation">
+<!ENTITY sitedelta.properties.whattoscan "Vad som skall sökas av">
+<!ENTITY sitedelta.properties.whentoscan "När avsökning skall ske">
+<!ENTITY sitedelta.properties.loadsettings "Läs in inställningar">
+<!ENTITY sitedelta.properties.loaddefault "Återställ standard">
+<!ENTITY sitedelta.properties.savesettings "Spara inställningar">
+<!ENTITY sitedelta.properties.savedefault "Spara som standard">
+<!ENTITY sitedelta.properties.editdefault "Redigera standard...">
+<!ENTITY sitedelta.properties.editpresets "Redigera förval...">
+<!ENTITY sitedelta.preset.close "Stäng">
+<!ENTITY sitedelta.preset.default "Standard">
+<!ENTITY sitedelta.preset.on "På">
+<!ENTITY sitedelta.preset.off "Av">
+<!ENTITY sitedelta.preset.title "Redigera förval">
+<!ENTITY sitedelta.preset.descname "Ange ett namn för områdesförvalet:">
+<!ENTITY sitedelta.preset.descurl "Adresser som förvalet tillämpas på (använd * och ? som jokertecken):">
+<!ENTITY sitedelta.preset.descinclude "Bevakade områden: ">
+<!ENTITY sitedelta.preset.descexclude "Ignorerade områden: ">
+<!ENTITY sitedelta.preset.delete "Ta bort">
+<!ENTITY sitedelta.preset.duplicate "Duplicera">
+<!ENTITY sitedelta.preset.lblname "Namn:">
+<!ENTITY sitedelta.preset.lblurl "URL:">
+<!ENTITY sitedelta.prefs.about "Om SiteDelta">
+<!ENTITY sitedelta.prefs.about.title "SiteDelta">
+<!ENTITY sitedelta.prefs.about.text "Informerar om ändrade webbsidor och markerar ändringar sedan det senaste besöket.">
+<!ENTITY sitedelta.prefs.about.translation "Svensk översättning: Mikael Hiort af Ornäs">
+<!ENTITY sitedelta.prefs.whattoscan "Avsökningsinställningar">
+<!ENTITY sitedelta.prefs.whentoscan "Avsökningsschema">
+<!ENTITY sitedelta.prefs.reaction "Avsökningsmeddelande">
+<!ENTITY sitedelta.prefs.title "Inställningar för SiteDelta">
+<!ENTITY sitedelta.prefs.add "Tillagd text">
+<!ENTITY sitedelta.prefs.remove "Borttagen text">
+<!ENTITY sitedelta.prefs.move "Flyttad text">
+<!ENTITY sitedelta.prefs.bgcolor "Bakgrundsfärg: ">
+<!ENTITY sitedelta.prefs.bordercolor "Kantlinjefärg: ">
+<!ENTITY sitedelta.prefs.regions "Områden">
+<!ENTITY sitedelta.prefs.scanregion "Färg för bevakade områden: ">
+<!ENTITY sitedelta.prefs.ignoreregion "Färg för ignorerade områden: ">
+<!ENTITY sitedelta.prefs.showregions.desc "Ramar in de bevakade och ignorerade områdena vid markering av ändringar.">
+<!ENTITY sitedelta.prefs.showregions "Rama in områden">
+<!ENTITY sitedelta.prefs.scanimages.desc "SiteDelta kan informera dig om tillagda eller borttagna bilder (eller ändrade bilder om filnamnet ändrats)">
+<!ENTITY sitedelta.prefs.scanimages "Kontrollera bildadresser">
+<!ENTITY sitedelta.prefs.scandeleted.desc "När detta är aktiverat meddelar SiteDelta om borttagen text på sidor (kan se rörigt ut på komplexa sidor)">
+<!ENTITY sitedelta.prefs.scandeleted "Visa borttagen text">
+<!ENTITY sitedelta.prefs.ignorenumbers.desc "SiteDelta kan ignorera tal om de ofta ändras (t.ex. antal inlägg på diskussionsforum)">
+<!ENTITY sitedelta.prefs.ignorenumbers "Ignorera ändrade tal">
+<!ENTITY sitedelta.prefs.ignorecase.desc "SiteDelta kan ignorera ändringar från gemener till VERSALER eller vice versa.">
+<!ENTITY sitedelta.prefs.ignorecase "Ignorera skiftläge">
+<!ENTITY sitedelta.prefs.settings "Inställningar">
+<!ENTITY sitedelta.prefs.appearance "Utseende">
+<!ENTITY sitedelta.prefs.watch "Webbplatsbevakning">
+<!ENTITY sitedelta.prefs.backuppages.desc "När ändringar hittas på en sida, så kan SiteDelta automatiskt spara en säkerhetskopia (t.ex. för dokumentation).">
+<!ENTITY sitedelta.prefs.backuppages "Säkerhetskopiera ändrade sidor">
+<!ENTITY sitedelta.prefs.scanonload.desc "Vid besök på bevakade sidor kan SiteDelta automatiskt söka efter ändringar.">
+<!ENTITY sitedelta.prefs.scanonload "Sök igenom kända sidor vid besök">
+<!ENTITY sitedelta.prefs.enablewatch.desc "SiteDelta kan söka igenom kända sidor regelbundet och informera dig om ändringar.">
+<!ENTITY sitedelta.prefs.enablewatch "Aktivera webbplatsbevakning">
+<!ENTITY sitedelta.prefs.watchpagetimeout.desc "När inläsning av en sida tar för lång tid, så avbryter SiteDelta inläsningen av sidan.">
+<!ENTITY sitedelta.prefs.watchpagetimeout "Tidsgräns för inläsning av sida (s)">
+<!ENTITY sitedelta.prefs.watchpagedelay.desc "SiteDelta väntar så här länge mellan avsökning av två sidor (för att minska serverbelastningen).">
+<!ENTITY sitedelta.prefs.watchpagedelay "Fördröjning efter avsökning av en sida (s)">
+<!ENTITY sitedelta.prefs.watchenablescript.desc "Gör SiteDelta en smula långsammare, men undviker vissa falsklarm.">
+<!ENTITY sitedelta.prefs.watchenablescript "Aktivera JavaScript för webbplatsbevakning">
+<!ENTITY sitedelta.prefs.frequency.default.desc "Använd standardinställning (angiven i inställningsdialogen)">
+<!ENTITY sitedelta.prefs.frequency.default "Standard">
+<!ENTITY sitedelta.prefs.frequency.never.desc "Använd detta alternativ för att undanta denna sida från automatisk avsökning">
+<!ENTITY sitedelta.prefs.frequency.never "Aldrig">
+<!ENTITY sitedelta.prefs.frequency.auto.desc "Lämna kontrollen över sökintervallet till SiteDelta. SiteDelta kommer inledningsvis att söka ofta, men förlänga sökintervallet om inga ändringar sker under en längre tid.">
+<!ENTITY sitedelta.prefs.frequency.auto "Automatiskt">
+<!ENTITY sitedelta.prefs.frequency.desc "Anpassat sökintervall:">
+<!ENTITY sitedelta.prefs.frequency.weekly "Varje vecka">
+<!ENTITY sitedelta.prefs.frequency.daily "Varje dag">
+<!ENTITY sitedelta.prefs.frequency.hourly "Varje timme">
+<!ENTITY sitedelta.prefs.frequency.custom "Eget: var ">
+<!ENTITY sitedelta.prefs.frequency.minutes "minut">
+<!ENTITY sitedelta.prefs.notifyalert "Visa aviseringsfönster">
+<!ENTITY sitedelta.prefs.notifyalert.desc "Visar ett meddelandefönster i den nedre högra delen av skärmen när ändrade sidor hittas.">
+<!ENTITY sitedelta.prefs.notifysound "Aviseringsljud">
+<!ENTITY sitedelta.prefs.notifysound.none "Inget">
+<!ENTITY sitedelta.prefs.notifysound.beep "Pip">
+<!ENTITY sitedelta.prefs.notifysound.alert "Systemavisering">
+<!ENTITY sitedelta.prefs.notifysound.newmail "Ny e-post">
+<!ENTITY sitedelta.prefs.notifysound.custom "Eget">
+<!ENTITY sitedelta.sidebar.sidebarkey "S">
+<!ENTITY sitedelta.sidebar.sidebarmods "alt accel">
+<!ENTITY sitedelta.sidebar.menukey "S">
+<!ENTITY sitedelta.sidebar.menumods "shift accel">
+<!ENTITY sitedelta.highlight.accesskey "M">
+<!ENTITY sitedelta.backups.accesskey "ä">
+<!ENTITY sitedelta.createbackup.accesskey "ä">
+<!ENTITY sitedelta.regions.accesskey "å">
+<!ENTITY sitedelta.scanregion.accesskey "ö">
+<!ENTITY sitedelta.ignoreregion.accesskey "i">
+<!ENTITY sitedelta.loadpreset.accesskey "l">
+<!ENTITY sitedelta.sidebar.pagesettings.accesskey "a">
+<!ENTITY sitedelta.togglesidebar.accesskey "d">
+<!ENTITY sitedelta.sidebar.pages.accesskey "r">
+<!ENTITY sitedelta.sidebar.updateall.accesskey "u">
+<!ENTITY sitedelta.sidebar.openall.accesskey "p">
+<!ENTITY sitedelta.sidebar.showpresets.accesskey "f">
+<!ENTITY sitedelta.sidebar.showprefs.accesskey "v">
+<!ENTITY sitedelta.prefs.enablewatch.accesskey "k">
+<!ENTITY sitedelta.sidebar.search.accesskey "s">
+<!ENTITY sitedelta.prefs.highlightonload.desc "När bevakade sidor söks, så kan SiteDelta automatiskt markera ändringarna.">
+<!ENTITY sitedelta.prefs.highlightonload "Markera ändringar på sidor vid besök">

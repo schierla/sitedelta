@@ -1447,21 +1447,23 @@ SiteDelta.prototype = {
                 } else if(_svc.scanPage(_svc._iframe.contentDocument)>0) {
                     var result = _svc.getPage(_svc._iframe.contentDocument.URL);
                     if(_svc.notifyAlert) {
-						var alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
-						alerts.showAlertNotification("chrome://sitedelta/content/sitedeltaGross.gif",  _svc._strings.GetStringFromName("notifyTitle"), result.name, true, result.url, _svc);
-	        		}
-	        		if(_svc.notifySound!="") {
-	        			_svc._playSound(_svc.notifySound);
-	        		}
-	        	}
-        	}
+                        try {
+                            var alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
+                            alerts.showAlertNotification("chrome://sitedelta/content/sitedeltaGross.gif",  _svc._strings.GetStringFromName("notifyTitle"), result.name, true, result.url, _svc);
+                        } catch(e) {}
+                    }
+                    if(_svc.notifySound!="") {
+                        _svc._playSound(_svc.notifySound);
+                    }
+                }
+            }
         }
         _svc._watchUrl=null;
         _svc._watchEndCheck(_svc);
     },
     _watchEndCheck: function() {
-    	var _svc=(this._svc?this._svc:this);
-    	if(_svc._watchUrl!=null) {
+        var _svc=(this._svc?this._svc:this);
+        if(_svc._watchUrl!=null) {
           var result = _svc.getPage(_svc._watchUrl);
           if (result.status == _svc.RESULT_CHECKING) {
             result.status= _svc.RESULT_ERROR;

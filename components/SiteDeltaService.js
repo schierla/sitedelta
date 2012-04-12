@@ -1719,7 +1719,7 @@ SiteDelta.prototype = {
                     if (elem.nodeName == "url") {
                         result.url = elem.firstChild.data;
                         if (elem.hasAttribute("user"))
-                            result.user = elem.attributes.getNamedItem("user").firstChild.data;
+                            result.user = elem.attributes.getNamedItem("user").value;
                     } else if (elem.nodeName == "include")
                         result.includes.push(elem.firstChild.data);
                     else if (elem.nodeName == "exclude")
@@ -1735,24 +1735,24 @@ SiteDelta.prototype = {
 	                        result.content += n.data;
                     else if (elem.nodeName == "settings") {
                         if (elem.hasAttribute("checkDeleted"))
-                            result.checkDeleted = elem.attributes.getNamedItem("checkDeleted").firstChild.data == "true";
+                            result.checkDeleted = elem.attributes.getNamedItem("checkDeleted").value == "true";
                         if (elem.hasAttribute("scanImages"))
-                            result.scanImages = elem.attributes.getNamedItem("scanImages").firstChild.data == "true";
+                            result.scanImages = elem.attributes.getNamedItem("scanImages").value == "true";
                         if (elem.hasAttribute("watchEnableScript"))
-                            result.backupPage = elem.attributes.getNamedItem("watchEnableScript").firstChild.data == "true";
+                            result.backupPage = elem.attributes.getNamedItem("watchEnableScript").value == "true";
                         if (elem.hasAttribute("backupPage"))
-                            result.backupPage = elem.attributes.getNamedItem("backupPage").firstChild.data == "true";
+                            result.backupPage = elem.attributes.getNamedItem("backupPage").value == "true";
                         if (elem.hasAttribute("watchDelay"))
-                            result.watchDelay = elem.attributes.getNamedItem("watchDelay").firstChild.data;
+                            result.watchDelay = elem.attributes.getNamedItem("watchDelay").value;
                         if (elem.hasAttribute("enableWatch")) {
-                            if (elem.attributes.getNamedItem("enableWatch").firstChild.data == "true")
+                            if (elem.attributes.getNamedItem("enableWatch").value == "true")
                                 result.watchDelay = 0;
                             else result.watchDelay =- 1;
                         }
                         if (elem.hasAttribute("ignoreCase"))
-                            result.ignoreCase = elem.attributes.getNamedItem("ignoreCase").firstChild.data == "true";
+                            result.ignoreCase = elem.attributes.getNamedItem("ignoreCase").value == "true";
                         if (elem.hasAttribute("ignoreNumbers"))
-                            result.ignoreNumbers = elem.attributes.getNamedItem("ignoreNumbers").firstChild.data == "true";
+                            result.ignoreNumbers = elem.attributes.getNamedItem("ignoreNumbers").value == "true";
                     }
                 }
                 elem = elem.nextSibling;

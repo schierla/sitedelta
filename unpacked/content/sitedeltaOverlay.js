@@ -120,32 +120,35 @@ var sitedeltaOverlay= {
  install: function() {
   var url=content.window.location.href; 
   var req = new XMLHttpRequest();
-  req.open('GET', url, false); 
-  req.send(null);
-  if(req.status != 200 && req.status!=0) return;
-  var parser = new DOMParser(); var dom=false; dom = parser.parseFromString(req.responseText, "text/xml");
-  if(!dom || dom.firstChild.nodeName!="sitedelta") return;
-  var preset={}; preset.includes=new Array(); preset.excludes=new Array();
-  preset.checkDeleted=null; preset.scanImages=null; preset.ignoreCase=null; preset.ignoreNumbers=null;
-  var elem=dom.firstChild.firstChild; while(elem) {
-   if(elem.firstChild) {
-    if(elem.nodeName=="url") preset.url=elem.firstChild.data;
-    else if(elem.nodeName=="include") preset.includes.push(elem.firstChild.data);
-    else if(elem.nodeName=="exclude") preset.excludes.push(elem.firstChild.data);
-    else if(elem.nodeName=="name") preset.name=elem.firstChild.data;
-    else if(elem.nodeName=="settings") {
-     if(elem.hasAttribute("checkDeleted")) preset.checkDeleted=elem.attributes.getNamedItem("checkDeleted").firstChild.data=="true";
-     if(elem.hasAttribute("scanImages")) preset.scanImages=elem.attributes.getNamedItem("scanImages").firstChild.data=="true";
-     if(elem.hasAttribute("ignoreCase")) preset.ignoreCase=elem.attributes.getNamedItem("ignoreCase").firstChild.data=="true";
-     if(elem.hasAttribute("ignoreNumbers")) preset.ignoreNumbers=elem.attributes.getNamedItem("ignoreNumbers").firstChild.data=="true";
-    }    
+  req.open('GET', url, true); 
+  req.onreadystatechange = function() {
+   if(req.readyState != 4) return;
+   if(req.status != 200 && req.status!=0) return;
+   var parser = new DOMParser(); var dom=false; dom = parser.parseFromString(req.responseText, "text/xml");
+   if(!dom || dom.firstChild.nodeName!="sitedelta") return;
+   var preset={}; preset.includes=new Array(); preset.excludes=new Array();
+   preset.checkDeleted=null; preset.scanImages=null; preset.ignoreCase=null; preset.ignoreNumbers=null;
+   var elem=dom.firstChild.firstChild; while(elem) {
+    if(elem.firstChild) {
+     if(elem.nodeName=="url") preset.url=elem.firstChild.data;
+     else if(elem.nodeName=="include") preset.includes.push(elem.firstChild.data);
+     else if(elem.nodeName=="exclude") preset.excludes.push(elem.firstChild.data);
+     else if(elem.nodeName=="name") preset.name=elem.firstChild.data;
+     else if(elem.nodeName=="settings") {
+      if(elem.hasAttribute("checkDeleted")) preset.checkDeleted=elem.attributes.getNamedItem("checkDeleted").firstChild.data=="true";
+      if(elem.hasAttribute("scanImages")) preset.scanImages=elem.attributes.getNamedItem("scanImages").firstChild.data=="true";
+      if(elem.hasAttribute("ignoreCase")) preset.ignoreCase=elem.attributes.getNamedItem("ignoreCase").firstChild.data=="true";
+      if(elem.hasAttribute("ignoreNumbers")) preset.ignoreNumbers=elem.attributes.getNamedItem("ignoreNumbers").firstChild.data=="true";
+     }    
+    }
+    elem=elem.nextSibling;
    }
-   elem=elem.nextSibling;
-  }
-  var noB=gBrowser.getNotificationBox();
-  if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("presetFoundDone").replace(/%s/,preset.url), "sitedelta-install", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_HIGH);
-  var fn=sitedeltaService.newPreset(preset);
-  sitedelta.showPresets(fn);
+   var noB=gBrowser.getNotificationBox();
+   if(noB) noB.appendNotification(sitedeltaOverlay.strings.getString("presetFoundDone").replace(/%s/,preset.url), "sitedelta-install", "chrome://sitedelta/content/sitedelta.gif", noB.PRIORITY_WARNING_HIGH);
+   var fn=sitedeltaService.newPreset(preset);
+   sitedelta.showPresets(fn);
+  };
+  req.send(null);
  },
  mouseover: function(e) {
   if(sitedeltaOverlay.needText && !e.target.firstChild.data && (!e.target.id || e.target.id.substr(0,16)=="sitedelta-change")) return;

@@ -7,3 +7,7 @@
 #sitedeltaButton {list-style-image: url("chrome://sitedelta/skin/sitedelta.gif"); }
 #sitedeltaButton[pagestatus="0"] { list-style-image: url("chrome://sitedelta/skin/sitedelta-known.gif"); }
 #sitedeltaButton[pagestatus="1"] { list-style-image: url("chrome://sitedelta/skin/sitedelta-changed.gif"); }
+
+#sitedeltaPages {list-style-image: url("chrome://sitedelta/skin/pages.gif"); }
+#sitedeltaPages[type="button"] { list-style-image: url("chrome://sitedelta/skin/pages.gif"); }
+#sitedeltaPages[type="menu-button"] { list-style-image: url("chrome://sitedelta/skin/pages-changed.gif"); }

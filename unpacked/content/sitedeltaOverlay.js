@@ -63,11 +63,9 @@ var sitedeltaOverlay= {
   document.getElementById("appcontent").addEventListener("load", sitedeltaOverlay.onPageLoad, true);
   sitedeltaService.addObserver(sitedeltaOverlay);
   var list=document.getElementById("sitedelta-watch-popup");
-  list.database.AddDataSource(sitedeltaService.RDF);
-  list.builder.rebuild(); 
+  if(list && list.database) { list.database.AddDataSource(sitedeltaService.RDF); list.builder.rebuild(); }
   list=document.getElementById("sitedelta-pages-popup");
-  list.database.AddDataSource(sitedeltaService.RDF);
-  list.builder.rebuild(); 
+  if(list && list.database) { list.database.AddDataSource(sitedeltaService.RDF); list.builder.rebuild(); }
   sitedeltaOverlay.observe("","sitedelta","");
  },
  observe: function(aSubject, aTopic, aData) {
@@ -126,15 +124,16 @@ var sitedeltaOverlay= {
   var button = document.getElementById("sitedeltaButton");
   if(button) button.setAttribute("pagestatus", page.status > 0 ? "1" : page.status == 0 ? "0" : "-1");
   
-  var watches=document.getElementById("sitedelta-watch-popup").firstChild;
-  var found=false; while((watches=watches.nextSibling)!=null) if(watches.id!="" && watches.id != url) { found=true; break; }
   var button = document.getElementById("sitedeltaButton");
   var pbutton = document.getElementById("sitedeltaPages");
-  if(button && !pbutton) button.setAttribute("type", found ? "menu-button" : "button");
-  
-  watches=document.getElementById("sitedelta-pages-popup").firstChild;
-  var found=false; while((watches=watches.nextSibling)!=null) if(watches.id!="") { found=true; break; }
-  if(pbutton) pbutton.setAttribute("type", found ? "menu-button" : "button");
+  var watches=document.getElementById("sitedelta-watch-popup").firstChild;
+  var found=false, pfound = false; 
+  while((watches=watches.nextSibling)!=null) {
+   if(watches.id!="") {pfound = true; }
+   if(watches.id!="" && watches.id != url) { found=true; break; }
+  }
+  if(button) button.setAttribute("type", found && !pbutton ? "menu-button" : "button");
+  if(pbutton) pbutton.setAttribute("type", pfound ? "menu-button" : "button");
   
   if(content.document.sitedeltaMatch==-2) {
    content.document.sitedeltaMatch=-1; sitedeltaOverlay.highlightPage(content.document);

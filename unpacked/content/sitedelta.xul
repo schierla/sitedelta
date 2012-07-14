@@ -93,7 +93,7 @@
       </menupopup>
     </toolbarbutton>
 	
-	<toolbarbutton id="sitedeltaPages" class="toolbarbutton-1" foundpages="false" pagestatus="-1" label="&sitedelta.togglesidebar;" tooltiptext="&sitedelta.togglesidebar;" oncommand="toggleSidebar('viewSitedeltaSidebar'); return false;" type="button">
+	<toolbarbutton id="sitedeltaPages" class="toolbarbutton-1" label="&sitedelta.togglesidebar;" tooltiptext="&sitedelta.togglesidebar;" oncommand="toggleSidebar('viewSitedeltaSidebar'); return false;" type="button">
       <menupopup id="sitedelta-pages-popup" position="before_start" datasources="rdf:null" ref="urn:root" sortResource="http://home.netscape.com/NC-rdf#name" sortDirection="ascending">
         <menuitem label="&sitedelta.openwatches;" default="true" oncommand="sitedeltaOverlay.openChanged(); return false;" />
         <menuseparator/>

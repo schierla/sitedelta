@@ -2,7 +2,7 @@
 var sitedeltaSidebar = {
 onLoad: function() {
  var list=document.getElementById("sitedeltaPages");
- if(list != null) {
+ if(list && list.database) {
   list.database.AddDataSource(sitedeltaService.RDF);
   list.builder.rebuild();
  }

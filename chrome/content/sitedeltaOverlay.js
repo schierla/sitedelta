@@ -12,7 +12,7 @@ var sitedeltaOverlay= {
    if(result.status!=sitedeltaService.RESULT_NEW) {
 	if(sitedeltaService.scanOnLoad) sitedeltaService.scanPage(doc);
 	if(sitedeltaService.highlightOnLoad) {
-     doc.sitedeltaMatch = -2; sitedeltaOverlay.pageChanged();
+     doc.sitedeltaMatch=-1; sitedeltaOverlay.highlightPage(doc);
     }
    }
   }
@@ -48,7 +48,7 @@ var sitedeltaOverlay= {
  },
  onLoad: function() {
   sitedeltaOverlay.strings = document.getElementById("sitedelta-strings");
-  gBrowser.addProgressListener(sitedeltaOverlay, Components.interfaces.nsIWebProgress.NOTIFY_LOCATION); // Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT 
+  gBrowser.addProgressListener(sitedeltaOverlay); 
   var addonBar = document.getElementById("addon-bar");
   if (addonBar) {
    if (!document.getElementById("sitedeltaButton")) {
@@ -134,10 +134,6 @@ var sitedeltaOverlay= {
   }
   if(button) button.setAttribute("type", found && !pbutton ? "menu-button" : "button");
   if(pbutton) pbutton.setAttribute("type", pfound ? "menu-button" : "button");
-  
-  if(content.document.sitedeltaMatch==-2) {
-   content.document.sitedeltaMatch=-1; sitedeltaOverlay.highlightPage(content.document);
-  }
  },
  install: function() {
   var url=content.window.location.href; 

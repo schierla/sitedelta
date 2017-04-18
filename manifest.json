@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+	"name": "SiteDelta",
+	"version": "0.1",
+	
+	"description": "Highlights changes made to a website since last visit",
+	"icons": {
+		"48": "icons/delta.png"
+	},
+	
+	"permissions": [
+		"activeTab", 
+		"storage",
+		"*://*/"
+	],
+	
+	"browser_action": {
+		"default_icon": "icons/delta.png",
+		"default_title": "SiteDelta"
+	},
+	
+	"page_action": {
+		"default_icon": "icons/changed.gif",
+		"default_title": "Watched Page" 
+	},
+	
+	"background": {
+		"scripts": ["background/backgroundscript.js"]
+	}
+}

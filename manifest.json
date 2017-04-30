@@ -11,20 +11,26 @@
 	"permissions": [
 		"activeTab", 
 		"storage",
+		"webNavigation",
 		"*://*/"
 	],
 	
 	"browser_action": {
-		"default_icon": "icons/delta.png",
-		"default_title": "SiteDelta"
+		"browser_style": true,
+		"default_icon": "icons/neutral.svg",
+		"default_title": "SiteDelta WebExt",
+		"default_popup": "popup/popup.htm"
 	},
 	
 	"page_action": {
-		"default_icon": "icons/changed.gif",
-		"default_title": "Watched Page" 
+		"browser_style": true,		
+		"default_icon": "icons/changed.svg",
+		"default_title": "Watched Page",
+		"default_popup": "popup/pagepopup.htm"
 	},
 	
 	"background": {
-		"scripts": ["background/backgroundscript.js"]
+		"scripts": ["includes/io.js", "background/backgroundscript.js"]
 	}
+
 }

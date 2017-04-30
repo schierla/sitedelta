@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+
+  <body>
+    <div class="panel">
+      <div class="panel-section panel-section-header">
+        <img class="icon-section-header" id="icon"/>
+        <div class="text-section-header">SiteDelta</div>
+      </div>
+
+      <div class="panel-section panel-section-tabs"> 
+        <div class="panel-section-tabs-button selected" id="todetails">Details</div> <div class="panel-section-tabs-separator"></div> 
+        <div class="panel-section-tabs-button" id="toregions">Regions</div> <div class="panel-section-tabs-separator"></div> 
+        <div class="panel-section-tabs-button" id="toconfig">Configuration</div> <div class="panel-section-tabs-separator"></div> 
+      </div>
+
+      <div class="panel-section panel-section-formElements" id="details"> 
+        <div class="panel-formElements-item"> <label for="name">Title:</label><input type="text" value="" id="title" /> </div> 
+        <div class="panel-formElements-item"> <label for="url">URL:</label><input type="text" disabled value="" id="url" /> </div> 
+      </div>
+
+      <div class="panel-section panel-section-list" id="regions">
+        <div class="panel-list-item disabled">Included regions</div>
+        <div class="panel-list-item"><div class="text">html/body[0]</div><div class="text-shortcut">remove</div></div>
+        <div class="panel-list-item"><div class="text"></div><div class="text-shortcut">add new</div></div>
+        <div class="panel-section-separator"></div>
+        <div class="panel-list-item disabled">Excluded regions</div>
+        <div class="panel-list-item"><div class="text"></div><div class="text-shortcut">add new</div></div>
+      </div>
+
+      <div class="panel-section panel-section-list" id="config"> 
+        <div class="panel-list-item disabled">Check contents</div>
+        <div class="panel-list-item switch"><input checked id="checkdeleted" type="checkbox" class="visually-hidden"><label for="checkdeleted">Check deletions</label></div>
+        <div class="panel-list-item switch"><input checked id="checkimages" type="checkbox" class="visually-hidden"><label for="checkimages">Check images</label></div>
+        <div class="panel-section-separator"></div>
+        <div class="panel-list-item disabled">Check ignores</div>
+        <div class="panel-list-item switch"><input checked id="ignorecase" type="checkbox" class="visually-hidden"><label for="ignorecase">Ignore case</label></div>
+        <div class="panel-list-item switch"><input checked id="ignorenumbers" type="checkbox" class="visually-hidden"><label for="ignorenumbers">Ignore numbers</label></div>
+      </div>
+
+      <div class="panel-section panel-section-footer" id="footer">
+        <div id="highlight" class="panel-section-footer-button default">Highlight changes</div><div class="panel-section-footer-separator"></div>
+        <div id="delete" class="panel-section-footer-button">Delete Page</div><div class="panel-section-footer-separator"></div>
+      </div>
+
+    </div>
+
+
+    <script src="../includes/config.js"></script>
+    <script src="../includes/ui.js"></script>
+    <script src="../includes/io.js"></script>
+    <script src="pagepopup.js"></script>
+  </body>
+
+</html>

@@ -4,41 +4,15 @@ if(!("highlightChanges" in window)) {
 
 function messageHandler(request, sender, sendResponse) {
     if(request.command == "getContent") {
+		sendResponse(getText(request.config));
+    } else if(request.command == "highlightChanges") {
 		if(window.highlighted) {
 			
 		} else {	
-			sendResponse(getText(request.config));
+			var changes = highlightChanges(request.config, request.content);
+			window.highlighted = true;
+			sendResponse(changes);
 		}
-    } else if(request.command == "highlightChanges") {
-		var changes = highlightChanges(request.config, request.content);
-		window.highlighted = true;
-		sendResponse(changes);
-	} else if(request.command == "debugSetContent") {
-		console.log("debugSetContent");
-		while(document.firstChild) document.removeChild(document.firstChild);
-		var html = document.createElement("html");html.style.padding="0";html.style.margin="0";
-		document.appendChild(html);
-		var body = document.createElement("body");body.style.padding="0";body.style.margin="0";
-		html.appendChild(body);
-		var div1 = document.createElement("div");
-		div1.style.position="absolute";div1.style.left="0";div1.style.top="0";div1.style.width="100%";div1.style.height="2em";div1.style.background="yellow";
-		body.appendChild(div1);
-		var div = document.createElement("div");
-		div.style.position="absolute";div.style.top="2em";div.style.left="1px";div.style.right="1px";div.style.bottom="1px";div.style.margin="0";div.style.padding="0";
-		body.appendChild(div);
-		var iframe = document.createElement("iframe");
-		iframe.setAttribute("sandbox", "allow-same-origin");
-		iframe.style.position="absolute";iframe.style.width="100%";iframe.style.height="100%";iframe.style.border="none 0";iframe.style.padding="0"; iframe.style.margin="0";
-		div.appendChild(iframe);
-		iframe.onload = function() {
-			var doc = iframe.contentDocument;
-			var content = new DOMParser().parseFromString(request.content, "text/html");
-			var elem = doc.importNode(content.documentElement, true);
-			while(doc.firstChild) doc.removeChild(doc.firstChild);
-			doc.appendChild(elem);	
-			iframe.onload=null;
-		}
-		sendResponse("ok");
 	}
 }
 

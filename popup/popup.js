@@ -3,15 +3,13 @@ ui.init([
     {tab:"towatch",elem:"watch",footer:["managewatch", "watchpage"]}
 ], 0);
 
-document.body.style.minWidth="40em";
-document.querySelector("#icon").src="../icons/neutral.svg";
+document.body.style.minWidth = "40em";
+document.querySelector("#icon").src = "../icons/neutral.svg";
 
 document.querySelector("#configure").addEventListener("click", function(e) {
-    chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
-        chrome.pageAction.setIcon({path: "../icons/neutral.svg", tabId: tabs[0].id});
-        chrome.pageAction.show(tabs[0].id);
-        window.location.href="pagepopup.htm";
-    });
+    chrome.pageAction.setIcon({path: "../icons/neutral.svg", tabId: tabId});
+    chrome.pageAction.show(tabId);
+    window.location.href="pagepopup.htm";
 });
 
 document.querySelector("#managepages").addEventListener("click", function(e) {
@@ -24,27 +22,47 @@ document.querySelector("#managewatch").addEventListener("click", function(e) {
     window.close();
 });
 
+var PAGESTATE = {
+    UNSUPPORTED: -1,
+    DISABLED: 0,
+    ENABLED: 1
+};
+
 function enableButtons(title, state) {
-    document.querySelector("#enabled").style.display = (state==1?'block':'none');
-    document.querySelector("#disabled").style.display = (state==0?'block':'none');
-    document.querySelector("#unsupported").style.display = (state==-1?'block':'none');
-    document.querySelector("#configure").style.visibility = (state==-1?'hidden':'visible');
-    document.querySelector("#watchpage").style.visibility = (state==-1?'hidden':'visible');
-    var titleElem = document.querySelector("#title");
-    while(titleElem.firstChild) titleElem.removeChild(titleElem.firstChild);
-    titleElem.appendChild(document.createTextNode(title));
+    document.querySelector("#pagetitle").value = title;
+    document.querySelector("#url").value = url;
+    switch(state) {
+    case PAGESTATE.UNSUPPORTED: 
+        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("popupHighlightUnsupported");
+        document.querySelector("#configure").style.visibility = "hidden";
+        document.querySelector("#watchpage").style.visibility = "hidden";
+        break;
+    case PAGESTATE.ENABLED:
+        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("popupHighlightEnabled");
+        break;
+    case PAGESTATE.DISABLED:
+        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("popupHighlightDisabled");
+        break;
+    }
+    document.querySelector("#panel-loading").style.display = "block";
 }
 
+var url = null;
+var tabId = null;
+var title = null;
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    if(tabs[0].url.substr(0,4)!="http") {
-        enableButtons(tabs[0].title, -1);
+    tabId = tabs[0].id;
+    url = tabs[0].url;
+    title = tabs[0].title;
+    if(url.substr(0,4)!="http") {
+        enableButtons(title, PAGESTATE.UNSUPPORTED);
         return;
     } 
-    io.get(tabs[0].url, function(existing) {
+    io.get(url, function(existing) {
         if(existing == null) {
-            enableButtons(tabs[0].title, 1);
+            enableButtons(title, PAGESTATE.DISABLED);
         } else {
-            enableButtons(tabs[0].title, 0);
+            enableButtons(title, PAGESTATE.ENABLED);
         }
     });
 });

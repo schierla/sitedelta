@@ -2,21 +2,194 @@ if(!("highlightChanges" in window)) {
 	window.highlighted = false;
 }
 
+var STATE = {
+	LOADED: 1, 
+	HIGHLIGHTED: 2,
+	SELECTREGION: 3
+};
+
 function messageHandler(request, sender, sendResponse) {
-    if(request.command == "getContent") {
-		sendResponse(getText(request.config));
+	if(request.command == "getStatus") {
+		if(window.highlighted) 
+			sendResponse({state: STATE.HIGHLIGHTED, changes: window.numChanges, current: window.currentChange});
+		else if(regions.callback != null)
+			sendResponse({state: STATE.SELECTREGION});
+		else 
+			sendResponse({state: STATE.LOADED});
+	} else if(request.command == "getContent") {
+		if(!window.highlighted) {
+			window.content = getText(request.config);
+		}
+		sendResponse(window.content);
     } else if(request.command == "highlightChanges") {
 		if(window.highlighted) {
-			
+			if(window.numChanges > 0) nextChange();
+			sendResponse({state: STATE.HIGHLIGHTED, changes: window.numChanges, current: window.currentChange});
 		} else {	
 			var changes = highlightChanges(request.config, request.content);
 			window.highlighted = true;
-			sendResponse(changes);
+			window.numChanges = changes;
+			window.currentChange = 0;
+			if(window.numChanges > 0) nextChange();
+			sendResponse({state: STATE.HIGHLIGHTED, changes: window.numChanges, current: window.currentChange});
 		}
+	} else if(request.command == "selectRegion") {
+		selectRegion(function(xpath) {
+			sendResponse(xpath);
+		});
+		return true;
+	} else if(request.command == "showOutline") {
+		regions.showOutline(request.xpath, request.color);
+	} else if(request.command == "removeOutline") {
+		regions.removeOutline();
 	}
 }
 
 chrome.runtime.onMessage.addListener(messageHandler);
+
+function nextChange() {
+	if(!document.getElementById("sitedelta-change"+window.currentChange))
+		window.currentChange=0;
+	var elem = document.getElementById("sitedelta-change"+window.currentChange);
+	elem.scrollIntoView(true);
+	window.scrollBy(0, elem.getBoundingClientRect().top - (window.innerHeight/2));
+	var elems = document.getElementsByClassName("sitedelta-change" + window.currentChange);
+	for(var i=0; i<elems.length; i++) {
+		var elem = elems[i];
+		setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 10);
+		setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 1), 200);
+		setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 400);
+		setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 1), 600);
+	}
+	window.currentChange++;	 
+}
+
+var regions = {
+	mouseover: function(e) {
+		if(regions.needText && !e.target.firstChild.data && 
+				(!e.target.id || e.target.id.substr(0,16)=="sitedelta-change")) 
+			return;
+		e.target.style.outline="red dotted 2px";
+		e.preventDefault();
+		e.stopPropagation();
+	},
+	mouseout: function(e) {
+		if(e.target && e.target != regions.destelement) 
+			e.target.style.outline="none";
+		e.preventDefault();
+		e.stopPropagation();
+	},
+	mousedown: function(e) {
+		regions.needText = true;
+		regions.destelement = e.target;
+		e.target.style.outline = "green solid 2px;";
+		e.preventDefault();
+		e.stopPropagation();
+	},
+	mouseup: function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		regions.mouseout(e);
+		if(regions.destelement != null)
+			regions.destelement.style.outline="none";
+
+		document.removeEventListener("mouseover", regions.mouseover, true);
+		document.removeEventListener("mousedown", regions.mousedown, true);
+		document.removeEventListener("mouseup",   regions.mouseup,   true);
+		document.removeEventListener("mouseout",  regions.mouseout,  true);
+
+		if(e.button == 0 && !e.ctrlKey) {
+			regions.needText = false;
+			if (e.target != regions.destelement && (e.target.firstChild.data || e.target.id)) {
+				var to = regions.buildXPath(regions.destelement, false).split("/");
+				var from = regions.buildXPath(e.target, false).split("/");
+				var common = "";
+				for(var i = 0; i < Math.min(to.length, from.length); i++) {
+					common+="/"+to[i]; 
+					if (to[i] != from[i]) break; 
+				}  
+				common = common.substr(1);   
+				if(e.target.id) {
+					var xpath="//*[@id=\""+ e.target.id +"\"]";
+					xpath = 'id("' + e.target.id + '")';
+				} else {
+					var data = new String(e.target.firstChild.data); 
+					var func = "text()";
+					if (data.replace(/[ \n\t\r]+/g," ").replace(/^ /,"").replace(/ $/,"") != data) {
+						data = data.replace(/[ \n\t\r]+/g," ").replace(/^ /,"").replace(/ $/,""); 
+						func="normalize-space("+func+")";
+					}
+					if (data.replace(/"/,"'") != data) {
+						data = data.replace(/"/,"'"); 
+						func = "translate(" + func + ",'\"',\"'\")";
+					}
+						
+					var xpath = "//" + e.target.nodeName.toLowerCase() + '[' + func + '="' + data +'"]';
+				}
+				for(var j = i; j < from.length; j++) 
+					xpath += "/..";
+				for(i = i; i < to.length; i++) 
+					xpath += "/" + to[i];
+			} else {
+				var xpath = regions.buildXPath(regions.destelement, true);
+			}
+		} else {
+			var xpath = null;
+		}
+		regions.needText = false;
+		regions.destelement = null;
+		regions.callback(xpath);
+		regions.callback = null;
+	},
+	buildXPath: function(t, allowId) {
+        var path = "";
+        if(allowId && t.id != "" && t.id.indexOf('sitedelta')==-1) return 'id("' + t.id + '")';
+        while (t.nodeName != "HTML") {
+            c = t.parentNode.firstChild;
+            num = 1;
+            while (c != t) {
+                if (c.nodeName == t.nodeName)
+                    num ++ ;
+                c = c.nextSibling;
+            }
+            path = "/" + t.nodeName.toLowerCase() + "[" + num + "]" + path;
+            t = t.parentNode;
+            if(allowId && t.id != "" && t.id.indexOf('sitedelta')==-1) return 'id("' + t.id + '")' + path;
+        }
+        path = "/" + t.nodeName.toLowerCase() + path;
+        return path;
+    },
+	showOutline: function(xpath, color) {
+		if(regions.outlinedElement) 
+			regions.removeOutline();
+		var element = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
+		if (!element) 
+			return;
+		regions.outlinedElement = element; 
+		regions.outlinedElementStyle = element.style.outline;
+		element.style.outline = color + " dotted 2px";
+	},
+	removeOutline: function() {
+		if(regions.outlinedElement) 
+			regions.outlinedElement.style.outline = regions.outlinedElementStyle;
+		regions.outlinedElement = null;
+	},
+	outlinedElement: null,
+	needText: false,
+	destelement: null,
+	callback: null
+};
+
+function selectRegion(callback) {
+	regions.needText = false; 
+	regions.destelement = null; 
+	regions.callback = callback;
+	document.addEventListener("mouseover", regions.mouseover, true);
+	document.addEventListener("mousedown", regions.mousedown, true);
+	document.addEventListener("mouseup",   regions.mouseup,   true);
+	document.addEventListener("mouseout",  regions.mouseout,  true);
+}
+
 
 function highlightChanges(config, oldContent) {
 	var doc = document;
@@ -167,15 +340,15 @@ function highlightChanges(config, oldContent) {
 					if (replace == null)
 						replace = doc.createElement("SITEDELTA_SPAN");
 					if (last == "K") {
-						replace.appendChild(_DOMChanged(doc, txt, -changes, last, config));
+						replace.appendChild(_DOMChanged(doc, txt, (1-changes), last, config));
 						if (txt.match(/\[[^ ]+\] /))
 							replace = null;
 					} else if (last == "D" || last=="m") {
 						if (txt.replace(/\s+/, "") != "") {
-							replace.appendChild(_DOMChanged(doc, txt, (count ? changes ++: -changes), last, config));
+							replace.appendChild(_DOMChanged(doc, txt, (count ? (++changes-1): (1-changes)), last, config));
 						}
 					} else if (last == "I" || last == "M") {
-						replace.appendChild(_DOMChanged(doc, txt, (count ? changes ++: -changes), last, config));
+						replace.appendChild(_DOMChanged(doc, txt, (count ? (++changes-1): (1-changes)), last, config));
 					}
 					if (last == "K")
 						count = true;
@@ -228,7 +401,7 @@ function getText(config) {
     for (var i = 0; i < config.excludes.length; i ++ ) {
         var elements = doc.evaluate(config.excludes[i], doc, null, XPathResult.ANY_TYPE, null);
         for(var element = elements.iterateNext(); element!=null; element = elements.iterateNext()) {
-            excludeElements.push(element);
+            config.excludeElements.push(element);
         }
     }
     var regions = [];
@@ -276,7 +449,8 @@ function _DOMChanged(doc, text, nr, type, config) {
 			del.style.display = 'none';
 		}}(del), false);
 		doc.body.appendChild(del);
-		if (nr > -1) del.id = "sitedelta-change" + nr; 
+		if (nr > -1) img.id = "sitedelta-change" + nr; 
+		img.className="sitedelta-change" + Math.abs(nr);
 		del.className="sitedelta-change" + Math.abs(nr);
 
 	} else if (type == "I" || type=="M") {

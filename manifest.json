@@ -1,11 +1,12 @@
 {
 	"manifest_version": 2,
-	"name": "SiteDelta",
+	"name": "__MSG_extensionName__",
 	"version": "0.1",
 	
-	"description": "Highlights changes made to a website since last visit",
+	"default_locale": "en",
+	"description": "__MSG_extensionDescription__",
 	"icons": {
-		"48": "icons/delta.png"
+		"48": "icons/neutral.svg"
 	},
 	
 	"permissions": [
@@ -18,14 +19,14 @@
 	"browser_action": {
 		"browser_style": true,
 		"default_icon": "icons/neutral.svg",
-		"default_title": "SiteDelta WebExt",
+		"default_title": "__MSG_extensionName__",
 		"default_popup": "popup/popup.htm"
 	},
 	
 	"page_action": {
 		"browser_style": true,		
 		"default_icon": "icons/changed.svg",
-		"default_title": "Watched Page",
+		"default_title": "__MSG_extensionName__",
 		"default_popup": "popup/pagepopup.htm"
 	},
 	

@@ -1,0 +1,164 @@
+{
+    "extensionName": {
+        "message": "SiteDelta",
+        "description": "Name fo the extension"
+    },
+    "extensionDescription": {
+        "message": "Highlights changes made to a website since last visit",
+        "description": "Description of the extension"
+    },
+    "popupTitle": {
+        "message": "SiteDelta",
+        "description": "Title of the browser action popup"
+    },
+    "popupHighlightTab": {
+        "message": "Highlight",
+        "description": "Text of the 'highlight' tab"
+    },
+    "popupHighlightUnsupported": {
+        "message": "SiteDelta does not support monitoring this page.",
+        "description": "Text that the current page is unsupported"
+    },
+    "popupHighlightDisabled": {
+        "message": "SiteDelta is disabled for this page. Click 'Configure Page' to enable.",
+        "description": "Text that highlighting of the current page is disabled"
+    },
+    "popupHighlightEnabled": {
+        "message": "SiteDelta is enabled for this page. Click 'Configure Page' to configure.",
+        "description": "Text that highlighting of the current page is enabled"
+    },
+
+    "popupWatchTab":  {
+        "message": "Watch",
+        "descriptoin": "Text of the 'watch' tab"
+    },
+    "popupWatchTitle": {
+        "message": "Changed Pages",
+        "description": "Headline for changed pages"
+    },
+    "popupWatchEnabled": {
+        "message": "Check pages in background", 
+        "description": "Label for checkbox to enable/disable page watch"
+    },
+
+    "popupButtonConfigure": {
+        "message": "Configure Highlight",
+        "description": "Button to enable/configure highlighting for current page"
+    },
+    "popupButtonManagePages": {
+        "message": "Manage Pages",
+        "description": "Button to manage highlighted pages"
+    },
+    "popupButtonWatch": {
+        "message": "Watch Page",
+        "description": "Button to enable watch for current page"
+    },
+    "popupButtonManageWatch": {
+        "message": "Manage Watched Pages",
+        "description": "Button to manage watched pages"
+    },
+
+    "pagepopupTitle": {
+        "message": "SiteDelta Page Settings",
+        "description": "Title of the page action popup"
+    },
+    "pagepopupTitleNoChanges": {
+        "message": "No changes found.",
+        "description": "Title of the page action popup when no changes are found"
+    },
+    "pagepopupTitleChanges": {
+        "message": "Highlighting change $CURRENT$ of $COUNT$.",
+        "description": "Title of the page action popup when changes are found",
+        "placeholders": {
+            "current": {
+                "content": "$1",
+                "example": "1"
+            },
+            "count": {
+                "content": "$2",
+                "example": "5"
+            }
+        }
+    },
+    "pagepopupTitleSelectRegion": {
+        "message": "Click to select a region",
+        "description": "Title of the page action popup while selecting a region"
+    },
+    "pagepopupTitleStored": {
+        "message": "Current contents have been stored.",
+        "description": "Title of the page action popup when the initial contents of the page have been stored."
+    },
+
+    "pagepopupDetailsTab": {
+        "message": "Details",
+        "description": "Text of the 'details' tab"
+    },
+    "pagepopupDetailsTitle": {
+        "message": "Title: ",
+        "description": "Label for the 'title' field"
+    },
+    "pagepopupDetailsUrl": {
+        "message": "URL:",
+        "description": "Label for the 'URL' field"
+    },
+
+    "pagepopupRegionsTab": {
+        "message": "Regions",
+        "description": "Text of the 'regions' tab"
+    },
+    "pagepopupRegionsInclude": {
+        "message": "Included regions", 
+        "description": "Headline for included regions"
+    },
+    "pagepopupRegionsExclude": {
+        "message": "Excluded regions", 
+        "description": "Headline for excluded regions"
+    },
+    "pagepopupRegionsRemove": {
+        "message": "remove",
+        "description": "Button to remove a region"
+    },
+    "pagepopupRegionsAdd": {
+        "message": "add new",
+        "description": "Button to add a new region"
+    },
+
+    "pagepopupConfigurationTab": {
+        "message": "Configuration",
+        "description": "Text of the 'configuration' tab"
+    },
+    "pagepopupConfigurationChecks": {
+        "message": "Check contents",
+        "description": "Headline for configured page checks"
+    },
+    "pagepopupConfigurationCheckDeleted": {
+        "message": "Check deletions",
+        "description": "Label for checkbox to enable the check for deletions"
+    },
+    "pagepopupConfigurationCheckImages": {
+        "message": "Check images",
+        "description": "Label for checkbox to enable the check for image changes"
+    },
+    "pagepopupConfigurationIgnores": {
+        "message": "Check ignores", 
+        "description": "Headline for configured ignores"
+    },
+    "pagepopupConfigurationIgnoreCase": {
+        "message": "Ignore case",
+        "description": "Label for checkbox to ignore case when checking"
+    },
+    "pagepopupConfigurationIgnoreNumbers": {
+        "message": "Ignore numbers",
+        "description": "Label for checkbox to ignore numbers when checking"
+    },
+
+    "pagepopupButtonHighlight": {
+        "message": "Highlight Changes",
+        "description": "Button to highlight changes on the current page"
+    },
+    "pagepopupButtonDelete": {
+        "message": "Delete Page",
+        "description": "Button to delete the current page"
+    }
+}
+

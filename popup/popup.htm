@@ -9,42 +9,33 @@
     <div class="panel">
       <div class="panel-section panel-section-header">
         <img class="icon-section-header" id="icon"/>
-        <div class="text-section-header">SiteDelta</div>
+        <div class="text-section-header i18n">__MSG_popupTitle__</div>
       </div>
-
-      <div class="panel-section panel-section-tabs"> 
-        <div class="panel-section-tabs-button selected" id="topage">Highlight</div> <div class="panel-section-tabs-separator"></div> 
-        <div class="panel-section-tabs-button" id="towatch">Watch</div> <div class="panel-section-tabs-separator"></div> 
-      </div>
-
-      <div class="panel-section panel-section-list" id="page">  
-        <div class="panel-list-item" id="title">Google - Hello</div>
-        <div class="panel-section-separator"></div>
-        <div id="unsupported">
-            <div class="panel-list-item disabled">SiteDelta does not support monitoring this page.</div>
+      <div id="panel-loading" style="display: none">
+        <div class="panel-section panel-section-tabs"> 
+          <div class="panel-section-tabs-button selected i18n" id="topage">__MSG_popupHighlightTab__</div> <div class="panel-section-tabs-separator"></div> 
+          <div class="panel-section-tabs-button i18n" id="towatch">__MSG_popupWatchTab__</div> <div class="panel-section-tabs-separator"></div> 
         </div>
-        <div id="enabled">
-            <div class="panel-list-item disabled">SiteDelta is enabled for this page. Click 'Configure Page' to configure.</div>
+
+        <div class="panel-section panel-section-formElements" id="page"> 
+          <div class="panel-formElements-item"> <label for="pagetitle" class="i18n">__MSG_pagepopupDetailsTitle__</label><input type="text" disabled value="" id="pagetitle" /> </div> 
+          <div class="panel-formElements-item"> <label for="url" class="i18n">__MSG_pagepopupDetailsUrl__</label><input type="text" disabled value="" id="url" /> </div> 
+          <div id="status" class="panel-formElements-item i18n">__MSG_popupHighlightUnsupported__</div>
         </div>
-        <div id="disabled">
-            <div class="panel-list-item disabled">SiteDelta is disabled for this page. Click 'Configure Page' to enable.</div>
+
+        <div class="panel-section panel-section-list" id="watch">
+          <div class="panel-list-item disabled i18n">__MSG_popupWatchTitle__</div>
+          <div class="panel-section-separator"></div>
+          <div class="panel-list-item switch"><input checked id="pagewatch" type="checkbox" class="visually-hidden"><label for="pagewatch" class="i18n">__MSG_popupWatchEnabled__</label></div>
+        </div>
+
+        <div class="panel-section panel-section-footer" id="footer">
+          <div id="configure" class="panel-section-footer-button default i18n">__MSG_popupButtonConfigure__</div><div class="panel-section-footer-separator"></div>
+          <div id="managepages" class="panel-section-footer-button i18n">__MSG_popupButtonManagePages__</div><div class="panel-section-footer-separator"></div>
+          <div id="watchpage" class="panel-section-footer-button default i18n">__MSG_popupButtonWatch__</div><div class="panel-section-footer-separator"></div>
+          <div id="managewatch" class="panel-section-footer-button i18n">__MSG_popupButtonManageWatch__</div><div class="panel-section-footer-separator"></div>
         </div>
       </div>
-
-      <div class="panel-section panel-section-list" id="watch">
-        <div class="panel-list-item disabled">Changed Pages</div>
-        <div class="panel-list-item">Google - Hello</div>
-        <div class="panel-section-separator"></div>
-        <div class="panel-list-item switch"><input checked id="pagewatch" type="checkbox" class="visually-hidden"><label for="pagewatch">Check pages in background</label></div>
-      </div>
-
-      <div class="panel-section panel-section-footer" id="footer">
-        <div id="configure" class="panel-section-footer-button default">Configure Highlight</div><div class="panel-section-footer-separator"></div>
-        <div id="managepages" class="panel-section-footer-button">Manage Pages</div><div class="panel-section-footer-separator"></div>
-        <div id="watchpage" class="panel-section-footer-button default">Watch Page</div><div class="panel-section-footer-separator"></div>
-        <div id="managewatch" class="panel-section-footer-button">Manage Watched Pages</div><div class="panel-section-footer-separator"></div>
-      </div>
-
     </div>
     <script src="../includes/ui.js"></script>    
     <script src="../includes/io.js"></script>    

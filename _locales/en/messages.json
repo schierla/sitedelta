@@ -84,10 +84,6 @@
         "message": "Click to select a region",
         "description": "Title of the page action popup while selecting a region"
     },
-    "pagepopupTitleStored": {
-        "message": "Current contents have been stored.",
-        "description": "Title of the page action popup when the initial contents of the page have been stored."
-    },
 
     "pagepopupDetailsTab": {
         "message": "Details",

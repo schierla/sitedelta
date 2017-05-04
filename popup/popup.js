@@ -1,4 +1,4 @@
-ui.init([
+uiUtils.init([
     {tab:"topage",elem:"page",footer:["managepages", "configure"]},
     {tab:"towatch",elem:"watch",footer:["managewatch", "watchpage"]}
 ], 0);
@@ -7,18 +7,18 @@ document.body.style.minWidth = "40em";
 document.querySelector("#icon").src = "../icons/neutral.svg";
 
 document.querySelector("#configure").addEventListener("click", function(e) {
-    chrome.pageAction.setIcon({path: "../icons/neutral.svg", tabId: tabId});
-    chrome.pageAction.show(tabId);
-    window.location.href="pagepopup.htm";
+    tabController.tabShowPageAction(tabId, "../icons/neutral.svg", function() {
+        window.location.href="pagepopup.htm";
+    });
 });
 
 document.querySelector("#managepages").addEventListener("click", function(e) {
-	chrome.tabs.create({url: chrome.runtime.getURL("res/pages.htm")});
+	openResourceTab("res/pages.htm");
     window.close();
 });
 
 document.querySelector("#managewatch").addEventListener("click", function(e) {
-	chrome.tabs.create({url: chrome.runtime.getURL("res/watch.htm")});
+	openResourceTab("res/watch.htm");
     window.close();
 });
 
@@ -50,15 +50,15 @@ function enableButtons(title, state) {
 var url = null;
 var tabId = null;
 var title = null;
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    tabId = tabs[0].id;
-    url = tabs[0].url;
-    title = tabs[0].title;
+tabController.tabGetActive(function(tab) {
+    tabId = tab.id;
+    url = tab.url;
+    title = tab.title;
     if(url.substr(0,4)!="http") {
         enableButtons(title, PAGESTATE.UNSUPPORTED);
         return;
     } 
-    io.get(url, function(existing) {
+    pageController.pageGet(url, function(existing) {
         if(existing == null) {
             enableButtons(title, PAGESTATE.DISABLED);
         } else {

@@ -1,9 +1,9 @@
-var io = {
+var ioUtils = {
     clean: function(url) {
         return url.replace(/http:\/\/[^\/]+@/i, "http://").replace(/https:\/\/[^\/]+@/i, "https://");
     },
     get: function(url, callback) {
-        url = io.clean(url);
+        url = ioUtils.clean(url);
         chrome.storage.local.get(url, function(existing) {
             if(url in existing) {
                 callback(existing[url]);
@@ -13,8 +13,8 @@ var io = {
         });
     },
     put: function(url, data, callback) {
-        url = io.clean(url);
-        io.get(url, function(existing) {
+        url = ioUtils.clean(url);
+        ioUtils.get(url, function(existing) {
             if(existing == null) existing = {};
             for(var key in data) {
                 existing[key] = data[key];
@@ -24,7 +24,7 @@ var io = {
         });
     }, 
     delete: function(url, callback) {
-        url = io.clean(url);
+        url = ioUtils.clean(url);
         chrome.storage.local.remove(url, callback);
     }
 };

@@ -31,7 +31,13 @@
 	},
 	
 	"background": {
-		"scripts": ["includes/io.js", "background/backgroundscript.js"]
+		"scripts": [
+			"utils/ioUtils.js", 
+			"utils/textUtils.js", 
+			"controller/tabController.js", 
+			"controller/pageController.js", 
+			"scripts/background.js"
+		]
 	}
 
 }

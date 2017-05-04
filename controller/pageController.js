@@ -9,8 +9,9 @@ var pageController = {
                 var config = defaultConfig();
                 var pagetitle = title.replace(/[\n\r]/g, ' ');
                 var set = {config: config, title: pagetitle};
-                ioUtils.put(url, set);
-                callback(set);
+                ioUtils.put(url, set, function() {
+                    callback(set);
+                });
             } else {
                 callback(existing);
             }

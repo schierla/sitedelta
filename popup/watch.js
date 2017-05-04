@@ -8,20 +8,31 @@ document.querySelector("#icon").src = "../icons/neutral.svg";
 
 document.querySelector("#configure").addEventListener("click", function(e) {
     tabController.tabShowPageAction(tabId, "../icons/neutral.svg", function() {
-        window.location.href="pagepopup.htm";
+        window.location.href="highlight.htm";
     });
 });
 
 document.querySelector("#managepages").addEventListener("click", function(e) {
-	openResourceTab("res/pages.htm");
+	tabController.tabOpenResource("pages/manageHighlight.htm");
     window.close();
 });
 
 document.querySelector("#managewatch").addEventListener("click", function(e) {
-	openResourceTab("res/watch.htm");
+	tabController.tabOpenResource("pages/manageWatch.htm");
     window.close();
 });
 
+function createChangeList() {
+    var sep = document.querySelector("#watchseparator");
+    var div = document.createElement("div");
+    div.classList.add("panel-list-item");
+    var url = "http://www.google.de";
+    div.appendChild(document.createTextNode(url));
+    div.addEventListener("click", function() {
+        tabController.tabOpenResource("pages/showWatch.htm?" + url);
+    });
+    sep.parentElement.insertBefore(div, sep);
+}
 var PAGESTATE = {
     UNSUPPORTED: -1,
     DISABLED: 0,
@@ -54,6 +65,8 @@ tabController.tabGetActive(function(tab) {
     tabId = tab.id;
     url = tab.url;
     title = tab.title;
+    createChangeList();
+    
     if(url.substr(0,4)!="http") {
         enableButtons(title, PAGESTATE.UNSUPPORTED);
         return;

@@ -25,13 +25,25 @@ chrome.webNavigation.onCompleted.addListener(function(details) {
 	});
 });
 
-function _clean(text, config) {
-	if (config.ignoreCase)
-		text = text.toLowerCase();
-	if (config.ignoreNumbers)
-		text = text.replace(/[0-9]+/g, "xxx");
-	return text;
-}
+chrome.contextMenus.create({
+	id: "highlight",
+	title: chrome.i18n.getMessage("pagepopupButtonHighlight"),
+	contexts: ["all"]
+});
+
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
+	if(info.menuItemId == "highlight") {
+    	pageController.pageGetOrCreate(tab.url, tab.title, function() {
+			tabController.tabHighlightChanges(tab.id, tab.url, function(status) {
+				if(status.changes == 0) {
+					tabController.tabShowPageAction(tab.id, "../icons/unchanged.svg", function() {});				
+				} else {
+					tabController.tabShowPageAction(tab.id, "../icons/changed.svg", function() {});
+				}
+			});
+		});
+	}
+});
 
 function messageHandler(request, sender, sendResponse) {
     if(request.command == "addIncludeRegion") {

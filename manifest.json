@@ -10,6 +10,7 @@
 	},
 	
 	"permissions": [
+		"contextMenus",
 		"activeTab", 
 		"storage",
 		"webNavigation",
@@ -20,20 +21,21 @@
 		"browser_style": true,
 		"default_icon": "icons/neutral.svg",
 		"default_title": "__MSG_extensionName__",
-		"default_popup": "popup/popup.htm"
+		"default_popup": "popup/watch.htm"
 	},
 	
 	"page_action": {
 		"browser_style": true,		
-		"default_icon": "icons/changed.svg",
+		"default_icon": "icons/neutral.svg",
 		"default_title": "__MSG_extensionName__",
-		"default_popup": "popup/pagepopup.htm"
+		"default_popup": "popup/highlight.htm"
 	},
 	
 	"background": {
 		"scripts": [
 			"utils/ioUtils.js", 
 			"utils/textUtils.js", 
+			"controller/defaultConfig.js", 			
 			"controller/tabController.js", 
 			"controller/pageController.js", 
 			"scripts/background.js"

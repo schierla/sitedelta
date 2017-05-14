@@ -1,67 +1,90 @@
 // page operations
 var pageController = {
-    pageGet: function(url, callback) {
-        ioUtils.get(url, callback);
+    pageGetTitle: function(scope, url, callback) {
+        ioUtils.get(scope, url, "title", callback);
+    },    
+    pageGetConfig: function(scope, url, callback) {
+        ioUtils.get(scope, url, "config", callback);
     },
-    pageGetOrCreate: function(url, title, callback) {
-        ioUtils.get(url, function(existing) {
-            if(existing == null) {
-                var config = defaultConfig();
-                var pagetitle = title.replace(/[\n\r]/g, ' ');
-                var set = {config: config, title: pagetitle};
-                ioUtils.put(url, set, function() {
-                    callback(set);
+    pageGetContent: function(scope, url, callback) {
+        ioUtils.get(scope, url, "content", callback);
+    },
+    pageGetConfigProperty: function(scope, url, property, callback) {
+        pageController.pageGetConfig(scope, url, function(config) {
+            callback(config[property]);
+        });
+    },
+    pageGetOrCreateConfig: function(scope, url, title, callback) {
+        pageController.pageGetConfig(scope, url, function(config) {
+            if(config == null) {
+                pageController.pageCreate(scope, url, title, function() {
+                    pageController.pageGetConfig(scope, url, callback);
                 });
             } else {
-                callback(existing);
+                callback(config);
             }
         });
     },
-    pageDelete: function(url, callback) {
-        ioUtils.delete(url, callback);
-    },
-    pageSetTitle: function(url, title, callback) {
-        ioUtils.put(url, {title: title}, callback);
-    },
-    pageSetProperty: function(url, property, value, callback) {
-        ioUtils.get(url, function(data) {
-            data.config[property] = value;
-            ioUtils.put(url, data, callback);
+    pageCreate: function(scope, url, title, callback) {
+        var config = defaultConfig();
+        var pagetitle = title.replace(/[\n\r]/g, ' ');
+        pageController.pageSetTitle(scope, url, pagetitle, function() {
+            pageController.pageSetConfig(scope, url, config, function() {
+                callback();
+            });
         });
     },
-    pageRemoveInclude: function(url, region, callback) {
-        ioUtils.get(url, function(data) {
-            for(var i=0; i<data.config.includes.length; i++) {
-                if(data.config.includes[i] == region) {
-                    data.config.includes.splice(i--, 1);
+    pageDelete: function(scope, url, callback) {
+        ioUtils.delete(scope, url, callback);
+    },
+    pageSetTitle: function(scope, url, title, callback) {
+        ioUtils.put(scope, url, "title", title, callback);
+    },
+    pageSetConfig: function(scope, url, config, callback) {
+        ioUtils.put(scope, url, "config", config, callback);
+    },
+    pageSetContent: function(scope, url, content, callback) {
+        ioUtils.put(scope, url, "content", content, callback);
+    },
+    pageSetConfigProperty: function(scope, url, property, value, callback) {
+        pageController.pageGetConfig(scope, url, function(config) {
+            config[property] = value;
+            pageController.pageSetConfig(scope, url, config, callback);
+        });
+    },
+    pageRemoveInclude: function(scope, url, region, callback) {
+        pageController.pageGetConfigProperty(scope, url, "includes", function(includes) {
+            for(var i=0; i<includes.length; i++) {
+                if(includes[i] == region) {
+                    includes.splice(i--, 1);
                 }
             }
-            if(data.config.includes.length == 0) {
-                data.config.includes.push("/html/body[1]");
+            if(includes.length == 0) {
+                includes.push("/html/body[1]");
             }
-            ioUtils.put(url, data, callback);
+            pageController.pageSetConfigProperty(scope, url, "includes", includes, callback);
         });
     },
-    pageRemoveExclude: function(url, region, callback) {
-        ioUtils.get(url, function(data) {
-            for(var i=0; i<data.config.excludes.length; i++) {
-                if(data.config.excludes[i] == region) {
-                    data.config.excludes.splice(i--, 1);
+    pageRemoveExclude: function(scope, url, region, callback) {
+        pageController.pageGetConfigProperty(scope, url, "excludes", function(excludes) {
+            for(var i=0; i<excludes.length; i++) {
+                if(excludes[i] == region) {
+                    excludes.splice(i--, 1);
                 }
             }
-            ioUtils.put(url, data, callback);
+            pageController.pageSetConfigProperty(scope, url, "excludes", excludes, callback);
         });
     },
-    pageAddInclude: function(url, xpath, callback) {
-        ioUtils.get(url, function(data) {
-            data.config.includes.push(xpath);
-            ioUtils.put(url, data, callback);
+    pageAddInclude: function(scope, url, xpath, callback) {
+        pageController.pageGetConfigProperty(scope, url, "includes", function(includes) {
+            includes.push(xpath);
+            pageController.pageSetConfigProperty(scope, url, "includes", includes, callback);
         });
     },
-    pageAddExclude: function(url, xpath, callback) {
-        ioUtils.get(url, function(data) {
-            data.config.excludes.push(xpath);
-            ioUtils.put(url, data, callback);
+    pageAddExclude: function(scope, url, xpath, callback) {
+        pageController.pageGetConfigProperty(scope, url, "excludes", function(excludes) {
+            excludes.push(xpath);
+            pageController.pageSetConfigProperty(scope, url, "excludes", excludes, callback);
         });
     }
 };

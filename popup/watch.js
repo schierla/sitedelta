@@ -71,7 +71,7 @@ tabController.tabGetActive(function(tab) {
         enableButtons(title, PAGESTATE.UNSUPPORTED);
         return;
     } 
-    pageController.pageGet(url, function(existing) {
+    pageController.pageGetConfig(SCOPE_HIGHLIGHT, url, function(existing) {
         if(existing == null) {
             enableButtons(title, PAGESTATE.DISABLED);
         } else {

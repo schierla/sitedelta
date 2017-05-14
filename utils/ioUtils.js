@@ -1,30 +1,33 @@
+var SCOPE_HIGHLIGHT = "highlight";
+var SCOPE_WATCH = "watch";
+
 var ioUtils = {
     clean: function(url) {
         return url.replace(/http:\/\/[^\/]+@/i, "http://").replace(/https:\/\/[^\/]+@/i, "https://");
     },
-    get: function(url, callback) {
-        url = ioUtils.clean(url);
-        chrome.storage.local.get(url, function(existing) {
-            if(url in existing) {
-                callback(existing[url]);
+    get: function(scope, url, key, callback) {
+        var storagekey = scope + ":" + ioUtils.clean(url);
+        chrome.storage.local.get(storagekey, function(existing) {
+            if(storagekey in existing && key in existing[storagekey]) {
+                callback(existing[storagekey][key]);
             } else {
                 callback(null);
             }
         });
     },
-    put: function(url, data, callback) {
-        url = ioUtils.clean(url);
-        ioUtils.get(url, function(existing) {
-            if(existing == null) existing = {};
-            for(var key in data) {
-                existing[key] = data[key];
+    put: function(scope, url, key, data, callback) {
+        var storagekey = scope + ":" + ioUtils.clean(url);
+        chrome.storage.local.get(storagekey, function(existing) {
+            if(!(storagekey in existing)) {
+                existing = {};
+                existing[storagekey]= {};
             }
-            var set = {}; set[url] = existing;
-            chrome.storage.local.set(set, callback);
+            existing[storagekey][key] = data;
+            chrome.storage.local.set(existing, callback);
         });
     }, 
-    delete: function(url, callback) {
-        url = ioUtils.clean(url);
+    delete: function(scope, url, callback) {
+        url = scope + ":" + ioUtils.clean(url);
         chrome.storage.local.remove(url, callback);
     }
 };

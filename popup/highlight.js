@@ -18,20 +18,20 @@ document.querySelector("#excludeadd").addEventListener("click", function(e) {
     });
 });
 document.querySelector("#pagetitle").addEventListener("change", function(e) {
-    pageController.pageSetTitle(url, document.querySelector("#pagetitle").value, function() {});
+    pageController.pageSetTitle(SCOPE_HIGHLIGHT, url, document.querySelector("#pagetitle").value, function() {});
 });
 
 document.querySelector("#checkdeleted").addEventListener("change", function(e) {
-    pageController.pageSetProperty(url, "checkDeleted", document.querySelector("#checkdeleted").checked, function() {});
+    pageController.pageSetConfigProperty(SCOPE_HIGHLIGHT, url, "checkDeleted", document.querySelector("#checkdeleted").checked, function() {});
 });
 document.querySelector("#checkimages").addEventListener("change", function(e) {
-    pageController.pageSetProperty(url, "scanImages", document.querySelector("#checkimages").checked, function() {});
+    pageController.pageSetConfigProperty(SCOPE_HIGHLIGHT, url, "scanImages", document.querySelector("#checkimages").checked, function() {});
 });
 document.querySelector("#ignorecase").addEventListener("change", function(e) {
-    pageController.pageSetProperty(url, "ignoreCase", document.querySelector("#ignorecase").checked, function() {});
+    pageController.pageSetConfigProperty(SCOPE_HIGHLIGHT, url, "ignoreCase", document.querySelector("#ignorecase").checked, function() {});
 });
 document.querySelector("#ignorenumbers").addEventListener("change", function(e) {
-    pageController.pageSetProperty(url, "ignoreNumbers", document.querySelector("#ignorenumbers").checked, function() {});
+    pageController.pageSetConfigProperty(SCOPE_HIGHLIGHT, url, "ignoreNumbers", document.querySelector("#ignorenumbers").checked, function() {});
 });
 
 var STATE = {
@@ -41,14 +41,14 @@ var STATE = {
 };
 
 document.querySelector("#highlight").addEventListener("click", function(e) {
-    tabController.tabHighlightChanges(tabId, url, function(status) {
+    tabController.tabHighlightChanges(SCOPE_HIGHLIGHT, tabId, url, function(status) {
         fillStatus(status);
     });
 });
 
 document.querySelector("#delete").addEventListener("click", function(e) {
     tabController.tabHidePageAction(tabId, function() {
-        pageController.pageDelete(url, function() {
+        pageController.pageDelete(SCOPE_HIGHLIGHT, url, function() {
             window.close(); 
         });
     });
@@ -59,30 +59,35 @@ function checkCheckbox(checked, id) {
     if(checked == true) elem.setAttribute("checked", "checked"); else elem.removeAttribute("checked");
 }
 
-function fillUI(data) {
+function showTitle(title) {
     document.querySelector("#url").value = url;
-    document.querySelector("#pagetitle").value = data.title;
-    checkCheckbox(data.config.checkDeleted, "checkdeleted");
-    checkCheckbox(data.config.scanImages, "checkimages");
-    checkCheckbox(data.config.ignoreCase, "ignorecase");
-    checkCheckbox(data.config.ignoreNumbers, "ignorenumbers");
+    document.querySelector("#pagetitle").value = title;
+}
+
+function showConfig(config) {
+    checkCheckbox(config.checkDeleted, "checkdeleted");
+    checkCheckbox(config.scanImages, "checkimages");
+    checkCheckbox(config.ignoreCase, "ignorecase");
+    checkCheckbox(config.ignoreNumbers, "ignorenumbers");
 
     var incelem = document.querySelector("#includeadd");
-    for(var i=0; i<data.config.includes.length; i++) {
-        var node = createRegionNode(data.config.includes[i], data.config.includeRegion);
-        node.addEventListener("click", function(e) { removeIncludeRegion(e.target.firstChild.data, function() {window.close(); }); });        
+    for(var i=0; i<config.includes.length; i++) {
+        var node = createRegionNode(config.includes[i], config.includeRegion, function(xpath) {
+            removeIncludeRegion(xpath, function() {window.close(); });
+        });
         incelem.parentElement.insertBefore(node, incelem);
     }
 
     var excelem = document.querySelector("#excludeadd");
-    for(var i=0; i<data.config.excludes.length; i++) {
-        var node = createRegionNode(data.config.excludes[i], data.config.excludeRegion);
-        node.addEventListener("click", function(e) { removeExcludeRegion(e.target.firstChild.data, function() {window.close(); }); });
+    for(var i=0; i<config.excludes.length; i++) {
+        var node = createRegionNode(config.excludes[i], config.excludeRegion, function(xpath) {
+            removeExcludeRegion(xpath, function() {window.close(); });
+        });
         excelem.parentElement.insertBefore(node, excelem);
     }
 }
 
-function createRegionNode(xpath, color) {
+function createRegionNode(xpath, color, clickHandler) {
     var node = document.createElement("div");
     node.classList.add("panel-list-item");
     var text = document.createElement("div");
@@ -99,18 +104,21 @@ function createRegionNode(xpath, color) {
     node.addEventListener("mouseout", function(e) { 
         tabController.tabRemoveOutline(tabId, function() {});
     });
+    node.addEventListener("click", function(e) { 
+        clickHandler(xpath); 
+    });
     return node;
 }
 
 function removeIncludeRegion(region, callback) {
     tabController.tabRemoveOutline(tabId, function() {
-        pageController.pageRemoveInclude(url, region, callback);
+        pageController.pageRemoveInclude(SCOPE_HIGHLIGHT, url, region, callback);
     });
 }
 
 function removeExcludeRegion(region, callback) {
     tabController.tabRemoveOutline(tabId, function() {
-        pageController.pageRemoveExclude(url, region, callback);
+        pageController.pageRemoveExclude(SCOPE_HIGHLIGHT, url, region, callback);
     });
 }
 
@@ -149,5 +157,8 @@ tabController.tabGetActive(function(tab) {
     }
 
     tabController.tabGetStatus(tabId, fillStatus);
-    pageController.pageGetOrCreate(url, tab.title, fillUI);
+    pageController.pageGetOrCreateConfig(SCOPE_HIGHLIGHT, url, tab.title, function(config) {
+        pageController.pageGetTitle(SCOPE_HIGHLIGHT, url, showTitle);
+        showConfig(config);
+    });
 });

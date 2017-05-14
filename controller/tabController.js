@@ -19,21 +19,22 @@ var tabController = {
     tabGetStatus: function(tabId, callback) {
         tabController._callContentScript(tabId, {command: "getStatus"}, callback);
     },
-    tabGetContent: function(tabId, url, callback) {
-        ioUtils.get(url, function(stored) {
-            tabController._callContentScript(tabId, {command: "getContent", config: stored.config}, function(content) {
+    tabGetContent: function(scope, tabId, url, callback) {
+        pageController.pageGetConfig(scope, url, function(config) {
+            tabController._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
                 callback(content);
             });
         });
     },
-    tabHighlightChanges: function(tabId, url, callback) {
-        ioUtils.get(url, function(stored) {
-            tabController._callContentScript(tabId, {command: "getContent", config: stored.config}, function(content) {
-                var old = "";
-                if("content" in stored) old = stored.content;
-                ioUtils.put(url, {content: content}, function() {
-                    tabController._callContentScript(tabId, {command: "highlightChanges", config: stored.config, content: old}, function(status) {
-                        callback(status);
+    tabHighlightChanges: function(scope, tabId, url, callback) {
+        pageController.pageGetConfig(scope, url, function(config) {
+            tabController._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
+                pageController.pageGetContent(scope, url, function(oldcontent) {
+                    if(oldcontent == null) oldcontent = "";
+                    pageController.pageSetContent(scope, url, content, function() {
+                        tabController._callContentScript(tabId, {command: "highlightChanges", config: config, content: oldcontent}, function(status) {
+                            callback(status);
+                        });
                     });
                 });
             });

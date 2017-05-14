@@ -300,10 +300,10 @@ var highlightUtils = {
             }
         }
         //
-        for (var i in symbol) {
-            if (("newCtr" in symbol[i]) && (symbol[i].newCtr == 1) && (symbol[i].oldCtr == 1) && !/\s+/.test(text.newWords[symbol[i].toNew])) {
-                text.newToOld[symbol[i].toNew] = symbol[i].toOld;
-                text.oldToNew[symbol[i].toOld] = symbol[i].toNew;
+        for (var s in symbol) {
+            if (("newCtr" in symbol[s]) && (symbol[s].newCtr == 1) && (symbol[s].oldCtr == 1) && !/\s+/.test(text.newWords[symbol[s].toNew])) {
+                text.newToOld[symbol[s].toNew] = symbol[s].toOld;
+                text.oldToNew[symbol[s].toOld] = symbol[s].toNew;
             }
         }
         //

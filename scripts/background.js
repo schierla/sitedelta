@@ -1,6 +1,8 @@
 chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
 	if(details.frameId != 0) return;
 	chrome.pageAction.hide(details.tabId);
+	chrome.notifications.clear("highlight");
+
 });
 
 chrome.webNavigation.onCompleted.addListener(function(details) {
@@ -39,8 +41,20 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 			tabController.tabHighlightChanges(SCOPE_HIGHLIGHT, tab.id, tab.url, function(status) {
 				if(status.changes == 0) {
 					tabController.tabShowPageAction(tab.id, "../icons/unchanged.svg", function() {});				
+					chrome.notifications.create("highlight", {
+						"type": "basic",
+						"iconUrl": chrome.extension.getURL("icons/unchanged.svg"),
+						"title": chrome.i18n.getMessage("pagepopupButtonHighlight"),
+						"message": chrome.i18n.getMessage("pagepopupTitleNoChanges")
+					});
 				} else {
 					tabController.tabShowPageAction(tab.id, "../icons/changed.svg", function() {});
+					chrome.notifications.create("highlight", {
+						"type": "basic",
+						"iconUrl": chrome.extension.getURL("icons/changed.svg"),
+						"title": chrome.i18n.getMessage("pagepopupButtonHighlight"),
+						"message": chrome.i18n.getMessage("pagepopupTitleChanges", [status.current, status.changes])
+					});
 				}
 			});
 		});

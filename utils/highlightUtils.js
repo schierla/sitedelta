@@ -7,9 +7,7 @@ var highlightUtils = {
         elem.scrollIntoView(true);
         window.scrollBy(0, elem.getBoundingClientRect().top - (window.innerHeight/2));
         var elems = doc.getElementsByClassName("sitedelta-change" + nr);
-        for(var i=0; i<elems.length; i++) {
-            highlightUtils._blink(elems[i]);
-        }
+        highlightUtils._blink(elems);
         nr++;
         return nr;
     },
@@ -435,11 +433,20 @@ var highlightUtils = {
     },
 
     _blink: function(elem) {
-        setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 10);
-        setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 1), 200);
-        setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 0.5), 400);
-        setTimeout(function(elem,opac) {return function() {elem.style.opacity = opac;}}(elem, 1), 600);
+        if(highlightUtils._blinkId != null)
+            clearTimeout(highlightUtils._blinkId);
+        highlightUtils._blinkCount = 0;
+        highlightUtils._blinkId = setInterval(function(elem) {
+            for(var i=0; i<elem.length; i++)
+                elem[i].style.opacity = 1 - (highlightUtils._blinkCount%2)/2;
+            highlightUtils._blinkCount++;
+            if(highlightUtils._blinkCount == 11) {
+                clearTimeout(highlightUtils._blinkId);
+                highlightUtils._blinkId = null;
+            }
+        }, 250, elem);
     },
-
+    _blinkId: null,
+    _blinkCount: 0,
     _currentChange: null
 };

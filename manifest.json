@@ -11,6 +11,7 @@
 	
 	"permissions": [
 		"contextMenus",
+		"notifications",
 		"activeTab", 
 		"storage",
 		"webNavigation",
@@ -19,7 +20,7 @@
 	
 	"browser_action": {
 		"browser_style": true,
-		"default_icon": "icons/neutral.svg",
+		"default_icon": "icons/watch.svg",
 		"default_title": "__MSG_extensionName__",
 		"default_popup": "popup/watch.htm"
 	},

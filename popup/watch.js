@@ -17,6 +17,11 @@ document.querySelector("#managepages").addEventListener("click", function(e) {
     window.close();
 });
 
+document.querySelector("#watchpage").addEventListener("click", function(e) {
+	tabController.tabOpenResource("pages/showWatch.htm?" + url);
+    window.close();
+});
+
 document.querySelector("#managewatch").addEventListener("click", function(e) {
 	tabController.tabOpenResource("pages/manageWatch.htm");
     window.close();

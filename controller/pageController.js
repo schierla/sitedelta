@@ -1,5 +1,26 @@
 // page operations
 var pageController = {
+    pageList: function(scope, callback) {
+        ioUtils.list(scope, callback);
+    }, 
+    pageListChanged: function(scope, callback) {
+        pageController.pageList(scope, function(pages) {
+            var ret = [], seen = 0;
+            for(var i=0; i<pages.length; i++) {
+                let page = pages[i];
+                pageController.pageGetChanges(scope, page, function(changes) {
+                    if(changes > 0) ret.push(page);
+                    seen++; if(seen == pages.length) callback(ret);
+                });
+            }
+        });
+    },
+    pageGetNextScan: function(scope, url, callback) {
+        ioUtils.get(scope, url, "nextScan", callback);
+    },
+    pageGetChanges: function(scope, url, callback) {
+        ioUtils.get(scope, url, "changes", callback);
+    },
     pageGetTitle: function(scope, url, callback) {
         ioUtils.get(scope, url, "title", callback);
     },    
@@ -36,6 +57,12 @@ var pageController = {
     },
     pageDelete: function(scope, url, callback) {
         ioUtils.delete(scope, url, callback);
+    },
+    pageSetNextScan: function(scope, url, nextScan, callback) {
+        ioUtils.put(scope, url, "nextScan", nextScan, callback);
+    },
+    pageSetChanges: function(scope, url, changes, callback) {
+        ioUtils.put(scope, url, "changes", changes, callback);
     },
     pageSetTitle: function(scope, url, title, callback) {
         ioUtils.put(scope, url, "title", title, callback);

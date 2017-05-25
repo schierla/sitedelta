@@ -20,7 +20,7 @@
 	
 	"browser_action": {
 		"browser_style": true,
-		"default_icon": "icons/watch.svg",
+		"default_icon": "icons/pages.svg",
 		"default_title": "__MSG_extensionName__",
 		"default_popup": "popup/watch.htm"
 	},
@@ -39,7 +39,9 @@
 			"controller/defaultConfig.js", 			
 			"controller/tabController.js", 
 			"controller/pageController.js", 
-			"scripts/background.js"
+			"controller/watchController.js", 
+			"scripts/backgroundHighlight.js",
+			"scripts/backgroundWatch.js"
 		]
 	}
 

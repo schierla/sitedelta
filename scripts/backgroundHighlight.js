@@ -2,7 +2,6 @@ chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
 	if(details.frameId != 0) return;
 	chrome.pageAction.hide(details.tabId);
 	chrome.notifications.clear("highlight");
-
 });
 
 chrome.webNavigation.onCompleted.addListener(function(details) {
@@ -74,6 +73,3 @@ function messageHandler(request, sender, sendResponse) {
 }
 
 chrome.runtime.onMessage.addListener(messageHandler);
-
-
-chrome.browserAction.setBadgeText({text:"2"});

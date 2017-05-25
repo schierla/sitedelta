@@ -1,4 +1,4 @@
-window.onload=function() {
+window.onload = function() {
 	var url = window.location.search.substr(1);
 	if (url == "") url = "about:blank";
 	var iframe = document.getElementById("iframe");

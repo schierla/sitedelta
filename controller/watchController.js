@@ -8,8 +8,8 @@ var watchController = {
         });
     },
     watchUpdateAlarm(url) {
-        var nextScan = pageController.pageGetNextScan(SCOPE_WATCH, url);
-        chrome.alarms.create(url, {when: nextScan});
+        pageController.pageGetNextScan(SCOPE_WATCH, url,
+            (nextScan) => chrome.alarms.create(url, {when: nextScan}));
     },
 
     watchLoadPage: function(url, callback) {

@@ -27,7 +27,7 @@ document.querySelector("#managewatch").addEventListener("click", function(e) {
     window.close();
 });
 
-function createChangeList() {
+function addChangedUrl(url) {
     var sep = document.querySelector("#watchseparator");
     var div = document.createElement("div");
     div.classList.add("panel-list-item");
@@ -36,8 +36,17 @@ function createChangeList() {
     div.addEventListener("click", function() {
         tabController.tabOpenResource("pages/showWatch.htm?" + url);
     });
-    sep.parentElement.insertBefore(div, sep);
+    sep.parentElement.insertBefore(div, sep);            
 }
+
+function createChangeList() {
+    pageController.pageListChanged(SCOPE_WATCH, function(urls) {
+        for(var i=0; i<urls.length; i++) {
+            addChangedUrl(urls[i]);
+        }
+    });
+}
+
 var PAGESTATE = {
     UNSUPPORTED: -1,
     DISABLED: 0,

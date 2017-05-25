@@ -1,6 +1,7 @@
 chrome.alarms.onAlarm.addListener(function(alarm) {
     var url = alarm.name;
     pageController.pageGetConfig(SCOPE_WATCH, url, function(config) {
+        if(config == null) return;
         watchController.watchLoadPage(url, function(doc) {
             var newContent = textUtils.getText(doc, config);
             pageController.pageGetContent(SCOPE_WATCH, url, function(oldContent) {

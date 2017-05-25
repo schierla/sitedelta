@@ -15,6 +15,7 @@
 		"activeTab", 
 		"storage",
 		"webNavigation",
+		"alarms",
 		"*://*/"
 	],
 	

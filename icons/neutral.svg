@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg8"
-   version="1.1"
-   viewBox="0 0 64.000002 64.000002"
+   width="64mm"
    height="64mm"
-   width="64mm">
+   viewBox="0 0 64.000002 64.000002"
+   version="1.1"
+   id="svg8">
   <defs
      id="defs2" />
   <metadata
@@ -25,17 +25,11 @@
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(0,-232.99998)"
-     id="layer1">
+     id="layer1"
+     transform="translate(0,-232.99998)">
     <path
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.44129169;stroke-linecap:butt;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:9.37499905;stroke-opacity:1"
        id="path4485"
-       d="m 15.097091,294.4265 -13.2608478,0 6.630424,-11.48423 z"
-       transform="matrix(3.8714503,0,0,4.4763607,-0.77828101,-1025.2103)" />
-    <path
-       transform="matrix(3.8714503,0,0,4.4763607,-0.77828101,-1025.2103)"
-       d="m 15.097091,294.4265 -13.2608478,0 6.630424,-11.48423 z"
-       id="path5069"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.72064584;stroke-linecap:butt;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:9.37499905;stroke-opacity:1" />
+       d="M 32.000502,234.89397 1.4977083,295.9718 H 62.503296 l -2.419657,-4.83478 z m 0,12.89576 20.831729,41.72985 H 11.168773 Z"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:9.37499905;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
   </g>
 </svg>

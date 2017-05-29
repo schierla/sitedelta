@@ -5,7 +5,7 @@ uiUtils.init([
 ], 0);
 
 document.body.style.minWidth="40em";
-document.querySelector("#icon").src="../icons/neutral.svg";
+document.querySelector("#icon").src="../common/icons/neutral.svg";
 
 document.querySelector("#includeadd").addEventListener("click", function(e) {
     tabController.tabSelectInclude(tabId, url, function() {

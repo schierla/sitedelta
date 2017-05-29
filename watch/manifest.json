@@ -1,49 +1,38 @@
 {
 	"manifest_version": 2,
-	"name": "__MSG_extensionName__",
+	"name": "__MSG_watchExtensionName__",
 	"version": "0.1",
 	
 	"default_locale": "en",
-	"description": "__MSG_extensionDescription__",
+	"description": "__MSG_watchExtensionDescription__",
 	"icons": {
-		"48": "icons/neutral.svg"
+		"48": "common/icons/watch.svg"
 	},
 	
 	"permissions": [
-		"contextMenus",
 		"notifications",
 		"activeTab", 
 		"storage",
-		"webNavigation",
 		"alarms",
 		"*://*/"
 	],
 	
 	"browser_action": {
 		"browser_style": true,
-		"default_icon": "icons/watch.svg",
-		"default_title": "__MSG_extensionName__",
+		"default_icon": "common/icons/watch.svg",
+		"default_title": "__MSG_watchExtensionName__",
 		"default_popup": "popup/watch.htm"
-	},
-	
-	"page_action": {
-		"browser_style": true,		
-		"default_icon": "icons/neutral.svg",
-		"default_title": "__MSG_extensionName__",
-		"default_popup": "popup/highlight.htm"
 	},
 	
 	"background": {
 		"scripts": [
-			"utils/ioUtils.js", 
-			"utils/textUtils.js", 
-			"controller/defaultConfig.js", 			
-			"controller/tabController.js", 
-			"controller/pageController.js", 
-			"controller/watchController.js", 
-			"scripts/backgroundHighlight.js",
-			"scripts/backgroundWatch.js"
+			"common/scripts/ioUtils.js", 
+			"common/scripts/textUtils.js", 
+			"common/scripts/defaultConfig.js", 			
+			"common/scripts/tabController.js", 
+			"common/scripts/pageController.js", 
+			"common/scripts/watchController.js", 
+			"scripts/background.js"
 		]
 	}
-
 }

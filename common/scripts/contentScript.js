@@ -52,7 +52,3 @@ var contentscript = {
 }
 
 chrome.runtime.onMessage.addListener(contentscript.messageHandler);
-
-
-
-

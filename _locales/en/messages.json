@@ -1,11 +1,19 @@
 {
-    "extensionName": {
-        "message": "SiteDelta",
-        "description": "Name fo the extension"
+    "highlightExtensionName": {
+        "message": "SiteDelta Highlight",
+        "description": "Name of the highlight extension"
     },
-    "extensionDescription": {
+    "highlightExtensionDescription": {
         "message": "Highlights changes made to a website since last visit",
-        "description": "Description of the extension"
+        "description": "Description of the highlight extension"
+    },
+    "watchExtensionName": {
+        "message": "SiteDelta Watch",
+        "description": "Name of the watch extension"
+    },
+    "watchExtensionDescription": {
+        "message": "Regularly monitors a website for changes",
+        "description": "Description of the watch extension"
     },
     "popupTitle": {
         "message": "SiteDelta",

@@ -4,10 +4,10 @@ uiUtils.init([
 ], 0);
 
 document.body.style.minWidth = "40em";
-document.querySelector("#icon").src = "../icons/neutral.svg";
+document.querySelector("#icon").src = "../common/icons/neutral.svg";
 
 document.querySelector("#configure").addEventListener("click", function(e) {
-    tabController.tabShowPageAction(tabId, "../icons/neutral.svg", function() {
+    tabController.tabShowPageAction(tabId, "../common/icons/neutral.svg", function() {
         window.location.href="highlight.htm";
     });
 });

@@ -8,13 +8,8 @@ var tabController = {
             callback(tabs[0]);
         });
     },
-    tabHidePageAction: function(tabId, callback) {
-        chrome.pageAction.hide(tabId, callback);
-    },
-    tabShowPageAction: function(tabId, url, callback) {
-        chrome.pageAction.setIcon({path: url, tabId: tabId}, function() {
-            chrome.pageAction.show(tabId, callback);
-        });
+    tabShowIcon: function(tabId, url, callback) {
+        chrome.browserAction.setIcon({path: url, tabId: tabId}, callback);
     },
     tabGetStatus: function(tabId, callback) {
         tabController._callContentScript(tabId, {command: "getStatus"}, callback);
@@ -64,10 +59,10 @@ var tabController = {
         chrome.tabs.sendMessage(tabId, command, function(status) {
             if(chrome.runtime.lastError) {
                 var scripts = [
-                    "/utils/textUtils.js", 
-                    "/utils/regionUtils.js", 
-                    "/utils/highlightUtils.js", 
-                    "/scripts/content.js"
+                    "/common/scripts/textUtils.js", 
+                    "/common/scripts/regionUtils.js", 
+                    "/common/scripts/highlightUtils.js", 
+                    "/common/scripts/contentScript.js"
                 ];
                 tabController._executeScripts(tabId, scripts, function() {
                     chrome.tabs.sendMessage(tabId, command, function(status) {

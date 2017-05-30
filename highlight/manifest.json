@@ -14,7 +14,8 @@
 		"webNavigation",
 		"storage",
 		"notifications",
-		"contextMenus"
+		"contextMenus",
+		"*://*/"
 	],
 	
 	"browser_action": {

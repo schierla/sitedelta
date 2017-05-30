@@ -4,7 +4,7 @@ uiUtils.init([
     {tab: "toconfig", elem: "config", footer: []}
 ], 0);
 
-document.body.style.minWidth="40em";
+document.body.style.minWidth="20em";
 document.querySelector("#icon").src="../common/icons/neutral.svg";
 
 document.querySelector("#includeadd").addEventListener("click", function(e) {
@@ -47,7 +47,7 @@ document.querySelector("#highlight").addEventListener("click", function(e) {
 });
 
 document.querySelector("#delete").addEventListener("click", function(e) {
-    tabController.tabHidePageAction(tabId, function() {
+    tabController.tabShowIcon(tabId, "/common/icons/neutral.svg", function() {
         pageController.pageDelete(SCOPE_HIGHLIGHT, url, function() {
             window.close(); 
         });
@@ -130,9 +130,11 @@ function fillStatus(status) {
         break;
     case STATE.HIGHLIGHTED:
         if(status.changes == 0) {
+            tabController.tabShowIcon(tabId, "/common/icons/unchanged.svg", function() {});
             document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("pagepopupTitleNoChanges");
             document.querySelector("#highlight").style.visibility='hidden';
         } else {
+            tabController.tabShowIcon(tabId, "/common/icons/changed.svg", function() {});
             document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("pagepopupTitleChanges", [status.current, status.changes]);
         }
         document.querySelector("#panel-contents").style.display='none';

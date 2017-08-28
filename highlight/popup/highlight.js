@@ -1,37 +1,101 @@
-uiUtils.init([
-    {tab: "todetails", elem: "details", footer: []}, 
-    {tab: "toregions", elem: "regions", footer: []},
-    {tab: "toconfig", elem: "config", footer: []}
-], 0);
+uiUtils.i18n();
 
-document.body.style.minWidth="20em";
-document.querySelector("#icon").src="../common/icons/neutral.svg";
+document.querySelector("#setup").addEventListener("click", function(e) {
+    chrome.runtime.openOptionsPage();
+    window.close();
+});
 
 document.querySelector("#includeadd").addEventListener("click", function(e) {
     tabController.tabSelectInclude(tabId, url, function() {
         fillStatus({state: STATE.SELECTREGION});     
     });
 });
+
+document.querySelector("#includedel").addEventListener("click", function(e) {
+    var region = document.querySelector("#include").value;
+    tabController.tabRemoveOutline(tabId, function() {
+        pageController.pageRemoveInclude(url, region, function() {
+            pageController.pageGetConfig(url, function(pageconfig) {
+                showConfig(pageconfig);
+                config = pageconfig;
+            });
+        });
+    });
+});
+
+document.querySelector("#include").addEventListener("change", function(e) {
+    var region = document.querySelector("#include").value;
+    document.querySelector("#excludedel").setAttribute("disabled", "disabled"); 
+    document.querySelector("#includedel").setAttribute("disabled", "disabled"); 
+    if(region == null) return;
+    document.querySelector("#exclude").value = null;
+    document.querySelector("#includedel").removeAttribute("disabled");    
+    tabController.tabShowOutline(tabId, region, config.includeRegion, function() {}); 
+});
+
+   
 document.querySelector("#excludeadd").addEventListener("click", function(e) {
     tabController.tabSelectExclude(tabId, url, function() {
         fillStatus({state: STATE.SELECTREGION});     
     });
 });
+
+document.querySelector("#excludedel").addEventListener("click", function(e) {
+    var region = document.querySelector("#exclude").value;
+    tabController.tabRemoveOutline(tabId, function() {
+        pageController.pageRemoveExclude(url, region, function() {
+            pageController.pageGetConfig(url, function(pageconfig) {
+                showConfig(pageconfig);
+                config = pageconfig;
+            });
+        });
+    });
+});
+
+document.querySelector("#exclude").addEventListener("change", function(e) {
+    var region = document.querySelector("#exclude").value;
+    document.querySelector("#excludedel").setAttribute("disabled", "disabled"); 
+    document.querySelector("#includedel").setAttribute("disabled", "disabled"); 
+    if(region == null) return;
+    document.querySelector("#include").value = null;
+    document.querySelector("#excludedel").removeAttribute("disabled");
+    tabController.tabShowOutline(tabId, region, config.excludeRegion, function() {}); 
+});
+
 document.querySelector("#pagetitle").addEventListener("change", function(e) {
-    pageController.pageSetTitle(SCOPE_HIGHLIGHT, url, document.querySelector("#pagetitle").value, function() {});
+    pageController.pageSetTitle(url, document.querySelector("#pagetitle").value, function() {});
 });
 
 document.querySelector("#checkdeleted").addEventListener("change", function(e) {
-    pageController.pageSetConfigProperty(SCOPE_HIGHLIGHT, url, "checkDeleted", document.querySelector("#checkdeleted").checked, function() {});
+    pageController.pageSetConfigProperty(url, "checkDeleted", document.querySelector("#checkdeleted").checked, function() {});
 });
 document.querySelector("#checkimages").addEventListener("change", function(e) {
-    pageController.pageSetConfigProperty(SCOPE_HIGHLIGHT, url, "scanImages", document.querySelector("#checkimages").checked, function() {});
+    pageController.pageSetConfigProperty(url, "scanImages", document.querySelector("#checkimages").checked, function() {});
 });
 document.querySelector("#ignorecase").addEventListener("change", function(e) {
-    pageController.pageSetConfigProperty(SCOPE_HIGHLIGHT, url, "ignoreCase", document.querySelector("#ignorecase").checked, function() {});
+    pageController.pageSetConfigProperty(url, "ignoreCase", document.querySelector("#ignorecase").checked, function() {});
 });
 document.querySelector("#ignorenumbers").addEventListener("change", function(e) {
-    pageController.pageSetConfigProperty(SCOPE_HIGHLIGHT, url, "ignoreNumbers", document.querySelector("#ignorenumbers").checked, function() {});
+    pageController.pageSetConfigProperty(url, "ignoreNumbers", document.querySelector("#ignorenumbers").checked, function() {});
+});
+
+document.querySelector("#delete").addEventListener("click", function(e) {
+    tabController.tabShowIcon(tabId, "/common/icons/neutral.svg", function() {
+        pageController.pageDelete(url, function() {
+            window.close(); 
+        });
+    });
+});
+
+document.querySelector("#highlight").addEventListener("click", function(e) {
+    tabController.tabHighlightChanges(tabId, url, function(status) {
+        fillStatus(status);
+    });
+});
+
+document.querySelector("#expand").addEventListener("click", function(e) {
+    document.querySelector("#config").style.display = 'block';
+    document.querySelector("#settings").style.display='block';    
 });
 
 var STATE = {
@@ -39,20 +103,6 @@ var STATE = {
 	HIGHLIGHTED: 2,
 	SELECTREGION: 3
 };
-
-document.querySelector("#highlight").addEventListener("click", function(e) {
-    tabController.tabHighlightChanges(SCOPE_HIGHLIGHT, tabId, url, function(status) {
-        fillStatus(status);
-    });
-});
-
-document.querySelector("#delete").addEventListener("click", function(e) {
-    tabController.tabShowIcon(tabId, "/common/icons/neutral.svg", function() {
-        pageController.pageDelete(SCOPE_HIGHLIGHT, url, function() {
-            window.close(); 
-        });
-    });
-});
 
 function checkCheckbox(checked, id) {
     var elem = document.querySelector("#" + id);
@@ -70,97 +120,78 @@ function showConfig(config) {
     checkCheckbox(config.ignoreCase, "ignorecase");
     checkCheckbox(config.ignoreNumbers, "ignorenumbers");
 
-    var incelem = document.querySelector("#includeadd");
+    document.querySelector("#excludedel").setAttribute("disabled", "disabled"); 
+    document.querySelector("#includedel").setAttribute("disabled", "disabled"); 
+
+    var incelem = document.querySelector("#include");
+    while(incelem.firstChild) incelem.removeChild(incelem.firstChild);
+    console.log(config.includes);
     for(var i=0; i<config.includes.length; i++) {
-        var node = createRegionNode(config.includes[i], config.includeRegion, function(xpath) {
-            removeIncludeRegion(xpath, function() {window.close(); });
-        });
-        incelem.parentElement.insertBefore(node, incelem);
+        var node = createRegionNode(config.includes[i]);
+        incelem.appendChild(node);
     }
 
-    var excelem = document.querySelector("#excludeadd");
+    var excelem = document.querySelector("#exclude");
+    while(excelem.firstChild) excelem.removeChild(excelem.firstChild);
     for(var i=0; i<config.excludes.length; i++) {
-        var node = createRegionNode(config.excludes[i], config.excludeRegion, function(xpath) {
-            removeExcludeRegion(xpath, function() {window.close(); });
-        });
-        excelem.parentElement.insertBefore(node, excelem);
+        var node = createRegionNode(config.excludes[i], config.excludeRegion);
+        excelem.appendChild(node);
     }
 }
 
-function createRegionNode(xpath, color, clickHandler) {
-    var node = document.createElement("div");
-    node.classList.add("panel-list-item");
-    var text = document.createElement("div");
-    text.classList.add("text");
-    node.appendChild(text);
-    text.appendChild(document.createTextNode(xpath));
-    var del = document.createElement("div");
-    del.classList.add("text-shortcut");
-    del.appendChild(document.createTextNode(chrome.i18n.getMessage("pagepopupRegionsRemove")));
-    node.appendChild(del);
-    node.addEventListener("mouseover", function(e) { 
-        tabController.tabShowOutline(tabId, xpath, color, function() {}); 
-    });
-    node.addEventListener("mouseout", function(e) { 
-        tabController.tabRemoveOutline(tabId, function() {});
-    });
-    node.addEventListener("click", function(e) { 
-        clickHandler(xpath); 
-    });
+function createRegionNode(xpath, color) {
+    var node = document.createElement("option");
+    node.setAttribute("value", xpath);
+    node.appendChild(document.createTextNode(xpath));
     return node;
-}
-
-function removeIncludeRegion(region, callback) {
-    tabController.tabRemoveOutline(tabId, function() {
-        pageController.pageRemoveInclude(SCOPE_HIGHLIGHT, url, region, callback);
-    });
-}
-
-function removeExcludeRegion(region, callback) {
-    tabController.tabRemoveOutline(tabId, function() {
-        pageController.pageRemoveExclude(SCOPE_HIGHLIGHT, url, region, callback);
-    });
 }
 
 function fillStatus(status) {
     switch(status.state) {
     case STATE.LOADED:
-        document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("pagepopupTitle");
-        document.querySelector("#panel-contents").style.display='block';
+        document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitle");
+        document.querySelector("#expand").style.display='block';
         break;
     case STATE.HIGHLIGHTED:
         if(status.changes == 0) {
             tabController.tabShowIcon(tabId, "/common/icons/unchanged.svg", function() {});
-            document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("pagepopupTitleNoChanges");
+            document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleNoChanges");
             document.querySelector("#highlight").style.visibility='hidden';
         } else {
             tabController.tabShowIcon(tabId, "/common/icons/changed.svg", function() {});
-            document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("pagepopupTitleChanges", [status.current, status.changes]);
+            document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [status.current, status.changes]);
         }
-        document.querySelector("#panel-contents").style.display='none';
+        document.querySelector("#expand").style.display='none';
         break;
     case STATE.SELECTREGION:
-        document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("pagepopupTitleSelectRegion");
-        document.querySelector("#panel-contents").style.display='none';
+        document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleSelectRegion");
+        document.querySelector("#expand").style.display='none';
         document.querySelector("#highlight").style.visibility='hidden';
         break;
     }
-    document.querySelector("#panel-loading").style.display = "block";
+    document.querySelector("#config").style.display='none';
+    document.querySelector("#settings").style.display='none';
 }
 
 var tabId = null;
 var url = null;
+var config = null;
 
 tabController.tabGetActive(function(tab) {
     tabId = tab.id; url = tab.url;
     if(url.substr(0,4)!="http") {
-        window.close(); 
-        return; 
+        document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleUnavailable");
+        document.querySelector("#settings").style.display="block";
+        document.querySelector("#buttons").style.display="none";
+        document.querySelector("#textfields").style.display="none";
+        document.querySelector("#setup").classList.add("default");
+        return;
     }
 
     tabController.tabGetStatus(tabId, fillStatus);
-    pageController.pageGetOrCreateConfig(SCOPE_HIGHLIGHT, url, tab.title, function(config) {
-        pageController.pageGetTitle(SCOPE_HIGHLIGHT, url, showTitle);
-        showConfig(config);
+    pageController.pageGetOrCreateConfig(url, tab.title, function(pageconfig) {
+        pageController.pageGetTitle(url, showTitle);
+        showConfig(pageconfig);
+        config = pageconfig;
     });
 });

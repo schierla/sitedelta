@@ -1,0 +1,7 @@
+body {padding: 12px 8px 4px 8px; }
+#title {font-weight: bold; text-align: center; }
+.section {font-weight: bold; }
+.browser-style input[type="text"], .browser-style select {width: 100%; }
+.buttons {text-align: right; }
+#config {display: none; margin-top: 8px;}
+#settings {display: none; margin-top: 8px; }

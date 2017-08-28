@@ -14,19 +14,19 @@ var tabController = {
     tabGetStatus: function(tabId, callback) {
         tabController._callContentScript(tabId, {command: "getStatus"}, callback);
     },
-    tabGetContent: function(scope, tabId, url, callback) {
-        pageController.pageGetConfig(scope, url, function(config) {
+    tabGetContent: function(tabId, url, callback) {
+        pageController.pageGetConfig(url, function(config) {
             tabController._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
                 callback(content);
             });
         });
     },
-    tabHighlightChanges: function(scope, tabId, url, callback) {
-        pageController.pageGetConfig(scope, url, function(config) {
+    tabHighlightChanges: function(tabId, url, callback) {
+        pageController.pageGetConfig(url, function(config) {
             tabController._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
-                pageController.pageGetContent(scope, url, function(oldcontent) {
+                pageController.pageGetContent(url, function(oldcontent) {
                     if(oldcontent == null) oldcontent = "";
-                    pageController.pageSetContent(scope, url, content, function() {
+                    pageController.pageSetContent(url, content, function() {
                         tabController._callContentScript(tabId, {command: "highlightChanges", config: config, content: oldcontent}, function(status) {
                             callback(status);
                         });

@@ -41,7 +41,7 @@
         "descriptoin": "Text of the 'watch' tab"
     },
     "popupWatchTitle": {
-        "message": "Changed Pages",
+        "message": "Changed Pages:",
         "description": "Headline for changed pages"
     },
     "popupWatchEnabled": {
@@ -66,15 +66,19 @@
         "description": "Button to manage watched pages"
     },
 
-    "pagepopupTitle": {
-        "message": "SiteDelta Page Settings",
+    "highlightTitle": {
+        "message": "SiteDelta Highlight",
         "description": "Title of the page action popup"
     },
-    "pagepopupTitleNoChanges": {
+    "highlightTitleUnavailable": {
+        "message": "SiteDelta Highlight does not support monitoring this page.",
+        "description": "Title of the page action popup when not available for the current page"
+    },
+    "highlightTitleNoChanges": {
         "message": "No changes found.",
         "description": "Title of the page action popup when no changes are found"
     },
-    "pagepopupTitleChanges": {
+    "highlightTitleChanges": {
         "message": "Highlighting change $CURRENT$ of $COUNT$.",
         "description": "Title of the page action popup when changes are found",
         "placeholders": {
@@ -88,81 +92,94 @@
             }
         }
     },
-    "pagepopupTitleSelectRegion": {
+    "highlightTitleSelectRegion": {
         "message": "Click to select a region",
         "description": "Title of the page action popup while selecting a region"
     },
 
-    "pagepopupDetailsTab": {
+    "highlightDetailsTab": {
         "message": "Details",
         "description": "Text of the 'details' tab"
     },
-    "pagepopupDetailsTitle": {
+    "highlightDetailsTitle": {
         "message": "Title: ",
         "description": "Label for the 'title' field"
     },
-    "pagepopupDetailsUrl": {
-        "message": "URL:",
-        "description": "Label for the 'URL' field"
-    },
-
-    "pagepopupRegionsTab": {
+    
+    "highlightRegionsTab": {
         "message": "Regions",
         "description": "Text of the 'regions' tab"
     },
-    "pagepopupRegionsInclude": {
-        "message": "Included regions", 
+    "highlightRegionsInclude": {
+        "message": "Included regions:", 
         "description": "Headline for included regions"
     },
-    "pagepopupRegionsExclude": {
-        "message": "Excluded regions", 
+    "highlightRegionsExclude": {
+        "message": "Excluded regions:", 
         "description": "Headline for excluded regions"
     },
-    "pagepopupRegionsRemove": {
+    "highlightRegionsRemove": {
         "message": "remove",
         "description": "Button to remove a region"
     },
-    "pagepopupRegionsAdd": {
+    "highlightRegionsAdd": {
         "message": "add new",
         "description": "Button to add a new region"
     },
 
-    "pagepopupConfigurationTab": {
+    "highlightConfigurationTab": {
         "message": "Configuration",
         "description": "Text of the 'configuration' tab"
     },
-    "pagepopupConfigurationChecks": {
-        "message": "Check contents",
+    "highlightConfigurationChecks": {
+        "message": "Check contents:",
         "description": "Headline for configured page checks"
     },
-    "pagepopupConfigurationCheckDeleted": {
+    "highlightConfigurationCheckDeleted": {
         "message": "Check deletions",
         "description": "Label for checkbox to enable the check for deletions"
     },
-    "pagepopupConfigurationCheckImages": {
+    "highlightConfigurationCheckImages": {
         "message": "Check images",
         "description": "Label for checkbox to enable the check for image changes"
     },
-    "pagepopupConfigurationIgnores": {
-        "message": "Check ignores", 
+    "highlightConfigurationIgnores": {
+        "message": "Check ignores:", 
         "description": "Headline for configured ignores"
     },
-    "pagepopupConfigurationIgnoreCase": {
+    "highlightConfigurationIgnoreCase": {
         "message": "Ignore case",
         "description": "Label for checkbox to ignore case when checking"
     },
-    "pagepopupConfigurationIgnoreNumbers": {
+    "highlightConfigurationIgnoreNumbers": {
         "message": "Ignore numbers",
         "description": "Label for checkbox to ignore numbers when checking"
     },
 
-    "pagepopupButtonHighlight": {
+    "highlightButtonHighlight": {
         "message": "Highlight Changes",
         "description": "Button to highlight changes on the current page"
     },
-    "pagepopupButtonDelete": {
+    "highlightButtonDelete": {
         "message": "Delete Page",
         "description": "Button to delete the current page"
+    },
+    "highlightButtonSetup": {
+        "message": "Configure SiteDelta Highlight...",
+        "description": "Button to open settings dialog"
+    },
+
+    "manageKnownPages": {
+        "message": "Monitored pages:",
+        "description": "Region title for the list of monitored pages"
+    },
+    "manageDelete": {
+        "message": "Delete Page",
+        "description": "Button to delete the selected page"
+    },
+    "manageOpen": {
+        "message": "Open Page",
+        "description": "Button to open the selected page"
     }
 }
 

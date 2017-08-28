@@ -181,6 +181,13 @@ var highlightUtils = {
                 del.style.display = 'block';
                 del.style.maxWidth = this.ownerDocument.width / 3;
             }}(del), false);
+            img.addEventListener("click", function(del) {return function(event) {
+                del.style.display = 'block';
+                del.style.maxWidth = this.ownerDocument.width / 3;
+                event.preventDefault();
+                event.stopPropagation(); 
+                return false;
+            }}(del), false);
             img.addEventListener("mousemove", function(del) {return function(event) {
                 del.style.left = (event.pageX <= this.ownerDocument.width / 2 ? event.pageX + 4: Math.max(10, event.pageX - 4 - del.clientWidth)) + "px";
                 del.style.top = (event.pageY - del.clientHeight > 0 ? (event.pageY - del.clientHeight): event.pageY + 10) + "px";

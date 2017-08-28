@@ -1,14 +1,14 @@
 // watch operations
 var watchController = {
     watchInitAlarms: function() {
-        pageController.pageList(SCOPE_WATCH, function(pages) {
+        pageController.pageList(function(pages) {
             for(var i=0; i<pages.length; i++) {
                 watchController.watchUpdateAlarm(pages[i]);
             }
         });
     },
     watchUpdateAlarm(url) {
-        pageController.pageGetNextScan(SCOPE_WATCH, url,
+        pageController.pageGetNextScan(url,
             (nextScan) => chrome.alarms.create(url, {when: nextScan}));
     },
 
@@ -19,8 +19,8 @@ var watchController = {
     },
 
     watchSetChanges: function(url, changes) {
-        pageController.pageSetChanges(SCOPE_WATCH, url, changes, function() {
-            pageController.pageListChanged(SCOPE_WATCH, function(changed) {
+        pageController.pageSetChanges(url, changes, function() {
+            pageController.pageListChanged(function(changed) {
                 if(changed > 0) 
                     chrome.browserAction.setBadgeText({text:changed.length});
                 else 

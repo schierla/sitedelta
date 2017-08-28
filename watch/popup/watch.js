@@ -40,7 +40,7 @@ function addChangedUrl(url) {
 }
 
 function createChangeList() {
-    pageController.pageListChanged(SCOPE_WATCH, function(urls) {
+    pageController.pageListChanged(function(urls) {
         for(var i=0; i<urls.length; i++) {
             addChangedUrl(urls[i]);
         }
@@ -85,7 +85,7 @@ tabController.tabGetActive(function(tab) {
         enableButtons(title, PAGESTATE.UNSUPPORTED);
         return;
     } 
-    pageController.pageGetConfig(SCOPE_HIGHLIGHT, url, function(existing) {
+    pageController.pageGetConfig(url, function(existing) {
         if(existing == null) {
             enableButtons(title, PAGESTATE.DISABLED);
         } else {

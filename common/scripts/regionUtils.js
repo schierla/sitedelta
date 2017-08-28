@@ -37,6 +37,7 @@ var regionUtils = {
 		e.target.style.outline="red dotted 2px";
 		e.preventDefault();
 		e.stopPropagation();
+		return false;
 	},
 
 	_mouseout: function(e) {
@@ -44,6 +45,7 @@ var regionUtils = {
 			e.target.style.outline="none";
 		e.preventDefault();
 		e.stopPropagation();
+		return false;
 	},
 
 	_mousedown: function(e) {
@@ -52,6 +54,7 @@ var regionUtils = {
 		e.target.style.outline = "green solid 2px;";
 		e.preventDefault();
 		e.stopPropagation();
+		return false;
 	},
 
 	_mouseup: function(e) {
@@ -108,6 +111,7 @@ var regionUtils = {
 		regionUtils._destelement = null;
 		regionUtils._callback(xpath);
 		regionUtils._callback = null;
+		return false;
 	},
 
 	_buildXPath: function(t, allowId) {

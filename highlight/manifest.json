@@ -6,28 +6,44 @@
 	"default_locale": "en",
 	"description": "__MSG_highlightExtensionDescription__",
 	"icons": {
-		"48": "common/icons/neutral.svg"
+		"16": "common/icons/neutral-16.png",
+		"24": "common/icons/neutral-24.png",
+		"32": "common/icons/neutral-32.png",
+		"48": "common/icons/neutral-48.png",
+		"64": "common/icons/neutral-64.png"
 	},
 	
 	"permissions": [
 		"activeTab", 
-		"webNavigation",
 		"storage",
-		"notifications",
+		"unlimitedStorage"
+	],
+
+	"optional_permissions": [
 		"contextMenus",
-		"*://*/"
+		"notifications",
+		"webNavigation",
+		"<all_urls>"
 	],
 	
 	"browser_action": {
-		"default_icon": "common/icons/neutral.svg",
+		"default_icon": {
+			"16": "common/icons/neutral-16.png",
+			"24": "common/icons/neutral-24.png",
+			"32": "common/icons/neutral-32.png",
+			"48": "common/icons/neutral-48.png",
+			"64": "common/icons/neutral-64.png"
+		},
 		"default_title": "__MSG_highlightExtensionName__",
 		"default_popup": "popup/highlight.htm",
-		"browser_style": true
+		"browser_style": true,
+		"chrome_style": true
 	},
 
 	"options_ui": {
-		"page": "pages/manageHighlight.htm",
-		"browser_style": true
+		"page": "pages/manage.htm",
+		"browser_style": true,
+		"chrome_style": true
 	},
 	
 	"background": {

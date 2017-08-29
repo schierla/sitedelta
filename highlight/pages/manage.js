@@ -36,5 +36,14 @@ document.querySelector("#pages").addEventListener("dblclick", function(e) {
     }
 });
 
+document.querySelector("#request").addEventListener("click", function(e) {
+    chrome.permissions.request({
+        permissions: ["webNavigation"],
+        origins: ["<all_urls>"]
+    }, function(success) {
+        chrome.runtime.sendMessage({command: "reinitialize"}, function() {});
+    });
+});
+
 uiUtils.i18n();
 load();

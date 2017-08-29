@@ -80,7 +80,7 @@ document.querySelector("#ignorenumbers").addEventListener("change", function(e) 
 });
 
 document.querySelector("#delete").addEventListener("click", function(e) {
-    tabController.tabShowIcon(tabId, "/common/icons/neutral.svg", function() {
+    tabController.tabShowIcon(tabId, "neutral", function() {
         pageController.pageDelete(url, function() {
             window.close(); 
         });
@@ -88,14 +88,20 @@ document.querySelector("#delete").addEventListener("click", function(e) {
 });
 
 document.querySelector("#highlight").addEventListener("click", function(e) {
-    tabController.tabHighlightChanges(tabId, url, function(status) {
-        fillStatus(status);
+    pageController.pageGetOrCreateConfig(url, document.querySelector("#pagetitle").value, () => {
+        tabController.tabHighlightChanges(tabId, url, function(status) {
+            fillStatus(status);
+        });
     });
 });
 
 document.querySelector("#expand").addEventListener("click", function(e) {
-    document.querySelector("#config").style.display = 'block';
-    document.querySelector("#settings").style.display='block';    
+    pageController.pageGetOrCreateConfig(url, document.querySelector("#pagetitle").value, (pageconfig) => {
+        showConfig(pageconfig);
+        config = pageconfig;
+        document.querySelector("#config").style.display = 'block';
+        document.querySelector("#settings").style.display='block';    
+    });
 });
 
 var STATE = {
@@ -125,7 +131,6 @@ function showConfig(config) {
 
     var incelem = document.querySelector("#include");
     while(incelem.firstChild) incelem.removeChild(incelem.firstChild);
-    console.log(config.includes);
     for(var i=0; i<config.includes.length; i++) {
         var node = createRegionNode(config.includes[i]);
         incelem.appendChild(node);
@@ -154,11 +159,11 @@ function fillStatus(status) {
         break;
     case STATE.HIGHLIGHTED:
         if(status.changes == 0) {
-            tabController.tabShowIcon(tabId, "/common/icons/unchanged.svg", function() {});
+            tabController.tabShowIcon(tabId, "unchanged", function() {});
             document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleNoChanges");
             document.querySelector("#highlight").style.visibility='hidden';
         } else {
-            tabController.tabShowIcon(tabId, "/common/icons/changed.svg", function() {});
+            tabController.tabShowIcon(tabId, "changed", function() {});
             document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [status.current, status.changes]);
         }
         document.querySelector("#expand").style.display='none';
@@ -189,9 +194,7 @@ tabController.tabGetActive(function(tab) {
     }
 
     tabController.tabGetStatus(tabId, fillStatus);
-    pageController.pageGetOrCreateConfig(url, tab.title, function(pageconfig) {
-        pageController.pageGetTitle(url, showTitle);
-        showConfig(pageconfig);
-        config = pageconfig;
+    pageController.pageGetTitle(url, (title) => {
+        if(title == null) showTitle(tab.title); else showTitle(title); 
     });
 });

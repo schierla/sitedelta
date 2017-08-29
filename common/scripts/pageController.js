@@ -30,6 +30,12 @@ var pageController = {
     pageGetConfigProperty: function(url, property, callback) {
         pageController.pageGetConfig(url, (config) => callback(config[property]));
     },
+    pageGetOrDefaultConfig: function(url, callback) {
+        pageGetConfig(url, (config) => {
+            if(config == null) callback(defaultConfig());
+            else callback(config);
+        });
+    },
     pageGetOrCreateConfig: function(url, title, callback) {
         pageController.pageGetConfig(url, function(config) {
             if(config == null) {
@@ -86,7 +92,6 @@ var pageController = {
             if(newlist.length == 0) {
                 newlist.push("/html/body[1]");
             }
-            console.log(newlist);
             pageController.pageSetConfigProperty(url, "includes", newlist, callback);
         });
     },

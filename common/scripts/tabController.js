@@ -8,8 +8,17 @@ var tabController = {
             callback(tabs[0]);
         });
     },
-    tabShowIcon: function(tabId, url, callback) {
-        chrome.browserAction.setIcon({path: url, tabId: tabId}, callback);
+    tabShowIcon: function(tabId, name, callback) {
+        if(chrome.webNavigation)
+            chrome.browserAction.setIcon({
+                path: {
+                    "16": "/common/icons/" + name + "-16.png", 
+                    "24": "/common/icons/" + name + "-24.png", 
+                    "32": "/common/icons/" + name + "-32.png", 
+                    "48": "/common/icons/" + name + "-48.png", 
+                    "64": "/common/icons/" + name + "-64.png"
+                }, tabId: tabId}, 
+            callback);
     },
     tabGetStatus: function(tabId, callback) {
         tabController._callContentScript(tabId, {command: "getStatus"}, callback);

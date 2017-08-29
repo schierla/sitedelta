@@ -164,9 +164,9 @@
         "message": "Delete Page",
         "description": "Button to delete the current page"
     },
-    "highlightButtonSetup": {
+    "highlightButtonOptions": {
         "message": "Configure SiteDelta Highlight...",
-        "description": "Button to open settings dialog"
+        "description": "Button to open options dialog"
     },
 
     "manageKnownPages": {

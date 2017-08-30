@@ -1,25 +1,25 @@
 
 var webNavigationBeforeListener = function(details) {
 	if(details.frameId != 0) return;
-	tabController.tabShowIcon(details.tabId, "inactive", function() {});
+	tabUtils.tabShowIcon(details.tabId, "inactive", function() {});
 	if(chrome.notifications) chrome.notifications.clear("highlight");
 };
 
 var webNavigationCompletedListener = function(details) {
 	if(details.frameId != 0) return;
-	pageController.pageGetConfig(details.url, function(config) {
+	pageUtils.pageGetConfig(details.url, function(config) {
 		if(config == null) {
-			tabController.tabShowIcon(details.tabId, "neutral", function() {});
+			tabUtils.tabShowIcon(details.tabId, "neutral", function() {});
 		} else {
-			pageController.pageGetContent(details.url, function(oldcontent) {
+			pageUtils.pageGetContent(details.url, function(oldcontent) {
 				if(oldcontent != null) {
-					tabController.tabGetContent(details.tabId, details.url, function(content) {
+					tabUtils.tabGetContent(details.tabId, details.url, function(content) {
 						if(textUtils.clean(content, config) == textUtils.clean(oldcontent, config)) {
 							// unchanged
-							tabController.tabShowIcon(details.tabId, "unchanged", function() {});
+							tabUtils.tabShowIcon(details.tabId, "unchanged", function() {});
 						} else {
 							// changed
-							tabController.tabShowIcon(details.tabId, "changed", function() {});
+							tabUtils.tabShowIcon(details.tabId, "changed", function() {});
 						}
 					});
 				}
@@ -59,10 +59,10 @@ var contextMenuListener = function(info, tab) {
 			});
 			return;
 		}
-		pageController.pageGetOrCreateConfig(tab.url, tab.title, function() {
-			tabController.tabHighlightChanges(tab.id, tab.url, function(status) {
+		pageUtils.pageGetOrCreateConfig(tab.url, tab.title, function() {
+			tabUtils.tabHighlightChanges(tab.id, tab.url, function(status) {
 				if(status.changes == 0) {
-					tabController.tabShowIcon(tab.id, "unchanged", function() {});
+					tabUtils.tabShowIcon(tab.id, "unchanged", function() {});
 					chrome.notifications.create("highlight", {
 						"type": "basic",
 						"iconUrl": chrome.extension.getURL("common/icons/unchanged.svg"),
@@ -70,7 +70,7 @@ var contextMenuListener = function(info, tab) {
 						"message": chrome.i18n.getMessage("highlightTitleNoChanges")
 					});
 				} else {
-					tabController.tabShowIcon(tab.id, "changed", function() {});
+					tabUtils.tabShowIcon(tab.id, "changed", function() {});
 					chrome.notifications.create("highlight", {
 						"type": "basic",
 						"iconUrl": chrome.extension.getURL("common/icons/changed.svg"),
@@ -87,12 +87,12 @@ var contextMenuListener = function(info, tab) {
 
 var messageListener = function(request, sender, sendResponse) {
     if(request.command == "addIncludeRegion") {
-		tabController.tabSelectRegion(request.tab, function(xpath) {
-			pageController.pageAddInclude(request.url, xpath);
+		tabUtils.tabSelectRegion(request.tab, function(xpath) {
+			pageUtils.pageAddInclude(request.url, xpath);
         });
 	} else if(request.command == "addExcludeRegion") {
-		tabController.tabSelectRegion(request.tab, function(xpath) {
-			pageController.pageAddExclude(request.url, xpath);
+		tabUtils.tabSelectRegion(request.tab, function(xpath) {
+			pageUtils.pageAddExclude(request.url, xpath);
 		});
 	} else if(request.command == "reinitialize") {
 		initialize();

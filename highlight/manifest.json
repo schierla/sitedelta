@@ -51,9 +51,9 @@
 			"common/scripts/ioUtils.js", 
 			"common/scripts/textUtils.js", 
 			"common/scripts/defaultConfig.js", 			
-			"common/scripts/tabController.js", 
-			"common/scripts/pageController.js", 
-			"common/scripts/watchController.js", 
+			"common/scripts/tabUtils.js", 
+			"common/scripts/pageUtils.js", 
+			"common/scripts/watchUtils.js", 
 			"scripts/background.js"
 		]
 	}

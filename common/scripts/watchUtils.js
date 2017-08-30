@@ -1,26 +1,26 @@
 // watch operations
-var watchController = {
+var watchUtils = {
     watchInitAlarms: function() {
-        pageController.pageList(function(pages) {
+        pageUtils.pageList(function(pages) {
             for(var i=0; i<pages.length; i++) {
-                watchController.watchUpdateAlarm(pages[i]);
+                watchUtils.watchUpdateAlarm(pages[i]);
             }
         });
     },
     watchUpdateAlarm(url) {
-        pageController.pageGetNextScan(url,
+        pageUtils.pageGetNextScan(url,
             (nextScan) => chrome.alarms.create(url, {when: nextScan}));
     },
 
     watchLoadPage: function(url, callback) {
-        watchController._watchDownloadPage(url, "", function(mime, content) {
-            watchController._watchParsePage(url, mime, content, callback);
+        watchUtils._watchDownloadPage(url, "", function(mime, content) {
+            watchUtils._watchParsePage(url, mime, content, callback);
         });
     },
 
     watchSetChanges: function(url, changes) {
-        pageController.pageSetChanges(url, changes, function() {
-            pageController.pageListChanged(function(changed) {
+        pageUtils.pageSetChanges(url, changes, function() {
+            pageUtils.pageListChanged(function(changed) {
                 if(changed > 0) 
                     chrome.browserAction.setBadgeText({text:changed.length});
                 else 
@@ -51,8 +51,8 @@ var watchController = {
                 if(metas.item(i).getAttribute("http-equiv").toLowerCase()=="content-type") {
                     mime = metas.item(i).getAttribute("content");
                     if(mime.toLowerCase().indexOf("charset") > 0) {
-                        watchController._watchDownloadPage(url, mime, function(mime, content) {
-                            watchController._watchParsePage(url, mime, content, documentCallback);
+                        watchUtils._watchDownloadPage(url, mime, function(mime, content) {
+                            watchUtils._watchParsePage(url, mime, content, documentCallback);
                         });
                         return;
                     }

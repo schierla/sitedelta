@@ -1,29 +1,26 @@
-uiUtils.init([
-    {tab:"topage",elem:"page",footer:["managepages", "configure"]},
-    {tab:"towatch",elem:"watch",footer:["managewatch", "watchpage"]}
-], 0);
+uiUtils.i18n();
 
 document.body.style.minWidth = "40em";
 document.querySelector("#icon").src = "../common/icons/neutral.svg";
 
 document.querySelector("#configure").addEventListener("click", function(e) {
-    tabController.tabShowPageAction(tabId, "../common/icons/neutral.svg", function() {
+    tabUtils.tabShowPageAction(tabId, "../common/icons/neutral.svg", function() {
         window.location.href="highlight.htm";
     });
 });
 
 document.querySelector("#managepages").addEventListener("click", function(e) {
-	tabController.tabOpenResource("pages/manageHighlight.htm");
+	tabUtils.tabOpenResource("pages/manageHighlight.htm");
     window.close();
 });
 
 document.querySelector("#watchpage").addEventListener("click", function(e) {
-	tabController.tabOpenResource("pages/showWatch.htm?" + url);
+	tabUtils.tabOpenResource("pages/showWatch.htm?" + url);
     window.close();
 });
 
 document.querySelector("#managewatch").addEventListener("click", function(e) {
-	tabController.tabOpenResource("pages/manageWatch.htm");
+	tabUtils.tabOpenResource("pages/manageWatch.htm");
     window.close();
 });
 
@@ -34,13 +31,13 @@ function addChangedUrl(url) {
     var url = "http://www.google.de";
     div.appendChild(document.createTextNode(url));
     div.addEventListener("click", function() {
-        tabController.tabOpenResource("pages/showWatch.htm?" + url);
+        tabUtils.tabOpenResource("pages/showWatch.htm?" + url);
     });
     sep.parentElement.insertBefore(div, sep);            
 }
 
 function createChangeList() {
-    pageController.pageListChanged(function(urls) {
+    pageUtils.pageListChanged(function(urls) {
         for(var i=0; i<urls.length; i++) {
             addChangedUrl(urls[i]);
         }
@@ -75,7 +72,7 @@ function enableButtons(title, state) {
 var url = null;
 var tabId = null;
 var title = null;
-tabController.tabGetActive(function(tab) {
+tabUtils.tabGetActive(function(tab) {
     tabId = tab.id;
     url = tab.url;
     title = tab.title;
@@ -85,7 +82,7 @@ tabController.tabGetActive(function(tab) {
         enableButtons(title, PAGESTATE.UNSUPPORTED);
         return;
     } 
-    pageController.pageGetConfig(url, function(existing) {
+    pageUtils.pageGetConfig(url, function(existing) {
         if(existing == null) {
             enableButtons(title, PAGESTATE.DISABLED);
         } else {

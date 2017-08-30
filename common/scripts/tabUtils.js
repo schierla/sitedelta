@@ -1,5 +1,5 @@
 // tab operations
-var tabController = {
+var tabUtils = {
     tabOpenResource: function(url) {
         chrome.tabs.create({url: chrome.runtime.getURL(url)});
     },
@@ -21,22 +21,22 @@ var tabController = {
             callback);
     },
     tabGetStatus: function(tabId, callback) {
-        tabController._callContentScript(tabId, {command: "getStatus"}, callback);
+        tabUtils._callContentScript(tabId, {command: "getStatus"}, callback);
     },
     tabGetContent: function(tabId, url, callback) {
-        pageController.pageGetConfig(url, function(config) {
-            tabController._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
+        pageUtils.pageGetConfig(url, function(config) {
+            tabUtils._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
                 callback(content);
             });
         });
     },
     tabHighlightChanges: function(tabId, url, callback) {
-        pageController.pageGetConfig(url, function(config) {
-            tabController._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
-                pageController.pageGetContent(url, function(oldcontent) {
+        pageUtils.pageGetConfig(url, function(config) {
+            tabUtils._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
+                pageUtils.pageGetContent(url, function(oldcontent) {
                     if(oldcontent == null) oldcontent = "";
-                    pageController.pageSetContent(url, content, function() {
-                        tabController._callContentScript(tabId, {command: "highlightChanges", config: config, content: oldcontent}, function(status) {
+                    pageUtils.pageSetContent(url, content, function() {
+                        tabUtils._callContentScript(tabId, {command: "highlightChanges", config: config, content: oldcontent}, function(status) {
                             callback(status);
                         });
                     });
@@ -45,19 +45,19 @@ var tabController = {
         });
     },
     tabShowOutline: function(tabId, xpath, color, callback) {
-        tabController._callContentScript(tabId, {command: "showOutline", xpath: xpath, color: color}, callback);
+        tabUtils._callContentScript(tabId, {command: "showOutline", xpath: xpath, color: color}, callback);
     },
     tabRemoveOutline: function(tabId, callback) {
-        tabController._callContentScript(tabId, {command: "removeOutline"}, callback);
+        tabUtils._callContentScript(tabId, {command: "removeOutline"}, callback);
     },
     tabSelectInclude: function(tabId, url, callback) {
-        tabController._callBackgroundScript({command: "addIncludeRegion", tab: tabId, url: url}, callback);
+        tabUtils._callBackgroundScript({command: "addIncludeRegion", tab: tabId, url: url}, callback);
     }, 
     tabSelectExclude: function(tabId, url, callback) {
-        tabController._callBackgroundScript({command: "addExcludeRegion", tab: tabId, url: url}, callback);
+        tabUtils._callBackgroundScript({command: "addExcludeRegion", tab: tabId, url: url}, callback);
     },
     tabSelectRegion: function(tabId, callback) {
-        tabController._callContentScript(tabId, {command: "selectRegion"}, callback);
+        tabUtils._callContentScript(tabId, {command: "selectRegion"}, callback);
     },
 
     // internal functions
@@ -73,7 +73,7 @@ var tabController = {
                     "/common/scripts/highlightUtils.js", 
                     "/common/scripts/contentScript.js"
                 ];
-                tabController._executeScripts(tabId, scripts, function() {
+                tabUtils._executeScripts(tabId, scripts, function() {
                     chrome.tabs.sendMessage(tabId, command, function(status) {
                         if(chrome.runtime.lastError) {
                             console.log(chrome.runtime.lastError);
@@ -93,7 +93,7 @@ var tabController = {
         } else {
             var file = files.splice(0, 1);
             chrome.tabs.executeScript(tabId, {file: file[0]}, function() {
-                tabController._executeScripts(tabId, files, callback);
+                tabUtils._executeScripts(tabId, files, callback);
             });
         }
     }

@@ -4,23 +4,23 @@ document.body.style.minWidth = "40em";
 document.querySelector("#icon").src = "../common/icons/neutral.svg";
 
 document.querySelector("#configure").addEventListener("click", function(e) {
-    tabUtils.tabShowPageAction(tabId, "../common/icons/neutral.svg", function() {
+    tabUtils.showPageAction(tabId, "../common/icons/neutral.svg", function() {
         window.location.href="highlight.htm";
     });
 });
 
 document.querySelector("#managepages").addEventListener("click", function(e) {
-	tabUtils.tabOpenResource("pages/manageHighlight.htm");
+	tabUtils.openResource("pages/manageHighlight.htm");
     window.close();
 });
 
 document.querySelector("#watchpage").addEventListener("click", function(e) {
-	tabUtils.tabOpenResource("pages/showWatch.htm?" + url);
+	tabUtils.openResource("pages/showWatch.htm?" + url);
     window.close();
 });
 
 document.querySelector("#managewatch").addEventListener("click", function(e) {
-	tabUtils.tabOpenResource("pages/manageWatch.htm");
+	tabUtils.openResource("pages/manageWatch.htm");
     window.close();
 });
 
@@ -31,13 +31,13 @@ function addChangedUrl(url) {
     var url = "http://www.google.de";
     div.appendChild(document.createTextNode(url));
     div.addEventListener("click", function() {
-        tabUtils.tabOpenResource("pages/showWatch.htm?" + url);
+        tabUtils.openResource("pages/showWatch.htm?" + url);
     });
     sep.parentElement.insertBefore(div, sep);            
 }
 
 function createChangeList() {
-    pageUtils.pageListChanged(function(urls) {
+    pageUtils.listChanged(function(urls) {
         for(var i=0; i<urls.length; i++) {
             addChangedUrl(urls[i]);
         }
@@ -72,7 +72,7 @@ function enableButtons(title, state) {
 var url = null;
 var tabId = null;
 var title = null;
-tabUtils.tabGetActive(function(tab) {
+tabUtils.getActive(function(tab) {
     tabId = tab.id;
     url = tab.url;
     title = tab.title;
@@ -82,7 +82,7 @@ tabUtils.tabGetActive(function(tab) {
         enableButtons(title, PAGESTATE.UNSUPPORTED);
         return;
     } 
-    pageUtils.pageGetConfig(url, function(existing) {
+    pageUtils.getConfig(url, function(existing) {
         if(existing == null) {
             enableButtons(title, PAGESTATE.DISABLED);
         } else {

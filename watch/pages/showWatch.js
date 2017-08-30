@@ -5,7 +5,7 @@ window.onload = function() {
 	iframe.style.visibility = "hidden";
 	var idoc = iframe.contentWindow.document;
 	while(idoc.firstChild) idoc.removeChild(idoc.firstChild);
-	watchUtils.watchLoadPage(url, function(doc) {
+	watchUtils.loadPage(url, function(doc) {
 		var idoc = iframe.contentWindow.document;
 		var base = doc.createElement("base");
 		base.setAttribute("href", url);
@@ -16,7 +16,7 @@ window.onload = function() {
 		idoc.body.addEventListener("click", stopIt, true);
 
 		iframe.style.visibility = "visible";
-		watchUtils.watchSetChanges(url, 1);
+		watchUtils.setChanges(url, 1);
 	});
 }
 

@@ -50,7 +50,7 @@
 		"scripts": [
 			"common/scripts/ioUtils.js", 
 			"common/scripts/textUtils.js", 
-			"common/scripts/defaultConfig.js", 			
+			"common/scripts/configUtils.js", 			
 			"common/scripts/tabUtils.js", 
 			"common/scripts/pageUtils.js", 
 			"common/scripts/watchUtils.js", 

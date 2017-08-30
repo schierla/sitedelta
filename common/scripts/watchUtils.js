@@ -1,26 +1,26 @@
 // watch operations
 var watchUtils = {
-    watchInitAlarms: function() {
-        pageUtils.pageList(function(pages) {
+    initAlarms: function() {
+        pageUtils.list(function(pages) {
             for(var i=0; i<pages.length; i++) {
-                watchUtils.watchUpdateAlarm(pages[i]);
+                watchUtils.updateAlarm(pages[i]);
             }
         });
     },
-    watchUpdateAlarm(url) {
-        pageUtils.pageGetNextScan(url,
+    updateAlarm(url) {
+        pageUtils.getNextScan(url,
             (nextScan) => chrome.alarms.create(url, {when: nextScan}));
     },
 
-    watchLoadPage: function(url, callback) {
-        watchUtils._watchDownloadPage(url, "", function(mime, content) {
-            watchUtils._watchParsePage(url, mime, content, callback);
+    loadPage: function(url, callback) {
+        watchUtils._downloadPage(url, "", function(mime, content) {
+            watchUtils._parsePage(url, mime, content, callback);
         });
     },
 
-    watchSetChanges: function(url, changes) {
-        pageUtils.pageSetChanges(url, changes, function() {
-            pageUtils.pageListChanged(function(changed) {
+    setChanges: function(url, changes) {
+        pageUtils.setChanges(url, changes, function() {
+            pageUtils.listChanged(function(changed) {
                 if(changed > 0) 
                     chrome.browserAction.setBadgeText({text:changed.length});
                 else 
@@ -29,7 +29,7 @@ var watchUtils = {
         });
     },
 
-    _watchDownloadPage: function(url, mime, contentCallback) {
+    _downloadPage: function(url, mime, contentCallback) {
         var xhr = new XMLHttpRequest();
         if(mime != "") xhr.overrideMimeType(mime);
         xhr.onreadystatechange = function() {
@@ -42,7 +42,7 @@ var watchUtils = {
         xhr.open("GET", url, true);
         xhr.send();
     },
-    _watchParsePage: function(url, mime, content, documentCallback) {
+    _parsePage: function(url, mime, content, documentCallback) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(content, "text/html");
         if(mime.toLowerCase().indexOf("charset")<0) {
@@ -51,8 +51,8 @@ var watchUtils = {
                 if(metas.item(i).getAttribute("http-equiv").toLowerCase()=="content-type") {
                     mime = metas.item(i).getAttribute("content");
                     if(mime.toLowerCase().indexOf("charset") > 0) {
-                        watchUtils._watchDownloadPage(url, mime, function(mime, content) {
-                            watchUtils._watchParsePage(url, mime, content, documentCallback);
+                        watchUtils._downloadPage(url, mime, function(mime, content) {
+                            watchUtils._parsePage(url, mime, content, documentCallback);
                         });
                         return;
                     }

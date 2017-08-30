@@ -6,16 +6,16 @@ document.querySelector("#setup").addEventListener("click", function(e) {
 });
 
 document.querySelector("#includeadd").addEventListener("click", function(e) {
-    tabUtils.tabSelectInclude(tabId, url, function() {
+    tabUtils.selectInclude(tabId, url, function() {
         fillStatus({state: STATE.SELECTREGION});     
     });
 });
 
 document.querySelector("#includedel").addEventListener("click", function(e) {
     var region = document.querySelector("#include").value;
-    tabUtils.tabRemoveOutline(tabId, function() {
-        pageUtils.pageRemoveInclude(url, region, function() {
-            pageUtils.pageGetConfig(url, function(pageconfig) {
+    tabUtils.removeOutline(tabId, function() {
+        pageUtils.removeInclude(url, region, function() {
+            pageUtils.getEffectiveConfig(url, function(pageconfig) {
                 showConfig(pageconfig);
                 config = pageconfig;
             });
@@ -30,21 +30,21 @@ document.querySelector("#include").addEventListener("change", function(e) {
     if(region == null) return;
     document.querySelector("#exclude").value = null;
     document.querySelector("#includedel").removeAttribute("disabled");    
-    tabUtils.tabShowOutline(tabId, region, config.includeRegion, function() {}); 
+    tabUtils.showOutline(tabId, region, config.includeRegion, function() {}); 
 });
 
    
 document.querySelector("#excludeadd").addEventListener("click", function(e) {
-    tabUtils.tabSelectExclude(tabId, url, function() {
+    tabUtils.selectExclude(tabId, url, function() {
         fillStatus({state: STATE.SELECTREGION});     
     });
 });
 
 document.querySelector("#excludedel").addEventListener("click", function(e) {
     var region = document.querySelector("#exclude").value;
-    tabUtils.tabRemoveOutline(tabId, function() {
-        pageUtils.pageRemoveExclude(url, region, function() {
-            pageUtils.pageGetConfig(url, function(pageconfig) {
+    tabUtils.removeOutline(tabId, function() {
+        pageUtils.removeExclude(url, region, function() {
+            pageUtils.getEffectiveConfig(url, function(pageconfig) {
                 showConfig(pageconfig);
                 config = pageconfig;
             });
@@ -59,44 +59,44 @@ document.querySelector("#exclude").addEventListener("change", function(e) {
     if(region == null) return;
     document.querySelector("#include").value = null;
     document.querySelector("#excludedel").removeAttribute("disabled");
-    tabUtils.tabShowOutline(tabId, region, config.excludeRegion, function() {}); 
+    tabUtils.showOutline(tabId, region, config.excludeRegion, function() {}); 
 });
 
 document.querySelector("#pagetitle").addEventListener("change", function(e) {
-    pageUtils.pageSetTitle(url, document.querySelector("#pagetitle").value, function() {});
+    pageUtils.setTitle(url, document.querySelector("#pagetitle").value, function() {});
 });
 
 document.querySelector("#checkdeleted").addEventListener("change", function(e) {
-    pageUtils.pageSetConfigProperty(url, "checkDeleted", document.querySelector("#checkdeleted").checked, function() {});
+    pageUtils.setConfigProperty(url, "checkDeleted", document.querySelector("#checkdeleted").checked, function() {});
 });
 document.querySelector("#checkimages").addEventListener("change", function(e) {
-    pageUtils.pageSetConfigProperty(url, "scanImages", document.querySelector("#checkimages").checked, function() {});
+    pageUtils.setConfigProperty(url, "scanImages", document.querySelector("#checkimages").checked, function() {});
 });
 document.querySelector("#ignorecase").addEventListener("change", function(e) {
-    pageUtils.pageSetConfigProperty(url, "ignoreCase", document.querySelector("#ignorecase").checked, function() {});
+    pageUtils.setConfigProperty(url, "ignoreCase", document.querySelector("#ignorecase").checked, function() {});
 });
 document.querySelector("#ignorenumbers").addEventListener("change", function(e) {
-    pageUtils.pageSetConfigProperty(url, "ignoreNumbers", document.querySelector("#ignorenumbers").checked, function() {});
+    pageUtils.setConfigProperty(url, "ignoreNumbers", document.querySelector("#ignorenumbers").checked, function() {});
 });
 
 document.querySelector("#delete").addEventListener("click", function(e) {
-    tabUtils.tabShowIcon(tabId, "neutral", function() {
-        pageUtils.pageDelete(url, function() {
+    tabUtils.showIcon(tabId, "neutral", function() {
+        pageUtils.delete(url, function() {
             window.close(); 
         });
     });
 });
 
 document.querySelector("#highlight").addEventListener("click", function(e) {
-    pageUtils.pageGetOrCreateConfig(url, document.querySelector("#pagetitle").value, () => {
-        tabUtils.tabHighlightChanges(tabId, url, function(status) {
+    pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, () => {
+        tabUtils.highlightChanges(tabId, url, function(status) {
             fillStatus(status);
         });
     });
 });
 
 document.querySelector("#expand").addEventListener("click", function(e) {
-    pageUtils.pageGetOrCreateConfig(url, document.querySelector("#pagetitle").value, (pageconfig) => {
+    pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, (pageconfig) => {
         showConfig(pageconfig);
         config = pageconfig;
         document.querySelector("#config").style.display = 'block';
@@ -159,11 +159,11 @@ function fillStatus(status) {
         break;
     case STATE.HIGHLIGHTED:
         if(status.changes == 0) {
-            tabUtils.tabShowIcon(tabId, "unchanged", function() {});
+            tabUtils.showIcon(tabId, "unchanged", function() {});
             document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleNoChanges");
             document.querySelector("#highlight").style.visibility='hidden';
         } else {
-            tabUtils.tabShowIcon(tabId, "changed", function() {});
+            tabUtils.showIcon(tabId, "changed", function() {});
             document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [status.current, status.changes]);
         }
         document.querySelector("#expand").style.display='none';
@@ -182,7 +182,7 @@ var tabId = null;
 var url = null;
 var config = null;
 
-tabUtils.tabGetActive(function(tab) {
+tabUtils.getActive(function(tab) {
     tabId = tab.id; url = tab.url;
     if(url.substr(0,4)!="http") {
         document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleUnavailable");
@@ -193,8 +193,8 @@ tabUtils.tabGetActive(function(tab) {
         return;
     }
 
-    tabUtils.tabGetStatus(tabId, fillStatus);
-    pageUtils.pageGetTitle(url, (title) => {
+    tabUtils.getStatus(tabId, fillStatus);
+    pageUtils.getTitle(url, (title) => {
         if(title == null) showTitle(tab.title); else showTitle(title); 
     });
 });

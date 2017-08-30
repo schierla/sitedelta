@@ -3,6 +3,18 @@ var ioUtils = {
     clean: function(url) {
         return url.replace(/http:\/\/[^\/]+@/i, "http://").replace(/https:\/\/[^\/]+@/i, "https://");
     },
+    getConfig: function(callback) {
+        chrome.storage.local.get("config", function(existing) {
+            if("config" in existing) {
+                callback(existing["config"]);
+            } else {
+                callback({});
+            }
+        });
+    },
+    setConfig: function(config, callback) {
+        chrome.storage.local.set({"config": config}, callback);
+    },
     listIndex: function(callback) {
         chrome.storage.local.get("index", function(existing) {
             if("index" in existing) {

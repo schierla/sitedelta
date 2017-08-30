@@ -1,88 +1,89 @@
 // page operations
 var pageUtils = {
-    pageList: function(callback) {
+    list: function(callback) {
         ioUtils.findInIndex((url, status) => url, callback);
     }, 
-    pageListChanged: function(callback) {
+    listChanged: function(callback) {
         ioUtils.findInIndex((url, status) => url, callback);
     }, 
-    pageGetStatus: function(url, callback) {
+    getStatus: function(url, callback) {
         ioUtils.findInIndex((furl, fstatus) => (url == furl ? fstatus : null), 
                 (result) => result.length > 0 ? callback(result[0]) : callback({}));
     },
-    pageGetChanges: function(url, callback) {
-        pageUtils.pageGetStatus(url, 
+    getChanges: function(url, callback) {
+        pageUtils.getStatus(url, 
             (status) => callback(status["changes"]));
     },
-    pageGetNextScan: function(url, callback) {
-        pageUtils.pageGetStatus(url, 
+    getNextScan: function(url, callback) {
+        pageUtils.getStatus(url, 
             (status) => callback(status["nextScan"]));
     },
-    pageGetTitle: function(url, callback) {
+    getTitle: function(url, callback) {
         ioUtils.get(url, "title", callback);
     },    
-    pageGetConfig: function(url, callback) {
-        ioUtils.get(url, "config", callback);
-    },
-    pageGetContent: function(url, callback) {
+    getContent: function(url, callback) {
         ioUtils.get(url, "content", callback);
     },
-    pageGetConfigProperty: function(url, property, callback) {
-        pageUtils.pageGetConfig(url, (config) => callback(config[property]));
+    getConfig: function(url, callback) {
+        ioUtils.get(url, "config", callback);
     },
-    pageGetOrDefaultConfig: function(url, callback) {
-        pageGetConfig(url, (config) => {
-            if(config == null) callback(defaultConfig());
-            else callback(config);
+    getEffectiveConfig: function(url, callback) {
+        pageUtils.getConfig(url, (config) => {
+            if(config == null) callback(null);
+            else configUtils.getEffectiveConfig(config, callback);   
         });
     },
-    pageGetOrCreateConfig: function(url, title, callback) {
-        pageUtils.pageGetConfig(url, function(config) {
+    getEffectiveConfigProperty: function(url, property, callback) {
+        pageUtils.getEffectiveConfig(url, (config) => callback(config[property]));
+    },
+    getOrCreateEffectiveConfig: function(url, title, callback) {
+        pageUtils.getEffectiveConfig(url, function(config) {
             if(config == null) {
-                pageUtils.pageCreate(url, title, 
-                    () => pageUtils.pageGetConfig(url, callback));
+                pageUtils.create(url, title, 
+                    () => pageUtils.getEffectiveConfig(url, callback));
             } else {
                 callback(config);
             }
         });
     },
-    pageCreate: function(url, title, callback) {
-        var config = defaultConfig();
+    create: function(url, title, callback) {
         var pagetitle = title.replace(/[\n\r]/g, ' ');
-        pageUtils.pageSetStatus(url, {}, 
-            () => pageUtils.pageSetTitle(url, pagetitle, 
-                () => pageUtils.pageSetConfig(url, config, 
-                    () => callback())));
+        configUtils.getPresetConfig(url, (config) => {
+            pageUtils.setStatus(url, {}, 
+                () => pageUtils.setTitle(url, pagetitle, 
+                    () => pageUtils.setConfig(url, config, 
+                        () => callback())));
+        });
     },
-    pageDelete: function(url, callback) {
+    delete: function(url, callback) {
         ioUtils.delete(url, callback);
     },
-    pageSetStatus: function(url, status, callback) {
+    setStatus: function(url, status, callback) {
         ioUtils.setInIndex(url, status, callback);
     },
-    pageSetNextScan: function(url, nextScan, callback) {
-        pageUtils.pageGetStatus(url, 
-            (status) => {status["nextScan"] = nextScan; pageUtils.pageSetStatus(url, status, callback);});
+    setNextScan: function(url, nextScan, callback) {
+        pageUtils.getStatus(url, 
+            (status) => {status["nextScan"] = nextScan; pageUtils.setStatus(url, status, callback);});
     },
-    pageSetChanges: function(url, changes, callback) {
-        pageUtils.pageGetStatus(url, 
-            (status) => {status["changes"] = changes; pageUtils.pageSetStatus(url, status, callback);});
+    setChanges: function(url, changes, callback) {
+        pageUtils.getStatus(url, 
+            (status) => {status["changes"] = changes; pageUtils.setStatus(url, status, callback);});
     },
-    pageSetTitle: function(url, title, callback) {
+    setTitle: function(url, title, callback) {
         ioUtils.put(url, "title", title, callback);
     },
-    pageSetConfig: function(url, config, callback) {
-        ioUtils.put(url, "config", config, callback);
-    },
-    pageSetContent: function(url, content, callback) {
+    setContent: function(url, content, callback) {
         ioUtils.put(url, "content", content, callback);
     },
-    pageSetConfigProperty: function(url, property, value, callback) {
-        pageUtils.pageGetConfig(url, 
-            (config) => { config[property] = value; pageUtils.pageSetConfig(url, config, callback); });
+    setConfig: function(url, config, callback) {
+        ioUtils.put(url, "config", config, callback);
     },
-    pageRemoveInclude: function(url, region, callback) {
-        pageUtils.pageGetConfigProperty(url, "includes", function(includes) {
+    setConfigProperty: function(url, property, value, callback) {
+        pageUtils.getConfig(url, 
+            (config) => { config[property] = value; pageUtils.setConfig(url, config, callback); });
+    },
+    removeInclude: function(url, region, callback) {
+        pageUtils.getEffectiveConfigProperty(url, "includes", function(includes) {
             var newlist = [];
             for(var i=0; i<includes.length; i++) {
                 if(includes[i] != region) {
@@ -92,32 +93,32 @@ var pageUtils = {
             if(newlist.length == 0) {
                 newlist.push("/html/body[1]");
             }
-            pageUtils.pageSetConfigProperty(url, "includes", newlist, callback);
+            pageUtils.setConfigProperty(url, "includes", newlist, callback);
         });
     },
-    pageRemoveExclude: function(url, region, callback) {
-        pageUtils.pageGetConfigProperty(url, "excludes", function(excludes) {
+    removeExclude: function(url, region, callback) {
+        pageUtils.getEffectiveConfigProperty(url, "excludes", function(excludes) {
             var newlist = [];
             for(var i=0; i<excludes.length; i++) {
                 if(excludes[i] != region) {
                     newlist.push(excludes[i]);
                 }
             }
-            pageUtils.pageSetConfigProperty(url, "excludes", newlist, callback);
+            pageUtils.setConfigProperty(url, "excludes", newlist, callback);
         });
     },
-    pageAddInclude: function(url, xpath, callback) {
+    addInclude: function(url, xpath, callback) {
         if(xpath == null) return;
-        pageUtils.pageGetConfigProperty(url, "includes", function(includes) {
+        pageUtils.getEffectiveConfigProperty(url, "includes", function(includes) {
             includes.push(xpath);
-            pageUtils.pageSetConfigProperty(url, "includes", includes, callback);
+            pageUtils.setConfigProperty(url, "includes", includes, callback);
         });
     },
-    pageAddExclude: function(url, xpath, callback) {
+    addExclude: function(url, xpath, callback) {
         if(xpath == null) return;
-        pageUtils.pageGetConfigProperty(url, "excludes", function(excludes) {
+        pageUtils.getEffectiveConfigProperty(url, "excludes", function(excludes) {
             excludes.push(xpath);
-            pageUtils.pageSetConfigProperty(url, "excludes", excludes, callback);
+            pageUtils.setConfigProperty(url, "excludes", excludes, callback);
         });
     }
 };

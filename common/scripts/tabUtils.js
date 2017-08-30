@@ -1,14 +1,14 @@
 // tab operations
 var tabUtils = {
-    tabOpenResource: function(url) {
+    openResource: function(url) {
         chrome.tabs.create({url: chrome.runtime.getURL(url)});
     },
-    tabGetActive: function(callback) {
+    getActive: function(callback) {
         chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
             callback(tabs[0]);
         });
     },
-    tabShowIcon: function(tabId, name, callback) {
+    showIcon: function(tabId, name, callback) {
         if(chrome.webNavigation)
             chrome.browserAction.setIcon({
                 path: {
@@ -20,22 +20,22 @@ var tabUtils = {
                 }, tabId: tabId}, 
             callback);
     },
-    tabGetStatus: function(tabId, callback) {
+    getStatus: function(tabId, callback) {
         tabUtils._callContentScript(tabId, {command: "getStatus"}, callback);
     },
-    tabGetContent: function(tabId, url, callback) {
-        pageUtils.pageGetConfig(url, function(config) {
+    getContent: function(tabId, url, callback) {
+        pageUtils.getEffectiveConfig(url, function(config) {
             tabUtils._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
                 callback(content);
             });
         });
     },
-    tabHighlightChanges: function(tabId, url, callback) {
-        pageUtils.pageGetConfig(url, function(config) {
+    highlightChanges: function(tabId, url, callback) {
+        pageUtils.getEffectiveConfig(url, function(config) {
             tabUtils._callContentScript(tabId, {command: "getContent", config: config}, function(content) {
-                pageUtils.pageGetContent(url, function(oldcontent) {
+                pageUtils.getContent(url, function(oldcontent) {
                     if(oldcontent == null) oldcontent = "";
-                    pageUtils.pageSetContent(url, content, function() {
+                    pageUtils.setContent(url, content, function() {
                         tabUtils._callContentScript(tabId, {command: "highlightChanges", config: config, content: oldcontent}, function(status) {
                             callback(status);
                         });
@@ -44,19 +44,19 @@ var tabUtils = {
             });
         });
     },
-    tabShowOutline: function(tabId, xpath, color, callback) {
+    showOutline: function(tabId, xpath, color, callback) {
         tabUtils._callContentScript(tabId, {command: "showOutline", xpath: xpath, color: color}, callback);
     },
-    tabRemoveOutline: function(tabId, callback) {
+    removeOutline: function(tabId, callback) {
         tabUtils._callContentScript(tabId, {command: "removeOutline"}, callback);
     },
-    tabSelectInclude: function(tabId, url, callback) {
+    selectInclude: function(tabId, url, callback) {
         tabUtils._callBackgroundScript({command: "addIncludeRegion", tab: tabId, url: url}, callback);
     }, 
-    tabSelectExclude: function(tabId, url, callback) {
+    selectExclude: function(tabId, url, callback) {
         tabUtils._callBackgroundScript({command: "addExcludeRegion", tab: tabId, url: url}, callback);
     },
-    tabSelectRegion: function(tabId, callback) {
+    selectRegion: function(tabId, callback) {
         tabUtils._callContentScript(tabId, {command: "selectRegion"}, callback);
     },
 

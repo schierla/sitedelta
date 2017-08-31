@@ -40,8 +40,10 @@ var contentscript = {
 			return true;
 		} else if(request.command == "showOutline") {
 			regionUtils.showOutline(document, request.xpath, request.color);
+			sendResponse();
 		} else if(request.command == "removeOutline") {
 			regionUtils.removeOutline();
+			sendResponse();
 		}
 	},
 

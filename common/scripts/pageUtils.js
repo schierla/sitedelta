@@ -55,8 +55,8 @@ var pageUtils = {
                         () => callback())));
         });
     },
-    delete: function(url, callback) {
-        ioUtils.delete(url, callback);
+    remove: function(url, callback) {
+        ioUtils.remove(url, callback);
     },
     setStatus: function(url, status, callback) {
         ioUtils.setInIndex(url, status, callback);
@@ -86,13 +86,9 @@ var pageUtils = {
         pageUtils.getEffectiveConfigProperty(url, "includes", function(includes) {
             var newlist = [];
             for(var i=0; i<includes.length; i++) {
-                if(includes[i] != region) {
-                    newlist.push(includes[i]);
-                }
+                if(includes[i] != region) newlist.push(includes[i]);
             }
-            if(newlist.length == 0) {
-                newlist.push("/html/body[1]");
-            }
+            if(newlist.length == 0) newlist.push("/html/body[1]");
             pageUtils.setConfigProperty(url, "includes", newlist, callback);
         });
     },
@@ -100,9 +96,7 @@ var pageUtils = {
         pageUtils.getEffectiveConfigProperty(url, "excludes", function(excludes) {
             var newlist = [];
             for(var i=0; i<excludes.length; i++) {
-                if(excludes[i] != region) {
-                    newlist.push(excludes[i]);
-                }
+                if(excludes[i] != region) newlist.push(excludes[i]);
             }
             pageUtils.setConfigProperty(url, "excludes", newlist, callback);
         });
@@ -110,15 +104,23 @@ var pageUtils = {
     addInclude: function(url, xpath, callback) {
         if(xpath == null) return;
         pageUtils.getEffectiveConfigProperty(url, "includes", function(includes) {
-            includes.push(xpath);
-            pageUtils.setConfigProperty(url, "includes", includes, callback);
+            var newlist = [];
+            for(var i=0; i<includes.length; i++) {
+                if(includes[i] != "/html/body[1]") newlist.push(includes[i]);
+            }
+            newlist.push(xpath);
+            pageUtils.setConfigProperty(url, "includes", newlist, callback);
         });
     },
     addExclude: function(url, xpath, callback) {
         if(xpath == null) return;
         pageUtils.getEffectiveConfigProperty(url, "excludes", function(excludes) {
-            excludes.push(xpath);
-            pageUtils.setConfigProperty(url, "excludes", excludes, callback);
+            var newlist = [];
+            for(var i=0; i<excludes.length; i++) {
+                newlist.push(excludes[i]);
+            }
+            newlist.push(xpath);
+            pageUtils.setConfigProperty(url, "excludes", newlist, callback);
         });
     }
 };

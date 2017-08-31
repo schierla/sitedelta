@@ -7,7 +7,7 @@ var webNavigationBeforeListener = function(details) {
 
 var webNavigationCompletedListener = function(details) {
 	if(details.frameId != 0) return;
-	pageUtils.getConfig(details.url, function(config) {
+	pageUtils.getEffectiveConfig(details.url, function(config) {
 		if(config == null) {
 			tabUtils.showIcon(details.tabId, "neutral", function() {});
 		} else {
@@ -20,6 +20,9 @@ var webNavigationCompletedListener = function(details) {
 						} else {
 							// changed
 							tabUtils.showIcon(details.tabId, "changed", function() {});
+							if(config.highlightOnLoad) {
+								tabUtils.highlightChanges(details.tabId, details.url, () => {});
+							}
 						}
 					});
 				}
@@ -29,27 +32,27 @@ var webNavigationCompletedListener = function(details) {
 };
 
 
-var menuHighlightPage = {
+function menuHighlightPage() {return {
 	id: "highlightPage",
 	title: chrome.i18n.getMessage("highlightButtonHighlight"),
 	documentUrlPatterns: ["http://*/*", "https://*/*"],		
 	contexts: ["page"]
-};
+}};
 
-var menuHighlight = {
+function menuHighlight() {return {
 	id: "highlight",
 	title: chrome.i18n.getMessage("highlightButtonHighlight"),
 	contexts: ["browser_action"]
-};
+}};
 
-var menuOptions = {
+function menuOptions() {return {
 	id: "options",
 	title: chrome.i18n.getMessage("highlightButtonOptions"),
 	contexts: ["browser_action"]
-};
+}};
 
 var contextMenuListener = function(info, tab) {
-	if(info.menuItemId == menuHighlight.id || info.menuItemId == menuHighlightPage.id) {
+	if(info.menuItemId == menuHighlight().id || info.menuItemId == menuHighlightPage().id) {
 		if(tab.url.substr(0,4)!="http") {
 			chrome.notifications.create("highlight", {
 				"type": "basic",
@@ -59,7 +62,7 @@ var contextMenuListener = function(info, tab) {
 			});
 			return;
 		}
-		pageUtils.getOrCreateConfig(tab.url, tab.title, function() {
+		pageUtils.getOrCreateEffectiveConfig(tab.url, tab.title, function(config) {
 			tabUtils.highlightChanges(tab.id, tab.url, function(status) {
 				if(status.changes == 0) {
 					tabUtils.showIcon(tab.id, "unchanged", function() {});
@@ -80,7 +83,7 @@ var contextMenuListener = function(info, tab) {
 				}
 			});
 		});
-	} else if(info.menuItemId == menuOptions.id) {
+	} else if(info.menuItemId == menuOptions().id) {
 		chrome.runtime.openOptionsPage();
 	}
 };
@@ -101,26 +104,25 @@ var messageListener = function(request, sender, sendResponse) {
 
 
 function initialize() {
-
-	chrome.permissions.contains({permissions:["webNavigation"]}, function(supported) {
-		if(supported) {
+	configUtils.getDefaultConfig((config) => {
+		if(chrome.webNavigation) {
 			chrome.webNavigation.onBeforeNavigate.removeListener(webNavigationBeforeListener);
 			chrome.webNavigation.onCompleted.removeListener(webNavigationCompletedListener);
-
-			chrome.webNavigation.onBeforeNavigate.addListener(webNavigationBeforeListener);
-			chrome.webNavigation.onCompleted.addListener(webNavigationCompletedListener);
+			if(config.scanOnLoad) {
+				chrome.webNavigation.onBeforeNavigate.addListener(webNavigationBeforeListener);
+				chrome.webNavigation.onCompleted.addListener(webNavigationCompletedListener);
+			}
 		}
-	});
-	
-	chrome.permissions.contains({permissions:["contextMenus"]}, function(supported) {
-		if(supported) {
+
+		if(chrome.contextMenus) {
 			chrome.contextMenus.onClicked.removeListener(contextMenuListener);
-			chrome.contextMenus.removeAll(function() {
-				chrome.contextMenus.create(menuHighlightPage);
-				chrome.contextMenus.create(menuHighlight);
-				chrome.contextMenus.create(menuOptions);
+			chrome.contextMenus.removeAll();
+			if(config.enableContextMenu) {
+				chrome.contextMenus.create(menuHighlightPage());
+				chrome.contextMenus.create(menuHighlight());
+				chrome.contextMenus.create(menuOptions());
 				chrome.contextMenus.onClicked.addListener(contextMenuListener);
-			});
+			}
 		}
 	});
 

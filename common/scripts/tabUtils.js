@@ -9,7 +9,7 @@ var tabUtils = {
         });
     },
     showIcon: function(tabId, name, callback) {
-        if(chrome.webNavigation)
+        if(chrome.webNavigation) {
             chrome.browserAction.setIcon({
                 path: {
                     "16": "/common/icons/" + name + "-16.png", 
@@ -19,6 +19,9 @@ var tabUtils = {
                     "64": "/common/icons/" + name + "-64.png"
                 }, tabId: tabId}, 
             callback);
+        } else {
+            callback();
+        }
     },
     getStatus: function(tabId, callback) {
         tabUtils._callContentScript(tabId, {command: "getStatus"}, callback);
@@ -77,6 +80,7 @@ var tabUtils = {
                     chrome.tabs.sendMessage(tabId, command, function(status) {
                         if(chrome.runtime.lastError) {
                             console.log(chrome.runtime.lastError);
+                            callback();
                         } else {
                             callback(status);
                         }

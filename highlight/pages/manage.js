@@ -1,26 +1,7 @@
-function load() {
-    ioUtils.listIndex(function(index) {
-        var pages = document.querySelector("#pages");
-        while(pages.firstChild) pages.removeChild(pages.firstChild);
-        for(var url in index) {
-            if(url == null) continue;
-            addItem(url);
-        }
-    });
-}
-function addItem(url) {
-    ioUtils.get(url, "title", function(title) {
-        var item = document.createElement("option");
-        item.setAttribute("value", url);
-        item.setAttribute("title", url);
-        item.appendChild(document.createTextNode(title));
-        pages.appendChild(item);    
-    });
-}
 
 document.querySelector("#delete").addEventListener("click", function(e) {
     if(document.querySelector("#pages").value != "") {
-        ioUtils.delete(document.querySelector("#pages").value, load);
+        ioUtils.remove(document.querySelector("#pages").value, load);
     }
 });
 
@@ -36,14 +17,162 @@ document.querySelector("#pages").addEventListener("dblclick", function(e) {
     }
 });
 
-document.querySelector("#request").addEventListener("click", function(e) {
-    chrome.permissions.request({
-        permissions: ["webNavigation"],
-        origins: ["<all_urls>"]
-    }, function(success) {
-        chrome.runtime.sendMessage({command: "reinitialize"}, function() {});
+function checkPermission(name) {
+    chrome.permissions.contains(permissions[name], (success) => {
+        if(success) delete permissions[name];
     });
-});
+}
+function checkPermissions() {
+    for(var name in permissions) {
+        checkPermission(name);
+    }
+}
+
+function requirePermission(name, callback) {
+    if(name in permissions) {
+        try {
+            chrome.permissions.request(permissions[name], (success) => {
+                if(success) delete(permissions[name]);
+                callback(success);
+            });
+        } catch(e) {
+            callback(false);
+        }
+    } else {
+        callback(true);
+    }
+}    
+
+var permissions = {
+    "scanonload":  {permissions: ["webNavigation"], origins: ["<all_urls>"]},
+    "contextmenu": {permissions: ["contextMenus", "notifications"]}
+};
+
+function checkScanOnLoad(selected, callback) {
+    requirePermission("scanonload", (success) => {
+        callback(selected & success);
+    });
+}
+function checkHighlightOnLoad(selected, callback) {
+    callback(selected & document.querySelector("#scanonload").checked);
+}
+
+function checkContextMenu(selected, callback) {
+    requirePermission("contextmenu", (success) => {
+        callback(selected & success);
+    });
+};
+
+var options = [
+    {type: "checkbox", key: "checkDeleted",      elem: "checkdeleted"},
+    {type: "checkbox", key: "scanImages",        elem: "checkimages"},
+    {type: "checkbox", key: "ignoreCase",        elem: "ignorecase"},
+    {type: "checkbox", key: "ignoreNumbers",     elem: "ignorenumbers"},
+    {type: "checkbox", key: "showRegions",       elem: "showregions"},
+    {type: "checkbox", key: "scanOnLoad",        elem: "scanonload",      pre: checkScanOnLoad,      post: notifyChanged},
+    {type: "checkbox", key: "highlightOnLoad",   elem: "highlightonload", pre: checkHighlightOnLoad, post: notifyChanged},
+    {type: "checkbox", key: "enableContextMenu", elem: "contextmenu",     pre: checkContextMenu,     post: notifyChanged},
+    {type: "text", key: "addBackground",    elem: "addbackground",    post: updatePreview},
+    {type: "text", key: "addBorder",        elem: "addborder",        post: updatePreview},
+    {type: "text", key: "removeBackground", elem: "removebackground", post: updatePreview},
+    {type: "text", key: "removeBorder",     elem: "removeborder",     post: updatePreview},
+    {type: "text", key: "moveBackground",   elem: "movebackground",   post: updatePreview},
+    {type: "text", key: "moveBorder",       elem: "moveborder",       post: updatePreview},
+    {type: "text", key: "includeRegion",    elem: "includeborder",    post: updatePreview},
+    {type: "text", key: "excludeRegion",    elem: "excludeborder",    post: updatePreview}
+];
+
+function registerListeners() {
+    for(var i=0; i<options.length; i++) {
+        registerListener(options[i]);
+    }
+}
+function registerListener(option) {
+    document.querySelector("#"+option.elem).addEventListener("change", function(e) {
+        var value = "";
+        if(option.type=="text") 
+            value = document.querySelector("#"+option.elem).value;
+        else if(option.type=="checkbox") 
+            value = document.querySelector("#"+option.elem).checked;
+        var performUpdate = (value) => {
+            var update = {}; update[option.key] = value;
+            configUtils.setDefaultConfigProperties(update, () => {
+                if(option.post) option.post();
+            });
+        };
+        if(option.pre) option.pre(value, performUpdate); else performUpdate(value);
+    });
+}
+function showOptions() {
+    configUtils.getDefaultConfig((config) => {
+        for(var i=0; i<options.length; i++) {
+            if(options[i].type=="text")
+                document.querySelector("#"+options[i].elem).value = config[options[i].key];
+            else if(options[i].type=="checkbox") 
+                document.querySelector("#"+options[i].elem).checked = config[options[i].key];
+        }
+        updatePreview();
+    });
+}
+
+function updatePreview() {
+    var addpreview = document.querySelector("#addpreview");
+    addpreview.style.border = "dotted black 1px";
+    addpreview.style.background = document.querySelector("#addbackground").value;
+    addpreview.style.borderColor = document.querySelector("#addborder").value;
+    var removepreview = document.querySelector("#removepreview");
+    removepreview.style.border = "dotted black 1px";
+    removepreview.style.background = document.querySelector("#removebackground").value;
+    removepreview.style.borderColor = document.querySelector("#removeborder").value;
+    var movepreview = document.querySelector("#movepreview");
+    movepreview.style.border = "dotted black 1px";
+    movepreview.style.background = document.querySelector("#movebackground").value;
+    movepreview.style.borderColor = document.querySelector("#moveborder").value;
+    var includepreview = document.querySelector("#includepreview");
+    includepreview.style.border = "dotted white 2px";
+    includepreview.style.borderColor = document.querySelector("#includeborder").value;
+    var excludepreview = document.querySelector("#excludepreview");
+    excludepreview.style.border = "dotted white 2px";
+    excludepreview.style.borderColor = document.querySelector("#excludeborder").value;
+
+    var scanonload = document.querySelector("#scanonload");
+    var highlightonload = document.querySelector("#highlightonload");
+    if(!scanonload.checked) highlightonload.checked = false;
+}
+
+
+function load() {
+    checkPermissions();
+    registerListeners();
+    showOptions();
+    showPages();
+}
+
+function showPage(url) {
+    ioUtils.get(url, "title", function(title) {
+        var item = document.createElement("option");
+        item.setAttribute("value", url);
+        item.setAttribute("title", url);
+        item.appendChild(document.createTextNode(title));
+        pages.appendChild(item);    
+    });
+}
+
+function showPages() {
+    ioUtils.listIndex(function(index) {
+        var pages = document.querySelector("#pages");
+        while(pages.firstChild) pages.removeChild(pages.firstChild);
+        for(var url in index) {
+            if(url == null) continue;
+            showPage(url);
+        }
+    });
+}
+
+function notifyChanged() {
+    showOptions();
+    chrome.runtime.sendMessage({command: "reinitialize"}, function() {});
+}
 
 uiUtils.i18n();
 load();

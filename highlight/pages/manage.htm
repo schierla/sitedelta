@@ -5,16 +5,75 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="manage.css" />
+  <link rel="stylesheet" href="../common/browser_style.css" />
 </head>
 
 <body>
-  <h2 class="i18n">__MSG_manageKnownPages__</h2>
+
+  <div class="browser-style section i18n">__MSG_manageKnownPages__</div>
   <select id="pages" size="5"></select>
   <div class="buttons browser-style">
     <button id="open" class="browser-style i18n">__MSG_manageOpen__</button>
     <button id="delete" class="browser-style i18n">__MSG_manageDelete__</button>
   </div>
-  <button class="browser-style" id="request">Request permission</buton>
+  
+  <div class="browser-style section i18n">__MSG_configBehavior__</div>
+  <div class="browser-style">
+    <input checked id="scanonload" type="checkbox" class="browser-style"> 
+    <label for="scanonload" class="i18n">__MSG_configScanOnLoad__</label>
+  </div>
+  <div class="browser-style">
+    <input checked id="highlightonload" type="checkbox" class="browser-style"> 
+    <label for="highlightonload" class="i18n">__MSG_configHighlightOnLoad__</label>
+  </div>
+  <div class="browser-style">
+    <input checked id="contextmenu" type="checkbox" class="browser-style"> 
+    <label for="contextmenu" class="i18n">__MSG_configEnableContextMenu__</label>
+  </div>
+
+  <div class="browser-style section i18n">__MSG_configAppearance__</div>
+  <div class="browser-style">
+    <input checked id="showregions" type="checkbox" class="browser-style"> 
+    <label for="showregions" class="i18n">__MSG_configShowRegions__</label>
+  </div>
+  <div class="browser-style">
+    <span id="includepreview">&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+    <input id="includeborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+    <label for="includeborder" class="i18n">__MSG_configIncludeColors__</label>
+  </div>
+  <div class="browser-style">
+    <span id="excludepreview">&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+    <input id="excludeborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+    <label for="excludeborder" class="i18n">__MSG_configExcludeColors__</label>
+  </div>
+  <div class="browser-style">
+    <span id="addpreview">&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+    <input id="addbackground" type="text" class="browser-style i18n" title="__MSG_configBackground__" maxlength="7" size="4"> 
+    <input id="addborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+    <label for="addbackground" class="i18n">__MSG_configAddColors__</label>
+  </div>
+  <div class="browser-style">
+    <span id="removepreview">&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+    <input id="removebackground" type="text" class="browser-style i18n" title="__MSG_configBackground__" maxlength="7" size="4"> 
+    <input id="removeborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+    <label for="removebackground" class="i18n">__MSG_configRemoveColors__</label>
+  </div>
+  <div class="browser-style">
+    <span id="movepreview">&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+    <input id="movebackground" type="text" class="browser-style i18n" title="__MSG_configBackground__" maxlength="7" size="4"> 
+    <input id="moveborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+    <label for="movebackground" class="i18n">__MSG_configMoveColors__</label>
+  </div>
+  
+  <div class="browser-style section i18n">__MSG_configChecks__</div>
+  <div class="browser-style"><input checked id="checkdeleted" type="checkbox" class="browser-style"> <label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label></div>
+  <div class="browser-style"><input checked id="checkimages" type="checkbox" class="browser-style"> <label for="checkimages" class="i18n">__MSG_configCheckImages__</label></div>
+
+  <div class="browser-style section i18n">__MSG_configIgnores__</div>
+  <div class="browser-style"><input checked id="ignorecase" type="checkbox" class="browser-style"> <label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label></div>
+  <div class="browser-style"><input checked id="ignorenumbers" type="checkbox" class="browser-style"> <label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label></div>
+
+  <script src="../common/scripts/configUtils.js"></script>
   <script src="../common/scripts/ioUtils.js"></script>
   <script src="../common/scripts/uiUtils.js"></script>
   <script src="manage.js"></script>

@@ -19,10 +19,6 @@
         "message": "SiteDelta",
         "description": "Title of the browser action popup"
     },
-    "popupHighlightTab": {
-        "message": "Highlight",
-        "description": "Text of the 'highlight' tab"
-    },
     "popupHighlightUnsupported": {
         "message": "SiteDelta does not support monitoring this page.",
         "description": "Text that the current page is unsupported"
@@ -36,10 +32,6 @@
         "description": "Text that highlighting of the current page is enabled"
     },
 
-    "popupWatchTab":  {
-        "message": "Watch",
-        "descriptoin": "Text of the 'watch' tab"
-    },
     "popupWatchTitle": {
         "message": "Changed Pages:",
         "description": "Headline for changed pages"
@@ -97,19 +89,6 @@
         "description": "Title of the page action popup while selecting a region"
     },
 
-    "highlightDetailsTab": {
-        "message": "Details",
-        "description": "Text of the 'details' tab"
-    },
-    "highlightDetailsTitle": {
-        "message": "Title: ",
-        "description": "Label for the 'title' field"
-    },
-    
-    "highlightRegionsTab": {
-        "message": "Regions",
-        "description": "Text of the 'regions' tab"
-    },
     "highlightRegionsInclude": {
         "message": "Included regions:", 
         "description": "Headline for included regions"
@@ -127,33 +106,84 @@
         "description": "Button to add a new region"
     },
 
-    "highlightConfigurationTab": {
-        "message": "Configuration",
-        "description": "Text of the 'configuration' tab"
+    "configBehavior": {
+        "message": "Overall behavior:",
+        "description": "Headline for extension behavior settings"
     },
-    "highlightConfigurationChecks": {
-        "message": "Check contents:",
+    "configScanOnLoad": {
+        "message": "Automatically scan known pages (shown in SiteDelta icon)",
+        "description": "Label for checkbox to enable automatically scanning pages on load"
+    },
+    "configHighlightOnLoad": {
+        "message": "Automatically highlight changes on known pages",
+        "description": "Label for checkbox to enable automatically highlighting pages"
+    },
+    "configEnableContextMenu": {
+        "message": "Enable SiteDelta context menu on pages and button",
+        "description": "Label for checkbox to enable SiteDelta context menus"
+    },
+
+    "configChecks": {
+        "message": "Aspects to check:",
         "description": "Headline for configured page checks"
     },
-    "highlightConfigurationCheckDeleted": {
+    "configCheckDeleted": {
         "message": "Check deletions",
         "description": "Label for checkbox to enable the check for deletions"
     },
-    "highlightConfigurationCheckImages": {
+    "configCheckImages": {
         "message": "Check images",
         "description": "Label for checkbox to enable the check for image changes"
     },
-    "highlightConfigurationIgnores": {
-        "message": "Check ignores:", 
+
+    "configIgnores": {
+        "message": "Aspects to ignore:", 
         "description": "Headline for configured ignores"
     },
-    "highlightConfigurationIgnoreCase": {
+    "configIgnoreCase": {
         "message": "Ignore case",
         "description": "Label for checkbox to ignore case when checking"
     },
-    "highlightConfigurationIgnoreNumbers": {
+    "configIgnoreNumbers": {
         "message": "Ignore numbers",
         "description": "Label for checkbox to ignore numbers when checking"
+    },
+
+    "configAppearance": {
+        "message": "Appearance:",
+        "description": "Headline for configured appearance"
+    },
+    "configBackground": {
+        "message": "Background color",
+        "description": "Tooltip for text fields with background color"
+    },
+    "configBorder": {
+        "message": "Border color",
+        "description": "Tooltip for text fields with border color"
+    },
+    "configAddColors": {
+        "message": "Colors for added text",
+        "description": "Label for text fields for background and border color of added text"
+    },
+    "configRemoveColors": {
+        "message": "Colors for removed text",
+        "description": "Label for text fields for background and border color of removed text"
+    },
+    "configMoveColors": {
+        "message": "Colors for moved text",
+        "description": "Label for text fields for background and border color of removed text"
+    },
+    "configIncludeColors": {
+        "message": "Color for included regions",
+        "description": "Label for text field for border color of included regions"
+    },
+    "configExcludeColors": {
+        "message": "Color for excluded regions",
+        "description": "Label for text field for border color of excluded regions"
+    },
+    "configShowRegions": {
+        "message": "Outline include an exclude regions",
+        "description": "Label for check box to outline include and exclude regions"
     },
 
     "highlightButtonHighlight": {
@@ -161,7 +191,7 @@
         "description": "Button to highlight changes on the current page"
     },
     "highlightButtonDelete": {
-        "message": "Delete Page",
+        "message": "Forget Page",
         "description": "Button to delete the current page"
     },
     "highlightButtonOptions": {

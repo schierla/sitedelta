@@ -64,6 +64,7 @@ document.querySelector("#exclude").addEventListener("change", function(e) {
 
 document.querySelector("#pagetitle").addEventListener("change", function(e) {
     pageUtils.setTitle(url, document.querySelector("#pagetitle").value, function() {});
+    document.querySelector("#delete").style.visibility = 'visible';    
 });
 
 document.querySelector("#checkdeleted").addEventListener("change", function(e) {
@@ -81,7 +82,7 @@ document.querySelector("#ignorenumbers").addEventListener("change", function(e) 
 
 document.querySelector("#delete").addEventListener("click", function(e) {
     tabUtils.showIcon(tabId, "neutral", function() {
-        pageUtils.delete(url, function() {
+        pageUtils.remove(url, function() {
             window.close(); 
         });
     });
@@ -89,6 +90,7 @@ document.querySelector("#delete").addEventListener("click", function(e) {
 
 document.querySelector("#highlight").addEventListener("click", function(e) {
     pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, () => {
+        document.querySelector("#delete").style.visibility = 'visible';
         tabUtils.highlightChanges(tabId, url, function(status) {
             fillStatus(status);
         });
@@ -101,6 +103,7 @@ document.querySelector("#expand").addEventListener("click", function(e) {
         config = pageconfig;
         document.querySelector("#config").style.display = 'block';
         document.querySelector("#settings").style.display='block';    
+        document.querySelector("#delete").style.visibility = 'visible';
     });
 });
 
@@ -110,21 +113,16 @@ var STATE = {
 	SELECTREGION: 3
 };
 
-function checkCheckbox(checked, id) {
-    var elem = document.querySelector("#" + id);
-    if(checked == true) elem.setAttribute("checked", "checked"); else elem.removeAttribute("checked");
-}
-
 function showTitle(title) {
     document.querySelector("#url").value = url;
     document.querySelector("#pagetitle").value = title;
 }
 
 function showConfig(config) {
-    checkCheckbox(config.checkDeleted, "checkdeleted");
-    checkCheckbox(config.scanImages, "checkimages");
-    checkCheckbox(config.ignoreCase, "ignorecase");
-    checkCheckbox(config.ignoreNumbers, "ignorenumbers");
+    document.querySelector("#checkdeleted").checked = config.checkDeleted;
+    document.querySelector("#checkimages").checked = config.scanImages;
+    document.querySelector("#ignorecase").checked = config.ignoreCase;
+    document.querySelector("#ignorenumbers").checked = config.ignoreNumbers;
 
     document.querySelector("#excludedel").setAttribute("disabled", "disabled"); 
     document.querySelector("#includedel").setAttribute("disabled", "disabled"); 
@@ -195,6 +193,12 @@ tabUtils.getActive(function(tab) {
 
     tabUtils.getStatus(tabId, fillStatus);
     pageUtils.getTitle(url, (title) => {
-        if(title == null) showTitle(tab.title); else showTitle(title); 
+        if(title == null) {
+            showTitle(tab.title); 
+            document.querySelector("#delete").style.visibility = 'hidden';
+        } else {
+            showTitle(title); 
+            document.querySelector("#delete").style.visibility = 'visible';
+        }
     });
 });

@@ -65,7 +65,7 @@ var ioUtils = {
             chrome.storage.local.set(existing, callback);
         });
     }, 
-    delete: function(url, callback) {
+    remove: function(url, callback) {
         url = ioUtils.clean(url);
         chrome.storage.local.remove(url, function() {
             chrome.storage.local.get("index", function(existing) {

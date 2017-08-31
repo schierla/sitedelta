@@ -8,7 +8,7 @@ var configUtils = {
 		});
 	},
 	setDefaultConfigProperties: function(update, callback) {
-		getDefaultConfig((config) => {
+		configUtils.getDefaultConfig((config) => {
 			for(var key in update) config[key] = update[key];
 			ioUtils.setConfig(config, callback);
 		});
@@ -30,34 +30,40 @@ var configUtils = {
 	_upgrade: function(config) {
 		var upgraded = false;
 		if(!("configVersion" in config)) {
-			var initial = configUtils._initial();
-			for(var key in initial) config[key] = initial[key];
+			config.configVersion = 0;
 			upgraded = true;
 		}
 		if(config.configVersion == 0) {
-			// upgrade to config version 1
+			config.addBackground = "#ff8";
+			config.addBorder = "#f00";
+			config.includeRegion = "#f00";
+			config.excludeRegion = "#0f0";
+			config.showRegions = true;
+			config.removeBackground = "#fee";
+			config.removeBorder = "#ff0";
+			config.moveBackground = "#efe";
+			config.moveBorder = "#0b0";
+			config.checkDeleted = true;
+			config.scanImages = false;
+			config.ignoreCase = false;
+			config.ignoreNumbers = false;
+			config.includes = ["/html/body[1]"];
+			config.excludes = [];
+			config.configVersion = 1,
+			upgraded = true;
+		}
+		if(config.configVersion == 1) {
+			config.scanOnLoad = false;
+			config.highlightOnLoad = false;
+			config.enableContextMenu = false;
+			config.configVersion = 2,
+			upgraded = true;
 		}
 		return upgraded;
 	},
 
 	_initial: function() {
 		return {
-			configVersion: 1,
-			addBackground: "#ff8",
-			addBorder: "#f00",
-			includeRegion: "#f00",
-			excludeRegion: "#0f0",
-			showRegions: true,
-			removeBackground: "#fee",
-			removeBorder: "#ff0",
-			moveBackground: "#efe",
-			moveBorder: "#0b0",
-			checkDeleted: true,
-			scanImages: false,
-			ignoreCase: false,
-			ignoreNumbers: false,
-			includes: ["/html/body[1]"],
-			excludes: []
 		};
 	}
 };

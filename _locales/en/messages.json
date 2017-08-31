@@ -1,215 +1,215 @@
 {
-    "highlightExtensionName": {
-        "message": "SiteDelta Highlight",
-        "description": "Name of the highlight extension"
-    },
-    "highlightExtensionDescription": {
-        "message": "Highlights changes made to a website since last visit",
-        "description": "Description of the highlight extension"
-    },
-    "watchExtensionName": {
-        "message": "SiteDelta Watch",
-        "description": "Name of the watch extension"
-    },
-    "watchExtensionDescription": {
-        "message": "Regularly monitors a website for changes",
-        "description": "Description of the watch extension"
-    },
-    "popupTitle": {
-        "message": "SiteDelta",
-        "description": "Title of the browser action popup"
-    },
-    "popupHighlightUnsupported": {
-        "message": "SiteDelta does not support monitoring this page.",
-        "description": "Text that the current page is unsupported"
-    },
-    "popupHighlightDisabled": {
-        "message": "SiteDelta is disabled for this page. Click 'Configure Page' to enable.",
-        "description": "Text that highlighting of the current page is disabled"
-    },
-    "popupHighlightEnabled": {
-        "message": "SiteDelta is enabled for this page. Click 'Configure Page' to configure.",
-        "description": "Text that highlighting of the current page is enabled"
-    },
+	"highlightExtensionName": {
+		"message": "SiteDelta Highlight",
+		"description": "Name of the highlight extension"
+	},
+	"highlightExtensionDescription": {
+		"message": "Highlights changes made to a website since last visit",
+		"description": "Description of the highlight extension"
+	},
+	"watchExtensionName": {
+		"message": "SiteDelta Watch",
+		"description": "Name of the watch extension"
+	},
+	"watchExtensionDescription": {
+		"message": "Regularly monitors a website for changes",
+		"description": "Description of the watch extension"
+	},
+	"popupTitle": {
+		"message": "SiteDelta",
+		"description": "Title of the browser action popup"
+	},
+	"popupHighlightUnsupported": {
+		"message": "SiteDelta does not support monitoring this page.",
+		"description": "Text that the current page is unsupported"
+	},
+	"popupHighlightDisabled": {
+		"message": "SiteDelta is disabled for this page. Click 'Configure Page' to enable.",
+		"description": "Text that highlighting of the current page is disabled"
+	},
+	"popupHighlightEnabled": {
+		"message": "SiteDelta is enabled for this page. Click 'Configure Page' to configure.",
+		"description": "Text that highlighting of the current page is enabled"
+	},
 
-    "popupWatchTitle": {
-        "message": "Changed Pages:",
-        "description": "Headline for changed pages"
-    },
-    "popupWatchEnabled": {
-        "message": "Check pages in background", 
-        "description": "Label for checkbox to enable/disable page watch"
-    },
+	"popupWatchTitle": {
+		"message": "Changed Pages:",
+		"description": "Headline for changed pages"
+	},
+	"popupWatchEnabled": {
+		"message": "Check pages in background", 
+		"description": "Label for checkbox to enable/disable page watch"
+	},
 
-    "popupButtonConfigure": {
-        "message": "Configure Highlight",
-        "description": "Button to enable/configure highlighting for current page"
-    },
-    "popupButtonManagePages": {
-        "message": "Manage Pages",
-        "description": "Button to manage highlighted pages"
-    },
-    "popupButtonWatch": {
-        "message": "Watch Page",
-        "description": "Button to enable watch for current page"
-    },
-    "popupButtonManageWatch": {
-        "message": "Manage Watched Pages",
-        "description": "Button to manage watched pages"
-    },
+	"popupButtonConfigure": {
+		"message": "Configure Highlight",
+		"description": "Button to enable/configure highlighting for current page"
+	},
+	"popupButtonManagePages": {
+		"message": "Manage Pages",
+		"description": "Button to manage highlighted pages"
+	},
+	"popupButtonWatch": {
+		"message": "Watch Page",
+		"description": "Button to enable watch for current page"
+	},
+	"popupButtonManageWatch": {
+		"message": "Manage Watched Pages",
+		"description": "Button to manage watched pages"
+	},
 
-    "highlightTitle": {
-        "message": "SiteDelta Highlight",
-        "description": "Title of the page action popup"
-    },
-    "highlightTitleUnavailable": {
-        "message": "SiteDelta Highlight does not support monitoring this page.",
-        "description": "Title of the page action popup when not available for the current page"
-    },
-    "highlightTitleNoChanges": {
-        "message": "No changes found.",
-        "description": "Title of the page action popup when no changes are found"
-    },
-    "highlightTitleChanges": {
-        "message": "Highlighting change $CURRENT$ of $COUNT$.",
-        "description": "Title of the page action popup when changes are found",
-        "placeholders": {
-            "current": {
-                "content": "$1",
-                "example": "1"
-            },
-            "count": {
-                "content": "$2",
-                "example": "5"
-            }
-        }
-    },
-    "highlightTitleSelectRegion": {
-        "message": "Click to select a region",
-        "description": "Title of the page action popup while selecting a region"
-    },
+	"highlightTitle": {
+		"message": "SiteDelta Highlight",
+		"description": "Title of the page action popup"
+	},
+	"highlightTitleUnavailable": {
+		"message": "SiteDelta Highlight does not support monitoring this page.",
+		"description": "Title of the page action popup when not available for the current page"
+	},
+	"highlightTitleNoChanges": {
+		"message": "No changes found.",
+		"description": "Title of the page action popup when no changes are found"
+	},
+	"highlightTitleChanges": {
+		"message": "Highlighting change $CURRENT$ of $COUNT$.",
+		"description": "Title of the page action popup when changes are found",
+		"placeholders": {
+			"current": {
+				"content": "$1",
+				"example": "1"
+			},
+			"count": {
+				"content": "$2",
+				"example": "5"
+			}
+		}
+	},
+	"highlightTitleSelectRegion": {
+		"message": "Click to select a region",
+		"description": "Title of the page action popup while selecting a region"
+	},
 
-    "highlightRegionsInclude": {
-        "message": "Included regions:", 
-        "description": "Headline for included regions"
-    },
-    "highlightRegionsExclude": {
-        "message": "Excluded regions:", 
-        "description": "Headline for excluded regions"
-    },
-    "highlightRegionsRemove": {
-        "message": "remove",
-        "description": "Button to remove a region"
-    },
-    "highlightRegionsAdd": {
-        "message": "add new",
-        "description": "Button to add a new region"
-    },
+	"highlightRegionsInclude": {
+		"message": "Included regions:", 
+		"description": "Headline for included regions"
+	},
+	"highlightRegionsExclude": {
+		"message": "Excluded regions:", 
+		"description": "Headline for excluded regions"
+	},
+	"highlightRegionsRemove": {
+		"message": "remove",
+		"description": "Button to remove a region"
+	},
+	"highlightRegionsAdd": {
+		"message": "add new",
+		"description": "Button to add a new region"
+	},
 
-    "configBehavior": {
-        "message": "Overall behavior:",
-        "description": "Headline for extension behavior settings"
-    },
-    "configScanOnLoad": {
-        "message": "Automatically scan known pages (shown in SiteDelta icon)",
-        "description": "Label for checkbox to enable automatically scanning pages on load"
-    },
-    "configHighlightOnLoad": {
-        "message": "Automatically highlight changes on known pages",
-        "description": "Label for checkbox to enable automatically highlighting pages"
-    },
-    "configEnableContextMenu": {
-        "message": "Enable SiteDelta context menu on pages and button",
-        "description": "Label for checkbox to enable SiteDelta context menus"
-    },
+	"configBehavior": {
+		"message": "Overall behavior:",
+		"description": "Headline for extension behavior settings"
+	},
+	"configScanOnLoad": {
+		"message": "Automatically scan known pages (shown in SiteDelta icon)",
+		"description": "Label for checkbox to enable automatically scanning pages on load"
+	},
+	"configHighlightOnLoad": {
+		"message": "Automatically highlight changes on known pages",
+		"description": "Label for checkbox to enable automatically highlighting pages"
+	},
+	"configEnableContextMenu": {
+		"message": "Enable SiteDelta context menu on pages and button",
+		"description": "Label for checkbox to enable SiteDelta context menus"
+	},
 
-    "configChecks": {
-        "message": "Aspects to check:",
-        "description": "Headline for configured page checks"
-    },
-    "configCheckDeleted": {
-        "message": "Check deletions",
-        "description": "Label for checkbox to enable the check for deletions"
-    },
-    "configCheckImages": {
-        "message": "Check images",
-        "description": "Label for checkbox to enable the check for image changes"
-    },
+	"configChecks": {
+		"message": "Aspects to check:",
+		"description": "Headline for configured page checks"
+	},
+	"configCheckDeleted": {
+		"message": "Check deletions",
+		"description": "Label for checkbox to enable the check for deletions"
+	},
+	"configCheckImages": {
+		"message": "Check images",
+		"description": "Label for checkbox to enable the check for image changes"
+	},
 
-    "configIgnores": {
-        "message": "Aspects to ignore:", 
-        "description": "Headline for configured ignores"
-    },
-    "configIgnoreCase": {
-        "message": "Ignore case",
-        "description": "Label for checkbox to ignore case when checking"
-    },
-    "configIgnoreNumbers": {
-        "message": "Ignore numbers",
-        "description": "Label for checkbox to ignore numbers when checking"
-    },
+	"configIgnores": {
+		"message": "Aspects to ignore:", 
+		"description": "Headline for configured ignores"
+	},
+	"configIgnoreCase": {
+		"message": "Ignore case",
+		"description": "Label for checkbox to ignore case when checking"
+	},
+	"configIgnoreNumbers": {
+		"message": "Ignore numbers",
+		"description": "Label for checkbox to ignore numbers when checking"
+	},
 
-    "configAppearance": {
-        "message": "Appearance:",
-        "description": "Headline for configured appearance"
-    },
-    "configBackground": {
-        "message": "Background color",
-        "description": "Tooltip for text fields with background color"
-    },
-    "configBorder": {
-        "message": "Border color",
-        "description": "Tooltip for text fields with border color"
-    },
-    "configAddColors": {
-        "message": "Colors for added text",
-        "description": "Label for text fields for background and border color of added text"
-    },
-    "configRemoveColors": {
-        "message": "Colors for removed text",
-        "description": "Label for text fields for background and border color of removed text"
-    },
-    "configMoveColors": {
-        "message": "Colors for moved text",
-        "description": "Label for text fields for background and border color of removed text"
-    },
-    "configIncludeColors": {
-        "message": "Color for included regions",
-        "description": "Label for text field for border color of included regions"
-    },
-    "configExcludeColors": {
-        "message": "Color for excluded regions",
-        "description": "Label for text field for border color of excluded regions"
-    },
-    "configShowRegions": {
-        "message": "Outline include an exclude regions",
-        "description": "Label for check box to outline include and exclude regions"
-    },
+	"configAppearance": {
+		"message": "Appearance:",
+		"description": "Headline for configured appearance"
+	},
+	"configBackground": {
+		"message": "Background color",
+		"description": "Tooltip for text fields with background color"
+	},
+	"configBorder": {
+		"message": "Border color",
+		"description": "Tooltip for text fields with border color"
+	},
+	"configAddColors": {
+		"message": "Colors for added text",
+		"description": "Label for text fields for background and border color of added text"
+	},
+	"configRemoveColors": {
+		"message": "Colors for removed text",
+		"description": "Label for text fields for background and border color of removed text"
+	},
+	"configMoveColors": {
+		"message": "Colors for moved text",
+		"description": "Label for text fields for background and border color of removed text"
+	},
+	"configIncludeColors": {
+		"message": "Color for included regions",
+		"description": "Label for text field for border color of included regions"
+	},
+	"configExcludeColors": {
+		"message": "Color for excluded regions",
+		"description": "Label for text field for border color of excluded regions"
+	},
+	"configShowRegions": {
+		"message": "Outline include an exclude regions",
+		"description": "Label for check box to outline include and exclude regions"
+	},
 
-    "highlightButtonHighlight": {
-        "message": "Highlight Changes",
-        "description": "Button to highlight changes on the current page"
-    },
-    "highlightButtonDelete": {
-        "message": "Forget Page",
-        "description": "Button to delete the current page"
-    },
-    "highlightButtonOptions": {
-        "message": "Configure SiteDelta Highlight...",
-        "description": "Button to open options dialog"
-    },
+	"highlightButtonHighlight": {
+		"message": "Highlight Changes",
+		"description": "Button to highlight changes on the current page"
+	},
+	"highlightButtonDelete": {
+		"message": "Forget Page",
+		"description": "Button to delete the current page"
+	},
+	"highlightButtonOptions": {
+		"message": "Configure SiteDelta Highlight...",
+		"description": "Button to open options dialog"
+	},
 
-    "manageKnownPages": {
-        "message": "Monitored pages:",
-        "description": "Region title for the list of monitored pages"
-    },
-    "manageDelete": {
-        "message": "Delete Page",
-        "description": "Button to delete the selected page"
-    },
-    "manageOpen": {
-        "message": "Open Page",
-        "description": "Button to open the selected page"
-    }
+	"manageKnownPages": {
+		"message": "Monitored pages:",
+		"description": "Region title for the list of monitored pages"
+	},
+	"manageDelete": {
+		"message": "Delete Page",
+		"description": "Button to delete the selected page"
+	},
+	"manageOpen": {
+		"message": "Open Page",
+		"description": "Button to open the selected page"
+	}
 }
 

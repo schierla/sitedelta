@@ -1,6 +1,6 @@
 
 var regionUtils = {
-    
+	
 	showOutline: function(doc, xpath, color) {
 		if(regionUtils._outlinedElement) 
 			regionUtils.removeOutline();
@@ -18,16 +18,16 @@ var regionUtils = {
 		regionUtils._outlinedElement = null;
 	},
 
-    selectRegion: function(doc, callback) {
+	selectRegion: function(doc, callback) {
 		regionUtils._doc = doc;
-        regionUtils._needText = false; 
-        regionUtils._destelement = null; 
-        regionUtils._callback = callback;
-        doc.addEventListener("mouseover", regionUtils._mouseover, true);
-        doc.addEventListener("mousedown", regionUtils._mousedown, true);
-        doc.addEventListener("mouseup",   regionUtils._mouseup,   true);
-        doc.addEventListener("mouseout",  regionUtils._mouseout,  true);
-    },
+		regionUtils._needText = false; 
+		regionUtils._destelement = null; 
+		regionUtils._callback = callback;
+		doc.addEventListener("mouseover", regionUtils._mouseover, true);
+		doc.addEventListener("mousedown", regionUtils._mousedown, true);
+		doc.addEventListener("mouseup",   regionUtils._mouseup,   true);
+		doc.addEventListener("mouseout",  regionUtils._mouseout,  true);
+	},
 
 
 	_mouseover: function(e) {
@@ -115,23 +115,23 @@ var regionUtils = {
 	},
 
 	_buildXPath: function(t, allowId) {
-        var path = "";
-        if(allowId && t.id != "" && t.id.indexOf('sitedelta')==-1) return 'id("' + t.id + '")';
-        while (t.nodeName != "HTML") {
-            var c = t.parentNode.firstChild;
-            var num = 1;
-            while (c != t) {
-                if (c.nodeName == t.nodeName)
-                    num ++ ;
-                c = c.nextSibling;
-            }
-            path = "/" + t.nodeName.toLowerCase() + "[" + num + "]" + path;
-            t = t.parentNode;
-            if(allowId && t.id != "" && t.id.indexOf('sitedelta')==-1) return 'id("' + t.id + '")' + path;
-        }
-        path = "/" + t.nodeName.toLowerCase() + path;
-        return path;
-    },
+		var path = "";
+		if(allowId && t.id != "" && t.id.indexOf('sitedelta')==-1) return 'id("' + t.id + '")';
+		while (t.nodeName != "HTML") {
+			var c = t.parentNode.firstChild;
+			var num = 1;
+			while (c != t) {
+				if (c.nodeName == t.nodeName)
+					num ++ ;
+				c = c.nextSibling;
+			}
+			path = "/" + t.nodeName.toLowerCase() + "[" + num + "]" + path;
+			t = t.parentNode;
+			if(allowId && t.id != "" && t.id.indexOf('sitedelta')==-1) return 'id("' + t.id + '")' + path;
+		}
+		path = "/" + t.nodeName.toLowerCase() + path;
+		return path;
+	},
 
 	_outlinedElement: null,
 	_needText: false,

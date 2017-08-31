@@ -1,56 +1,76 @@
 <!DOCTYPE html>
-
 <html>
-  <head>
-    <link rel="stylesheet" href="highlight.css" />
-    <link rel="stylesheet" href="../common/browser_style.css" />
-    <meta charset="utf-8">
-  </head>
 
-  <body>
-    <div class="browser-style i18n" type="text" id="title">__MSG_highlightTitle__</div>
-    
-    <div id="textfields" class="browser-style">
-      <input class="browser-style" type="text" value="" id="pagetitle" />
-      <input class="browser-style" type="text" disabled="disabled" id="url" />
-    </div>
+<head>
+	<link rel="stylesheet" href="highlight.css" />
+	<link rel="stylesheet" href="../common/browser_style.css" />
+	<meta charset="utf-8">
+</head>
 
-    <div id="buttons">
-      <div class="browser-style buttons">
-        <button id="delete" class="browser-style i18n">__MSG_highlightButtonDelete__</button>
-        <button id="highlight" class="browser-style default i18n">__MSG_highlightButtonHighlight__</button>
-      </div>
-      <div>
-        <button id="expand" class="browser-style expander"></button>
-      </div>        
-    </div>
-    
-    <div id="config">
-      <div class="browser-style section i18n">__MSG_configChecks__</div>
-      <div class="browser-style"><input checked id="checkdeleted" type="checkbox" class="browser-style"> <label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label></div>
-      <div class="browser-style"><input checked id="checkimages" type="checkbox" class="browser-style"> <label for="checkimages" class="i18n">__MSG_configCheckImages__</label></div>
-      <div class="browser-style section i18n">__MSG_configIgnores__</div>
-      <div class="browser-style"><input checked id="ignorecase" type="checkbox" class="browser-style"> <label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label></div>
-      <div class="browser-style"><input checked id="ignorenumbers" type="checkbox" class="browser-style"> <label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label></div>
+<body>
+	<div class="browser-style i18n" type="text" id="title">__MSG_highlightTitle__</div>
 
-      <div class="browser-style section i18n">__MSG_highlightRegionsInclude__</div>
-      <div class="browser-style"><select id="include" size="2"></select></div>
-      <div class="browser-style buttons"><button class="browser-style i18n" id="includeadd">__MSG_highlightRegionsAdd__</button> <button class="browser-style i18n" disabled="disabled" id="includedel">__MSG_highlightRegionsRemove__</button></div>
-      <div class="browser-style section i18n">__MSG_highlightRegionsExclude__</div>
-      <div class="browser-style"><select id="exclude" size="2"></select></div>
-      <div class="browser-style buttons"><button class="browser-style i18n" id="excludeadd">__MSG_highlightRegionsAdd__</button> <button class="browser-style i18n" disabled="disabled" id="excludedel">__MSG_highlightRegionsRemove__</button></div>
-    </div>
+	<div id="textfields" class="browser-style">
+		<input class="browser-style" type="text" value="" id="pagetitle" />
+		<input class="browser-style" type="text" disabled="disabled" id="url" />
+	</div>
 
-    <div id="settings">
-      <div class="browser-style buttons"><button class="browser-style i18n" id="setup">__MSG_highlightButtonOptions__</button></div>
-    </div>
-    
-    <script src="../common/scripts/uiUtils.js"></script>
-    <script src="../common/scripts/ioUtils.js"></script>
-    <script src="../common/scripts/configUtils.js"></script>
-    <script src="../common/scripts/tabUtils.js"></script>
-    <script src="../common/scripts/pageUtils.js"></script>
-    <script src="highlight.js"></script>
-  </body>
+	<div id="buttons">
+		<div class="browser-style buttons">
+			<button id="delete" class="browser-style i18n">__MSG_highlightButtonDelete__</button>
+			<button id="highlight" class="browser-style default i18n">__MSG_highlightButtonHighlight__</button>
+		</div>
+		<div>
+			<button id="expand" class="browser-style expander"></button>
+		</div>
+	</div>
+
+	<div id="config">
+		<div class="browser-style section i18n">__MSG_configChecks__</div>
+		<div class="browser-style">
+			<input checked id="checkdeleted" type="checkbox" class="browser-style">
+			<label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label>
+		</div>
+		<div class="browser-style">
+			<input checked id="checkimages" type="checkbox" class="browser-style">
+			<label for="checkimages" class="i18n">__MSG_configCheckImages__</label>
+		</div>
+
+		<div class="browser-style section i18n">__MSG_configIgnores__</div>
+		<div class="browser-style">
+			<input checked id="ignorecase" type="checkbox" class="browser-style"> 
+			<label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label>
+		</div>
+		<div class="browser-style">
+			<input checked id="ignorenumbers" type="checkbox" class="browser-style"> 
+			<label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label>
+		</div>
+
+		<div class="browser-style section i18n">__MSG_highlightRegionsInclude__</div>
+		<div class="browser-style"><select id="include" size="2"></select></div>
+		<div class="browser-style buttons">
+			<button class="browser-style i18n" id="includeadd">__MSG_highlightRegionsAdd__</button>
+			<button class="browser-style i18n" disabled="disabled" id="includedel">__MSG_highlightRegionsRemove__</button>
+		</div>
+
+		<div class="browser-style section i18n">__MSG_highlightRegionsExclude__</div>
+		<div class="browser-style"><select id="exclude" size="2"></select></div>
+		<div class="browser-style buttons">
+			<button class="browser-style i18n" id="excludeadd">__MSG_highlightRegionsAdd__</button> 
+			<button class="browser-style i18n" disabled="disabled" id="excludedel">__MSG_highlightRegionsRemove__</button>
+		</div>
+	</div>
+
+	<div id="settings">
+		<div class="browser-style buttons"><button class="browser-style i18n" id="setup">__MSG_highlightButtonOptions__</button></div>
+	</div>
+
+	<script src="../common/scripts/uiUtils.js"></script>
+	<script src="../common/scripts/ioUtils.js"></script>
+	<script src="../common/scripts/configUtils.js"></script>
+	<script src="../common/scripts/tabUtils.js"></script>
+	<script src="../common/scripts/pageUtils.js"></script>
+	<script src="highlight.js"></script>
+</body>
 
 </html>

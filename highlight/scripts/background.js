@@ -65,7 +65,6 @@ var contextMenuListener = function(info, tab) {
 		pageUtils.getOrCreateEffectiveConfig(tab.url, tab.title, function(config) {
 			tabUtils.highlightChanges(tab.id, tab.url, function(status) {
 				if(status.changes == 0) {
-					tabUtils.showIcon(tab.id, "unchanged", function() {});
 					chrome.notifications.create("highlight", {
 						"type": "basic",
 						"iconUrl": chrome.extension.getURL("common/icons/unchanged.svg"),
@@ -73,7 +72,6 @@ var contextMenuListener = function(info, tab) {
 						"message": chrome.i18n.getMessage("highlightTitleNoChanges")
 					});
 				} else {
-					tabUtils.showIcon(tab.id, "changed", function() {});
 					chrome.notifications.create("highlight", {
 						"type": "basic",
 						"iconUrl": chrome.extension.getURL("common/icons/changed.svg"),

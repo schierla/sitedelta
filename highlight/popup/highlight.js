@@ -157,11 +157,9 @@ function fillStatus(status) {
 		break;
 	case STATE.HIGHLIGHTED:
 		if(status.changes == 0) {
-			tabUtils.showIcon(tabId, "unchanged", function() {});
 			document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleNoChanges");
 			document.querySelector("#highlight").style.visibility='hidden';
 		} else {
-			tabUtils.showIcon(tabId, "changed", function() {});
 			document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [status.current, status.changes]);
 		}
 		document.querySelector("#expand").style.display='none';

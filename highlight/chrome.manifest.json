@@ -16,12 +16,12 @@
 	"permissions": [
 		"activeTab", 
 		"storage",
-		"unlimitedStorage",
-		"notifications",
-		"contextMenus"
+		"unlimitedStorage"
 	],
 
 	"optional_permissions": [
+		"contextMenus",
+		"notifications",
 		"webNavigation",
 		"<all_urls>"
 	],
@@ -36,12 +36,12 @@
 		},
 		"default_title": "__MSG_highlightExtensionName__",
 		"default_popup": "popup/highlight.htm",
-		"browser_style": true
+		"chrome_style": true
 	},
 
 	"options_ui": {
 		"page": "pages/manage.htm",
-		"browser_style": true
+		"chrome_style": true
 	},
 	
 	"background": {

@@ -40,7 +40,7 @@
 	},
 
 	"options_ui": {
-		"page": "pages/manage.htm",
+		"page": "highlight/manage.htm",
 		"chrome_style": true
 	},
 	

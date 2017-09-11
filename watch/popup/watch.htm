@@ -1,47 +1,34 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <meta charset="utf-8">
-  </head>
 
-  <body>
-    <div class="panel">
-      <div class="panel-section panel-section-header">
-        <img class="icon-section-header" id="icon"/>
-        <div class="text-section-header i18n">__MSG_popupTitle__</div>
-      </div>
-      <div id="panel-loading" style="display: none">
-        <div class="panel-section panel-section-tabs"> 
-          <div class="panel-section-tabs-button selected i18n" id="topage">__MSG_popupHighlightTab__</div> <div class="panel-section-tabs-separator"></div> 
-          <div class="panel-section-tabs-button i18n" id="towatch">__MSG_popupWatchTab__</div> <div class="panel-section-tabs-separator"></div> 
-        </div>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="watch.css" />
+	<link rel="stylesheet" href="../common/browser_style.css" />
+</head>
 
-        <div class="panel-section panel-section-formElements" id="page"> 
-          <div class="panel-formElements-item"> <label for="pagetitle" class="i18n">__MSG_pagepopupDetailsTitle__</label><input type="text" disabled value="" id="pagetitle" /> </div> 
-          <div class="panel-formElements-item"> <label for="url" class="i18n">__MSG_pagepopupDetailsUrl__</label><input type="text" disabled value="" id="url" /> </div> 
-          <div id="status" class="panel-formElements-item i18n">__MSG_popupHighlightUnsupported__</div>
-        </div>
+<body>
+	<div class="browser-style i18n" type="text" id="title">__MSG_watchTitle__</div>
+	<div id="status" class="panel-formElements-item i18n">__MSG_watchUnsupported__</div>
+	<div class="browser-style buttons">
+		<button class="browser-style i18n" id="watch">__MSG_watchButtonWatch__</button>
+	</div>
 
-        <div class="panel-section panel-section-list" id="watch">
-          <div class="panel-list-item disabled i18n">__MSG_popupWatchTitle__</div>
-          <div class="panel-section-separator" id="watchseparator"></div>
-          <div class="panel-list-item switch"><input checked id="pagewatch" type="checkbox" class="visually-hidden"><label for="pagewatch" class="i18n">__MSG_popupWatchEnabled__</label></div>
-        </div>
 
-        <div class="panel-section panel-section-footer" id="footer">
-          <div id="configure" class="panel-section-footer-button default i18n">__MSG_popupButtonConfigure__</div><div class="panel-section-footer-separator"></div>
-          <div id="managepages" class="panel-section-footer-button i18n">__MSG_popupButtonManagePages__</div><div class="panel-section-footer-separator"></div>
-          <div id="watchpage" class="panel-section-footer-button default i18n">__MSG_popupButtonWatch__</div><div class="panel-section-footer-separator"></div>
-          <div id="managewatch" class="panel-section-footer-button i18n">__MSG_popupButtonManageWatch__</div><div class="panel-section-footer-separator"></div>
-        </div>
-      </div>
-    </div>
-    <script src="../common/scripts/uiUtils.js"></script>    
-    <script src="../common/scripts/ioUtils.js"></script>    
-    <script src="../common/scripts/tabUtils.js"></script>    
-    <script src="../common/scripts/pageUtils.js"></script>    
-    <script src="watch.js"></script>
-  </body>
+	<div class="browser-style section i18n">__MSG_watchChangedPages__</div>
+	<div class="browser-style"><select id="changed" size="5"></select></div>
+
+	<div class="browser-style buttons">
+		<button class="browser-style i18n" id="open">__MSG_watchButtonOpenAll__</button>
+		<button class="browser-style i18n" id="manage">__MSG_watchButtonManage__</button>
+	</div>
+
+	<script src="../common/scripts/uiUtils.js"></script>
+	<script src="../common/scripts/ioUtils.js"></script>
+	<script src="../common/scripts/tabUtils.js"></script>
+	<script src="../common/scripts/pageUtils.js"></script>
+	<script src="watch.js"></script>
+</body>
 
 </html>

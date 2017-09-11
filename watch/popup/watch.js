@@ -1,39 +1,36 @@
 uiUtils.i18n();
 
-document.body.style.minWidth = "40em";
-document.querySelector("#icon").src = "../common/icons/neutral.svg";
+document.querySelector("#watch").addEventListener("click", function(e) {
+	tabUtils.openResource("watch/show.htm?" + url);
+    window.close();
+});
 
-document.querySelector("#configure").addEventListener("click", function(e) {
-    tabUtils.showPageAction(tabId, "../common/icons/neutral.svg", function() {
-        window.location.href="highlight.htm";
+document.querySelector("#manage").addEventListener("click", function(e) {
+	tabUtils.openResource("watch/manage.htm");
+    window.close();
+});
+
+document.querySelector("#open").addEventListener("click", function(e) {
+    pageUtils.listChanged(function(urls) {
+        for(var i=0; i<urls.length; i++) {
+            tabUtils.openResource("watch/show.htm?" + urls[i]);
+        }
+        window.close();
     });
 });
 
-document.querySelector("#managepages").addEventListener("click", function(e) {
-	tabUtils.openResource("pages/manageHighlight.htm");
-    window.close();
+document.querySelector("#changed").addEventListener("dblclick", function() {
+    if(document.querySelector("#changed").value)
+        tabUtils.openResource("watch/show.htm?" + document.querySelector("#changed").value);
 });
 
-document.querySelector("#watchpage").addEventListener("click", function(e) {
-	tabUtils.openResource("pages/showWatch.htm?" + url);
-    window.close();
-});
-
-document.querySelector("#managewatch").addEventListener("click", function(e) {
-	tabUtils.openResource("pages/manageWatch.htm");
-    window.close();
-});
 
 function addChangedUrl(url) {
-    var sep = document.querySelector("#watchseparator");
-    var div = document.createElement("div");
-    div.classList.add("panel-list-item");
-    var url = "http://www.google.de";
-    div.appendChild(document.createTextNode(url));
-    div.addEventListener("click", function() {
-        tabUtils.openResource("pages/showWatch.htm?" + url);
-    });
-    sep.parentElement.insertBefore(div, sep);            
+    var list = document.querySelector("#changed");
+    var option = document.createElement("option");
+    option.appendChild(document.createTextNode(url));
+    option.setAttribute("value", url);
+    list.appendChild(option);            
 }
 
 function createChangeList() {
@@ -51,22 +48,18 @@ var PAGESTATE = {
 };
 
 function enableButtons(title, state) {
-    document.querySelector("#pagetitle").value = title;
-    document.querySelector("#url").value = url;
     switch(state) {
     case PAGESTATE.UNSUPPORTED: 
-        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("popupHighlightUnsupported");
-        document.querySelector("#configure").style.visibility = "hidden";
-        document.querySelector("#watchpage").style.visibility = "hidden";
+        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("watchUnsupported");
+        document.querySelector("#watch").style.visibility = "hidden";
         break;
     case PAGESTATE.ENABLED:
-        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("popupHighlightEnabled");
+        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("watchEnabled");
         break;
     case PAGESTATE.DISABLED:
-        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("popupHighlightDisabled");
+        document.querySelector("#status").firstChild.data = chrome.i18n.getMessage("watchDisabled");
         break;
     }
-    document.querySelector("#panel-loading").style.display = "block";
 }
 
 var url = null;

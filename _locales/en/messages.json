@@ -7,6 +7,7 @@
 		"message": "Highlights changes made to a website since last visit",
 		"description": "Description of the highlight extension"
 	},
+
 	"watchExtensionName": {
 		"message": "SiteDelta Watch",
 		"description": "Name of the watch extension"
@@ -15,45 +16,38 @@
 		"message": "Regularly monitors a website for changes",
 		"description": "Description of the watch extension"
 	},
-	"popupTitle": {
-		"message": "SiteDelta",
-		"description": "Title of the browser action popup"
-	},
-	"popupHighlightUnsupported": {
-		"message": "SiteDelta does not support monitoring this page.",
-		"description": "Text that the current page is unsupported"
-	},
-	"popupHighlightDisabled": {
-		"message": "SiteDelta is disabled for this page. Click 'Configure Page' to enable.",
-		"description": "Text that highlighting of the current page is disabled"
-	},
-	"popupHighlightEnabled": {
-		"message": "SiteDelta is enabled for this page. Click 'Configure Page' to configure.",
-		"description": "Text that highlighting of the current page is enabled"
+
+	"watchTitle": {
+		"message": "SiteDelta Watch",
+		"description": "Title of the page action popup"
 	},
 
-	"popupWatchTitle": {
+	"watchUnsupported": {
+		"message": "SiteDelta does not support monitoring this page",
+		"description": "Text that the current page is unsupported"
+	},
+	"watchDisabled": {
+		"message": "SiteDelta is disabled for this page",
+		"description": "Text that watching of the current page is disabled"
+	},
+	"watchEnabled": {
+		"message": "SiteDelta is enabled for this page",
+		"description": "Text that watching of the current page is enabled"
+	},
+
+	"watchChangedPages": {
 		"message": "Changed Pages:",
 		"description": "Headline for changed pages"
 	},
-	"popupWatchEnabled": {
-		"message": "Check pages in background", 
-		"description": "Label for checkbox to enable/disable page watch"
+	"watchButtonOpenAll": {
+		"message": "Open all",
+		"description": "Button to open all changed pages"
 	},
-
-	"popupButtonConfigure": {
-		"message": "Configure Highlight",
-		"description": "Button to enable/configure highlighting for current page"
-	},
-	"popupButtonManagePages": {
-		"message": "Manage Pages",
-		"description": "Button to manage highlighted pages"
-	},
-	"popupButtonWatch": {
+	"watchButtonWatch": {
 		"message": "Watch Page",
 		"description": "Button to enable watch for current page"
 	},
-	"popupButtonManageWatch": {
+	"watchButtonManage": {
 		"message": "Manage Watched Pages",
 		"description": "Button to manage watched pages"
 	},

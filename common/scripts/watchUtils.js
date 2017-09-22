@@ -1,21 +1,12 @@
 // watch operations
 var watchUtils = {
-	initAlarms: function() {
-		pageUtils.list(function(pages) {
-			for(var i=0; i<pages.length; i++) {
-				watchUtils.updateAlarm(pages[i]);
-			}
-		});
+
+	removeAlarm: function(url) {
+		chrome.runtime.sendMessage({command: "removeAlarm", url: url}, () => {});
 	},
-	updateAlarm(url) {
-		pageUtils.getNextScan(url,
-			(nextScan) => {
-				console.log(url + ": " + nextScan);
-				chrome.alarms.create(url, {"when": nextScan});
-			});
-	},
-	removeAlarm(url) {
-		chrome.alarms.clear(url);
+
+	updateAlarm: function(url) {
+		chrome.runtime.sendMessage({command: "updateAlarm", url: url}, () => {});		
 	},
 
 	loadPage: function(url, callback) {
@@ -24,17 +15,33 @@ var watchUtils = {
 		});
 	},
 
-	setChanges: function(url, changes) {
+	adaptDelay: function(url, changes) {
+		pageUtils.getEffectiveConfig(url, config => {
+			if(config.watchDelay < 0) {
+				if(changes == 0)
+					config.watchDelay = Math.round(config.watchDelay * config.autoDelayPercent / 100);
+				else 
+					config.watchDelay = Math.round(config.watchDelay / config.autoDelayPercent * 100);
+				
+				if(config.watchDelay < -config.autoDelayMax) config.watchDelay = -config.autoDelayMax;
+				if(config.watchDelay > -config.autoDelayMin) config.watchDelay = -config.autoDelayMin;
+				pageUtils.setConfigProperty(url, "watchDelay", config.watchDelay, () => {});
+			}
+		});
+	},
+
+	setChanges: function(url, changes, callback) {
 		pageUtils.setChanges(url, changes, function() {
 			watchUtils.showChanges();
-			if(changes == 0) {
-				console.log("next scan: " + (Date.now() + 60000));
-				pageUtils.setNextScan(url, (Date.now() + 60000), () => {
-					watchUtils.updateAlarm(url);
-				});
-			} else {
-
-			}
+			pageUtils.getEffectiveConfig(url, config => {
+				if(changes == 0) {
+					var next = Date.now() + Math.abs(config.watchDelay) * 60 * 1000;
+					pageUtils.setNextScan(url, next, () => {
+						if(callback) callback();
+					});
+				} else {
+				}
+			});
 		});
 	},
 
@@ -57,16 +64,24 @@ var watchUtils = {
 				contentCallback(mime, xhr.responseText);
 			}
 		};
-		xhr.open("GET", url, true);
-		xhr.send();
+		xhr.onerror = function() {
+			contentCallback("error", "");
+		};
+		try {
+			xhr.open("GET", url, true);
+			xhr.send();
+		} catch(e) {
+			contentCallback("error", "" + e);
+		}
 	},
+	
 	_parsePage: function(url, mime, content, documentCallback) {
 		var parser = new DOMParser();
 		var doc = parser.parseFromString(content, "text/html");
 		if(mime.toLowerCase().indexOf("charset")<0) {
 			var metas = doc.getElementsByTagName("meta");
 			for(var i=0; i<metas.length; i++) {
-				if(metas.item(i).getAttribute("http-equiv").toLowerCase()=="content-type") {
+				if(metas.item(i).getAttribute("http-equiv") && metas.item(i).getAttribute("http-equiv").toLowerCase()=="content-type") {
 					mime = metas.item(i).getAttribute("content");
 					if(mime.toLowerCase().indexOf("charset") > 0) {
 						watchUtils._downloadPage(url, mime, function(mime, content) {
@@ -79,5 +94,4 @@ var watchUtils = {
 		}
 		documentCallback(doc);
 	}
-
 };

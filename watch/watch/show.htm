@@ -1,78 +1,86 @@
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<link rel="stylesheet" href="show.css" />
-		<link rel="stylesheet" href="../common/browser_style.css" />
-        <title>SiteDelta Watch</title>
-    </head>
-    <body class="collapsed">
-        <div id="status">
-            <div id="buttons" class="browser-style buttons">
-                <button id="delete" class="browser-style i18n">__MSG_highlightButtonDelete__</button>
-                <button id="highlight" class="browser-style default i18n">__MSG_highlightButtonHighlight__</button>
-            </div>
-            <div id="statustext" class="i18n">__MSG_watchDisabled__</div>
-        </div>
-        <div id="settings">
-            <div>
-                <button id="expand" class="browser-style expander"></button>
-            </div>
-    
-            <div id="config">
-                <div id="textfields" class="browser-style">
-                    <input class="browser-style" type="text" value="" id="pagetitle" />
-                </div>
-                <div class="browser-style section i18n">__MSG_configChecks__</div>
-                <div class="browser-style">
-                    <input checked id="checkdeleted" type="checkbox" class="browser-style">
-                    <label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label>
-                </div>
-                <div class="browser-style">
-                    <input checked id="checkimages" type="checkbox" class="browser-style">
-                    <label for="checkimages" class="i18n">__MSG_configCheckImages__</label>
-                </div>
 
-                <div class="browser-style section i18n">__MSG_configIgnores__</div>
-                <div class="browser-style">
-                    <input checked id="ignorecase" type="checkbox" class="browser-style"> 
-                    <label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label>
-                </div>
-                <div class="browser-style">
-                    <input checked id="ignorenumbers" type="checkbox" class="browser-style"> 
-                    <label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label>
-                </div>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="show.css" />
+	<link rel="stylesheet" href="../common/browser_style.css" />
+	<title>SiteDelta Watch</title>
+</head>
 
-                <div class="browser-style section i18n">__MSG_configRegionsInclude__</div>
-                <div class="browser-style"><select id="include" size="3"></select></div>
-                <div class="browser-style buttons">
-                    <button class="browser-style i18n" id="includeadd">__MSG_configRegionsAdd__</button>
-                    <button class="browser-style i18n" disabled="disabled" id="includedel">__MSG_configRegionsRemove__</button>
-                </div>
+<body class="collapsed">
+	<div id="status">
+		<div id="buttons" class="browser-style buttons">
+			<button id="delete" class="browser-style i18n">__MSG_highlightButtonDelete__</button>
+			<button id="highlight" class="browser-style default i18n">__MSG_highlightButtonHighlight__</button>
+		</div>
+		<div id="statustext" class="i18n">__MSG_watchDisabled__</div>
+	</div>
+	<div id="settings">
+		<div>
+			<button id="expand" class="browser-style expander"></button>
+		</div>
 
-                <div class="browser-style section i18n">__MSG_configRegionsExclude__</div>
-                <div class="browser-style"><select id="exclude" size="3"></select></div>
-                <div class="browser-style buttons">
-                    <button class="browser-style i18n" id="excludeadd">__MSG_configRegionsAdd__</button> 
-                    <button class="browser-style i18n" disabled="disabled" id="excludedel">__MSG_configRegionsRemove__</button>
-                </div>
-            </div>
+		<div id="config">
+			<div id="textfields" class="browser-style">
+				<input class="browser-style" type="text" value="" id="pagetitle" />
+			</div>
+			<div class="browser-style section i18n">__MSG_configChecks__</div>
+			<div class="browser-style">
+				<input checked id="checkdeleted" type="checkbox" class="browser-style">
+				<label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label>
+			</div>
+			<div class="browser-style">
+				<input checked id="checkimages" type="checkbox" class="browser-style">
+				<label for="checkimages" class="i18n">__MSG_configCheckImages__</label>
+			</div>
 
-        </div>
-		<div id="content">
-			<div id="loading"><img src="../common/icons/neutral-48.png"></div>
-			<iframe id="iframe" src="about:blank" sandbox="allow-same-origin">
-            </iframe>
-        </div>
+			<div class="browser-style section i18n">__MSG_configIgnores__</div>
+			<div class="browser-style">
+				<input checked id="ignorecase" type="checkbox" class="browser-style">
+				<label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label>
+			</div>
+			<div class="browser-style">
+				<input checked id="ignorenumbers" type="checkbox" class="browser-style">
+				<label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label>
+			</div>
 
-        <script type="text/javascript" src="../common/scripts/configUtils.js"></script>
-        <script type="text/javascript" src="../common/scripts/regionUtils.js"></script>
-        <script type="text/javascript" src="../common/scripts/textUtils.js"></script>
-        <script type="text/javascript" src="../common/scripts/highlightUtils.js"></script>
-        <script type="text/javascript" src="../common/scripts/ioUtils.js"></script>
-        <script type="text/javascript" src="../common/scripts/pageUtils.js"></script>
-        <script type="text/javascript" src="../common/scripts/watchUtils.js"></script>
-        <script type="text/javascript" src="../common/scripts/uiUtils.js"></script>
-        <script type="text/javascript" src="show.js"></script>
-    </body>
+			<div class="browser-style section i18n">__MSG_configRegionsInclude__</div>
+			<div class="browser-style"><select id="include" size="3"></select></div>
+			<div class="browser-style buttons">
+				<button class="browser-style i18n" id="includeadd">__MSG_configRegionsAdd__</button>
+				<button class="browser-style i18n" disabled="disabled" id="includedel">__MSG_configRegionsRemove__</button>
+			</div>
+
+			<div class="browser-style section i18n">__MSG_configRegionsExclude__</div>
+			<div class="browser-style"><select id="exclude" size="3"></select></div>
+			<div class="browser-style buttons">
+				<button class="browser-style i18n" id="excludeadd">__MSG_configRegionsAdd__</button>
+				<button class="browser-style i18n" disabled="disabled" id="excludedel">__MSG_configRegionsRemove__</button>
+			</div>
+
+			<div class="browser-style section i18n">__MSG_configWatch__</div>
+			<div class="browser-style">
+				<input id="watchDelay" type="text" class="browser-style">
+			</div>				
+		</div>
+
+	</div>
+	<div id="content">
+		<div id="loading"><img src="../common/icons/neutral-48.png"></div>
+		<iframe id="iframe" src="about:blank" sandbox="allow-same-origin">
+		</iframe>
+	</div>
+
+	<script type="text/javascript" src="../common/scripts/configUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/regionUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/textUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/highlightUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/ioUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/pageUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/watchUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/uiUtils.js"></script>
+	<script type="text/javascript" src="show.js"></script>
+</body>
+
 </html>

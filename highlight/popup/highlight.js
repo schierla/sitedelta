@@ -90,7 +90,9 @@ document.querySelector("#delete").addEventListener("click", function(e) {
 
 document.querySelector("#highlight").addEventListener("click", function(e) {
 	pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, () => {
-		document.querySelector("#delete").style.visibility = 'visible';
+		document.body.classList.remove("disabled");
+		document.body.classList.remove("expanded");
+		document.body.classList.add("enabled");
 		tabUtils.highlightChanges(tabId, url, function(status) {
 			fillStatus(status);
 		});
@@ -99,11 +101,9 @@ document.querySelector("#highlight").addEventListener("click", function(e) {
 
 document.querySelector("#expand").addEventListener("click", function(e) {
 	pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, (pageconfig) => {
+		document.body.classList.add("expanded");
 		showConfig(pageconfig);
 		config = pageconfig;
-		document.querySelector("#config").style.display = 'block';
-		document.querySelector("#settings").style.display='block';    
-		document.querySelector("#delete").style.visibility = 'visible';
 	});
 });
 
@@ -150,28 +150,29 @@ function createRegionNode(xpath, color) {
 }
 
 function fillStatus(status) {
+	document.body.classList.remove("loaded");
+	document.body.classList.remove("highlighted");
+	document.body.classList.remove("changed");
+	document.body.classList.remove("unchanged");
+	document.body.classList.remove("selecting");
+	
 	switch(status.state) {
 	case STATE.LOADED:
-		document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitle");
-		document.querySelector("#expand").style.display='block';
+		document.body.classList.add("loaded");
 		break;
 	case STATE.HIGHLIGHTED:
+		document.body.classList.add("highlighted");
 		if(status.changes == 0) {
-			document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleNoChanges");
-			document.querySelector("#highlight").style.visibility='hidden';
+			document.body.classList.add("unchanged");
 		} else {
-			document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [status.current, status.changes]);
+			document.body.classList.add("changed");
+			document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [status.current, status.changes]);
 		}
-		document.querySelector("#expand").style.display='none';
 		break;
 	case STATE.SELECTREGION:
-		document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleSelectRegion");
-		document.querySelector("#expand").style.display='none';
-		document.querySelector("#highlight").style.visibility='hidden';
+		document.body.classList.add("selecting");	
 		break;
 	}
-	document.querySelector("#config").style.display='none';
-	document.querySelector("#settings").style.display='none';
 }
 
 var tabId = null;
@@ -181,10 +182,7 @@ var config = null;
 tabUtils.getActive(function(tab) {
 	tabId = tab.id; url = tab.url;
 	if(url.substr(0,4)!="http") {
-		document.querySelector("#title").firstChild.data = chrome.i18n.getMessage("highlightTitleUnavailable");
-		document.querySelector("#settings").style.display="block";
-		document.querySelector("#buttons").style.display="none";
-		document.querySelector("#textfields").style.display="none";
+		document.body.classList.add("unavailable");
 		document.querySelector("#setup").classList.add("default");
 		return;
 	}
@@ -193,10 +191,10 @@ tabUtils.getActive(function(tab) {
 	pageUtils.getTitle(url, (title) => {
 		if(title == null) {
 			showTitle(tab.title); 
-			document.querySelector("#delete").style.visibility = 'hidden';
+			document.body.classList.add("disabled");
 		} else {
 			showTitle(title); 
-			document.querySelector("#delete").style.visibility = 'visible';
+			document.body.classList.add("enabled");
 		}
 	});
 });

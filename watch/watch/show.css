@@ -1,23 +1,23 @@
-body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding: 0; background: #ddd; font-size: 100%;}
-#status {position: fixed; left: 0; right: 0; top: 0; height: 2em; padding: 0; margin: 0; }
+body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding: 0; background: #ddd; font-size: 75%;}
+#status {position: fixed; left: 0; right: 0; top: 0; height: 2.6em; padding: 0; margin: 0; }
 #status {background: #ffc; border-bottom: solid #777 1px; }
 #status #buttons {float: right; margin: 4px; }
-#status #statustext {text-align: center; line-height: 2em; vertical-align: middle; }
-#settings {position: fixed; left: 0; top: 2.1em; width: 18em; bottom: 0; padding: 0; margin: 0; transition: width 0.3s;}
+#status #statustext {text-align: center; font-size: 130%; line-height: 2em; vertical-align: middle; }
+#settings {position: fixed; left: 0; top: 2.7em; width: 18em; bottom: 0; padding: 0; margin: 0; transition: width 0.3s;}
 #settings {background: #eee; border-right: solid #777 1px; overflow-x: hidden; overflow-y: auto; }
 #settings #config {min-width: 10em; }
 #settings {overflow-y: auto; }
 #settings #textfields {margin-right: 4px; }
 #settings>div {margin: 4px; }
 #expand {display: none; }
-.collapsed #settings {width: 2em; }
+.collapsed #settings {width: 2.6em; }
 .collapsed #settings #config {display: none; }
-.collapsed #content {left: 2.1em; }
+.collapsed #content {left: 2.7em; }
 .collapsed #expand {display: block; }
-#content {position: fixed; left: 18.1em; top: 2.1em; right: 0; bottom: 0; padding: 0; margin: 0; transition: left 0.3s; }
+#content {position: fixed; left: 18.1em; top: 2.7em; right: 0; bottom: 0; padding: 0; margin: 0; transition: left 0.3s; }
 #loading {position: absolute; left: 0; top: 0; bottom: 0; right: 0; }
 #loading img {position: absolute; left: 50%; top: 50%; transform: translateY(-50%) translateY(-50%); animation: animate 2s linear infinite; height: 2em; height: 2em; }
-#iframe {position: absolute; left: 0; top: 0; width: 100%; height: 100%; border: none 0px; }
+#iframe {position: absolute; left: 0; top: 0; width: 100%; height: 100%; border: none 0px; background: #fff; }
 
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 .buttons {text-align: right; }

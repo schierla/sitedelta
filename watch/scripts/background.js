@@ -1,6 +1,6 @@
-chrome.alarms.onAlarm.addListener(function(alarm) {
+var alarmListener = function(alarm) {
     var url = alarm.name;
-    console.log(url);
+    console.log("SiteDelta: Scanning " + url);
     pageUtils.getEffectiveConfig(url, function(config) {
         if(config == null) return;
         watchUtils.loadPage(url, function(doc) {
@@ -15,14 +15,57 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
                             "message": title
                         });
                     });
-                    watchUtils.setChanges(url, 1);
+                    watchUtils.adaptDelay(url, 1);
+                    watchUtils.setChanges(url, 1, () => updateAlarm(url));
                 } else {
-                    watchUtils.setChanges(url, 0);
+                    watchUtils.adaptDelay(url, 0);
+                    watchUtils.setChanges(url, 0, () => updateAlarm(url));
                 }
             });
         });
     });
-});
+};
 
-watchUtils.initAlarms();
+var initAlarms = function() {
+    pageUtils.list(function(pages) {
+        for(var i=0; i<pages.length; i++) {
+            updateAlarm(pages[i]);
+        }
+    });
+}
+
+var updateAlarm = function(url) {
+    pageUtils.getChanges(url, changes => {
+        if(changes > 0) return; 
+        pageUtils.getNextScan(url,
+            (nextScan) => {
+                if(nextScan < Date.now()) nextScan = Date.now() + 10000;
+                console.log("SiteDelta: Scheduling scan of " + url + " for " + new Date(nextScan).toLocaleString());
+                chrome.alarms.create(url, {"when": nextScan});
+            }
+        )
+    });
+}
+
+var removeAlarm = function(url) {
+    chrome.alarms.clear(url);
+}
+
+var messageListener = function(request, sender, sendResponse) {
+    if(request.command == "updateAlarm") {
+        updateAlarm(request.url);
+    } else if(request.command == "removeAlarm") {
+        removeAlarm(request.url);
+    }
+};
+
+var notificationListener = function(url) {
+    tabUtils.openResource("watch/show.htm?" + url);
+}
+
+chrome.runtime.onMessage.addListener(messageListener);
+chrome.alarms.onAlarm.addListener(alarmListener);
+chrome.notifications.onClicked.addListener(notificationListener);
+
+initAlarms();
 watchUtils.showChanges();

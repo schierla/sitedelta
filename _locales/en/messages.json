@@ -23,20 +23,20 @@
 	},
 
 	"watchUnsupported": {
-		"message": "SiteDelta does not support monitoring this page",
+		"message": "SiteDelta Watch does not support monitoring this page.",
 		"description": "Text that the current page is unsupported"
 	},
 	"watchDisabled": {
-		"message": "SiteDelta is disabled for this page",
+		"message": "SiteDelta Watch does not monitor this page.",
 		"description": "Text that watching of the current page is disabled"
 	},
 	"watchEnabled": {
-		"message": "SiteDelta is enabled for this page",
+		"message": "SiteDelta Watch monitors this page.",
 		"description": "Text that watching of the current page is enabled"
 	},
 
 	"watchChangedPages": {
-		"message": "Changed Pages:",
+		"message": "Pages modified since last visit:",
 		"description": "Headline for changed pages"
 	},
 	"watchButtonOpenAll": {
@@ -44,12 +44,22 @@
 		"description": "Button to open all changed pages"
 	},
 	"watchButtonWatch": {
-		"message": "Watch Page",
-		"description": "Button to enable watch for current page"
+		"message": "Configure Page",
+		"description": "Button to configure/enable SiteDelta Watch for the current page"
 	},
-	"watchButtonManage": {
-		"message": "Manage Watched Pages",
-		"description": "Button to manage watched pages"
+	"watchButtonOptions": {
+		"message": "Configure SiteDelta Watch",
+		"description": "Button to open options dialog"
+	},
+	"watchNextScan": {
+		"message": "Next scan: $TIME$",
+		"description": "Label for the next scan time",
+		"placeholders": {
+			"time": {
+				"content": "$1",
+				"example": "2017-11-11 11:11"
+			}
+		}
 	},
 
 	"highlightTitle": {
@@ -177,6 +187,10 @@
 	"configShowRegions": {
 		"message": "Outline include an exclude regions",
 		"description": "Label for check box to outline include and exclude regions"
+	},
+	"configWatch": {
+		"message": "Watch settings:",
+		"description": "Label for text fields concerning watch / delay settings"
 	},
 
 	"highlightButtonHighlight": {

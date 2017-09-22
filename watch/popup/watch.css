@@ -1,7 +1,13 @@
 body {padding: 12px 8px 4px 8px; min-width: 20em; }
-#title {font-weight: bold; text-align: center; margin: 0 0 4px 0; }
+#status {font-weight: bold; margin: 0 0 8px 0; }
 #config {display: none; margin-top: 8px;}
 #settings {display: none; margin-top: 8px; }
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 .buttons {text-align: right; }
 .browser-style input[type="text"], .browser-style select {width: 100%; }
+#open, #changedPages, #watchUnsupported, #watchEnabled, #watchDisabled {display: none; }
+
+.changes #open {display: inline; }
+.changes #changedPages {display: block; }
+.unsupported #watch {display: none; }
+.disabled #watchDisabled, .enabled #watchEnabled, .unsupported #watchUnsupported {display: inline; }

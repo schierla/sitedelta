@@ -1,7 +1,33 @@
 body {padding: 12px 8px 4px 8px; min-width: 20em; }
-#title {font-weight: bold; text-align: center; margin: 0 0 4px 0; }
+#title {font-weight: bold; margin: 0 0 8px 0; }
 #config {display: none; margin-top: 8px;}
 #settings {display: none; margin-top: 8px; }
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 .buttons {text-align: right; }
 .browser-style input[type="text"], .browser-style select {width: 100%; }
+
+#unavailable, #loaded, #highlighted, #unchanged, #changed, #selecting {display: none; }
+.unavailable #unavailable, .loaded #loaded, .unchanged #unchanged, .changed #changed, .selecting #selecting {display: block; }
+
+.unavailable #unavailable {display: block; }
+.unavailable #settings {display: block; }
+.unavailable #buttons {display: none; }
+.unavailable #textfields {display: none; }
+
+.disabled #delete {visibility: hidden; }
+
+.unchanged #highlight {visibility: hidden; }
+
+.loaded #expand {display: block; }
+
+.highlighted #expand {display: none; }
+.selecting #expand {display: none; }
+.selecting #highlight {visibility: hidden; }
+
+#config, #settings {display: none; }
+
+.expanded #config {display: block; }
+.expanded #settings {display: block; }
+.expanded #delete {visibility: visible; }
+
+.expanded #expand {display: none; }

@@ -9,19 +9,23 @@
 </head>
 
 <body>
-	<div class="browser-style i18n" type="text" id="title">__MSG_watchTitle__</div>
-	<div id="status" class="panel-formElements-item i18n">__MSG_watchUnsupported__</div>
+	<div id="status" class="browser-style">
+		<span class="i18n" id="watchUnsupported">__MSG_watchUnsupported__</span>
+		<span class="i18n" id="watchDisabled">__MSG_watchDisabled__</span>
+		<span class="i18n" id="watchEnabled">__MSG_watchEnabled__</span>
+	</div>
 	<div class="browser-style buttons">
-		<button class="browser-style i18n" id="watch">__MSG_watchButtonWatch__</button>
+		<button class="browser-style i18n default" id="watch">__MSG_watchButtonWatch__</button>
 	</div>
 
-
-	<div class="browser-style section i18n">__MSG_watchChangedPages__</div>
-	<div class="browser-style"><select id="changed" size="5"></select></div>
+	<div id="changedPages">
+		<div class="browser-style section i18n">__MSG_watchChangedPages__</div>
+		<div class="browser-style"><select id="changed" size="5"></select></div>
+	</div>
 
 	<div class="browser-style buttons">
 		<button class="browser-style i18n" id="open">__MSG_watchButtonOpenAll__</button>
-		<button class="browser-style i18n" id="manage">__MSG_watchButtonManage__</button>
+		<button class="browser-style i18n" id="options">__MSG_watchButtonOptions__</button>
 	</div>
 
 	<script src="../common/scripts/uiUtils.js"></script>

@@ -59,6 +59,14 @@ var configUtils = {
 			config.configVersion = 2,
 			upgraded = true;
 		}
+		if(config.configVersion == 2) {
+			config.autoDelayPercent = 150;
+			config.autoDelayMin = 10;
+			config.autoDelayMax = 10080;
+			config.watchDelay = 1440;
+			config.configVersion = 3,
+			upgraded = true;
+		}
 		return upgraded;
 	},
 

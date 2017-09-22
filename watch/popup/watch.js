@@ -20,8 +20,10 @@ document.querySelector("#open").addEventListener("click", function(e) {
 });
 
 document.querySelector("#changed").addEventListener("dblclick", function() {
-    if(document.querySelector("#changed").value)
+    if(document.querySelector("#changed").value) {
         tabUtils.openResource("watch/show.htm?" + document.querySelector("#changed").value);
+        window.close();
+    }
 });
 
 

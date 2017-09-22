@@ -1,6 +1,7 @@
 chrome.alarms.onAlarm.addListener(function(alarm) {
     var url = alarm.name;
-    pageUtils.getConfig(url, function(config) {
+    console.log(url);
+    pageUtils.getEffectiveConfig(url, function(config) {
         if(config == null) return;
         watchUtils.loadPage(url, function(doc) {
             var newContent = textUtils.getText(doc, config);
@@ -8,16 +9,15 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
                 if(textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
                     pageUtils.getTitle(url, function(title) {
                         chrome.notifications.create(url, {
-                            "type": "basic",
-                            "iconUrl": chrome.extension.getURL("icons/changed.svg"),
-                            "title": chrome.i18n.getMessage("watchNotificationTitle"),
+                            "type": "basic", 
+                            "iconUrl": chrome.extension.getURL("common/icons/changed-64.png"),
+                            "title": chrome.i18n.getMessage("watchExtensionName"),
                             "message": title
                         });
                     });
                     watchUtils.setChanges(url, 1);
                 } else {
                     watchUtils.setChanges(url, 0);
-                    pageUtils.setNextScan(url, Date.now() + 60000);
                 }
             });
         });
@@ -25,3 +25,4 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 });
 
 watchUtils.initAlarms();
+watchUtils.showChanges();

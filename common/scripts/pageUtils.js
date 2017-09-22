@@ -4,7 +4,7 @@ var pageUtils = {
 		ioUtils.findInIndex((url, status) => url, callback);
 	}, 
 	listChanged: function(callback) {
-		ioUtils.findInIndex((url, status) => url, callback);
+		ioUtils.findInIndex((url, status) => status["changes"]==0?null:url, callback);
 	}, 
 	getStatus: function(url, callback) {
 		ioUtils.findInIndex((furl, fstatus) => (url == furl ? fstatus : null), 
@@ -16,7 +16,7 @@ var pageUtils = {
 	},
 	getNextScan: function(url, callback) {
 		pageUtils.getStatus(url, 
-			(status) => callback(status["nextScan"]));
+			(status) => status == null ? callback(Date.now() + 60000) : callback(status["nextScan"]));
 	},
 	getTitle: function(url, callback) {
 		ioUtils.get(url, "title", callback);

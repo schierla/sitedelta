@@ -83,23 +83,22 @@
 		"description": "Title of the page action popup while selecting a region"
 	},
 
-	"highlightRegionsInclude": {
+	"configRegionsInclude": {
 		"message": "Included regions:", 
 		"description": "Headline for included regions"
 	},
-	"highlightRegionsExclude": {
+	"configRegionsExclude": {
 		"message": "Excluded regions:", 
 		"description": "Headline for excluded regions"
 	},
-	"highlightRegionsRemove": {
+	"configRegionsRemove": {
 		"message": "remove",
 		"description": "Button to remove a region"
 	},
-	"highlightRegionsAdd": {
+	"configRegionsAdd": {
 		"message": "add new",
 		"description": "Button to add a new region"
 	},
-
 	"configBehavior": {
 		"message": "Overall behavior:",
 		"description": "Headline for extension behavior settings"

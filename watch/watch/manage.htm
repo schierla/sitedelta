@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="manage.css" />
-    <title>Watched pages</title>
-  </head>
-  <body>
-    <ul id="pages">
-      <li>http://www.google.de</li>
-      <li class="selected">http://www.schierla.de</li>
-    </ul>
-    <iframe id="preview" sandbox="allow-same-origin"></iframe>
-    <script type="text/javascript" src="manage.js"></script>    
-  </body>
+
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="manage.css" />
+	<link rel="stylesheet" href="../common/browser_style.css" />
+	<title>Watched pages</title>
+</head>
+
+<body>
+	<div class="browser-style section i18n">__MSG_manageKnownPages__</div>
+	<select id="pages" size="5"></select>
+	<div class="buttons browser-style">
+		<button id="open" class="browser-style i18n">__MSG_manageOpen__</button>
+		<button id="delete" class="browser-style i18n">__MSG_manageDelete__</button>
+	</div>
+	
+	<script type="text/javascript" src="../common/scripts/ioUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/watchUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/pageUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/uiUtils.js"></script>
+	<script type="text/javascript" src="manage.js"></script>
+</body>
+
 </html>

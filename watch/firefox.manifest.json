@@ -36,10 +36,9 @@
 	
 	"options_ui": {
 		"page": "watch/manage.htm",
-		"browser_style": true,
-		"chrome_style": true		
+		"browser_style": true
 	},
-
+	
 	"background": {
 		"scripts": [
 			"common/scripts/ioUtils.js", 

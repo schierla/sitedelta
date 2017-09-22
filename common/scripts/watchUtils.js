@@ -9,7 +9,13 @@ var watchUtils = {
 	},
 	updateAlarm(url) {
 		pageUtils.getNextScan(url,
-			(nextScan) => chrome.alarms.create(url, {when: nextScan}));
+			(nextScan) => {
+				console.log(url + ": " + nextScan);
+				chrome.alarms.create(url, {"when": nextScan});
+			});
+	},
+	removeAlarm(url) {
+		chrome.alarms.clear(url);
 	},
 
 	loadPage: function(url, callback) {
@@ -20,12 +26,24 @@ var watchUtils = {
 
 	setChanges: function(url, changes) {
 		pageUtils.setChanges(url, changes, function() {
-			pageUtils.listChanged(function(changed) {
-				if(changed > 0) 
-					chrome.browserAction.setBadgeText({text:changed.length});
-				else 
-					chrome.browserAction.setBadgeText({text:""});
-			});
+			watchUtils.showChanges();
+			if(changes == 0) {
+				console.log("next scan: " + (Date.now() + 60000));
+				pageUtils.setNextScan(url, (Date.now() + 60000), () => {
+					watchUtils.updateAlarm(url);
+				});
+			} else {
+
+			}
+		});
+	},
+
+	showChanges: function() {
+		pageUtils.listChanged(function(changed) {
+			if(changed.length > 0) 
+				chrome.browserAction.setBadgeText({text:""+changed.length});
+			else 
+				chrome.browserAction.setBadgeText({text:""});
 		});
 	},
 

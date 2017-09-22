@@ -44,11 +44,11 @@
 		"description": "Button to open all changed pages"
 	},
 	"watchButtonWatch": {
-		"message": "Configure Page",
+		"message": "Configure Page...",
 		"description": "Button to configure/enable SiteDelta Watch for the current page"
 	},
 	"watchButtonOptions": {
-		"message": "Configure SiteDelta Watch",
+		"message": "Configure SiteDelta Watch...",
 		"description": "Button to open options dialog"
 	},
 	"watchNextScan": {

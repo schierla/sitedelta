@@ -1,6 +1,11 @@
 
 
 function highlight() {
+	
+	document.body.classList.remove("unchanged"); 
+	document.body.classList.remove("changed");
+	document.body.classList.remove("expanded");
+	document.body.classList.add("known"); 
 	pageUtils.getOrCreateEffectiveConfig(url, title, (config) => {
 		window.config = config;
 		pageUtils.getContent(url, function (content) {
@@ -9,14 +14,16 @@ function highlight() {
 			known = true;
 			
 			var newcontent = textUtils.getText(idoc, config);
-			pageUtils.setContent(url, newcontent, () => {
-				showData();
-			});
+			pageUtils.setContent(url, newcontent, () => {});
 
 			changes = highlightUtils.highlightChanges(idoc, config, content);
 			if (changes > 0) {
+				document.body.classList.add("changed"); 
 				current = highlightUtils.highlightNext(idoc, 0);
+			} else {
+				document.body.classList.add("unchanged"); 
 			}
+			showData();
 			watchUtils.setChanges(url, 0, () => watchUtils.updateAlarm(url));
 		});
 	});
@@ -133,27 +140,11 @@ function showOptions() {
 	});
 }
 
-function getStatusText() {
-	if (known) {
-		if (changes > 0)
-			return chrome.i18n.getMessage("highlightTitleChanges", [current, changes]);
-		else if (changes == 0)
-			return chrome.i18n.getMessage("highlightTitleNoChanges");
-		else
-			return chrome.i18n.getMessage("watchEnabled");
-	} else {
-		return chrome.i18n.getMessage("watchDisabled");
-	}
-}
-
 function showData() {
 	document.querySelector("#pagetitle").value = title;
 	document.title = title;
-	document.querySelector("#delete").style.display = known ? "inline" : "none";
-	document.querySelector("#statustext").firstChild.data = getStatusText();
+	document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [current, changes]);
 }
-
-
 
 
 function selectRegion(callback) {
@@ -202,6 +193,7 @@ var config = {};
 
 pageUtils.getTitle(url, pagetitle => {
 	if (pagetitle != null) {
+		document.body.classList.add("known");
 		known = true;
 		title = pagetitle;
 	}
@@ -232,16 +224,19 @@ document.querySelector("#delete").addEventListener("click", function (e) {
 
 document.querySelector("#expand").addEventListener("click", function (e) {
 	pageUtils.getOrCreateEffectiveConfig(url, title, config => {
+		document.body.classList.remove("unchanged"); 
+		document.body.classList.remove("changed"); 
+		document.body.classList.add("known"); 
+		document.body.classList.add("expanded");
 		known = true;
 		window.config = config;
 		loadPage(showData);
 		showOptions();
-		document.body.classList.remove("collapsed");
 	});
 });
 
 document.querySelector("#highlight").addEventListener("click", function (e) {
-	document.body.classList.add("collapsed");
+	document.body.classList.remove("expanded");
 	if (changes > 0) {
 		var iframe = document.getElementById("iframe");
 		var idoc = iframe.contentWindow.document;

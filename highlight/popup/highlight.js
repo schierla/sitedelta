@@ -1,83 +1,129 @@
+function registerListeners() {
+	for (var i = 0; i < options.length; i++) {
+		registerListener(options[i]);
+	}
+}
+function registerListener(option) {
+	var performUpdate = (value) => {
+		pageUtils.setConfigProperty(url, option.key, value, () => {
+			if (option.post) option.post();
+			if(option.type=="text") document.querySelector("#" + option.elem).value = value;
+			else if (option.type == "checkbox") document.querySelector("#" + option.elem).checked = value;
+		});
+	};
+	document.querySelector("#" + option.elem).addEventListener("change", function (e) {
+		var value = "";
+		if (option.type == "text") {
+			value = document.querySelector("#" + option.elem).value;
+		} else if (option.type == "checkbox") {
+			value = document.querySelector("#" + option.elem).checked;
+		} else if (option.type == "list") {
+			value = document.querySelector("#" + option.elem).value;
+			for (var i = 0; i < options.length; i++) {
+				if (options[i] != option && options[i].type == "list") {
+					document.querySelector("#" + options[i].delelem).setAttribute("disabled", "disabled");
+					document.querySelector("#" + options[i].elem).value = null;
+					if (options[i].select) options[i].select(null);
+				}
+			}
+			document.querySelector("#" + option.delelem).removeAttribute("disabled");
+			if (option.select) option.select(value);
+			return;
+		}
+		if (option.pre) option.pre(value, performUpdate); else performUpdate(value);
+	});
+	if (option.type == "list") {
+		document.querySelector("#" + option.addelem).addEventListener("click", function (e) {
+			option.add(value => {
+				var newlist = [];
+				for (var i = 0; i < option.contents.length; i++) {
+					newlist.push(option.contents[i]);
+				}
+				newlist.push(value);
+				if (option.pre) option.pre(newlist, performUpdate); else performUpdate(newlist);
+			});
+		});
+		document.querySelector("#" + option.delelem).addEventListener("click", function (e) {
+			var value = document.querySelector("#" + option.elem).value, newlist = [];
+			for (var i = 0; i < option.contents.length; i++) {
+				if (option.contents[i] != value) newlist.push(option.contents[i]);
+			}
+			if (option.select) option.select(null);
+			if (option.pre) option.pre(newlist, performUpdate); else performUpdate(newlist);
+		});
+	}
+}
+
+function showOptions() {
+	pageUtils.getEffectiveConfig(url, config => {
+		for (var i = 0; i < options.length; i++) {
+			if (options[i].type == "text")
+				document.querySelector("#" + options[i].elem).value = config[options[i].key];
+			else if (options[i].type == "checkbox")
+				document.querySelector("#" + options[i].elem).checked = config[options[i].key];
+			else if (options[i].type == "list") {
+				var list = document.querySelector("#" + options[i].elem);
+				while (list.firstChild) list.removeChild(list.firstChild);
+				options[i].contents = config[options[i].key];
+				for (var j = 0; j < config[options[i].key].length; j++) {
+					var item = config[options[i].key][j];
+					var node = document.createElement("option");
+					node.setAttribute("value", item);
+					node.appendChild(document.createTextNode(item));
+					list.appendChild(node);
+				}
+				document.querySelector("#" + options[i].delelem).setAttribute("disabled", "disabled");
+			}
+		}
+	});
+}
+
+
+function selectExclude(callback) {
+	tabUtils.selectExclude(tabId, url, function() {
+		fillStatus({state: STATE.SELECTREGION});     
+	});
+}
+
+function selectInclude(callback) {
+	tabUtils.selectInclude(tabId, url, function() {
+		fillStatus({state: STATE.SELECTREGION});     
+	});
+}
+
+function showOutline(region, color) {
+	if(region) tabUtils.showOutline(tabId, region, color, function() {}); 
+	else tabUtils.removeOutline(tabId, function() {});
+}
+
+function addBodyIfEmpty(list, callback) {
+	if (list.length == 0) list.push("/html/body[1]");
+	if(list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
+	callback(list);
+}
+
+var options = [
+	{ type: "checkbox", key: "checkDeleted", elem: "checkdeleted" },
+	{ type: "checkbox", key: "scanImages", elem: "checkimages" },
+	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
+	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
+	{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: xpath => showOutline(xpath, config.includeRegion), add: selectInclude, pre: addBodyIfEmpty, post: showOptions },
+	{ type: "list", key: "excludes", elem: "exclude", addelem: "excludeadd", delelem: "excludedel", select: xpath => showOutline(xpath, config.excludeRegion), add: selectExclude, post: showOptions }
+];
+
+registerListeners();
+
 uiUtils.i18n();
+
 
 document.querySelector("#setup").addEventListener("click", function(e) {
 	chrome.runtime.openOptionsPage();
 	window.close();
 });
 
-document.querySelector("#includeadd").addEventListener("click", function(e) {
-	tabUtils.selectInclude(tabId, url, function() {
-		fillStatus({state: STATE.SELECTREGION});     
-	});
-});
-
-document.querySelector("#includedel").addEventListener("click", function(e) {
-	var region = document.querySelector("#include").value;
-	tabUtils.removeOutline(tabId, function() {
-		pageUtils.removeInclude(url, region, function() {
-			pageUtils.getEffectiveConfig(url, function(pageconfig) {
-				showConfig(pageconfig);
-				config = pageconfig;
-			});
-		});
-	});
-});
-
-document.querySelector("#include").addEventListener("change", function(e) {
-	var region = document.querySelector("#include").value;
-	document.querySelector("#excludedel").setAttribute("disabled", "disabled"); 
-	document.querySelector("#includedel").setAttribute("disabled", "disabled"); 
-	if(region == null) return;
-	document.querySelector("#exclude").value = null;
-	document.querySelector("#includedel").removeAttribute("disabled");    
-	tabUtils.showOutline(tabId, region, config.includeRegion, function() {}); 
-});
-
-   
-document.querySelector("#excludeadd").addEventListener("click", function(e) {
-	tabUtils.selectExclude(tabId, url, function() {
-		fillStatus({state: STATE.SELECTREGION});     
-	});
-});
-
-document.querySelector("#excludedel").addEventListener("click", function(e) {
-	var region = document.querySelector("#exclude").value;
-	tabUtils.removeOutline(tabId, function() {
-		pageUtils.removeExclude(url, region, function() {
-			pageUtils.getEffectiveConfig(url, function(pageconfig) {
-				showConfig(pageconfig);
-				config = pageconfig;
-			});
-		});
-	});
-});
-
-document.querySelector("#exclude").addEventListener("change", function(e) {
-	var region = document.querySelector("#exclude").value;
-	document.querySelector("#excludedel").setAttribute("disabled", "disabled"); 
-	document.querySelector("#includedel").setAttribute("disabled", "disabled"); 
-	if(region == null) return;
-	document.querySelector("#include").value = null;
-	document.querySelector("#excludedel").removeAttribute("disabled");
-	tabUtils.showOutline(tabId, region, config.excludeRegion, function() {}); 
-});
-
 document.querySelector("#pagetitle").addEventListener("change", function(e) {
 	pageUtils.setTitle(url, document.querySelector("#pagetitle").value, function() {});
 	document.querySelector("#delete").style.visibility = 'visible';    
-});
-
-document.querySelector("#checkdeleted").addEventListener("change", function(e) {
-	pageUtils.setConfigProperty(url, "checkDeleted", document.querySelector("#checkdeleted").checked, function() {});
-});
-document.querySelector("#checkimages").addEventListener("change", function(e) {
-	pageUtils.setConfigProperty(url, "scanImages", document.querySelector("#checkimages").checked, function() {});
-});
-document.querySelector("#ignorecase").addEventListener("change", function(e) {
-	pageUtils.setConfigProperty(url, "ignoreCase", document.querySelector("#ignorecase").checked, function() {});
-});
-document.querySelector("#ignorenumbers").addEventListener("change", function(e) {
-	pageUtils.setConfigProperty(url, "ignoreNumbers", document.querySelector("#ignorenumbers").checked, function() {});
 });
 
 document.querySelector("#delete").addEventListener("click", function(e) {
@@ -102,8 +148,8 @@ document.querySelector("#highlight").addEventListener("click", function(e) {
 document.querySelector("#expand").addEventListener("click", function(e) {
 	pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, (pageconfig) => {
 		document.body.classList.add("expanded");
-		showConfig(pageconfig);
 		config = pageconfig;
+		showOptions();
 	});
 });
 
@@ -116,37 +162,6 @@ var STATE = {
 function showTitle(title) {
 	document.querySelector("#url").value = url;
 	document.querySelector("#pagetitle").value = title;
-}
-
-function showConfig(config) {
-	document.querySelector("#checkdeleted").checked = config.checkDeleted;
-	document.querySelector("#checkimages").checked = config.scanImages;
-	document.querySelector("#ignorecase").checked = config.ignoreCase;
-	document.querySelector("#ignorenumbers").checked = config.ignoreNumbers;
-
-	document.querySelector("#excludedel").setAttribute("disabled", "disabled"); 
-	document.querySelector("#includedel").setAttribute("disabled", "disabled"); 
-
-	var incelem = document.querySelector("#include");
-	while(incelem.firstChild) incelem.removeChild(incelem.firstChild);
-	for(var i=0; i<config.includes.length; i++) {
-		var node = createRegionNode(config.includes[i]);
-		incelem.appendChild(node);
-	}
-
-	var excelem = document.querySelector("#exclude");
-	while(excelem.firstChild) excelem.removeChild(excelem.firstChild);
-	for(var i=0; i<config.excludes.length; i++) {
-		var node = createRegionNode(config.excludes[i], config.excludeRegion);
-		excelem.appendChild(node);
-	}
-}
-
-function createRegionNode(xpath, color) {
-	var node = document.createElement("option");
-	node.setAttribute("value", xpath);
-	node.appendChild(document.createTextNode(xpath));
-	return node;
 }
 
 function fillStatus(status) {

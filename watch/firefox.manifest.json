@@ -13,6 +13,12 @@
 		"64": "common/icons/watch-64.png"
 	},
 	
+	"applications": {
+		"gecko": {
+			"id": "sitedelta-watch@schierla.de"
+		}
+	},
+
 	"permissions": [
 		"notifications",
 		"activeTab", 

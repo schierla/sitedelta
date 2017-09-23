@@ -12,6 +12,12 @@
 		"48": "common/icons/neutral-48.png",
 		"64": "common/icons/neutral-64.png"
 	},
+
+	"applications": {
+		"gecko": {
+			"id": "sitedelta-highlight@schierla.de"
+		}
+	},
 	
 	"permissions": [
 		"activeTab", 

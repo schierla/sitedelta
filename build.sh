@@ -6,7 +6,6 @@ if [ "A$1" != "A" ]; then
   mv build/unpacked/$2.manifest.json build/unpacked/manifest.json
   rm build/unpacked/*.manifest.json
   web-ext build -s build/unpacked -a build/$2 --overwrite-dest
-  rm -rf build/unpacked
   exit
 fi
 

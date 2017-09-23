@@ -1,0 +1,46 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "taskName": "Package all",
+            "type": "shell",
+            "command": "./buildall.sh",
+            "group": "build",
+            "problemMatcher": []
+        },
+
+        {
+            "taskName": "SiteDelta Watch for Chrome",
+            "type": "shell",
+            "command": "./build.sh watch chrome",
+            "group": "build",
+            "problemMatcher": []
+        },
+
+        {
+            "taskName": "SiteDelta Highlight for Chrome",
+            "type": "shell",
+            "command": "./build.sh highlight chrome",
+            "group": "build",
+            "problemMatcher": []
+        },
+
+        {
+            "taskName": "SiteDelta Highlight for Firefox",
+            "type": "shell",
+            "command": "./build.sh highlight firefox && web-ext run -s build/unpacked",
+            "group": "build",
+            "problemMatcher": []
+        }, 
+
+        {
+            "taskName": "SiteDelta Watch for Firefox",
+            "type": "shell",
+            "command": "./build.sh watch firefox && web-ext run -s build/unpacked",
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
+}

@@ -144,7 +144,7 @@ function showOptions() {
 function showData() {
 	document.querySelector("#pagetitle").value = title;
 	document.title = title;
-	document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [current, changes]);
+	document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("pageChanged", [current, changes]);
 }
 
 

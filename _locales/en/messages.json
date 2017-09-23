@@ -8,6 +8,21 @@
 		"description": "Description of the highlight extension"
 	},
 
+	"highlightTitle": {
+		"message": "SiteDelta Highlight",
+		"description": "Title of the page action popup"
+	},
+	"highlightUnsupported": {
+		"message": "SiteDelta Highlight does not support monitoring this page.",
+		"description": "Title of the page action popup when not available for the current page"
+	},
+	"highlightButtonOptions": {
+		"message": "Configure SiteDelta Highlight...",
+		"description": "Button to open options dialog"
+	},
+
+
+
 	"watchExtensionName": {
 		"message": "SiteDelta Watch",
 		"description": "Name of the watch extension"
@@ -15,11 +30,6 @@
 	"watchExtensionDescription": {
 		"message": "Regularly monitors a website for changes",
 		"description": "Description of the watch extension"
-	},
-
-	"watchTitle": {
-		"message": "SiteDelta Watch",
-		"description": "Title of the page action popup"
 	},
 
 	"watchUnsupported": {
@@ -34,13 +44,12 @@
 		"message": "SiteDelta Watch monitors this page.",
 		"description": "Text that watching of the current page is enabled"
 	},
-
 	"watchChangedPages": {
 		"message": "Pages modified since last visit:",
 		"description": "Headline for changed pages"
 	},
 	"watchButtonOpenAll": {
-		"message": "Open all",
+		"message": "Open all...",
 		"description": "Button to open all changed pages"
 	},
 	"watchButtonWatch": {
@@ -62,19 +71,13 @@
 		}
 	},
 
-	"highlightTitle": {
-		"message": "SiteDelta Highlight",
-		"description": "Title of the page action popup"
-	},
-	"highlightTitleUnavailable": {
-		"message": "SiteDelta Highlight does not support monitoring this page.",
-		"description": "Title of the page action popup when not available for the current page"
-	},
-	"highlightTitleNoChanges": {
+
+
+	"pageUnchanged": {
 		"message": "No changes found.",
 		"description": "Title of the page action popup when no changes are found"
 	},
-	"highlightTitleChanges": {
+	"pageChanged": {
 		"message": "Highlighting change $CURRENT$ of $COUNT$.",
 		"description": "Title of the page action popup when changes are found",
 		"placeholders": {
@@ -88,10 +91,28 @@
 			}
 		}
 	},
-	"highlightTitleSelectRegion": {
+	"pageSelectRegion": {
 		"message": "Click to select a region",
 		"description": "Title of the page action popup while selecting a region"
 	},
+	"pageList": {
+		"message": "Monitored pages:",
+		"description": "Headline for the list of monitored pages"
+	},
+	"pageDelete": {
+		"message": "Forget Page",
+		"description": "Button to delete the selected page"
+	},
+	"pageOpen": {
+		"message": "Open Page...",
+		"description": "Button to open the selected page"
+	},
+	"pageHighlight": {
+		"message": "Highlight Changes",
+		"description": "Button to highlight changes on the current page"
+	},
+
+	
 
 	"configRegionsInclude": {
 		"message": "Included regions:", 
@@ -199,32 +220,7 @@
 	"configWatchDelay": {
 		"message": "Scan frequency in minutes",
 		"description": "Label for scan frequency"
-	},
-
-	"highlightButtonHighlight": {
-		"message": "Highlight Changes",
-		"description": "Button to highlight changes on the current page"
-	},
-	"highlightButtonDelete": {
-		"message": "Forget Page",
-		"description": "Button to delete the current page"
-	},
-	"highlightButtonOptions": {
-		"message": "Configure SiteDelta Highlight...",
-		"description": "Button to open options dialog"
-	},
-
-	"manageKnownPages": {
-		"message": "Monitored pages:",
-		"description": "Headline for the list of monitored pages"
-	},
-	"manageDelete": {
-		"message": "Delete Page",
-		"description": "Button to delete the selected page"
-	},
-	"manageOpen": {
-		"message": "Open Page",
-		"description": "Button to open the selected page"
 	}
+
 }
 

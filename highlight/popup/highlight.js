@@ -181,7 +181,7 @@ function fillStatus(status) {
 			document.body.classList.add("unchanged");
 		} else {
 			document.body.classList.add("changed");
-			document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("highlightTitleChanges", [status.current, status.changes]);
+			document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("pageChanged", [status.current, status.changes]);
 		}
 		break;
 	case STATE.SELECTREGION:
@@ -198,7 +198,6 @@ tabUtils.getActive(function(tab) {
 	tabId = tab.id; url = tab.url;
 	if(url.substr(0,4)!="http") {
 		document.body.classList.add("unavailable");
-		document.querySelector("#setup").classList.add("default");
 		return;
 	}
 

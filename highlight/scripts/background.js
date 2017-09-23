@@ -34,14 +34,14 @@ var webNavigationCompletedListener = function(details) {
 
 function menuHighlightPage() {return {
 	id: "highlightPage",
-	title: chrome.i18n.getMessage("highlightButtonHighlight"),
+	title: chrome.i18n.getMessage("pageHighlight"),
 	documentUrlPatterns: ["http://*/*", "https://*/*"],		
 	contexts: ["page"]
 }};
 
 function menuHighlight() {return {
 	id: "highlight",
-	title: chrome.i18n.getMessage("highlightButtonHighlight"),
+	title: chrome.i18n.getMessage("pageHighlight"),
 	contexts: ["browser_action"]
 }};
 
@@ -58,7 +58,7 @@ var contextMenuListener = function(info, tab) {
 				"type": "basic",
 				"iconUrl": chrome.extension.getURL("common/icons/inactive.svg"),
 				"title": chrome.i18n.getMessage("highlightExtensionName"),
-				"message": chrome.i18n.getMessage("highlightTitleUnavailable")
+				"message": chrome.i18n.getMessage("highlightUnsupported")
 			});
 			return;
 		}
@@ -69,7 +69,7 @@ var contextMenuListener = function(info, tab) {
 						"type": "basic",
 						"iconUrl": chrome.extension.getURL("common/icons/unchanged.svg"),
 						"title": chrome.i18n.getMessage("highlightExtensionName"),
-						"message": chrome.i18n.getMessage("highlightTitleNoChanges")
+						"message": chrome.i18n.getMessage("pageUnchanged")
 					});
 				} else {
 					chrome.notifications.create("highlight", {

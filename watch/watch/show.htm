@@ -29,7 +29,7 @@
 
 		<div id="config">
 			<div id="textfields" class="browser-style">
-				<input class="browser-style" type="text" value="" id="pagetitle" />
+				<input class="wide" type="text" value="" id="pagetitle" />
 			</div>
 			<div class="browser-style section i18n">__MSG_configChecks__</div>
 			<div class="browser-style">
@@ -52,14 +52,14 @@
 			</div>
 
 			<div class="browser-style section i18n">__MSG_configRegionsInclude__</div>
-			<div class="browser-style"><select id="include" size="3"></select></div>
+			<div class="browser-style"><select id="include" class="wide" size="3"></select></div>
 			<div class="browser-style buttons">
 				<button class="browser-style i18n" id="includeadd">__MSG_configRegionsAdd__</button>
 				<button class="browser-style i18n" disabled="disabled" id="includedel">__MSG_configRegionsRemove__</button>
 			</div>
 
 			<div class="browser-style section i18n">__MSG_configRegionsExclude__</div>
-			<div class="browser-style"><select id="exclude" size="3"></select></div>
+			<div class="browser-style"><select id="exclude" class="wide" size="3"></select></div>
 			<div class="browser-style buttons">
 				<button class="browser-style i18n" id="excludeadd">__MSG_configRegionsAdd__</button>
 				<button class="browser-style i18n" disabled="disabled" id="excludedel">__MSG_configRegionsRemove__</button>
@@ -67,7 +67,8 @@
 
 			<div class="browser-style section i18n">__MSG_configWatch__</div>
 			<div class="browser-style">
-				<input id="watchDelay" type="text" class="browser-style">
+				<input id="watchDelay" size="4" type="text" class="browser-style">
+				<label for="watchDelay" class="i18n">__MSG_configWatchDelay__</label>
 			</div>				
 		</div>
 

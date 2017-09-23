@@ -196,6 +196,10 @@
 		"message": "Watch settings:",
 		"description": "Label for text fields concerning watch / delay settings"
 	},
+	"configWatchDelay": {
+		"message": "Scan frequency in minutes",
+		"description": "Label for scan frequency"
+	},
 
 	"highlightButtonHighlight": {
 		"message": "Highlight Changes",

@@ -8,7 +8,6 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 #settings {background: #eee; border-right: solid #777 1px; overflow-x: hidden; overflow-y: auto; }
 #settings #config {min-width: 10em; }
 #settings {overflow-y: auto; }
-#settings #textfields {margin-right: 4px; }
 #settings>div {margin: 4px; }
 
 #settings { width: 2.6em; }
@@ -36,7 +35,8 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 .buttons {text-align: right; }
-.browser-style input[type="text"], .browser-style select {width: 100%; }
+.browser-style .wide {width: 100%; }
+#settings #textfields {margin-right: 4px; }
 
 @keyframes animate {
     0% {transform: translateY(-50%) translateY(-50%) scale(1); }

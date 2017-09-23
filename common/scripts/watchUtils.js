@@ -69,6 +69,7 @@ var watchUtils = {
 		};
 		try {
 			xhr.open("GET", url, true);
+			if(mime == "") xhr.setRequestHeader("Cache-Control", "max-age=0");
 			xhr.send();
 		} catch(e) {
 			contentCallback("error", "" + e);

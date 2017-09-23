@@ -1,7 +1,8 @@
 
 
 function highlight() {
-	
+	if(document.body.classList.contains("selecting")) regionUtils.abortSelect();
+	document.body.classList.remove("selecting");
 	document.body.classList.remove("unchanged"); 
 	document.body.classList.remove("changed");
 	document.body.classList.remove("expanded");
@@ -150,7 +151,18 @@ function showData() {
 function selectRegion(callback) {
 	var iframe = document.getElementById("iframe");
 	var idoc = iframe.contentWindow.document;
-	regionUtils.selectRegion(idoc, callback);
+	if(document.body.classList.contains("selecting")) {
+		regionUtils.abortSelect();
+		document.body.classList.remove("selecting");
+		var region = prompt(chrome.i18n.getMessage("configRegionXpath"), "/html/body[1]");
+		if(region) callback(region);
+	} else {
+		document.body.classList.add("selecting");
+		regionUtils.selectRegion(idoc, region => {
+			document.body.classList.remove("selecting");
+			if(region) callback(region);
+		});
+	}
 }
 
 function showOutline(outline, color) {

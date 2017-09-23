@@ -109,6 +109,10 @@
 		"message": "add new",
 		"description": "Button to add a new region"
 	},
+	"configRegionXpath": {
+		"message": "XPath expression identifying the region",
+		"description": "Text for manual xpath entry"
+	},
 	"configBehavior": {
 		"message": "Overall behavior:",
 		"description": "Headline for extension behavior settings"
@@ -208,7 +212,7 @@
 
 	"manageKnownPages": {
 		"message": "Monitored pages:",
-		"description": "Region title for the list of monitored pages"
+		"description": "Headline for the list of monitored pages"
 	},
 	"manageDelete": {
 		"message": "Delete Page",

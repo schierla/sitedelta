@@ -29,6 +29,21 @@ var regionUtils = {
 		doc.addEventListener("mouseout",  regionUtils._mouseout,  true);
 	},
 
+	abortSelect: function() {
+		if(regionUtils._destelement != null)
+			regionUtils._destelement.style.outline="none";
+		if(regionUtils._doc == null) return;
+		
+		regionUtils._doc.removeEventListener("mouseover", regionUtils._mouseover, true);
+		regionUtils._doc.removeEventListener("mousedown", regionUtils._mousedown, true);
+		regionUtils._doc.removeEventListener("mouseup",   regionUtils._mouseup,   true);
+		regionUtils._doc.removeEventListener("mouseout",  regionUtils._mouseout,  true);
+
+		regionUtils._needText = false;
+		regionUtils._destelement = null;
+		regionUtils._callback = null;
+		regionUtils._doc = null;
+	},
 
 	_mouseover: function(e) {
 		if(regionUtils.needText && !e.target.firstChild.data && 
@@ -61,13 +76,6 @@ var regionUtils = {
 		e.preventDefault();
 		e.stopPropagation();
 		regionUtils._mouseout(e);
-		if(regionUtils._destelement != null)
-			regionUtils._destelement.style.outline="none";
-
-		regionUtils._doc.removeEventListener("mouseover", regionUtils._mouseover, true);
-		regionUtils._doc.removeEventListener("mousedown", regionUtils._mousedown, true);
-		regionUtils._doc.removeEventListener("mouseup",   regionUtils._mouseup,   true);
-		regionUtils._doc.removeEventListener("mouseout",  regionUtils._mouseout,  true);
 
 		if(e.button == 0 && !e.ctrlKey) {
 			regionUtils._needText = false;
@@ -107,10 +115,8 @@ var regionUtils = {
 		} else {
 			var xpath = null;
 		}
-		regionUtils._needText = false;
-		regionUtils._destelement = null;
 		regionUtils._callback(xpath);
-		regionUtils._callback = null;
+		regionUtils.abortSelect();
 		return false;
 	},
 

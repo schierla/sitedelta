@@ -25,12 +25,10 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 .known #delete {display: inline; }
 
 #disabled {display: inline; }
-#unchanged, #changed, #known {display: none; }
 .known #disabled {display: none; }
-.changed #changed {display: inline; }
-.unchanged #unchanged {display: inline; }
-.known #known {display: inline; }
-.known.changed #known, .known.unchanged #known {display: none; }
+#unchanged, #changed, #known, #selecting {display: none; }
+.changed #changed, .unchanged #unchanged, .known #known, .selecting #selecting {display: inline; }
+.known.changed #known, .known.unchanged #known, .selecting.known #known {display: none; }
 
 #loading {position: absolute; left: 0; top: 0; bottom: 0; right: 0; }
 #loading img {position: absolute; left: 50%; top: 50%; transform: translateY(-50%) translateY(-50%); animation: animate 2s linear infinite; height: 2em; height: 2em; }

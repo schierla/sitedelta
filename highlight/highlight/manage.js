@@ -37,11 +37,14 @@ document.querySelector("#importConfig").addEventListener("click", function(e) {
 	});
 });
 
-chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
-	if(!config && chrome.runtime.lastError) {
+chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
+	if(chrome.runtime.lastError) {
 		// SiteDelta not available, don't offer to import
-	} else {
+		console.log(chrome.runtime.lastError);
+	} else if(version == 1) {
 		document.body.classList.add("canimport");
+	} else {
+		console.log("Unsupported SiteDelta Version " + version);
 	}
 });
 

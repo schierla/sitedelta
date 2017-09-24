@@ -19,9 +19,10 @@ document.querySelector("#pages").addEventListener("dblclick", function(e) {
 
 document.querySelector("#importConfig").addEventListener("click", function(e) {
 	requirePermission("scanonload", (success) => {
+		if(!success) return;
 		chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
 			if(!config && chrome.runtime.lastError) {
-				console.log(chrome.runtime.lastError);
+				console.warn(chrome.runtime.lastError);
 			}
 			configUtils.getDefaultConfig((defaultConfig) => {
 				var update = {};
@@ -29,11 +30,28 @@ document.querySelector("#importConfig").addEventListener("click", function(e) {
 					if(key in defaultConfig) 
 						update[key] = config[key];
 				}
-				configUtils.setDefaultConfigProperties(update, showOptions);
+				configUtils.setDefaultConfigProperties(update, notifyChanged);
 			});
 		});
 	});
 });
+
+document.querySelector("#importPages").addEventListener("click", function(e) {
+	chrome.runtime.sendMessage("sitedelta@schierla.de", "getPages", (pages) => {
+		if(!pages && chrome.runtime.lastError) {
+			console.warn(chrome.runtime.lastError);
+		}
+		for(var i=0; i<pages.length; i++) {
+			importPage(pages[i]);
+		}
+	});
+});
+
+function importPage(page) {
+	pageUtils.getOrCreateEffectiveConfig(page.url, page.title, (config) => {
+		console.log(JSON.stringify(page));
+	});
+}
 
 chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
 	if(chrome.runtime.lastError) {

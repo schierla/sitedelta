@@ -7,13 +7,12 @@
 				   em:type="2"
 				   em:bootstrap="true"
 				   em:hasEmbeddedWebExtension="true"
-                   em:name="SiteDelta"
+                   em:name="SiteDelta (transition to SiteDelta Highlight and SiteDelta Watch)"
                    em:version="0.14.0"
                    em:creator="Andreas Schierl"
-                   em:description="Hightlights changes made to a website since last visit"
+                   em:description="Allows to transfer data from SiteDelta to SiteDelta Highlight and SiteDelta Watch"
                    em:homepageURL="http://sitedelta.schierla.de/"
-                   em:iconURL="chrome://sitedelta/content/sitedeltaGross.gif"
-                   em:optionsURL="chrome://sitedelta/content/sitedeltaPrefs.xul">
+                   em:iconURL="chrome://sitedelta/content/sitedelta.png">
     <em:targetApplication RDF:resource="rdf:#$u2YGH1"/>
   </RDF:Description>
   <RDF:Description RDF:about="rdf:#$u2YGH1"

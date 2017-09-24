@@ -4,8 +4,11 @@
          xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="sitedelta@schierla.de"
+				   em:type="2"
+				   em:bootstrap="true"
+				   em:hasEmbeddedWebExtension="true"
                    em:name="SiteDelta"
-                   em:version="0.13.2.20130526"
+                   em:version="0.14.0"
                    em:creator="Andreas Schierl"
                    em:description="Hightlights changes made to a website since last visit"
                    em:homepageURL="http://sitedelta.schierla.de/"
@@ -15,6 +18,6 @@
   </RDF:Description>
   <RDF:Description RDF:about="rdf:#$u2YGH1"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
-                   em:minVersion="4.0"
-                   em:maxVersion="24.*" />
+                   em:minVersion="55"
+                   em:maxVersion="*" />
 </RDF:RDF>

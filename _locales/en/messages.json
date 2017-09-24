@@ -220,6 +220,11 @@
 	"configWatchDelay": {
 		"message": "Scan frequency in minutes",
 		"description": "Label for scan frequency"
+	}, 
+
+	"configImport": {
+		"message": "Import from SiteDelta",
+		"description": "Button to import settings / pages from SiteDelta"
 	}
 
 }

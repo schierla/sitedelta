@@ -17,6 +17,34 @@ document.querySelector("#pages").addEventListener("dblclick", function(e) {
 	}
 });
 
+document.querySelector("#importConfig").addEventListener("click", function(e) {
+	console.log("importing...");
+	chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
+		console.log("received config..." + JSON.stringify(config));
+		if(!config && chrome.runtime.lastError) {
+			console.log(chrome.runtime.lastError);
+		}
+		configUtils.getDefaultConfig((defaultConfig) => {
+			console.log("current config..." + JSON.stringify(defaultConfig));
+			var update = {};
+			for(var key in config) {
+				if(key in defaultConfig) 
+					update[key] = config[key];
+			}
+			console.log("updating..." + JSON.stringify(update));
+			configUtils.setDefaultConfigProperties(update, showOptions);
+		});
+	});
+});
+
+chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
+	if(!config && chrome.runtime.lastError) {
+		// SiteDelta not available, don't offer to import
+	} else {
+		document.body.classList.add("canimport");
+	}
+});
+
 function checkPermission(name) {
 	chrome.permissions.contains(permissions[name], (success) => {
 		if(success) delete permissions[name];

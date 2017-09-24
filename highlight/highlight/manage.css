@@ -2,3 +2,6 @@ h2 {font-weight: normal; }
 select {width: 100%; }
 .buttons {text-align: right; margin-top: 8px; }
 .section.browser-style {font-weight: bold; margin-top: 8px; }
+
+.import {display: none; }
+.canimport .import {display: inline; }

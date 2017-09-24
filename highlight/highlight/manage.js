@@ -41,7 +41,7 @@ chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
 	if(chrome.runtime.lastError) {
 		// SiteDelta not available, don't offer to import
 		console.log(chrome.runtime.lastError);
-	} else if(version == 1) {
+	} else if(version == "0.14.0") {
 		document.body.classList.add("canimport");
 	} else {
 		console.log("Unsupported SiteDelta Version " + version);

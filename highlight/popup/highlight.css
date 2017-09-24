@@ -6,8 +6,8 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; }
 .buttons {text-align: right; }
 .browser-style input[type="text"], .browser-style select {width: 100%; }
 
-#unavailable, #loaded, #highlighted, #unchanged, #changed, #selecting {display: none; }
-.unavailable #unavailable, .loaded #loaded, .unchanged #unchanged, .changed #changed, .selecting #selecting {display: block; }
+#failed, #unavailable, #loaded, #highlighted, #unchanged, #changed, #selecting {display: none; }
+.failed #failed, .unavailable #unavailable, .loaded #loaded, .unchanged #unchanged, .changed #changed, .selecting #selecting {display: block; }
 
 .unavailable #unavailable {display: block; }
 .unavailable #settings {display: block; }

@@ -72,7 +72,10 @@
 	},
 
 
-
+	"pageFailed": {
+		"message": "Error getting page contents. Check the included regions.",
+		"description": "Title of the page action popup when no contents are found"
+	},
 	"pageUnchanged": {
 		"message": "No changes found.",
 		"description": "Title of the page action popup when no changes are found"

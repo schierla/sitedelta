@@ -15,6 +15,10 @@ var highlightUtils = {
 	highlightChanges: function(doc, config, oldContent) {
 		var current = textUtils.getText(doc, config);
 
+		var excludes = textUtils._findElements(doc, config.excludes);
+		var regions = textUtils._findElements(doc, config.includes);
+		if(regions.length == 0) return -1;
+
 		var oldt = highlightUtils._split(textUtils.clean(oldContent, config)),
 			newt = highlightUtils._split(textUtils.clean(current, config)),
 			old2 = highlightUtils._split(oldContent);
@@ -26,14 +30,8 @@ var highlightUtils = {
 			};
 		highlightUtils._diff(diff);
 		if(config.checkDeleted) highlightUtils._processDeleted(diff); 
-
-
-		var excludes = textUtils._findElements(doc, config.excludes);
 		if(config.showRegions) excludes.forEach(function(v,i,a) {v.style.outline = config.excludeRegion + " dotted 2px";});
-
-		var regions = textUtils._findElements(doc, config.includes);
 		if (config.showRegions) regions.forEach(function(v,i,a) {v.style.outline = config.includeRegion + " dotted 2px";});
-		if(regions.length == 0) return -1;
 
 
 		var pos = 0, wpos = 0, npos = 0, opos = 0;

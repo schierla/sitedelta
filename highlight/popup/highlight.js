@@ -145,12 +145,16 @@ document.querySelector("#highlight").addEventListener("click", function(e) {
 	});
 });
 
-document.querySelector("#expand").addEventListener("click", function(e) {
+function expand() {
 	pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, (pageconfig) => {
 		document.body.classList.add("expanded");
 		config = pageconfig;
 		showOptions();
 	});
+}
+
+document.querySelector("#expand").addEventListener("click", function(e) {
+	expand();
 });
 
 var STATE = {
@@ -165,6 +169,10 @@ function showTitle(title) {
 }
 
 function fillStatus(status) {
+	if(status == null) {
+		document.body.classList.add("unavailable");
+		return;
+	}
 	document.body.classList.remove("loaded");
 	document.body.classList.remove("highlighted");
 	document.body.classList.remove("changed");
@@ -179,9 +187,12 @@ function fillStatus(status) {
 		document.body.classList.add("highlighted");
 		if(status.changes == 0) {
 			document.body.classList.add("unchanged");
-		} else {
+		} else if(status.changes > 0) {
 			document.body.classList.add("changed");
 			document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("pageChanged", [status.current, status.changes]);
+		} else {
+			document.body.classList.add("failed");
+			expand();
 		}
 		break;
 	case STATE.SELECTREGION:

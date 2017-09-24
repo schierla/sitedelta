@@ -25,9 +25,9 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 
 #disabled {display: inline; }
 .known #disabled {display: none; }
-#unchanged, #changed, #known, #selecting {display: none; }
-.changed #changed, .unchanged #unchanged, .known #known, .selecting #selecting {display: inline; }
-.known.changed #known, .known.unchanged #known, .selecting.known #known {display: none; }
+#unchanged, #changed, #known, #selecting, #failed {display: none; }
+.changed #changed, .unchanged #unchanged, .known #known, .selecting #selecting, .failed #failed {display: inline; }
+.known.changed #known, .known.unchanged #known, .known.selecting #known, .known.failed #known {display: none; }
 
 #loading {position: absolute; left: 0; top: 0; bottom: 0; right: 0; }
 #loading img {position: absolute; left: 50%; top: 50%; transform: translateY(-50%) translateY(-50%); animation: animate 2s linear infinite; height: 2em; height: 2em; }

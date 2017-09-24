@@ -5,3 +5,6 @@ option {padding-left: 1.3em; }
 option {background: no-repeat 0.2em center; background-size: auto 0.8em; }
 option.unchanged {background-image: url(../common/icons/unchanged-32.png); }
 option.changed {background-image: url(../common/icons/changed-32.png); }
+
+.import {display: none; }
+.canimport .import {display: inline; }

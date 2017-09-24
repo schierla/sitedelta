@@ -1,28 +1,28 @@
-
-
 function highlight() {
-	if(document.body.classList.contains("selecting")) regionUtils.abortSelect();
+	if (document.body.classList.contains("selecting")) regionUtils.abortSelect();
 	document.body.classList.remove("selecting");
-	document.body.classList.remove("unchanged"); 
+	document.body.classList.remove("unchanged");
 	document.body.classList.remove("changed");
 	document.body.classList.remove("expanded");
-	document.body.classList.add("known"); 
+	document.body.classList.add("known");
 	pageUtils.getOrCreateEffectiveConfig(url, title, (config) => {
 		window.config = config;
 		pageUtils.getContent(url, function (content) {
 			var iframe = document.getElementById("iframe");
 			var idoc = iframe.contentWindow.document;
 			known = true;
-			
+
 			var newcontent = textUtils.getText(idoc, config);
-			pageUtils.setContent(url, newcontent, () => {});
+			pageUtils.setContent(url, newcontent, () => { });
 
 			changes = highlightUtils.highlightChanges(idoc, config, content);
 			if (changes > 0) {
-				document.body.classList.add("changed"); 
+				document.body.classList.add("changed");
 				current = highlightUtils.highlightNext(idoc, 0);
+			} else if (changes == 0) {
+				document.body.classList.add("unchanged");
 			} else {
-				document.body.classList.add("unchanged"); 
+				document.body.classList.add("failed");
 			}
 			showData();
 			watchUtils.setChanges(url, 0, () => watchUtils.updateAlarm(url));
@@ -70,7 +70,7 @@ function registerListener(option) {
 	var performUpdate = (value) => {
 		pageUtils.setConfigProperty(url, option.key, value, () => {
 			if (option.post) option.post();
-			if(option.type=="text") document.querySelector("#" + option.elem).value = value;
+			if (option.type == "text") document.querySelector("#" + option.elem).value = value;
 			else if (option.type == "checkbox") document.querySelector("#" + option.elem).checked = value;
 		});
 	};
@@ -151,16 +151,16 @@ function showData() {
 function selectRegion(callback) {
 	var iframe = document.getElementById("iframe");
 	var idoc = iframe.contentWindow.document;
-	if(document.body.classList.contains("selecting")) {
+	if (document.body.classList.contains("selecting")) {
 		regionUtils.abortSelect();
 		document.body.classList.remove("selecting");
 		var region = prompt(chrome.i18n.getMessage("configRegionXpath"), "/html/body[1]");
-		if(region) callback(region);
+		if (region) callback(region);
 	} else {
 		document.body.classList.add("selecting");
 		regionUtils.selectRegion(idoc, region => {
 			document.body.classList.remove("selecting");
-			if(region) callback(region);
+			if (region) callback(region);
 		});
 	}
 }
@@ -177,7 +177,7 @@ function showOutline(outline, color) {
 
 function addBodyIfEmpty(list, callback) {
 	if (list.length == 0) list.push("/html/body[1]");
-	if(list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
+	if (list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
 	callback(list);
 }
 
@@ -191,7 +191,7 @@ var options = [
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
 	{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: xpath => showOutline(xpath, config.includeRegion), add: selectRegion, pre: addBodyIfEmpty, post: showOptions },
 	{ type: "list", key: "excludes", elem: "exclude", addelem: "excludeadd", delelem: "excludedel", select: xpath => showOutline(xpath, config.excludeRegion), add: selectRegion, post: showOptions },
-	{ type: "text", key: "watchDelay", elem: "watchDelay", pre: (value,callback) => callback(parseInt(value))}
+	{ type: "text", key: "watchDelay", elem: "watchDelay", pre: (value, callback) => callback(parseInt(value)) }
 ];
 
 var url = window.location.search.substr(1);
@@ -236,9 +236,10 @@ document.querySelector("#delete").addEventListener("click", function (e) {
 
 document.querySelector("#expand").addEventListener("click", function (e) {
 	pageUtils.getOrCreateEffectiveConfig(url, title, config => {
-		document.body.classList.remove("unchanged"); 
-		document.body.classList.remove("changed"); 
-		document.body.classList.add("known"); 
+		document.body.classList.remove("unchanged");
+		document.body.classList.remove("changed");
+		document.body.classList.remove("failed");
+		document.body.classList.add("known");
 		document.body.classList.add("expanded");
 		known = true;
 		window.config = config;
@@ -254,7 +255,7 @@ document.querySelector("#highlight").addEventListener("click", function (e) {
 		var idoc = iframe.contentWindow.document;
 		current = highlightUtils.highlightNext(idoc, current);
 		showData();
-	} else if(changes == 0) {
+	} else if (changes == 0) {
 		showData();
 	} else {
 		highlight();

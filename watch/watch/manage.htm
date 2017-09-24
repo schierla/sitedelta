@@ -13,15 +13,70 @@
 	<div class="browser-style section i18n">__MSG_pageList__</div>
 	<select id="pages" size="5"></select>
 	<div class="buttons browser-style">
+		<button id="importPages" class="browser-style i18n import">__MSG_configImport__</button>
 		<button id="delete" class="browser-style i18n">__MSG_pageDelete__</button>
 		<button id="open" class="browser-style i18n default">__MSG_pageOpen__</button>
 	</div>
+
+	<div class="browser-style section i18n">__MSG_configAppearance__</div>
+	<div class="browser-style">
+		<input checked id="showregions" type="checkbox" class="browser-style">
+		<label for="showregions" class="i18n">__MSG_configShowRegions__</label>
+	</div>
+	<div class="browser-style">
+		<span id="includepreview">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<input id="includeborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+		<label for="includeborder" class="i18n">__MSG_configIncludeColors__</label>
+	</div>
+	<div class="browser-style">
+		<span id="excludepreview">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<input id="excludeborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+		<label for="excludeborder" class="i18n">__MSG_configExcludeColors__</label>
+	</div>
+	<div class="browser-style">
+		<span id="addpreview">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<input id="addbackground" type="text" class="browser-style i18n" title="__MSG_configBackground__" maxlength="7" size="4">
+		<input id="addborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+		<label for="addbackground" class="i18n">__MSG_configAddColors__</label>
+	</div>
+	<div class="browser-style">
+		<span id="removepreview">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<input id="removebackground" type="text" class="browser-style i18n" title="__MSG_configBackground__" maxlength="7" size="4">
+		<input id="removeborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+		<label for="removebackground" class="i18n">__MSG_configRemoveColors__</label>
+	</div>
+	<div class="browser-style">
+		<span id="movepreview">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<input id="movebackground" type="text" class="browser-style i18n" title="__MSG_configBackground__" maxlength="7" size="4">
+		<input id="moveborder" type="text" class="browser-style i18n" title="__MSG_configBorder__" maxlength="7" size="4">
+		<label for="movebackground" class="i18n">__MSG_configMoveColors__</label>
+	</div>
+
+	<div class="browser-style section i18n">__MSG_configChecks__</div>
+	<div class="browser-style"><input checked id="checkdeleted" type="checkbox" class="browser-style"> <label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label></div>
+	<div class="browser-style"><input checked id="checkimages" type="checkbox" class="browser-style"> <label for="checkimages" class="i18n">__MSG_configCheckImages__</label></div>
+
+	<div class="browser-style section i18n">__MSG_configIgnores__</div>
+	<div class="browser-style"><input checked id="ignorecase" type="checkbox" class="browser-style"> <label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label></div>
+	<div class="browser-style"><input checked id="ignorenumbers" type="checkbox" class="browser-style"> <label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label></div>
+
+	<div class="browser-style section i18n">__MSG_configWatch__</div>
+	<div class="browser-style">
+		<input id="watchDelay" size="4" type="text" class="browser-style">
+		<label for="watchDelay" class="i18n">__MSG_configWatchDelay__</label>
+	</div>		
+
+	<div class="buttons">
+		<button id="importConfig" class="browser-style i18n import">__MSG_configImport__</button>
+	</div>
+
 
 	<script type="text/javascript" src="../common/scripts/ioUtils.js"></script>
 	<script type="text/javascript" src="../common/scripts/tabUtils.js"></script>
 	<script type="text/javascript" src="../common/scripts/watchUtils.js"></script>
 	<script type="text/javascript" src="../common/scripts/pageUtils.js"></script>
 	<script type="text/javascript" src="../common/scripts/uiUtils.js"></script>
+	<script type="text/javascript" src="../common/scripts/configUtils.js"></script>
 	<script type="text/javascript" src="manage.js"></script>
 </body>
 

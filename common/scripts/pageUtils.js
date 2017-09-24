@@ -12,11 +12,11 @@ var pageUtils = {
 	},
 	getChanges: function(url, callback) {
 		pageUtils.getStatus(url, 
-			(status) => callback(status["changes"]));
+			(status) => callback("changes" in status ? status["changes"] : 0));
 	},
 	getNextScan: function(url, callback) {
 		pageUtils.getStatus(url, 
-			(status) => status == null ? callback(Date.now() + 60000) : callback(status["nextScan"]));
+			(status) => callback("nextScan" in status ? status["nextScan"] : Date.now() + 60000));
 	},
 	getTitle: function(url, callback) {
 		ioUtils.get(url, "title", callback);

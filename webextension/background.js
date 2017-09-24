@@ -5,7 +5,6 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, callback)
         sender.id == "42f46382-33c5-4728-9bec-a9a2e0c6397a") {
         chrome.runtime.sendMessage(message, function(reply) {
             if(!reply) console.log(chrome.runtime.lastError);
-            console.log(reply);
             callback(reply);
         });
         return true;

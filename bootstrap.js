@@ -19,7 +19,9 @@ function startup({ webExtension }) {
   webExtension.startup().then(api => {
     const { browser } = api;
     browser.runtime.onMessage.addListener((msg, sender, sendReply) => {
-      if (msg == "getSettings") {
+      if (msg == "getVersion") {
+        sendReply(1);
+      } if (msg == "getSettings") {
         SiteDeltaExport.getSettings(sendReply);
       } else if (msg == "getPages") {
         SiteDeltaExport.getPages(sendReply);

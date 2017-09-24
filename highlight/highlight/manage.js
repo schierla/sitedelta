@@ -41,16 +41,27 @@ document.querySelector("#importPages").addEventListener("click", function(e) {
 		if(!pages && chrome.runtime.lastError) {
 			console.warn(chrome.runtime.lastError);
 		}
-		for(var i=0; i<pages.length; i++) {
-			importPage(pages[i]);
-		}
+		importPages(pages);
 	});
 });
 
-function importPage(page) {
-	pageUtils.getOrCreateEffectiveConfig(page.url, page.title, (config) => {
-		console.log(JSON.stringify(page));
-	});
+function importPages(pages) {
+	if(pages.length == 0) {
+		showPages();
+	} else {
+		var page = pages.shift();
+		pageUtils.getOrCreateEffectiveConfig(page.url, page.name, (config) => {
+			var settings = { "includes": page.includes, "excludes": page.excludes };
+			if(page.checkDeleted  != null) settings["checkDeleted"]  = page.checkDeleted;
+			if(page.scanImages    != null) settings["scanImages"]    = page.scanImages;
+			if(page.ignoreCase    != null) settings["ignoreCase"]    = page.ignoreCase;
+			if(page.ignoreNumbers != null) settings["ignoreNumbers"] = page.ignoreNumbers;
+
+			pageUtils.setConfig(page.url, settings, () => {
+				pageUtils.setContent(page.url, page.content, () => {importPages(pages); });
+			})
+		});
+	}
 }
 
 chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {

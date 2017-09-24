@@ -1,5 +1,5 @@
 #!/bin/bash
-./build.sh highlight firefox
-./build.sh watch firefox
-./build.sh highlight chrome
-./build.sh watch chrome
+./build.sh highlight firefox pack
+./build.sh watch firefox pack
+./build.sh highlight chrome pack
+./build.sh watch chrome pack

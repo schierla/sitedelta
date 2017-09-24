@@ -30,7 +30,7 @@
         {
             "taskName": "SiteDelta Highlight for Firefox",
             "type": "shell",
-            "command": "./build.sh highlight firefox && web-ext run -s build/unpacked",
+            "command": "./build.sh highlight firefox run",
             "group": "build",
             "problemMatcher": []
         }, 
@@ -38,7 +38,7 @@
         {
             "taskName": "SiteDelta Watch for Firefox",
             "type": "shell",
-            "command": "./build.sh watch firefox && web-ext run -s build/unpacked",
+            "command": "./build.sh watch firefox run",
             "group": "build",
             "problemMatcher": []
         }

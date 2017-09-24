@@ -9,13 +9,15 @@ const Ci = Components.interfaces;
 function getPresets(callback) {
 	var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
 	file.append("sitedelta");
-	var entries = file.directoryEntries;
 	var presets = [];
-	while (entries.hasMoreElements()) {
-		var entry = entries.getNext();
-		entry.QueryInterface(Ci.nsIFile);
-		if (/\.sitedelta-preset$/.test(entry.leafName))
-			presets.push(_loadFile(entry.leafName));
+	if(file.exists()) {
+		var entries = file.directoryEntries;
+		while (entries.hasMoreElements()) {
+			var entry = entries.getNext();
+			entry.QueryInterface(Ci.nsIFile);
+			if (/\.sitedelta-preset$/.test(entry.leafName))
+				presets.push(_loadFile(entry.leafName));
+		}
 	}
 	callback(presets);
 }
@@ -23,13 +25,15 @@ function getPresets(callback) {
 function getPages(callback) {
 	var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
 	file.append("sitedelta");
-	var entries = file.directoryEntries;
 	var ret = [];
-	while (entries.hasMoreElements()) {
-		var entry = entries.getNext();
-		entry.QueryInterface(Ci.nsIFile);
-		if (/\.dat$/.test(entry.leafName)) {
-			ret.push(_loadFile(entry.leafName));
+	if(file.exists()) {
+		var entries = file.directoryEntries;
+		while (entries.hasMoreElements()) {
+			var entry = entries.getNext();
+			entry.QueryInterface(Ci.nsIFile);
+			if (/\.dat$/.test(entry.leafName)) {
+				ret.push(_loadFile(entry.leafName));
+			}
 		}
 	}
 	callback(ret);

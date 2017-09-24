@@ -3,7 +3,9 @@
 	"version": "0.14.0",
 	"manifest_version": 2,
 	"background": {
-		"scripts": ["background.js"]
+		"scripts": [
+			"background.js"
+		]
 	},
 	"browser_action": {
 		"browser_style": true,
@@ -14,5 +16,10 @@
 		},
 		"default_title": "SiteDelta",
 		"default_popup": "popup.htm"
+	},
+	"applications": {
+		"gecko": {
+			"id": "sitedelta@schierla.de"
+		}
 	}
 }

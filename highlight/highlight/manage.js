@@ -18,21 +18,19 @@ document.querySelector("#pages").addEventListener("dblclick", function(e) {
 });
 
 document.querySelector("#importConfig").addEventListener("click", function(e) {
-	console.log("importing...");
-	chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
-		console.log("received config..." + JSON.stringify(config));
-		if(!config && chrome.runtime.lastError) {
-			console.log(chrome.runtime.lastError);
-		}
-		configUtils.getDefaultConfig((defaultConfig) => {
-			console.log("current config..." + JSON.stringify(defaultConfig));
-			var update = {};
-			for(var key in config) {
-				if(key in defaultConfig) 
-					update[key] = config[key];
+	requirePermission("scanonload", (success) => {
+		chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
+			if(!config && chrome.runtime.lastError) {
+				console.log(chrome.runtime.lastError);
 			}
-			console.log("updating..." + JSON.stringify(update));
-			configUtils.setDefaultConfigProperties(update, showOptions);
+			configUtils.getDefaultConfig((defaultConfig) => {
+				var update = {};
+				for(var key in config) {
+					if(key in defaultConfig) 
+						update[key] = config[key];
+				}
+				configUtils.setDefaultConfigProperties(update, showOptions);
+			});
 		});
 	});
 });

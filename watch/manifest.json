@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "__MSG_watchExtensionName__",
-	"version": "0.14.0",
+	"version": "0.14.1",
 	
 	"default_locale": "en",
 	"description": "__MSG_watchExtensionDescription__",
@@ -11,7 +11,8 @@
 		"32": "common/icons/watch-32.png",
 		"48": "common/icons/watch-48.png",
 		"64": "common/icons/watch-64.png"
-	},
+	},		
+	
 	
 	"permissions": [
 		"notifications",

@@ -1,4 +1,4 @@
-body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding: 0; background: #ddd; font-size: 75%;}
+body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding: 0; background: #ddd; font-size: 75%;  -webkit-user-select: none;  -moz-user-select: none; user-select: none;}
 #content {position: fixed; left: 2.7em; top: 2.7em; right: 0; bottom: 0; padding: 0; margin: 0; transition: left 0.3s; }
 #status {position: fixed; left: 0; right: 0; top: 0; height: 2.6em; padding: 0; margin: 0; }
 #status {background: #ffc; border-bottom: solid #777 1px; }

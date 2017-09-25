@@ -4,7 +4,7 @@
 		"description": "Name of the highlight extension"
 	},
 	"highlightExtensionDescription": {
-		"message": "Highlights changes made to a website since last visit",
+		"message": "Hebt Änderungen an Webseiten seit dem letzten Besuch hervor",
 		"description": "Description of the highlight extension"
 	},
 
@@ -13,11 +13,11 @@
 		"description": "Title of the page action popup"
 	},
 	"highlightUnsupported": {
-		"message": "SiteDelta Highlight does not support monitoring this page.",
+		"message": "SiteDelta Highlight ist auf dieser Seite nicht verfügbar.",
 		"description": "Title of the page action popup when not available for the current page"
 	},
 	"highlightButtonOptions": {
-		"message": "Configure SiteDelta Highlight...",
+		"message": "SiteDelta Highlight konfigurieren...",
 		"description": "Button to open options dialog"
 	},
 
@@ -28,40 +28,40 @@
 		"description": "Name of the watch extension"
 	},
 	"watchExtensionDescription": {
-		"message": "Regularly monitors a website for changes",
+		"message": "Überwacht Webseiten regeläßig auf Änderungen",
 		"description": "Description of the watch extension"
 	},
 
 	"watchUnsupported": {
-		"message": "SiteDelta Watch does not support monitoring this page.",
+		"message": "SiteDelta Watch ist auf dieser Seite nicht verfügbar.",
 		"description": "Text that the current page is unsupported"
 	},
 	"watchDisabled": {
-		"message": "SiteDelta Watch does not monitor this page.",
+		"message": "SiteDelta Watch ist auf deser Seite nicht aktiv.",
 		"description": "Text that watching of the current page is disabled"
 	},
 	"watchEnabled": {
-		"message": "SiteDelta Watch monitors this page.",
+		"message": "SiteDelta Watch ist auf deser Seite aktiv.",
 		"description": "Text that watching of the current page is enabled"
 	},
 	"watchChangedPages": {
-		"message": "Pages modified since last visit:",
+		"message": "Seit dem letzten Besuch geänderte Seiten:",
 		"description": "Headline for changed pages"
 	},
 	"watchButtonOpenAll": {
-		"message": "Open all...",
+		"message": "Alle öffnen...",
 		"description": "Button to open all changed pages"
 	},
 	"watchButtonWatch": {
-		"message": "Configure Page...",
+		"message": "Seiteneinstellungen...",
 		"description": "Button to configure/enable SiteDelta Watch for the current page"
 	},
 	"watchButtonOptions": {
-		"message": "Configure SiteDelta Watch...",
+		"message": "SiteDelta Watch konfigurieren...",
 		"description": "Button to open options dialog"
 	},
 	"watchNextScan": {
-		"message": "Next scan: $TIME$",
+		"message": "Nächste Überprüfung: $TIME$",
 		"description": "Label for the next scan time",
 		"placeholders": {
 			"time": {
@@ -73,15 +73,15 @@
 
 
 	"pageFailed": {
-		"message": "Error getting page contents. Check the included regions.",
+		"message": "Fehler beim Abrufen der Seiteninhalte. Bitte überwachte Bereiche prüfen.",
 		"description": "Title of the page action popup when no contents are found"
 	},
 	"pageUnchanged": {
-		"message": "No changes found.",
+		"message": "Keine Änderungen gefunden.",
 		"description": "Title of the page action popup when no changes are found"
 	},
 	"pageChanged": {
-		"message": "Highlighting change $CURRENT$ of $COUNT$.",
+		"message": "Zeige Änderung $CURRENT$ von $COUNT$.",
 		"description": "Title of the page action popup when changes are found",
 		"placeholders": {
 			"current": {
@@ -95,138 +95,138 @@
 		}
 	},
 	"pageSelectRegion": {
-		"message": "Click to select a region",
+		"message": "Klicken, um einen Bereich auszuwählen.",
 		"description": "Title of the page action popup while selecting a region"
 	},
 	"pageList": {
-		"message": "Monitored pages:",
+		"message": "Überwachte Seiten:",
 		"description": "Headline for the list of monitored pages"
 	},
 	"pageDelete": {
-		"message": "Forget Page",
+		"message": "Seite vergessen",
 		"description": "Button to delete the selected page"
 	},
 	"pageOpen": {
-		"message": "Open Page...",
+		"message": "Seite öffnen...",
 		"description": "Button to open the selected page"
 	},
 	"pageHighlight": {
-		"message": "Highlight Changes",
+		"message": "Änderungen hervorheben",
 		"description": "Button to highlight changes on the current page"
 	},
 
 	
 
 	"configRegionsInclude": {
-		"message": "Included regions:", 
+		"message": "Überwachte Bereiche:", 
 		"description": "Headline for included regions"
 	},
 	"configRegionsExclude": {
-		"message": "Excluded regions:", 
+		"message": "Ignorierte Bereiche:", 
 		"description": "Headline for excluded regions"
 	},
 	"configRegionsRemove": {
-		"message": "remove",
+		"message": "entfernen",
 		"description": "Button to remove a region"
 	},
 	"configRegionsAdd": {
-		"message": "add new",
+		"message": "hinzufügen",
 		"description": "Button to add a new region"
 	},
 	"configRegionXpath": {
-		"message": "XPath expression identifying the region",
+		"message": "XPath-Ausdruck zur Definition der Region",
 		"description": "Text for manual xpath entry"
 	},
 	"configBehavior": {
-		"message": "Overall behavior:",
+		"message": "Verhalten:",
 		"description": "Headline for extension behavior settings"
 	},
 	"configScanOnLoad": {
-		"message": "Automatically scan known pages (shown in SiteDelta icon)",
+		"message": "Bekannte Seiten beim Besuch automatisch prüfen (Farbe des SiteDelta-Symbol)",
 		"description": "Label for checkbox to enable automatically scanning pages on load"
 	},
 	"configHighlightOnLoad": {
-		"message": "Automatically highlight changes on known pages",
+		"message": "Änderungen auf bekannten Seiten automatisch hervorheben",
 		"description": "Label for checkbox to enable automatically highlighting pages"
 	},
 	"configEnableContextMenu": {
-		"message": "Enable SiteDelta context menu on pages and button",
+		"message": "Kontextmenü auf Seiten und Symbol aktivieren",
 		"description": "Label for checkbox to enable SiteDelta context menus"
 	},
 
 	"configChecks": {
-		"message": "Aspects to check:",
+		"message": "Überprüfungsinhalte:",
 		"description": "Headline for configured page checks"
 	},
 	"configCheckDeleted": {
-		"message": "Check deletions",
+		"message": "Auf entfernten Text prüfen",
 		"description": "Label for checkbox to enable the check for deletions"
 	},
 	"configCheckImages": {
-		"message": "Check images",
+		"message": "Bilderadressen prüfen",
 		"description": "Label for checkbox to enable the check for image changes"
 	},
 
 	"configIgnores": {
-		"message": "Aspects to ignore:", 
+		"message": "Ignorierte Inhalte:", 
 		"description": "Headline for configured ignores"
 	},
 	"configIgnoreCase": {
-		"message": "Ignore case",
+		"message": "Geänderte Groß/Kleinschreibung ignorieren",
 		"description": "Label for checkbox to ignore case when checking"
 	},
 	"configIgnoreNumbers": {
-		"message": "Ignore numbers",
+		"message": "Geänderte Zahlen ignorieren",
 		"description": "Label for checkbox to ignore numbers when checking"
 	},
 
 	"configAppearance": {
-		"message": "Appearance:",
+		"message": "Erscheinungsbild:",
 		"description": "Headline for configured appearance"
 	},
 	"configBackground": {
-		"message": "Background color",
+		"message": "Hintergrundfarbe",
 		"description": "Tooltip for text fields with background color"
 	},
 	"configBorder": {
-		"message": "Border color",
+		"message": "Rahmenfarbe",
 		"description": "Tooltip for text fields with border color"
 	},
 	"configAddColors": {
-		"message": "Colors for added text",
+		"message": "Farben für hinzugefügten Text",
 		"description": "Label for text fields for background and border color of added text"
 	},
 	"configRemoveColors": {
-		"message": "Colors for removed text",
+		"message": "Farben für entfernten Text",
 		"description": "Label for text fields for background and border color of removed text"
 	},
 	"configMoveColors": {
-		"message": "Colors for moved text",
+		"message": "Farben für verschobenen Text",
 		"description": "Label for text fields for background and border color of removed text"
 	},
 	"configIncludeColors": {
-		"message": "Color for included regions",
+		"message": "Farbe für überwachte Bereiche",
 		"description": "Label for text field for border color of included regions"
 	},
 	"configExcludeColors": {
-		"message": "Color for excluded regions",
+		"message": "Farbe für ignorierte Bereiche",
 		"description": "Label for text field for border color of excluded regions"
 	},
 	"configShowRegions": {
-		"message": "Outline include and exclude regions",
+		"message": "Bereiche hervorheben",
 		"description": "Label for check box to outline include and exclude regions"
 	},
 	"configWatch": {
-		"message": "Watch settings:",
+		"message": "Überwachungseinstellungen:",
 		"description": "Label for text fields concerning watch / delay settings"
 	},
 	"configWatchDelay": {
-		"message": "Scan frequency in minutes",
+		"message": "Häufigkeit (in Minuten)",
 		"description": "Label for scan frequency"
 	}, 
 
 	"configImport": {
-		"message": "Import from SiteDelta",
+		"message": "Aus SiteDelta importieren",
 		"description": "Button to import settings / pages from SiteDelta"
 	}
 

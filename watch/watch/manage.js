@@ -75,18 +75,18 @@ document.querySelector("#importPages").addEventListener("click", function (e) {
 		if (!pages && chrome.runtime.lastError) {
 			console.warn(chrome.runtime.lastError);
 		}
-		importPages(pages);
+		importPages(pages, Date.now() + 30000);
 	});
 });
 
-function importPages(pages) {
+function importPages(pages, time) {
 	if (pages.length == 0) {
 		showPages();
 	} else {
 		var page = pages.shift();
-		if (watchDelay == -1) return importPages(pages);
+		if (watchDelay == -1) return importPages(pages, time);
 		pageUtils.getConfig(page.url, (config) => {
-			if(config != null) return importPages(pages);
+			if(config != null) return importPages(pages, time);
 			pageUtils.create(page.url, page.name, () => {
 				var settings = { "includes": page.includes, "excludes": page.excludes };
 				if (page.checkDeleted != null) settings["checkDeleted"] = page.checkDeleted;
@@ -96,7 +96,12 @@ function importPages(pages) {
 				if (page.watchDelay != 0) settings["watchDelay"] = page.watchDelay;
 	
 				pageUtils.setConfig(page.url, settings, () => {
-					pageUtils.setContent(page.url, page.content, () => { importPages(pages); });
+					pageUtils.setContent(page.url, page.content, () => { 
+						pageUtils.setNextScan(page.url, time, () => {
+							watchUtils.updateAlarm(page.url);
+							importPages(pages, time + 10000); 
+						});	
+					});
 				})
 			});
 		});

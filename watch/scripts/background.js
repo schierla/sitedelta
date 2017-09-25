@@ -34,12 +34,18 @@ var initAlarms = function() {
     });
 }
 
+var nextAllowedAlarm = 0;
+
 var updateAlarm = function(url) {
     pageUtils.getChanges(url, changes => {
         if(changes > 0) return; 
         pageUtils.getNextScan(url,
             (nextScan) => {
-                if(nextScan < Date.now()) nextScan = Date.now() + 10000;
+                if(nextAllowedAlarm < Date.now() + 5000) nextAllowedAlarm = Date.now() + 5000;
+                if(nextScan < nextAllowedAlarm) {
+                    nextScan = nextAllowedAlarm;
+                    nextAllowedAlarm += 5000;
+                }
                 console.log("SiteDelta: Scheduling scan of " + url + " for " + new Date(nextScan).toLocaleString());
                 chrome.alarms.create(url, {"when": nextScan});
             }

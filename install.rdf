@@ -7,7 +7,7 @@
 		<em:hasEmbeddedWebExtension>true</em:hasEmbeddedWebExtension>
 		<em:multiprocessCompatible>true</em:multiprocessCompatible>
 		<em:name>SiteDelta (transition to SiteDelta Highlight and SiteDelta Watch)</em:name>
-		<em:version>0.14.0</em:version>
+		<em:version>0.14.1</em:version>
 		<em:creator>Andreas Schierl</em:creator>
 		<em:description>Allows to transfer data from SiteDelta to SiteDelta Highlight and SiteDelta Watch</em:description>
 		<em:homepageURL>http://sitedelta.schierla.de/</em:homepageURL>
@@ -15,7 +15,7 @@
 		<em:targetApplication>
 			<Description>
 		 		<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-				<em:minVersion>52.*</em:minVersion>
+				<em:minVersion>51.*</em:minVersion>
 				<em:maxVersion>*</em:maxVersion>
 			</Description>
 		</em:targetApplication>

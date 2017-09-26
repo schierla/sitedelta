@@ -66,7 +66,7 @@ function importPages(pages) {
 		});
 	}
 }
-// 24ef0168-039c-49c2-94bb-afd2a4a852fb
+
 chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
 	if (chrome.runtime.lastError) {
 		// SiteDelta not available, don't offer to import

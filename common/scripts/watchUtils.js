@@ -36,6 +36,7 @@ var watchUtils = {
 			pageUtils.getEffectiveConfig(url, config => {
 				if(changes == 0) {
 					var next = Date.now() + Math.abs(config.watchDelay) * 60 * 1000;
+					if(config.watchDelay == 0) next = 0;
 					pageUtils.setNextScan(url, next, () => {
 						if(callback) callback();
 					});

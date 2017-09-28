@@ -69,7 +69,8 @@ var tabUtils = {
 	},
 	_callContentScript: function(tabId, command, callback) {
 		chrome.tabs.sendMessage(tabId, command, function(status) {
-			if(chrome.runtime.lastError) {
+			if(status == null) {
+				var ignore = chrome.runtime.lastError;
 				var scripts = [
 					"/common/scripts/textUtils.js", 
 					"/common/scripts/regionUtils.js", 
@@ -78,8 +79,8 @@ var tabUtils = {
 				];
 				tabUtils._executeScripts(tabId, scripts, function() {
 					chrome.tabs.sendMessage(tabId, command, function(status) {
-						if(chrome.runtime.lastError) {
-							console.log(chrome.runtime.lastError);
+						if(status == null) {
+							console.log("Error calling content script: " + chrome.runtime.lastError);
 							callback();
 						} else {
 							callback(status);

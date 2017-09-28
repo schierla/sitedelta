@@ -1,5 +1,6 @@
-body {font-family: sans-serif; padding: 10px 10px 6px 10px; margin: 0; }
+body {font-family: sans-serif; padding: 10px 10px 6px 10px; margin: 0; background: transparent;}
 .browser-style { margin-bottom: 4px; }
+input[type=color] {width: 3em; margin-right: 0.5em; }
 button.browser-style { background-color: #fbfbfb; border: 1px solid #b1b1b1; height: 24px; transition-duration: 250ms; transition-property: background-color; }
 button.browser-style:hover:not(.pressed):not(.disabled):not(.focused) {background-color: #ebebeb; border: 1px solid #b1b1b1;}
 button.browser-style:hover:active:not(.hover):not(.disabled):not(.focused) {background-color: #d4d4d4; border: 1px solid #858585;}

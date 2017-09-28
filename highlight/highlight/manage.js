@@ -1,45 +1,54 @@
 
-document.querySelector("#delete").addEventListener("click", function (e) {
-	if (document.querySelector("#pages").value != "") {
-		ioUtils.remove(document.querySelector("#pages").value, load);
-	}
-});
 
-document.querySelector("#open").addEventListener("click", function (e) {
-	if (document.querySelector("#pages").value != "") {
-		chrome.tabs.create({ url: document.querySelector("#pages").value });
+function deleteSelected() {
+	var options = document.querySelector("#pages").options;
+	for(var i=0; i<options.length; i++) {
+		if(options[i].selected) {
+			options[i].selected = false;
+			ioUtils.remove(options[i].value, deleteSelected);
+			return;
+		}
 	}
-});
+	load();
+}
 
-document.querySelector("#pages").addEventListener("dblclick", function (e) {
-	if (document.querySelector("#pages").value != "") {
-		chrome.tabs.create({ url: document.querySelector("#pages").value });
+function openSelected() {
+	var options = document.querySelector("#pages").options;
+	for(var i=0; i<options.length; i++) {
+		if(options[i].selected) {
+			options[i].selected = false;
+			chrome.tabs.create({ url: options[i].value });
+		}
 	}
-});
+}
+
+document.querySelector("#delete").addEventListener("click", deleteSelected);
+
+document.querySelector("#open").addEventListener("click", openSelected);
+
+document.querySelector("#pages").addEventListener("dblclick", openSelected);
 
 document.querySelector("#importConfig").addEventListener("click", function (e) {
-	requirePermission("scanonload", (success) => {
-		if (!success) return;
-		chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
-			if (!config && chrome.runtime.lastError) {
-				console.warn(chrome.runtime.lastError);
+	chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
+		if (config == null) {
+			console.warn("Error importing configuration: " + chrome.runtime.lastError);
+		}
+		configUtils.getDefaultConfig((defaultConfig) => {
+			var update = {};
+			if ("scanonload" in permissions) delete config["scanOnLoad"];
+			for (var key in config) {
+				if (key in defaultConfig)
+					update[key] = config[key];
 			}
-			configUtils.getDefaultConfig((defaultConfig) => {
-				var update = {};
-				for (var key in config) {
-					if (key in defaultConfig)
-						update[key] = config[key];
-				}
-				configUtils.setDefaultConfigProperties(update, notifyChanged);
-			});
+			configUtils.setDefaultConfigProperties(update, notifyChanged);
 		});
 	});
 });
 
 document.querySelector("#importPages").addEventListener("click", function (e) {
 	chrome.runtime.sendMessage("sitedelta@schierla.de", "getPages", (pages) => {
-		if (!pages && chrome.runtime.lastError) {
-			console.warn(chrome.runtime.lastError);
+		if (pages == null) {
+			console.warn("Error importing pages: " + chrome.runtime.lastError);
 		}
 		importPages(pages);
 	});
@@ -51,7 +60,7 @@ function importPages(pages) {
 	} else {
 		var page = pages.shift();
 		pageUtils.getConfig(page.url, (config) => {
-			if(config != null) return importPages(pages);
+			if (config != null) return importPages(pages);
 			pageUtils.create(page.url, page.name, () => {
 				var settings = { "includes": page.includes, "excludes": page.excludes };
 				if (page.checkDeleted != null) settings["checkDeleted"] = page.checkDeleted;
@@ -68,9 +77,8 @@ function importPages(pages) {
 }
 
 chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
-	if (chrome.runtime.lastError) {
-		// SiteDelta not available, don't offer to import
-		console.log(chrome.runtime.lastError);
+	if (version == null) {
+		console.log("SiteDelta not found, not offering import: " + chrome.runtime.lastError);
 	} else if (version == "0.14.0") {
 		document.body.classList.add("canimport");
 	} else {
@@ -79,7 +87,7 @@ chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
 });
 
 function checkPermission(name) {
-	if(chrome.permissions) {
+	if (chrome.permissions) {
 		chrome.permissions.contains(permissions[name], (success) => {
 			if (success) delete permissions[name];
 		});
@@ -135,14 +143,14 @@ var options = [
 	{ type: "checkbox", key: "scanOnLoad", elem: "scanonload", pre: checkScanOnLoad, post: notifyChanged },
 	{ type: "checkbox", key: "highlightOnLoad", elem: "highlightonload", pre: checkHighlightOnLoad, post: notifyChanged },
 	{ type: "checkbox", key: "enableContextMenu", elem: "contextmenu", pre: checkContextMenu, post: notifyChanged },
-	{ type: "text", key: "addBackground", elem: "addbackground", post: updatePreview },
-	{ type: "text", key: "addBorder", elem: "addborder", post: updatePreview },
-	{ type: "text", key: "removeBackground", elem: "removebackground", post: updatePreview },
-	{ type: "text", key: "removeBorder", elem: "removeborder", post: updatePreview },
-	{ type: "text", key: "moveBackground", elem: "movebackground", post: updatePreview },
-	{ type: "text", key: "moveBorder", elem: "moveborder", post: updatePreview },
-	{ type: "text", key: "includeRegion", elem: "includeborder", post: updatePreview },
-	{ type: "text", key: "excludeRegion", elem: "excludeborder", post: updatePreview }
+	{ type: "color", key: "addBackground", elem: "addbackground", post: updatePreview },
+	{ type: "color", key: "addBorder", elem: "addborder", post: updatePreview },
+	{ type: "color", key: "removeBackground", elem: "removebackground", post: updatePreview },
+	{ type: "color", key: "removeBorder", elem: "removeborder", post: updatePreview },
+	{ type: "color", key: "moveBackground", elem: "movebackground", post: updatePreview },
+	{ type: "color", key: "moveBorder", elem: "moveborder", post: updatePreview },
+	{ type: "color", key: "includeRegion", elem: "includeborder", post: updatePreview },
+	{ type: "color", key: "excludeRegion", elem: "excludeborder", post: updatePreview }
 ];
 
 function registerListeners() {
@@ -153,7 +161,7 @@ function registerListeners() {
 function registerListener(option) {
 	document.querySelector("#" + option.elem).addEventListener("change", function (e) {
 		var value = "";
-		if (option.type == "text")
+		if (option.type == "text" || option.type == 'color')
 			value = document.querySelector("#" + option.elem).value;
 		else if (option.type == "checkbox")
 			value = document.querySelector("#" + option.elem).checked;
@@ -166,11 +174,16 @@ function registerListener(option) {
 		if (option.pre) option.pre(value, performUpdate); else performUpdate(value);
 	});
 }
+function hexColor(color) {
+	if (color.length == 4) return color[0] + color[1] + color[1] + color[2] + color[2] + color[3] + color[3]; else return color;
+}
 function showOptions() {
 	configUtils.getDefaultConfig((config) => {
 		for (var i = 0; i < options.length; i++) {
 			if (options[i].type == "text")
 				document.querySelector("#" + options[i].elem).value = config[options[i].key];
+			else if (options[i].type == "color")
+				document.querySelector("#" + options[i].elem).value = hexColor(config[options[i].key]);
 			else if (options[i].type == "checkbox")
 				document.querySelector("#" + options[i].elem).checked = config[options[i].key];
 		}

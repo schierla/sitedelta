@@ -5,3 +5,5 @@ select {width: 100%; }
 
 .import {display: none; }
 .canimport .import {display: inline; }
+input[type=color] {vertical-align: middle; }
+#includepreview, #excludepreview, #addpreview, #removepreview, #movepreview {padding: 1px 0.5em; vertical-align: middle; }

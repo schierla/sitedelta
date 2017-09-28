@@ -41,6 +41,7 @@ var updateAlarm = function(url) {
         if(changes > 0) return; 
         pageUtils.getNextScan(url,
             (nextScan) => {
+                if(nextScan == 0) return;
                 if(nextAllowedAlarm < Date.now() + 5000) nextAllowedAlarm = Date.now() + 5000;
                 if(nextScan < nextAllowedAlarm) {
                     nextScan = nextAllowedAlarm;
@@ -62,6 +63,12 @@ var messageListener = function(request, sender, sendResponse) {
         updateAlarm(request.url);
     } else if(request.command == "removeAlarm") {
         removeAlarm(request.url);
+    } else if(request.command == "openChanged") {
+        pageUtils.listChanged(function (urls) {
+            for (var i = 0; i < urls.length; i++) {
+                tabUtils.openResource("watch/show.htm?" + urls[i]);
+            }
+        });
     }
 };
 

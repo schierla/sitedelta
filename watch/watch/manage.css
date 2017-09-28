@@ -8,3 +8,5 @@ option.changed {background-image: url(../common/icons/changed-32.png); }
 
 .import {display: none; }
 .canimport .import {display: inline; }
+input[type=color] {vertical-align: middle; }
+#includepreview, #excludepreview, #addpreview, #removepreview, #movepreview {padding: 1px 0.5em; vertical-align: middle; }

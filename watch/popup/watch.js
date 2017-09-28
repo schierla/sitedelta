@@ -11,12 +11,8 @@ document.querySelector("#options").addEventListener("click", function (e) {
 });
 
 document.querySelector("#open").addEventListener("click", function (e) {
-	pageUtils.listChanged(function (urls) {
-		for (var i = 0; i < urls.length; i++) {
-			tabUtils.openResource("watch/show.htm?" + urls[i]);
-		}
-		window.close();
-	});
+	chrome.runtime.sendMessage({command: "openChanged"}, () => {});
+	window.close();	
 });
 
 document.querySelector("#changed").addEventListener("dblclick", function () {

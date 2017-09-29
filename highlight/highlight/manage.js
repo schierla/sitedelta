@@ -1,5 +1,3 @@
-
-
 function deleteSelected() {
 	var options = document.querySelector("#pages").options;
 	for(var i=0; i<options.length; i++) {
@@ -55,9 +53,7 @@ document.querySelector("#importPages").addEventListener("click", function (e) {
 });
 
 function importPages(pages) {
-	if (pages.length == 0) {
-		showPages();
-	} else {
+	if (pages.length > 0) {
 		var page = pages.shift();
 		pageUtils.getConfig(page.url, (config) => {
 			if (config != null) return importPages(pages);
@@ -224,23 +220,30 @@ function load() {
 	showPages();
 }
 
-function showPage(url) {
-	ioUtils.get(url, "title", function (title) {
-		var item = document.createElement("option");
-		item.setAttribute("value", url);
-		item.setAttribute("title", url);
-		item.appendChild(document.createTextNode(title));
-		pages.appendChild(item);
-	});
-}
+var pageNodes = {};
 
 function showPages() {
-	ioUtils.listIndex(function (index) {
+	ioUtils.observeIndex(function (index) {
 		var pages = document.querySelector("#pages");
-		while (pages.firstChild) pages.removeChild(pages.firstChild);
+		for(var url in pageNodes) {
+			if(url in index) continue;
+			pages.removeChild(pageNodes[url]);
+			delete pageNodes[url];
+		}
 		for (var url in index) {
 			if (url == null) continue;
-			showPage(url);
+			if (url in pageNodes) {
+				if("title" in index[url])
+					pageNodes[url].firstChild.data = index[url]["title"];
+				continue;
+			}
+			pageNodes[url] = document.createElement("option");
+			pageNodes[url].setAttribute("value", url);
+			pageNodes[url].setAttribute("title", url);
+			var title = url;
+			if("title" in index[url]) title = index[url]["title"]; else pageUtils.getTitle(url, () => {});
+			pageNodes[url].appendChild(document.createTextNode(title)); 
+			pages.appendChild(pageNodes[url]);
 		}
 	});
 }

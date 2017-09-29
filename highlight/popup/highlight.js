@@ -117,7 +117,7 @@ uiUtils.i18n();
 
 
 document.querySelector("#setup").addEventListener("click", function(e) {
-	chrome.runtime.openOptionsPage();
+	tabUtils.openResource("highlight/manage.htm");
 	window.close();
 });
 

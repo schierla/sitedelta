@@ -1,4 +1,4 @@
-body {font-family: sans-serif; padding: 10px 10px 6px 10px; margin: 0; background: transparent;}
+body {font-family: sans-serif; padding: 10px 10px 6px 10px; margin: 0; }
 .browser-style { margin-bottom: 4px; }
 input[type=color] {width: 3em; margin-right: 0.5em; }
 button.browser-style { background-color: #fbfbfb; border: 1px solid #b1b1b1; height: 24px; transition-duration: 250ms; transition-property: background-color; }

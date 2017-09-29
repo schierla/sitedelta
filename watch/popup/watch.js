@@ -6,7 +6,7 @@ document.querySelector("#watch").addEventListener("click", function (e) {
 });
 
 document.querySelector("#options").addEventListener("click", function (e) {
-	chrome.runtime.openOptionsPage();
+	tabUtils.openResource("watch/manage.htm");
 	window.close();
 });
 

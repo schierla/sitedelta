@@ -24,6 +24,14 @@ var ioUtils = {
 			}
 		});
 	},
+	observeIndex: function(callback) {
+		chrome.storage.onChanged.addListener((changes, scope) => {
+			if(scope == "local" && "index" in changes) {
+				callback(changes["index"].newValue);
+			}
+		});
+		ioUtils.listIndex(callback);
+	},
 	findInIndex: function(selector, callback) {
 		chrome.storage.local.get("index", function(existing) {
 			var ret = [];
@@ -59,7 +67,7 @@ var ioUtils = {
 			if(!(storagekey in existing)) {
 				existing = {};
 				existing[storagekey]= {};
-				ioUtils.setInIndex(ioUtils.clean(url), {}, function() {});
+				ioUtils.setInIndex(url, {}, function() {});
 			}
 			existing[storagekey][key] = data;
 			chrome.storage.local.set(existing, callback);

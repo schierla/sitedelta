@@ -19,7 +19,16 @@ var pageUtils = {
 			(status) => callback("nextScan" in status ? status["nextScan"] : Date.now() + 60000));
 	},
 	getTitle: function(url, callback) {
-		ioUtils.get(url, "title", callback);
+		pageUtils.getStatus(url, status => {
+			if("title" in status) 
+				callback(status["title"]);
+			else 
+				ioUtils.get(url, "title", title => {
+					pageUtils.setTitle(url, title, () => {
+						callback(title);
+					}); 
+				}); 
+		});
 	},    
 	getContent: function(url, callback) {
 		ioUtils.get(url, "content", callback);
@@ -49,7 +58,7 @@ var pageUtils = {
 	create: function(url, title, callback) {
 		var pagetitle = title.replace(/[\n\r]/g, ' ');
 		configUtils.getPresetConfig(url, (config) => {
-			pageUtils.setStatus(url, {}, 
+			pageUtils.setStatus(url, {"title": title}, 
 				() => pageUtils.setTitle(url, pagetitle, 
 					() => pageUtils.setConfig(url, config, 
 						() => callback())));
@@ -61,16 +70,22 @@ var pageUtils = {
 	setStatus: function(url, status, callback) {
 		ioUtils.setInIndex(url, status, callback);
 	},
+	setStatusKey: function(url, key, value, callback) {
+		pageUtils.getStatus(url, (status) => {
+			if(key in status && status[key]==value) return callback(); 
+			status[key] = value; pageUtils.setStatus(url, status, callback);
+		});
+	},
 	setNextScan: function(url, nextScan, callback) {
-		pageUtils.getStatus(url, 
-			(status) => {status["nextScan"] = nextScan; pageUtils.setStatus(url, status, callback);});
+		pageUtils.setStatusKey(url, "nextScan", nextScan, callback);
 	},
 	setChanges: function(url, changes, callback) {
-		pageUtils.getStatus(url, 
-			(status) => {status["changes"] = changes; pageUtils.setStatus(url, status, callback);});
+		pageUtils.setStatusKey(url, "changes", nextScan, callback);
 	},
 	setTitle: function(url, title, callback) {
-		ioUtils.put(url, "title", title, callback);
+		ioUtils.put(url, "title", title, () => {
+			pageUtils.setStatusKey(url, "title", title, callback);
+		}); 
 	},
 	setContent: function(url, content, callback) {
 		ioUtils.put(url, "content", content, callback);

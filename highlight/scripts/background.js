@@ -82,7 +82,7 @@ var contextMenuListener = function(info, tab) {
 			});
 		});
 	} else if(info.menuItemId == menuOptions().id) {
-		chrome.runtime.openOptionsPage();
+		tabUtils.openResource("highlight/manage.htm");
 	}
 };
 

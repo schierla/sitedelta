@@ -8,18 +8,19 @@ var pageUtils = {
 	}, 
 	getStatus: function(url, callback) {
 		ioUtils.findInIndex((furl, fstatus) => (url == furl ? fstatus : null), 
-				(result) => result.length > 0 ? callback(result[0]) : callback({}));
+				(result) => result.length > 0 ? callback(result[0]) : callback(null));
 	},
 	getChanges: function(url, callback) {
 		pageUtils.getStatus(url, 
-			(status) => callback("changes" in status ? status["changes"] : 0));
+			(status) => callback(status != null && "changes" in status ? status["changes"] : 0));
 	},
 	getNextScan: function(url, callback) {
 		pageUtils.getStatus(url, 
-			(status) => callback("nextScan" in status ? status["nextScan"] : Date.now() + 60000));
+			(status) => callback(status != null && "nextScan" in status ? status["nextScan"] : Date.now() + 60000));
 	},
 	getTitle: function(url, callback) {
 		pageUtils.getStatus(url, status => {
+			if(status == null) return callback(null);
 			if("title" in status) 
 				callback(status["title"]);
 			else 
@@ -73,6 +74,7 @@ var pageUtils = {
 	setStatusKey: function(url, key, value, callback) {
 		pageUtils.getStatus(url, (status) => {
 			if(key in status && status[key]==value) return callback(); 
+			if(status == null) status = {};
 			status[key] = value; pageUtils.setStatus(url, status, callback);
 		});
 	},

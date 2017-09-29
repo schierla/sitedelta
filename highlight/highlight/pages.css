@@ -1,0 +1,8 @@
+#title {position: fixed; font-size: 1em; font-weight: bold; padding: 0; margin: 0; line-height: 26px; vertical-align: middle; left: 4px; top: 4px; height: 26px; right: 34px;}
+#actions {position: fixed; text-align: right; right: 4px; top: 4px; height: 30px; width: 30px;}
+#actions:hover {width: auto; height: auto; }
+#expanded {display: none; margin-top: 28px; padding: 4px 4px 0 4px; background: white; }
+#expand {position: fixed; right: 4px; top: 4px; }
+#expanded button {display: block; width: 100%; }
+#actions:hover #expanded {display: block;}
+#pages {position: fixed; left: 0; top: 30px; width: 100%; bottom: 0; right: 0;}

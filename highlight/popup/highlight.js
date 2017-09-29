@@ -123,6 +123,7 @@ document.querySelector("#setup").addEventListener("click", function(e) {
 
 document.querySelector("#pagetitle").addEventListener("change", function(e) {
 	pageUtils.setTitle(url, document.querySelector("#pagetitle").value, function() {});
+	document.body.classList.remove("disabled");
 	document.querySelector("#delete").style.visibility = 'visible';    
 });
 

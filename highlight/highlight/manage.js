@@ -1,30 +1,4 @@
-function deleteSelected() {
-	var options = document.querySelector("#pages").options;
-	for(var i=0; i<options.length; i++) {
-		if(options[i].selected) {
-			options[i].selected = false;
-			ioUtils.remove(options[i].value, deleteSelected);
-			return;
-		}
-	}
-	load();
-}
 
-function openSelected() {
-	var options = document.querySelector("#pages").options;
-	for(var i=0; i<options.length; i++) {
-		if(options[i].selected) {
-			options[i].selected = false;
-			chrome.tabs.create({ url: options[i].value });
-		}
-	}
-}
-
-document.querySelector("#delete").addEventListener("click", deleteSelected);
-
-document.querySelector("#open").addEventListener("click", openSelected);
-
-document.querySelector("#pages").addEventListener("dblclick", openSelected);
 
 document.querySelector("#importConfig").addEventListener("click", function (e) {
 	chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
@@ -218,34 +192,6 @@ function load() {
 	registerListeners();
 	showOptions();
 	showPages();
-}
-
-var pageNodes = {};
-
-function showPages() {
-	ioUtils.observeIndex(function (index) {
-		var pages = document.querySelector("#pages");
-		for(var url in pageNodes) {
-			if(url in index) continue;
-			pages.removeChild(pageNodes[url]);
-			delete pageNodes[url];
-		}
-		for (var url in index) {
-			if (url == null) continue;
-			if (url in pageNodes) {
-				if("title" in index[url])
-					pageNodes[url].firstChild.data = index[url]["title"];
-				continue;
-			}
-			pageNodes[url] = document.createElement("option");
-			pageNodes[url].setAttribute("value", url);
-			pageNodes[url].setAttribute("title", url);
-			var title = url;
-			if("title" in index[url]) title = index[url]["title"]; else pageUtils.getTitle(url, () => {});
-			pageNodes[url].appendChild(document.createTextNode(title)); 
-			pages.appendChild(pageNodes[url]);
-		}
-	});
 }
 
 function notifyChanged() {

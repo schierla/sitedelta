@@ -49,7 +49,18 @@
 		"page": "highlight/options.htm",
 		"browser_style": true
 	},
-	
+
+	"sidebar_action": {
+		"default_icon": "common/icons/neutral.svg" /*{
+			"16": "common/icons/neutral-16.png",
+			"24": "common/icons/neutral-24.png",
+			"32": "common/icons/neutral-32.png",
+			"48": "common/icons/neutral-48.png",
+			"64": "common/icons/neutral-64.png"
+		}*/,
+		"default_panel": "highlight/pages.htm",
+		"browser_style": true
+	},
 	"background": {
 		"scripts": [
 			"common/scripts/ioUtils.js", 

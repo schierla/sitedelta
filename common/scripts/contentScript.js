@@ -5,7 +5,7 @@ var STATE = {
 };
 
 var contentscript = {
- 	messageHandler: function(request, sender, sendResponse) {
+	messageHandler: function(request, sender, sendResponse) {
 		if(request.command == "getStatus") {
 			if (contentscript.state == STATE.HIGHLIGHTED) 
 				sendResponse({state: STATE.HIGHLIGHTED, changes: contentscript.numChanges, current: contentscript.currentChange});
@@ -32,25 +32,36 @@ var contentscript = {
 				sendResponse({state: STATE.HIGHLIGHTED, changes: contentscript.numChanges, current: contentscript.currentChange});
 			}
 		} else if(request.command == "selectRegion") {
-			contentscript.state = STATE.SELECTREGION;
-			regionUtils.selectRegion(document, function(xpath) {
+			if(contentscript.state == STATE.SELECTREGION) {
+				regionUtils.abortSelect();
 				contentscript.state = STATE.LOADED;
-				sendResponse(xpath);
-			});
-			return true;
+				contentscript.callback(null);
+				contentscript.callback = null;
+				sendResponse(prompt(chrome.i18n.getMessage("configRegionXpath"), ""));
+			} else {
+				contentscript.state = STATE.SELECTREGION;
+				contentscript.callback = sendResponse;
+				regionUtils.selectRegion(document, function(xpath) {
+					contentscript.state = STATE.LOADED;
+					contentscript.callback = null;
+					sendResponse(xpath);
+				});
+				return true;
+			}
 		} else if(request.command == "showOutline") {
 			regionUtils.showOutline(document, request.xpath, request.color);
-			sendResponse();
+			sendResponse(null);
 		} else if(request.command == "removeOutline") {
 			regionUtils.removeOutline();
-			sendResponse();
+			sendResponse(null);
 		}
 	},
 
 	state: STATE.LOADED,
 	numChanges: 0,
 	currentChange: 0,
-	content: null
+	content: null, 
+	callback: null
 }
 
 chrome.runtime.onMessage.addListener(contentscript.messageHandler);

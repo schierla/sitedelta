@@ -204,7 +204,7 @@ var config = {};
 
 
 pageUtils.getTitle(url, pagetitle => {
-	if (pagetitle != null) {
+	if (pagetitle !== null) {
 		document.body.classList.add("known");
 		known = true;
 		title = pagetitle;

@@ -2,7 +2,7 @@ var configUtils = {
 	getDefaultConfig: function(callback) {
 		ioUtils.getConfig((config) => {
 			if(configUtils._upgrade(config)) {
-				ioUtils.setConfig(config, function() {});
+				ioUtils.setConfig(config, () => {});
 			}
 			callback(config);
 		});

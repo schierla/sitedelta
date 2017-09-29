@@ -38,7 +38,7 @@ var ioUtils = {
 			if("index" in existing) {
 				for(var url in existing["index"]) {
 					var result = selector(url, existing["index"][url]);
-					if(result != null) ret.push(result);
+					if(result !== null) ret.push(result);
 				}
 			}
 			callback(ret);
@@ -67,7 +67,7 @@ var ioUtils = {
 			if(!(storagekey in existing)) {
 				existing = {};
 				existing[storagekey]= {};
-				ioUtils.setInIndex(url, {}, function() {});
+				ioUtils.setInIndex(url, {}, () => {});
 			}
 			existing[storagekey][key] = data;
 			chrome.storage.local.set(existing, callback);

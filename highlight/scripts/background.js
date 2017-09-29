@@ -1,25 +1,25 @@
 
 var webNavigationBeforeListener = function(details) {
 	if(details.frameId != 0) return;
-	tabUtils.showIcon(details.tabId, "inactive", function() {});
+	tabUtils.showIcon(details.tabId, "inactive", () => {});
 	if(chrome.notifications) chrome.notifications.clear("highlight");
 };
 
 var webNavigationCompletedListener = function(details) {
 	if(details.frameId != 0) return;
 	pageUtils.getEffectiveConfig(details.url, function(config) {
-		if(config == null) {
-			tabUtils.showIcon(details.tabId, "neutral", function() {});
+		if(config === null) {
+			tabUtils.showIcon(details.tabId, "neutral", () => {});
 		} else {
 			pageUtils.getContent(details.url, function(oldcontent) {
-				if(oldcontent != null) {
+				if(oldcontent !== null) {
 					tabUtils.getContent(details.tabId, details.url, function(content) {
 						if(textUtils.clean(content, config) == textUtils.clean(oldcontent, config)) {
 							// unchanged
-							tabUtils.showIcon(details.tabId, "unchanged", function() {});
+							tabUtils.showIcon(details.tabId, "unchanged", () => {});
 						} else {
 							// changed
-							tabUtils.showIcon(details.tabId, "changed", function() {});
+							tabUtils.showIcon(details.tabId, "changed", () => {});
 							if(config.highlightOnLoad) {
 								tabUtils.highlightChanges(details.tabId, details.url, () => {});
 							}
@@ -71,12 +71,19 @@ var contextMenuListener = function(info, tab) {
 						"title": chrome.i18n.getMessage("highlightExtensionName"),
 						"message": chrome.i18n.getMessage("pageUnchanged")
 					});
-				} else {
+				} else if(status.changes > 0) {
 					chrome.notifications.create("highlight", {
 						"type": "basic",
 						"iconUrl": chrome.extension.getURL("common/icons/changed.svg"),
 						"title": chrome.i18n.getMessage("highlightExtensionName"),
-						"message": chrome.i18n.getMessage("highlightTitleChanges", [status.current, status.changes])
+						"message": chrome.i18n.getMessage("pageChanged", [status.current, status.changes])
+					});
+				} else {
+					chrome.notifications.create("highlight", {
+						"type": "basic",
+						"iconUrl": chrome.extension.getURL("common/icons/inactive.svg"),
+						"title": chrome.i18n.getMessage("highlightExtensionName"),
+						"message": chrome.i18n.getMessage("pageFailed")
 					});
 				}
 			});

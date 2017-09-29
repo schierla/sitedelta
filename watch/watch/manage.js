@@ -64,7 +64,7 @@ document.querySelector("#pages").addEventListener("dblclick", openSelected);
 
 document.querySelector("#importConfig").addEventListener("click", function (e) {
 	chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
-		if (config == null) {
+		if (config === null) {
 			console.warn("Error importing configuration: " + chrome.runtime.lastError);
 		}
 		configUtils.getDefaultConfig((defaultConfig) => {
@@ -81,7 +81,7 @@ document.querySelector("#importConfig").addEventListener("click", function (e) {
 
 document.querySelector("#importPages").addEventListener("click", function (e) {
 	chrome.runtime.sendMessage("sitedelta@schierla.de", "getPages", (pages) => {
-		if (pages == null) {
+		if (pages === null) {
 			console.warn("Error importing pages: " + chrome.runtime.lastError);
 		}
 		importPages(pages, Date.now() + 30000);
@@ -97,14 +97,14 @@ function importPages(pages, time) {
 		else if(page.watchDelay == -1) page.watchDelay = 0;
 		
 		pageUtils.getConfig(page.url, (config) => {
-			if(config != null) return importPages(pages, time);
+			if(config !== null) return importPages(pages, time);
 			pageUtils.create(page.url, page.name, () => {
 				var settings = { "includes": page.includes, "excludes": page.excludes };
-				if (page.checkDeleted != null) settings["checkDeleted"] = page.checkDeleted;
-				if (page.scanImages != null) settings["scanImages"] = page.scanImages;
-				if (page.ignoreCase != null) settings["ignoreCase"] = page.ignoreCase;
-				if (page.ignoreNumbers != null) settings["ignoreNumbers"] = page.ignoreNumbers;
-				if (page.watchDelay != null) settings["watchDelay"] = page.watchDelay;
+				if (page.checkDeleted !== null) settings["checkDeleted"] = page.checkDeleted;
+				if (page.scanImages !== null) settings["scanImages"] = page.scanImages;
+				if (page.ignoreCase !== null) settings["ignoreCase"] = page.ignoreCase;
+				if (page.ignoreNumbers !== null) settings["ignoreNumbers"] = page.ignoreNumbers;
+				if (page.watchDelay !== null) settings["watchDelay"] = page.watchDelay;
 	
 				pageUtils.setConfig(page.url, settings, () => {
 					pageUtils.setContent(page.url, page.content, () => { 
@@ -120,7 +120,7 @@ function importPages(pages, time) {
 }
 
 chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
-	if (version == null) {
+	if (version === undefined) {
 		console.log("SiteDelta not found, not offering import: " + chrome.runtime.lastError);
 	} else if (version == "0.14.0") {
 		document.body.classList.add("canimport");

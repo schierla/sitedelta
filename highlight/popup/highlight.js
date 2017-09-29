@@ -43,6 +43,23 @@ function registerListener(option) {
 				if (option.pre) option.pre(newlist, performUpdate); else performUpdate(newlist);
 			});
 		});
+		document.querySelector("#" + option.elem).addEventListener("dblclick", function (e) {
+			if(option.edit) {
+				var oldValue = document.querySelector("#" + option.elem).value;
+				if(oldValue === null) return;
+				option.edit(oldValue, newValue => {
+					if(newValue === null) return;
+					var newlist = [];
+					for (var i = 0; i < option.contents.length; i++) {
+						if(option.contents[i] != oldValue)
+							newlist.push(option.contents[i]);
+						else
+							newlist.push(newValue);
+					}
+					if (option.pre) option.pre(newlist, performUpdate); else performUpdate(newlist);
+				});
+			}
+		});
 		document.querySelector("#" + option.delelem).addEventListener("click", function (e) {
 			var value = document.querySelector("#" + option.elem).value, newlist = [];
 			for (var i = 0; i < option.contents.length; i++) {
@@ -92,14 +109,18 @@ function selectInclude(callback) {
 }
 
 function showOutline(region, color) {
-	if(region) tabUtils.showOutline(tabId, region, color, function() {}); 
-	else tabUtils.removeOutline(tabId, function() {});
+	if(region) tabUtils.showOutline(tabId, region, color, () => {}); 
+	else tabUtils.removeOutline(tabId, () => {});
 }
 
 function addBodyIfEmpty(list, callback) {
 	if (list.length == 0) list.push("/html/body[1]");
 	if(list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
 	callback(list);
+}
+
+function editXpath(xpath, callback) {
+	callback(prompt(chrome.i18n.getMessage("configRegionXpath"), xpath));
 }
 
 var options = [
@@ -122,14 +143,14 @@ document.querySelector("#setup").addEventListener("click", function(e) {
 });
 
 document.querySelector("#pagetitle").addEventListener("change", function(e) {
-	pageUtils.setTitle(url, document.querySelector("#pagetitle").value, function() {});
+	pageUtils.setTitle(url, document.querySelector("#pagetitle").value, () => {});
 	document.body.classList.remove("disabled");
 	document.querySelector("#delete").style.visibility = 'visible';    
 });
 
 document.querySelector("#delete").addEventListener("click", function(e) {
-	tabUtils.showIcon(tabId, "neutral", function() {
-		pageUtils.remove(url, function() {
+	tabUtils.showIcon(tabId, "neutral", () => {
+		pageUtils.remove(url, () => {
 			window.close(); 
 		});
 	});
@@ -170,16 +191,16 @@ function showTitle(title) {
 }
 
 function fillStatus(status) {
-	if(status == null) {
-		document.body.classList.add("unavailable");
-		return;
-	}
 	document.body.classList.remove("loaded");
 	document.body.classList.remove("highlighted");
 	document.body.classList.remove("changed");
 	document.body.classList.remove("unchanged");
 	document.body.classList.remove("selecting");
-	
+	if(status === undefined) {
+		document.body.classList.add("unavailable");
+		return;
+	}
+
 	switch(status.state) {
 	case STATE.LOADED:
 		document.body.classList.add("loaded");
@@ -215,7 +236,7 @@ tabUtils.getActive(function(tab) {
 
 	tabUtils.getStatus(tabId, fillStatus);
 	pageUtils.getTitle(url, (title) => {
-		if(title == null) {
+		if(title === null) {
 			showTitle(tab.title); 
 			document.body.classList.add("disabled");
 		} else {

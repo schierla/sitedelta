@@ -2,7 +2,7 @@ var alarmListener = function(alarm) {
     var url = alarm.name;
     console.log("SiteDelta: Scanning " + url);
     pageUtils.getEffectiveConfig(url, function(config) {
-        if(config == null) return;
+        if(config === null) return;
         watchUtils.loadPage(url, function(doc) {
             var newContent = textUtils.getText(doc, config);
             pageUtils.getContent(url, function(oldContent) {

@@ -30,9 +30,9 @@ var regionUtils = {
 	},
 
 	abortSelect: function() {
-		if(regionUtils._destelement != null)
+		if(regionUtils._destelement !== null)
 			regionUtils._destelement.style.outline="none";
-		if(regionUtils._doc == null) return;
+		if(regionUtils._doc === null) return;
 		
 		regionUtils._doc.removeEventListener("mouseover", regionUtils._mouseover, true);
 		regionUtils._doc.removeEventListener("mousedown", regionUtils._mousedown, true);

@@ -47,7 +47,7 @@ var textUtils = {
 	_getTextForNode: function(node, config, excludes) {
 		var doc = node.ownerDocument, cur=null, text="", ret = "";
 		var tw = doc.createTreeWalker(node, NodeFilter.SHOW_ALL, textUtils._filter(config, excludes), true);
-		while ((cur = tw.nextNode()) != null) {
+		while ((cur = tw.nextNode()) !== null) {
 			if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {
 				if (cur.nodeName == 'IMG' && cur.hasAttribute("src"))
 					text = "[" + cur.getAttribute("src") + "] ";

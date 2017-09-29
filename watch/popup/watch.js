@@ -55,7 +55,7 @@ tabUtils.getActive(function (tab) {
 		return;
 	}
 	pageUtils.getConfig(url, function (existing) {
-		if (existing == null) {
+		if (existing === null) {
 			document.body.classList.add("disabled");
 		} else {
 			document.body.classList.add("enabled");

@@ -32,7 +32,7 @@ function showPages() {
 			delete pageNodes[url];
 		}
 		for (var url in index) {
-			if (url == null) continue;
+			if (url === null) continue;
 			if (url in pageNodes) {
 				if("title" in index[url])
 					pageNodes[url].firstChild.data = index[url]["title"];

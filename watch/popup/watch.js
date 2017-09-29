@@ -1,8 +1,8 @@
 uiUtils.i18n();
 
 document.querySelector("#watch").addEventListener("click", function (e) {
-	tabUtils.openResource("watch/show.htm?" + url);
-	window.close();
+	var showPrefix = chrome.runtime.getURL("watch/show.htm?");
+	chrome.tabs.update(tabId, {url: showPrefix + url}, () => {window.close();});
 });
 
 document.querySelector("#options").addEventListener("click", function (e) {
@@ -49,6 +49,12 @@ tabUtils.getActive(function (tab) {
 			addChangedUrl(urls[i]);
 		}
 	});
+	
+	var showPrefix = chrome.runtime.getURL("watch/show.htm?");
+	if(url.startsWith(showPrefix)) {
+		chrome.tabs.update(tabId, {url: url.substr(showPrefix.length)}, () => {window.close();});
+		return;
+	}
 
 	if (url.substr(0, 4) != "http") {
 		document.body.classList.add("unsupported");

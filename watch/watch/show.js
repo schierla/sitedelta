@@ -31,13 +31,25 @@ function highlight() {
 }
 
 function stopIt(e) {
-	if (!known && e.target && e.target.href) {
-		window.location.search = e.target.href;
-	} else {
+	console.log("handling click onto " + JSON.stringify(e.target));
+	if(document.body.classList.contains("selecting")) {
 		e.preventDefault();
 		e.stopPropagation();
-		return false;
+		console.log("suppressing due to selection");
+		return;
 	}
+	if(e.ctrlKey) return;
+	var target = e.target;
+	while(target != null) {
+		if(target.href) {
+			window.location.search = target.href;
+			console.log("following link");
+			return;
+		}
+		target = target.parentNode;
+	}
+	e.preventDefault();
+	e.stopPropagation();
 }
 
 function loadPage(callback) {
@@ -96,6 +108,23 @@ function registerListener(option) {
 		if (option.pre) option.pre(value, performUpdate); else performUpdate(value);
 	});
 	if (option.type == "list") {
+		document.querySelector("#" + option.elem).addEventListener("dblclick", function (e) {
+			if(option.edit) {
+				var oldValue = document.querySelector("#" + option.elem).value;
+				if(oldValue === null) return;
+				option.edit(oldValue, newValue => {
+					if(newValue === null) return;
+					var newlist = [];
+					for (var i = 0; i < option.contents.length; i++) {
+						if(option.contents[i] != oldValue)
+							newlist.push(option.contents[i]);
+						else
+							newlist.push(newValue);
+					}
+					if (option.pre) option.pre(newlist, performUpdate); else performUpdate(newlist);
+				});
+			}
+		});
 		document.querySelector("#" + option.addelem).addEventListener("click", function (e) {
 			option.add(value => {
 				var newlist = [];
@@ -147,6 +176,10 @@ function showData() {
 	document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("pageChanged", [current, changes]);
 }
 
+function editRegion(xpath, callback) {
+	showOutline(null);
+	callback(prompt(chrome.i18n.getMessage("configRegionXpath"), xpath));
+}
 
 function selectRegion(callback) {
 	var iframe = document.getElementById("iframe");
@@ -189,8 +222,8 @@ var options = [
 	{ type: "checkbox", key: "scanImages", elem: "checkimages" },
 	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
-	{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: xpath => showOutline(xpath, config.includeRegion), add: selectRegion, pre: addBodyIfEmpty, post: showOptions },
-	{ type: "list", key: "excludes", elem: "exclude", addelem: "excludeadd", delelem: "excludedel", select: xpath => showOutline(xpath, config.excludeRegion), add: selectRegion, post: showOptions },
+	{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: xpath => showOutline(xpath, config.includeRegion), add: selectRegion, edit: editRegion, pre: addBodyIfEmpty, post: showOptions },
+	{ type: "list", key: "excludes", elem: "exclude", addelem: "excludeadd", delelem: "excludedel", select: xpath => showOutline(xpath, config.excludeRegion), add: selectRegion, edit: editRegion, post: showOptions },
 	{ type: "text", key: "watchDelay", elem: "watchDelay", pre: (value, callback) => callback(parseInt(value)) }
 ];
 

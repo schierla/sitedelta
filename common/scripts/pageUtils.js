@@ -82,7 +82,7 @@ var pageUtils = {
 		pageUtils.setStatusKey(url, "nextScan", nextScan, callback);
 	},
 	setChanges: function(url, changes, callback) {
-		pageUtils.setStatusKey(url, "changes", nextScan, callback);
+		pageUtils.setStatusKey(url, "changes", changes, callback);
 	},
 	setTitle: function(url, title, callback) {
 		ioUtils.put(url, "title", title, () => {

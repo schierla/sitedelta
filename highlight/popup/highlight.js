@@ -98,13 +98,15 @@ function showOptions() {
 
 function selectExclude(callback) {
 	tabUtils.selectExclude(tabId, url, function() {
-		fillStatus({state: STATE.SELECTREGION});     
+		fillStatus({state: STATE.SELECTREGION});
+		setTimeout(() => window.close(), 5000);
 	});
 }
 
 function selectInclude(callback) {
 	tabUtils.selectInclude(tabId, url, function() {
 		fillStatus({state: STATE.SELECTREGION});     
+		setTimeout(() => window.close(), 5000);
 	});
 }
 

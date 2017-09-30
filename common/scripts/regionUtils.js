@@ -2,20 +2,26 @@
 var regionUtils = {
 	
 	showOutline: function(doc, xpath, color) {
-		if(regionUtils._outlinedElement) 
+		if(regionUtils._outlined.length > 0) 
 			regionUtils.removeOutline();
-		var element = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null).iterateNext();
-		if (!element) 
-			return;
-		regionUtils._outlinedElement = element; 
-		regionUtils.outlinedElementStyle = element.style.outline;
-		element.style.outline = color + " dotted 2px";
+		var elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+		var element = elements.iterateNext();
+		while(element) {
+			var outlined = {"e": element, "o": element.style.outline};
+			regionUtils._outlined.push(outlined);
+			element = elements.iterateNext();
+		}
+		for(var i=0; i<regionUtils._outlined.length; i++) {
+			regionUtils._outlined[i].e.style.outline = color + " dotted 2px";
+		}
+		
 	},
 
 	removeOutline: function() {
-		if(regionUtils._outlinedElement) 
-			regionUtils._outlinedElement.style.outline = regionUtils.outlinedElementStyle;
-		regionUtils._outlinedElement = null;
+		while(regionUtils._outlined.length > 0) {
+			var outlined = regionUtils._outlined.shift();
+			outlined.e.style.outline = outlined.o;
+		}
 	},
 
 	selectRegion: function(doc, callback) {
@@ -139,7 +145,7 @@ var regionUtils = {
 		return path;
 	},
 
-	_outlinedElement: null,
+	_outlined: [],
 	_needText: false,
 	_destelement: null,
 	_callback: null, 

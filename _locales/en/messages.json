@@ -114,8 +114,14 @@
 		"message": "Highlight Changes",
 		"description": "Button to highlight changes on the current page"
 	},
-
-	
+	"pageScanNow": {
+		"message": "Scan Page Now",
+		"description": "Button to scan the current page now"
+	},
+	"pageMarkSeen": {
+		"message": "Mark Page As Seen",
+		"description": "Button to mark the current page as seen"
+	},
 
 	"configRegionsInclude": {
 		"message": "Included regions:", 

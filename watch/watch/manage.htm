@@ -5,6 +5,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="manage.css" />
+	<link rel="stylesheet" href="pageList.css" />
 	<link rel="stylesheet" href="../common/browser_style.css" />
 	<title>Watched pages</title>
 </head>
@@ -14,6 +15,8 @@
 	<select id="pages" size="10" multiple></select>
 	<div class="buttons browser-style">
 		<button id="importPages" class="browser-style i18n import">__MSG_configImport__</button>
+		<button id="markseen" class="browser-style i18n">__MSG_pageMarkSeen__</button>
+		<button id="scannow" class="browser-style i18n">__MSG_pageScanNow__</button>
 		<button id="delete" class="browser-style i18n">__MSG_pageDelete__</button>
 		<button id="open" class="browser-style i18n default">__MSG_pageOpen__</button>
 	</div>
@@ -66,13 +69,15 @@
 	</div>
 
 
-	<script type="text/javascript" src="../common/scripts/ioUtils.js"></script>
-	<script type="text/javascript" src="../common/scripts/tabUtils.js"></script>
-	<script type="text/javascript" src="../common/scripts/watchUtils.js"></script>
-	<script type="text/javascript" src="../common/scripts/pageUtils.js"></script>
-	<script type="text/javascript" src="../common/scripts/uiUtils.js"></script>
-	<script type="text/javascript" src="../common/scripts/configUtils.js"></script>
-	<script type="text/javascript" src="manage.js"></script>
+	<script src="../common/scripts/configUtils.js"></script>
+	<script src="../common/scripts/ioUtils.js"></script>
+	<script src="../common/scripts/tabUtils.js"></script>
+	<script src="../common/scripts/pageUtils.js"></script>
+	<script src="../common/scripts/watchUtils.js"></script>
+	<script src="../common/scripts/textUtils.js"></script>
+	<script src="../common/scripts/uiUtils.js"></script>
+	<script src="pageList.js"></script>
+	<script src="manage.js"></script>
 </body>
 
 </html>

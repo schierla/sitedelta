@@ -6,7 +6,7 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; }
 .buttons {text-align: right; }
 .browser-style input[type="text"], .browser-style select {width: 100%; }
 #open, #changedPages, #watchUnsupported, #watchEnabled, #watchDisabled {display: none; }
-
+#changed {height: 6em; }
 .changes #open {display: inline; }
 .changes #changedPages {display: block; }
 .unsupported #watch {display: none; }

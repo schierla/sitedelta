@@ -40,8 +40,20 @@
 		"default_popup": "popup/watch.htm"
 	},
 	
+	"sidebar_action": {
+		"default_icon": {
+			"16": "common/icons/neutral-16.png",
+			"24": "common/icons/neutral-24.png",
+			"32": "common/icons/neutral-32.png",
+			"48": "common/icons/neutral-48.png",
+			"64": "common/icons/neutral-64.png"
+		},
+		"default_panel": "watch/pages.htm",
+		"browser_style": true
+	},
+	
 	"options_ui": {
-		"page": "watch/manage.htm",
+		"page": "watch/options.htm",
 		"browser_style": true
 	},
 	

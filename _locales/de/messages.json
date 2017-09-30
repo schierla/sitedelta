@@ -28,7 +28,7 @@
 		"description": "Name of the watch extension"
 	},
 	"watchExtensionDescription": {
-		"message": "Überwacht Webseiten regeläßig auf Änderungen",
+		"message": "Überwacht Webseiten regelmäßig auf Änderungen",
 		"description": "Description of the watch extension"
 	},
 
@@ -114,7 +114,14 @@
 		"message": "Änderungen hervorheben",
 		"description": "Button to highlight changes on the current page"
 	},
-
+	"pageScanNow": {
+		"message": "Seite jetzt prüfen",
+		"description": "Button to scan the current page now"
+	},
+	"pageMarkSeen": {
+		"message": "Seite als gesehen markieren",
+		"description": "Button to mark the current page as seen"
+	},
 	
 
 	"configRegionsInclude": {
@@ -172,7 +179,7 @@
 		"description": "Headline for configured ignores"
 	},
 	"configIgnoreCase": {
-		"message": "Geänderte Groß/Kleinschreibung ignorieren",
+		"message": "Groß/Kleinschreibung ignorieren",
 		"description": "Label for checkbox to ignore case when checking"
 	},
 	"configIgnoreNumbers": {

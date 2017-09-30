@@ -59,6 +59,7 @@ function loadPage(callback) {
 	var idoc = iframe.contentWindow.document;
 	while (idoc.firstChild) idoc.removeChild(idoc.firstChild);
 	watchUtils.loadPage(url, function (doc) {
+		if (doc === null) return;
 		var idoc = iframe.contentWindow.document;
 		if (title == "") title = doc.title;
 		var base = doc.createElement("base");
@@ -261,9 +262,13 @@ document.querySelector("#pagetitle").addEventListener("change", function (e) {
 document.querySelector("#delete").addEventListener("click", function (e) {
 	pageUtils.remove(url, function () {
 		watchUtils.removeAlarm(url);
-		chrome.tabs.getCurrent((current) => {
-			chrome.tabs.remove(current.id);
-		});
+		document.body.classList.remove("unchanged");
+		document.body.classList.remove("changed");
+		document.body.classList.remove("failed");
+		document.body.classList.remove("known");
+		document.body.classList.remove("expanded");
+		known = false;
+		loadPage(showData);
 	});
 });
 

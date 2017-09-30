@@ -34,13 +34,14 @@ var watchUtils = {
 		pageUtils.setChanges(url, changes, function() {
 			watchUtils.showChanges();
 			pageUtils.getEffectiveConfig(url, config => {
-				if(changes == 0) {
+				if(changes <= 0) {
 					var next = Date.now() + Math.abs(config.watchDelay) * 60 * 1000;
 					if(config.watchDelay == 0) next = 0;
 					pageUtils.setNextScan(url, next, () => {
 						if(callback) callback();
 					});
 				} else {
+					if(callback) callback();
 				}
 			});
 		});
@@ -62,23 +63,23 @@ var watchUtils = {
 			if (xhr.readyState == 4) {
 				if(mime == "" && xhr.getResponseHeader("content-type"))
 					mime = xhr.getResponseHeader("content-type");
-				contentCallback(mime, xhr.responseText);
+				if(xhr.status >= 200 && xhr.status < 300)
+					contentCallback(mime, xhr.responseText);
+				else
+					contentCallback("error/"+xhr.status, null);
 			}
 		};
-		xhr.onerror = function() {
-			contentCallback("error", "");
-		};
-		try {
-			xhr.open("GET", url, true);
-			if(mime == "") xhr.setRequestHeader("Cache-Control", "max-age=0");
-			xhr.send();
-		} catch(e) {
-			contentCallback("error", "" + e);
-		}
+		xhr.open("GET", url, true);
+		if(mime == "") xhr.setRequestHeader("Cache-Control", "max-age=0");
+		xhr.send();
 	},
 	
 	_parsePage: function(url, mime, content, documentCallback) {
 		var parser = new DOMParser();
+		if(content === null) {
+			console.log("Error loading " + url + ": " + mime);
+			return documentCallback(null);
+		}
 		var doc = parser.parseFromString(content, "text/html");
 		if(mime.toLowerCase().indexOf("charset")<0) {
 			var metas = doc.getElementsByTagName("meta");

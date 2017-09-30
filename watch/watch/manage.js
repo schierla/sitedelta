@@ -1,17 +1,5 @@
 uiUtils.i18n();
 
-function showPages() {
-	pageUtils.list(pages => {
-		var list = document.querySelector("#pages");
-		while (list.firstChild) list.removeChild(list.firstChild);
-
-		for (var i = 0; i < pages.length; i++) {
-			var url = pages[i];
-			addPage(url);
-		}
-	});
-};
-
 function addPage(url) {
 	pageUtils.getTitle(url, title => {
 		pageUtils.getChanges(url, changes => {
@@ -32,34 +20,6 @@ function addPage(url) {
 		})
 	});
 }
-
-function deleteSelected() {
-	var options = document.querySelector("#pages").options;
-	for(var i=0; i<options.length; i++) {
-		if(options[i].selected) {
-			options[i].selected = false;
-			ioUtils.remove(options[i].value, deleteSelected);
-			return;
-		}
-	}
-	load();
-}
-
-function openSelected() {
-	var options = document.querySelector("#pages").options;
-	for(var i=0; i<options.length; i++) {
-		if(options[i].selected) {
-			options[i].selected = false;
-			tabUtils.openResource("watch/show.htm?" + options[i].value);
-		}
-	}
-}
-
-document.querySelector("#delete").addEventListener("click", deleteSelected);
-
-document.querySelector("#open").addEventListener("click", openSelected);
-
-document.querySelector("#pages").addEventListener("dblclick", openSelected);
 
 
 document.querySelector("#importConfig").addEventListener("click", function (e) {
@@ -212,7 +172,6 @@ function updatePreview() {
 function load() {
 	registerListeners();
 	showOptions();
-	showPages();
 }
 
 

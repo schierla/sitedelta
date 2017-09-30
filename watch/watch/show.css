@@ -6,19 +6,18 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 #status #statustext {text-align: center; font-size: 130%; line-height: 2em; vertical-align: middle; }
 #settings {position: fixed; left: 0; top: 2.7em; bottom: 0; padding: 0; margin: 0; transition: width 0.3s;}
 #settings {background: #eee; border-right: solid #777 1px; overflow-x: hidden; overflow-y: auto; }
-#settings #config {min-width: 10em; }
+#settings #config {min-width: 16em; }
 #settings {overflow-y: auto; }
 #settings>div {margin: 4px; }
 
-#settings { width: 2.6em; }
-#content { left: 2.7em; }
-#settings #config { display: none; }
-#expand { display: block; }
+#settings { width: 0; }
+#content { left: 0; }
 #delete { display: none; }
+#expand { position: fixed; left: 4px; top: 4px; }
+.expanded #expand {display: none; }
 
 .expanded #settings { width: 18em; }
 .expanded #content { left: 18.1em; }
-.expanded #settings #config {display: block; }
 .expanded #expand {display: none; }
 .unchanged #highlight {visibility: hidden; }
 .known #delete {display: inline; }

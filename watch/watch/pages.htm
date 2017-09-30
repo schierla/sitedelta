@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title class="i18n">__MSG_watchExtensionName__</title>
+    <link rel="stylesheet" href="pages.css" />
+	<link rel="stylesheet" href="pageList.css" />
+	<link rel="stylesheet" href="../common/browser_style.css" />
+</head>
+
+<body>
+    <h2 id="title" class="browser-style i18n">__MSG_pageList__</h2>
+	<select id="pages" size="10" multiple></select>
+    <div id="actions" class="buttons browser-style">
+        <button id="expand" class="browser-style expander"></button>
+        <div id="expanded">
+            <button id="markseen" class="browser-style i18n">__MSG_pageMarkSeen__</button>
+            <button id="scannow" class="browser-style i18n">__MSG_pageScanNow__</button>
+            <button id="delete" class="browser-style i18n">__MSG_pageDelete__</button>
+            <button id="open" class="browser-style i18n default">__MSG_pageOpen__</button>
+        </div>
+    </div>
+    
+    
+    <script src="../common/scripts/configUtils.js"></script>
+    <script src="../common/scripts/ioUtils.js"></script>
+    <script src="../common/scripts/tabUtils.js"></script>
+    <script src="../common/scripts/pageUtils.js"></script>
+    <script src="../common/scripts/watchUtils.js"></script>
+	<script src="../common/scripts/textUtils.js"></script>
+    <script src="../common/scripts/uiUtils.js"></script>
+	<script src="pageList.js"></script>
+    <script src="pages.js"></script>
+</body>
+
+</html>

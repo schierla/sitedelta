@@ -8,4 +8,4 @@ button.browser-style.default { background-color: #0996f8; border-color: #0670cc;
 button.browser-style.default:hover:not(.pressed):not(.disabled):not(.focused) {background-color: #0670cc; border-color: #005bab;}
 button.browser-style.default:hover:active:not(.hover):not(.disabled):not(.focused) {background-color: #005bab; border-color: #004480;}
 button.browser-style:focus:not(.disabled) {border-color: #fff !important; }
-button.browser-style.expander { background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNOCwxMkwzLDcsNCw2bDQsNCw0LTQsMSwxWiIgZmlsbD0iIzZBNkE2QSIgLz4KPC9zdmc+Cg==) no-repeat center; height: 24px; padding: 0; width: 24px; }
+button.browser-style.expander { background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNOCwxMkwzLDcsNCw2bDQsNCw0LTQsMSwxWiIgZmlsbD0iIzZBNkE2QSIgLz4KPC9zdmc+Cg==) no-repeat center; background-color: white; height: 24px; padding: 0; width: 24px; }

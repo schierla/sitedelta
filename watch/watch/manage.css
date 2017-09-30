@@ -1,10 +1,7 @@
 select {width: 100%; background: #f7f7f7; background-image: none !important; }
 .buttons {text-align: right; margin-top: 8px; }
 .section.browser-style {font-weight: bold; margin-top: 8px; }
-option {padding-left: 1.3em; }
-option {background: no-repeat 0.2em center; background-size: auto 0.8em; }
-option.unchanged {background-image: url(../common/icons/unchanged-32.png); }
-option.changed {background-image: url(../common/icons/changed-32.png); }
+
 
 .import {display: none; }
 .canimport .import {display: inline; }

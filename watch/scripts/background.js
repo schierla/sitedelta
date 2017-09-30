@@ -1,15 +1,16 @@
-var alarmListener = function(alarm) {
+var alarmListener = function (alarm) {
     var url = alarm.name;
     console.log("SiteDelta: Scanning " + url);
-    pageUtils.getEffectiveConfig(url, function(config) {
-        if(config === null) return;
-        watchUtils.loadPage(url, function(doc) {
+    pageUtils.getEffectiveConfig(url, function (config) {
+        if (config === null) return;
+        watchUtils.loadPage(url, function (doc) {
+            if (doc === null) return watchUtils.setChanges(url, -1, () => updateAlarm(url));
             var newContent = textUtils.getText(doc, config);
-            pageUtils.getContent(url, function(oldContent) {
-                if(textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
-                    pageUtils.getTitle(url, function(title) {
+            pageUtils.getContent(url, function (oldContent) {
+                if (textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
+                    pageUtils.getTitle(url, function (title) {
                         chrome.notifications.create(url, {
-                            "type": "basic", 
+                            "type": "basic",
                             "iconUrl": chrome.extension.getURL("common/icons/changed-64.png"),
                             "title": chrome.i18n.getMessage("watchExtensionName"),
                             "message": title
@@ -26,9 +27,9 @@ var alarmListener = function(alarm) {
     });
 };
 
-var initAlarms = function() {
-    pageUtils.list(function(pages) {
-        for(var i=0; i<pages.length; i++) {
+var initAlarms = function () {
+    pageUtils.list(function (pages) {
+        for (var i = 0; i < pages.length; i++) {
             updateAlarm(pages[i]);
         }
     });
@@ -36,34 +37,34 @@ var initAlarms = function() {
 
 var nextAllowedAlarm = 0;
 
-var updateAlarm = function(url) {
+var updateAlarm = function (url) {
     pageUtils.getChanges(url, changes => {
-        if(changes > 0) return; 
+        if (changes > 0) return;
         pageUtils.getNextScan(url,
             (nextScan) => {
-                if(nextScan == 0) return;
-                if(nextAllowedAlarm < Date.now() + 5000) nextAllowedAlarm = Date.now() + 5000;
-                if(nextScan < nextAllowedAlarm) {
+                if (nextScan == 0) return;
+                if (nextAllowedAlarm < Date.now() + 5000) nextAllowedAlarm = Date.now() + 5000;
+                if (nextScan < nextAllowedAlarm) {
                     nextScan = nextAllowedAlarm;
                     nextAllowedAlarm += 5000;
                 }
                 console.log("SiteDelta: Scheduling scan of " + url + " for " + new Date(nextScan).toLocaleString());
-                chrome.alarms.create(url, {"when": nextScan});
+                chrome.alarms.create(url, { "when": nextScan });
             }
         )
     });
 }
 
-var removeAlarm = function(url) {
+var removeAlarm = function (url) {
     chrome.alarms.clear(url);
 }
 
-var messageListener = function(request, sender, sendResponse) {
-    if(request.command == "updateAlarm") {
+var messageListener = function (request, sender, sendResponse) {
+    if (request.command == "updateAlarm") {
         updateAlarm(request.url);
-    } else if(request.command == "removeAlarm") {
+    } else if (request.command == "removeAlarm") {
         removeAlarm(request.url);
-    } else if(request.command == "openChanged") {
+    } else if (request.command == "openChanged") {
         pageUtils.listChanged(function (urls) {
             for (var i = 0; i < urls.length; i++) {
                 tabUtils.openResource("watch/show.htm?" + urls[i]);
@@ -72,7 +73,7 @@ var messageListener = function(request, sender, sendResponse) {
     }
 };
 
-var notificationListener = function(url) {
+var notificationListener = function (url) {
     tabUtils.openResource("watch/show.htm?" + url);
 }
 

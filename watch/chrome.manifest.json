@@ -36,7 +36,7 @@
 	},
 	
 	"options_ui": {
-		"page": "watch/manage.htm",
+		"page": "watch/options.htm",
 		"chrome_style": true
 	},
 

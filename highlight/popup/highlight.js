@@ -233,6 +233,10 @@ tabUtils.getActive(function (tab) {
 		document.body.classList.add("unavailable");
 		return;
 	}
+	
+	if(url == "https://sitedelta.schierla.de/transfer/") {
+		tabUtils._executeScripts(tabId, ["../common/scripts/transferScript.js"]);
+	}
 
 	tabUtils.getStatus(tabId, fillStatus);
 	pageUtils.getTitle(url, (title) => {

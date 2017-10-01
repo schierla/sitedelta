@@ -74,13 +74,13 @@ function requirePermission(name, callback) {
 		try {
 			chrome.permissions.request(permissions[name], (success) => {
 				if (success) delete (permissions[name]);
-				callback(success);
+				if (callback !== undefined) callback(success);
 			});
 		} catch (e) {
-			callback(false);
+			if (callback !== undefined) callback(false);
 		}
 	} else {
-		callback(true);
+		if (callback !== undefined) callback(true);
 	}
 }
 
@@ -91,16 +91,16 @@ var permissions = {
 
 function checkScanOnLoad(selected, callback) {
 	requirePermission("scanonload", (success) => {
-		callback(selected & success);
+		if (callback !== undefined) callback(selected & success);
 	});
 }
 function checkHighlightOnLoad(selected, callback) {
-	callback(selected & document.querySelector("#scanonload").checked);
+	if (callback !== undefined) callback(selected & document.querySelector("#scanonload").checked);
 }
 
 function checkContextMenu(selected, callback) {
 	requirePermission("contextmenu", (success) => {
-		callback(selected & success);
+		if (callback !== undefined) callback(selected & success);
 	});
 };
 
@@ -196,8 +196,7 @@ function load() {
 
 function notifyChanged() {
 	showOptions();
-	chrome.runtime.sendMessage({ command: "reinitialize" }, function () { });
+	chrome.runtime.sendMessage({ command: "reinitialize" });
 }
 
-uiUtils.i18n();
 load();

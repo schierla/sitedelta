@@ -1,5 +1,3 @@
-uiUtils.i18n();
-
 function addPage(url) {
 	pageUtils.getTitle(url, title => {
 		pageUtils.getChanges(url, changes => {
@@ -30,7 +28,7 @@ document.querySelector("#importConfig").addEventListener("click", function (e) {
 		configUtils.getDefaultConfig((defaultConfig) => {
 			var update = {};
 			config["watchDelay"] = config["watchScanDelay"];
-			if(config["watchDelay"] == 0) delete config["watchDelay"];
+			if (config["watchDelay"] == 0) delete config["watchDelay"];
 			for (var key in config) {
 				if (key in defaultConfig) update[key] = config[key];
 			}
@@ -53,11 +51,11 @@ function importPages(pages, time) {
 		showPages();
 	} else {
 		var page = pages.shift();
-		if(page.watchDelay == 0) page["watchDelay"] = null;
-		else if(page.watchDelay == -1) page.watchDelay = 0;
-		
+		if (page.watchDelay == 0) page["watchDelay"] = null;
+		else if (page.watchDelay == -1) page.watchDelay = 0;
+
 		pageUtils.getConfig(page.url, (config) => {
-			if(config !== null) return importPages(pages, time);
+			if (config !== null) return importPages(pages, time);
 			pageUtils.create(page.url, page.name, () => {
 				var settings = { "includes": page.includes, "excludes": page.excludes };
 				if (page.checkDeleted !== null) settings["checkDeleted"] = page.checkDeleted;
@@ -65,13 +63,12 @@ function importPages(pages, time) {
 				if (page.ignoreCase !== null) settings["ignoreCase"] = page.ignoreCase;
 				if (page.ignoreNumbers !== null) settings["ignoreNumbers"] = page.ignoreNumbers;
 				if (page.watchDelay !== null) settings["watchDelay"] = page.watchDelay;
-	
+
 				pageUtils.setConfig(page.url, settings, () => {
-					pageUtils.setContent(page.url, page.content, () => { 
+					pageUtils.setContent(page.url, page.content, () => {
 						pageUtils.setNextScan(page.url, time, () => {
-							watchUtils.updateAlarm(page.url);
-							importPages(pages, time + 10000); 
-						});	
+							importPages(pages, time + 10000);
+						});
 					});
 				})
 			});

@@ -1,39 +1,39 @@
 var configUtils = {
-	getDefaultConfig: function(callback) {
+	getDefaultConfig: function (callback) {
 		ioUtils.getConfig((config) => {
-			if(configUtils._upgrade(config)) {
-				ioUtils.setConfig(config, () => {});
+			if (configUtils._upgrade(config)) {
+				ioUtils.setConfig(config);
 			}
-			callback(config);
+			if (callback !== undefined) callback(config);
 		});
 	},
-	setDefaultConfigProperties: function(update, callback) {
+	setDefaultConfigProperties: function (update, callback) {
 		configUtils.getDefaultConfig((config) => {
-			for(var key in update) config[key] = update[key];
+			for (var key in update) config[key] = update[key];
 			ioUtils.setConfig(config, callback);
 		});
 	},
-	
-	getPresetConfig: function(uri, callback) {
-		callback({});
+
+	getPresetConfig: function (uri, callback) {
+		if (callback !== undefined) callback({});
 	},
 
-	getEffectiveConfig: function(override, callback) {
+	getEffectiveConfig: function (override, callback) {
 		configUtils.getDefaultConfig((config) => {
 			var ret = {};
-			for(var key in config) ret[key] = config[key];
-			for(var key in override) ret[key] = override[key];
-			callback(ret);
+			for (var key in config) ret[key] = config[key];
+			for (var key in override) ret[key] = override[key];
+			if (callback !== undefined) callback(ret);
 		});
-	}, 
+	},
 
-	_upgrade: function(config) {
+	_upgrade: function (config) {
 		var upgraded = false;
-		if(!("configVersion" in config)) {
+		if (!("configVersion" in config)) {
 			config.configVersion = 0;
 			upgraded = true;
 		}
-		if(config.configVersion == 0) {
+		if (config.configVersion == 0) {
 			config.addBackground = "#ff8";
 			config.addBorder = "#f00";
 			config.includeRegion = "#f00";
@@ -50,27 +50,27 @@ var configUtils = {
 			config.includes = ["/html/body[1]"];
 			config.excludes = [];
 			config.configVersion = 1,
-			upgraded = true;
+				upgraded = true;
 		}
-		if(config.configVersion == 1) {
+		if (config.configVersion == 1) {
 			config.scanOnLoad = false;
 			config.highlightOnLoad = false;
 			config.enableContextMenu = false;
 			config.configVersion = 2,
-			upgraded = true;
+				upgraded = true;
 		}
-		if(config.configVersion == 2) {
+		if (config.configVersion == 2) {
 			config.autoDelayPercent = 150;
 			config.autoDelayMin = 10;
 			config.autoDelayMax = 10080;
 			config.watchDelay = 1440;
 			config.configVersion = 3,
-			upgraded = true;
+				upgraded = true;
 		}
 		return upgraded;
 	},
 
-	_initial: function() {
+	_initial: function () {
 		return {
 		};
 	}

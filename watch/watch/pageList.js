@@ -7,6 +7,7 @@ function deleteSelected() {
 		if (options[i].selected) {
 			options[i].selected = false;
 			ioUtils.remove(options[i].value, deleteSelected);
+			return;
 		}
 	}
 }
@@ -35,7 +36,7 @@ function markSeenSelected() {
 
 function markSeen(url, callback) {
 	pageUtils.getEffectiveConfig(url, function (config) {
-		if (config === null) callback();
+		if (config === null) return (callback !== undefined) ? callback() : null;
 		watchUtils.loadPage(url, function (doc) {
 			if (doc === null) return pageUtils.setChanges(url, -1, callback);
 			var newContent = textUtils.getText(doc, config);
@@ -95,7 +96,7 @@ function showPages() {
 
 			var title = "title" in index[url] ? index[url].title : url;
 			if (!(url in pageNodes)) {
-				if (!("title" in index[url])) pageUtils.getTitle(url, () => { });
+				if (!("title" in index[url])) pageUtils.getTitle(url);
 				pageNodes[url] = document.createElement("option");
 				pageNodes[url].setAttribute("value", url);
 				pageNodes[url].appendChild(document.createTextNode(title));

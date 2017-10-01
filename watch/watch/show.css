@@ -23,14 +23,18 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 .known #delete {display: inline; }
 
 #disabled {display: inline; }
-.known #disabled {display: none; }
-#unchanged, #changed, #known, #selecting, #failed {display: none; }
-.changed #changed, .unchanged #unchanged, .known #known, .selecting #selecting, .failed #failed {display: inline; }
-.known.changed #known, .known.unchanged #known, .known.selecting #known, .known.failed #known {display: none; }
+.known #disabled, .loadfail #disabled {display: none; }
+#unchanged, #changed, #known, #selecting, #failed, #loadfail {display: none; }
+.changed #changed, .unchanged #unchanged, .known #known, .selecting #selecting, .failed #failed, .loadfail #loadfail {display: inline; }
+.known.changed #known, .known.unchanged #known, .known.selecting #known, .known.failed #known, .loadfail #known {display: none; }
 
 #loading {position: absolute; left: 0; top: 0; bottom: 0; right: 0; }
 #loading img {position: absolute; left: 50%; top: 50%; transform: translateY(-50%) translateY(-50%); animation: animate 2s linear infinite; height: 2em; height: 2em; }
 #iframe {position: absolute; left: 0; top: 0; width: 100%; height: 100%; border: none 0px; background: #fff; }
+.loadfail #loading img {animation: none; transform: translateY(-50%) translateY(-50%) scale(2); }
+
+#iframe {visibility: hidden; }
+.loaded #iframe {visibility: visible; }
 
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 .buttons {text-align: right; }

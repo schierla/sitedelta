@@ -5,7 +5,7 @@ var tabUtils = {
 	},
 	getActive: function (callback) {
 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-			callback(tabs[0]);
+			if (callback !== undefined) callback(tabs[0]);
 		});
 	},
 	showIcon: function (tabId, name, callback) {
@@ -21,7 +21,7 @@ var tabUtils = {
 			},
 				callback);
 		} else {
-			callback();
+			if (callback !== undefined) callback();
 		}
 	},
 	getStatus: function (tabId, callback) {
@@ -30,19 +30,19 @@ var tabUtils = {
 	getContent: function (tabId, url, callback) {
 		pageUtils.getEffectiveConfig(url, function (config) {
 			tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {
-				callback(content);
+				if (callback !== undefined) callback(content);
 			});
 		});
 	},
 	highlightChanges: function (tabId, url, callback) {
 		pageUtils.getEffectiveConfig(url, function (config) {
 			tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {
-				if(content === undefined) return callback();
+				if (content === undefined) return (callback !== undefined) ? callback() : null;
 				pageUtils.getContent(url, function (oldcontent) {
 					if (oldcontent === null) oldcontent = "";
 					pageUtils.setContent(url, content, function () {
 						tabUtils._callContentScript(tabId, { command: "highlightChanges", config: config, content: oldcontent }, function (status) {
-							callback(status);
+							if (callback !== undefined) callback(status);
 						});
 					});
 				});
@@ -84,24 +84,24 @@ var tabUtils = {
 						if (status === undefined) {
 							console.log("Error calling content script '" + command.command + "': " +
 								chrome.runtime.lastError);
-							callback();
+							if (callback !== undefined) callback();
 						} else {
-							callback(status);
+							if (callback !== undefined) callback(status);
 						}
 					});
 				});
 			} else {
-				callback(status);
+				if (callback !== undefined) callback(status);
 			}
 		});
 	},
 	_executeScripts: function (tabId, files, callback) {
 		if (files.length == 0) {
-			callback();
+			if (callback !== undefined) callback();
 		} else {
 			var file = files.splice(0, 1);
 			chrome.tabs.executeScript(tabId, { file: file[0] }, function (results) {
-				if(results === undefined) console.log("Error executing script: " + chrome.runtime.lastError);
+				if (results === undefined) console.log("Error executing script: " + chrome.runtime.lastError);
 				tabUtils._executeScripts(tabId, files, callback);
 			});
 		}

@@ -8,27 +8,27 @@ var pageUtils = {
 	},
 	getStatus: function (url, callback) {
 		ioUtils.findInIndex((furl, fstatus) => (url == furl ? fstatus : null),
-			(result) => result.length > 0 ? callback(result[0]) : callback(null));
+			(result) => (callback !== undefined) ? callback(result.length > 0 ? result[0] : null) : null);
 	},
 	getChanges: function (url, callback) {
 		pageUtils.getStatus(url,
-			(status) => callback(status !== null && "changes" in status ? status["changes"] : 0));
+			(status) => (callback !== undefined) ? callback(status !== null && "changes" in status ? status["changes"] : 0) : null);
 	},
 	getNextScan: function (url, callback) {
 		pageUtils.getStatus(url,
-			(status) => callback(status !== null && "nextScan" in status ? status["nextScan"] : Date.now() + 60000));
+			(status) => (callback !== undefined) ? callback(status !== null && "nextScan" in status ? status["nextScan"] : Date.now() + 60000) : null);
 	},
 	getTitle: function (url, callback) {
 		pageUtils.getStatus(url, status => {
-			if (status === null) return callback(null);
+			if (status === null) return (callback !== undefined) ? callback(null) : null;
 			if ("title" in status)
-				callback(status["title"]);
-			else
-				ioUtils.get(url, "title", title => {
-					pageUtils.setTitle(url, title, () => {
-						callback(title);
+				if (callback !== undefined) callback(status["title"]);
+				else
+					ioUtils.get(url, "title", title => {
+						pageUtils.setTitle(url, title, () => {
+							if (callback !== undefined) callback(title);
+						});
 					});
-				});
 		});
 	},
 	getContent: function (url, callback) {
@@ -39,12 +39,12 @@ var pageUtils = {
 	},
 	getEffectiveConfig: function (url, callback) {
 		pageUtils.getConfig(url, (config) => {
-			if (config === null) callback(null);
+			if (config === null) (callback !== undefined) ? callback(null) : null;
 			else configUtils.getEffectiveConfig(config, callback);
 		});
 	},
 	getEffectiveConfigProperty: function (url, property, callback) {
-		pageUtils.getEffectiveConfig(url, (config) => callback(config[property]));
+		pageUtils.getEffectiveConfig(url, (config) => (callback !== undefined) ? callback(config[property]) : null);
 	},
 	getOrCreateEffectiveConfig: function (url, title, callback) {
 		pageUtils.getEffectiveConfig(url, function (config) {
@@ -52,7 +52,7 @@ var pageUtils = {
 				pageUtils.create(url, title,
 					() => pageUtils.getEffectiveConfig(url, callback));
 			} else {
-				callback(config);
+				if (callback !== undefined) callback(config);
 			}
 		});
 	},
@@ -62,7 +62,7 @@ var pageUtils = {
 			pageUtils.setStatus(url, { "title": title },
 				() => pageUtils.setTitle(url, pagetitle,
 					() => pageUtils.setConfig(url, config,
-						() => callback())));
+						() => (callback !== undefined) ? callback() : null)));
 		});
 	},
 	remove: function (url, callback) {
@@ -73,7 +73,7 @@ var pageUtils = {
 	},
 	setStatusKey: function (url, key, value, callback) {
 		pageUtils.getStatus(url, (status) => {
-			if (key in status && status[key] == value) return callback();
+			if (key in status && status[key] == value) return (callback !== undefined) ? callback() : null;
 			if (status === null) status = {};
 			status[key] = value; pageUtils.setStatus(url, status, callback);
 		});

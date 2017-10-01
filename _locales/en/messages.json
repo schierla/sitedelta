@@ -44,6 +44,10 @@
 		"message": "SiteDelta Watch monitors this page.",
 		"description": "Text that watching of the current page is enabled"
 	},
+	"watchFailed": {
+		"message": "SiteDelta Watch could not load this page.",
+		"description": "Text that downloading the current page failed"
+	},
 	"watchChangedPages": {
 		"message": "Pages modified since last visit:",
 		"description": "Headline for changed pages"

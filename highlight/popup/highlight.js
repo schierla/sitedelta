@@ -7,7 +7,7 @@ function registerListener(option) {
 	var performUpdate = (value) => {
 		pageUtils.setConfigProperty(url, option.key, value, () => {
 			if (option.post) option.post();
-			if(option.type=="text") document.querySelector("#" + option.elem).value = value;
+			if (option.type == "text") document.querySelector("#" + option.elem).value = value;
 			else if (option.type == "checkbox") document.querySelector("#" + option.elem).checked = value;
 		});
 	};
@@ -44,14 +44,14 @@ function registerListener(option) {
 			});
 		});
 		document.querySelector("#" + option.elem).addEventListener("dblclick", function (e) {
-			if(option.edit) {
+			if (option.edit) {
 				var oldValue = document.querySelector("#" + option.elem).value;
-				if(oldValue === null) return;
+				if (oldValue === null) return;
 				option.edit(oldValue, newValue => {
-					if(newValue === null) return;
+					if (newValue === null) return;
 					var newlist = [];
 					for (var i = 0; i < option.contents.length; i++) {
-						if(option.contents[i] != oldValue)
+						if (option.contents[i] != oldValue)
 							newlist.push(option.contents[i]);
 						else
 							newlist.push(newValue);
@@ -97,32 +97,32 @@ function showOptions() {
 
 
 function selectExclude(callback) {
-	tabUtils.selectExclude(tabId, url, function() {
-		fillStatus({state: STATE.SELECTREGION});
+	tabUtils.selectExclude(tabId, url, function () {
+		fillStatus({ state: STATE.SELECTREGION });
 		setTimeout(() => window.close(), 5000);
 	});
 }
 
 function selectInclude(callback) {
-	tabUtils.selectInclude(tabId, url, function() {
-		fillStatus({state: STATE.SELECTREGION});     
+	tabUtils.selectInclude(tabId, url, function () {
+		fillStatus({ state: STATE.SELECTREGION });
 		setTimeout(() => window.close(), 5000);
 	});
 }
 
 function showOutline(region, color) {
-	if(region) tabUtils.showOutline(tabId, region, color, () => {}); 
-	else tabUtils.removeOutline(tabId, () => {});
+	if (region) tabUtils.showOutline(tabId, region, color);
+	else tabUtils.removeOutline(tabId);
 }
 
 function addBodyIfEmpty(list, callback) {
 	if (list.length == 0) list.push("/html/body[1]");
-	if(list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
-	callback(list);
+	if (list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
+	if (callback !== undefined) callback(list);
 }
 
 function editXpath(xpath, callback) {
-	callback(prompt(chrome.i18n.getMessage("configRegionXpath"), xpath));
+	if (callback !== undefined) callback(prompt(chrome.i18n.getMessage("configRegionXpath"), xpath));
 }
 
 var options = [
@@ -136,34 +136,32 @@ var options = [
 
 registerListeners();
 
-uiUtils.i18n();
 
-
-document.querySelector("#setup").addEventListener("click", function(e) {
+document.querySelector("#setup").addEventListener("click", function (e) {
 	tabUtils.openResource("highlight/manage.htm");
 	window.close();
 });
 
-document.querySelector("#pagetitle").addEventListener("change", function(e) {
-	pageUtils.setTitle(url, document.querySelector("#pagetitle").value, () => {});
+document.querySelector("#pagetitle").addEventListener("change", function (e) {
+	pageUtils.setTitle(url, document.querySelector("#pagetitle").value);
 	document.body.classList.remove("disabled");
-	document.querySelector("#delete").style.visibility = 'visible';    
+	document.querySelector("#delete").style.visibility = 'visible';
 });
 
-document.querySelector("#delete").addEventListener("click", function(e) {
+document.querySelector("#delete").addEventListener("click", function (e) {
 	tabUtils.showIcon(tabId, "neutral", () => {
 		pageUtils.remove(url, () => {
-			window.close(); 
+			window.close();
 		});
 	});
 });
 
-document.querySelector("#highlight").addEventListener("click", function(e) {
+document.querySelector("#highlight").addEventListener("click", function (e) {
 	pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, () => {
 		document.body.classList.remove("disabled");
 		document.body.classList.remove("expanded");
 		document.body.classList.add("enabled");
-		tabUtils.highlightChanges(tabId, url, function(status) {
+		tabUtils.highlightChanges(tabId, url, function (status) {
 			fillStatus(status);
 		});
 	});
@@ -177,12 +175,12 @@ function expand() {
 	});
 }
 
-document.querySelector("#expand").addEventListener("click", function(e) {
+document.querySelector("#expand").addEventListener("click", function (e) {
 	expand();
 });
 
 var STATE = {
-	LOADED: 1, 
+	LOADED: 1,
 	HIGHLIGHTED: 2,
 	SELECTREGION: 3
 };
@@ -198,30 +196,30 @@ function fillStatus(status) {
 	document.body.classList.remove("changed");
 	document.body.classList.remove("unchanged");
 	document.body.classList.remove("selecting");
-	if(status === undefined) {
+	if (status === undefined) {
 		document.body.classList.add("unavailable");
 		return;
 	}
 
-	switch(status.state) {
-	case STATE.LOADED:
-		document.body.classList.add("loaded");
-		break;
-	case STATE.HIGHLIGHTED:
-		document.body.classList.add("highlighted");
-		if(status.changes == 0) {
-			document.body.classList.add("unchanged");
-		} else if(status.changes > 0) {
-			document.body.classList.add("changed");
-			document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("pageChanged", [status.current, status.changes]);
-		} else {
-			document.body.classList.add("failed");
-			expand();
-		}
-		break;
-	case STATE.SELECTREGION:
-		document.body.classList.add("selecting");	
-		break;
+	switch (status.state) {
+		case STATE.LOADED:
+			document.body.classList.add("loaded");
+			break;
+		case STATE.HIGHLIGHTED:
+			document.body.classList.add("highlighted");
+			if (status.changes == 0) {
+				document.body.classList.add("unchanged");
+			} else if (status.changes > 0) {
+				document.body.classList.add("changed");
+				document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("pageChanged", [status.current, status.changes]);
+			} else {
+				document.body.classList.add("failed");
+				expand();
+			}
+			break;
+		case STATE.SELECTREGION:
+			document.body.classList.add("selecting");
+			break;
 	}
 }
 
@@ -229,20 +227,20 @@ var tabId = null;
 var url = null;
 var config = null;
 
-tabUtils.getActive(function(tab) {
+tabUtils.getActive(function (tab) {
 	tabId = tab.id; url = tab.url;
-	if(url.substr(0,4)!="http") {
+	if (url.substr(0, 4) != "http") {
 		document.body.classList.add("unavailable");
 		return;
 	}
 
 	tabUtils.getStatus(tabId, fillStatus);
 	pageUtils.getTitle(url, (title) => {
-		if(title === null) {
-			showTitle(tab.title); 
+		if (title === null) {
+			showTitle(tab.title);
 			document.body.classList.add("disabled");
 		} else {
-			showTitle(title); 
+			showTitle(title);
 			document.body.classList.add("enabled");
 		}
 	});

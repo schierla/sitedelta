@@ -44,6 +44,10 @@
 		"message": "SiteDelta Watch ist auf deser Seite aktiv.",
 		"description": "Text that watching of the current page is enabled"
 	},
+	"watchFailed": {
+		"message": "SiteDelta Watch konnte die Seite nicht laden.",
+		"description": "Text that downloading the current page failed"
+	},
 	"watchChangedPages": {
 		"message": "Seit dem letzten Besuch geänderte Seiten:",
 		"description": "Headline for changed pages"

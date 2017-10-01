@@ -1,5 +1,6 @@
 function highlight() {
 	if (document.body.classList.contains("selecting")) regionUtils.abortSelect();
+	if(document.body.classList.contains("loadfail")) return;
 	document.body.classList.remove("selecting");
 	document.body.classList.remove("unchanged");
 	document.body.classList.remove("changed");
@@ -13,7 +14,7 @@ function highlight() {
 			known = true;
 
 			var newcontent = textUtils.getText(idoc, config);
-			pageUtils.setContent(url, newcontent, () => { });
+			pageUtils.setContent(url, newcontent);
 
 			changes = highlightUtils.highlightChanges(idoc, config, content);
 			if (changes > 0) {
@@ -25,25 +26,22 @@ function highlight() {
 				document.body.classList.add("failed");
 			}
 			showData();
-			watchUtils.setChanges(url, 0, () => watchUtils.updateAlarm(url));
+			watchUtils.setChanges(url, 0);
 		});
 	});
 }
 
 function stopIt(e) {
-	console.log("handling click onto " + JSON.stringify(e.target));
-	if(document.body.classList.contains("selecting")) {
+	if (document.body.classList.contains("selecting")) {
 		e.preventDefault();
 		e.stopPropagation();
-		console.log("suppressing due to selection");
 		return;
 	}
-	if(e.ctrlKey) return;
+	if (e.ctrlKey) return;
 	var target = e.target;
-	while(target != null) {
-		if(target.href) {
+	while (target != null) {
+		if (target.href) {
 			window.location.search = target.href;
-			console.log("following link");
 			return;
 		}
 		target = target.parentNode;
@@ -53,13 +51,19 @@ function stopIt(e) {
 }
 
 function loadPage(callback) {
+	document.body.classList.remove("loaded");
+	document.body.classList.remove("loadfail");
 	var iframe = document.getElementById("iframe");
 	changes = -1; current = -1;
-	iframe.style.visibility = "hidden";
 	var idoc = iframe.contentWindow.document;
 	while (idoc.firstChild) idoc.removeChild(idoc.firstChild);
 	watchUtils.loadPage(url, function (doc) {
-		if (doc === null) return;
+		if (doc === null) {
+			document.body.classList.add("loadfail");
+			if (callback !== undefined) callback();
+			return;
+		} 
+		document.body.classList.add("loaded");
 		var idoc = iframe.contentWindow.document;
 		if (title == "") title = doc.title;
 		var base = doc.createElement("base");
@@ -68,8 +72,7 @@ function loadPage(callback) {
 		var adopted = idoc.adoptNode(doc.documentElement);
 		idoc.appendChild(adopted);
 		idoc.body.addEventListener("click", stopIt, true);
-		iframe.style.visibility = "visible";
-		callback();
+		if (callback !== undefined) callback();
 	});
 }
 
@@ -110,14 +113,14 @@ function registerListener(option) {
 	});
 	if (option.type == "list") {
 		document.querySelector("#" + option.elem).addEventListener("dblclick", function (e) {
-			if(option.edit) {
+			if (option.edit) {
 				var oldValue = document.querySelector("#" + option.elem).value;
-				if(oldValue === null) return;
+				if (oldValue === "") return;
 				option.edit(oldValue, newValue => {
-					if(newValue === null) return;
+					if (newValue === null || newValue === "") return;
 					var newlist = [];
 					for (var i = 0; i < option.contents.length; i++) {
-						if(option.contents[i] != oldValue)
+						if (option.contents[i] != oldValue)
 							newlist.push(option.contents[i]);
 						else
 							newlist.push(newValue);
@@ -185,16 +188,16 @@ function editRegion(xpath, callback) {
 function selectRegion(callback) {
 	var iframe = document.getElementById("iframe");
 	var idoc = iframe.contentWindow.document;
-	if (document.body.classList.contains("selecting")) {
+	if (document.body.classList.contains("selecting") || document.body.classList.contains("loadfail")) {
 		regionUtils.abortSelect();
 		document.body.classList.remove("selecting");
-		var region = prompt(chrome.i18n.getMessage("configRegionXpath"), "/html/body[1]");
-		if (region) callback(region);
+		var region = prompt(chrome.i18n.getMessage("configRegionXpath"), "");
+		if (region && callback !== undefined) callback(region);
 	} else {
 		document.body.classList.add("selecting");
 		regionUtils.selectRegion(idoc, region => {
 			document.body.classList.remove("selecting");
-			if (region) callback(region);
+			if (region && callback !== undefined) callback(region);
 		});
 	}
 }
@@ -212,11 +215,9 @@ function showOutline(outline, color) {
 function addBodyIfEmpty(list, callback) {
 	if (list.length == 0) list.push("/html/body[1]");
 	if (list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
-	callback(list);
+	if (callback !== undefined) callback(list);
 }
 
-
-uiUtils.i18n();
 
 var options = [
 	{ type: "checkbox", key: "checkDeleted", elem: "checkdeleted" },
@@ -254,14 +255,13 @@ registerListeners();
 
 document.querySelector("#pagetitle").addEventListener("change", function (e) {
 	title = document.querySelector("#pagetitle").value;
-	pageUtils.setTitle(url, title, function () { });
+	pageUtils.setTitle(url, title);
 	showData();
 });
 
 
 document.querySelector("#delete").addEventListener("click", function (e) {
 	pageUtils.remove(url, function () {
-		watchUtils.removeAlarm(url);
 		document.body.classList.remove("unchanged");
 		document.body.classList.remove("changed");
 		document.body.classList.remove("failed");

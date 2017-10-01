@@ -1,16 +1,16 @@
 var textUtils = {
-	
-	getText: function(doc, config) {
+
+	getText: function (doc, config) {
 		var regions = textUtils._findElements(doc, config.includes);
 		var excludes = textUtils._findElements(doc, config.excludes);
 		var text = "";
-		for (var i = 0; i < regions.length; i ++ ) {
+		for (var i = 0; i < regions.length; i++) {
 			text += textUtils._getTextForNode(regions[i], config, excludes);
 		}
 		return text;
 	},
-	
-	clean: function(text, config) {
+
+	clean: function (text, config) {
 		if (config.ignoreCase)
 			text = text.toLowerCase();
 		if (config.ignoreNumbers)
@@ -18,21 +18,21 @@ var textUtils = {
 		return text;
 	},
 
-	_findElements: function(doc, xpaths) {
+	_findElements: function (doc, xpaths) {
 		var ret = [];
-		for (var i = 0; i < xpaths.length; i ++ ) {
+		for (var i = 0; i < xpaths.length; i++) {
 			var elements = doc.evaluate(xpaths[i], doc, null, XPathResult.ANY_TYPE, null);
-			for(var element = elements.iterateNext(); element!=null; element = elements.iterateNext()) {
+			for (var element = elements.iterateNext(); element != null; element = elements.iterateNext()) {
 				ret.push(element);
 			}
 		}
 		return ret;
 	},
 
-	_filter: function(config, excludes) {
+	_filter: function (config, excludes) {
 		return {
-			acceptNode: function(cur) {
-				for (var i = 0; i < excludes.length; i ++ )
+			acceptNode: function (cur) {
+				for (var i = 0; i < excludes.length; i++)
 					if (excludes[i] == cur)
 						return NodeFilter.FILTER_REJECT;
 				if (cur.nodeName == 'SCRIPT' || cur.nodeName == 'NOSCRIPT' || cur.nodeName == 'STYLE')
@@ -41,11 +41,11 @@ var textUtils = {
 					return NodeFilter.FILTER_ACCEPT;
 				return NodeFilter.FILTER_SKIP;
 			}
-		};	
+		};
 	},
 
-	_getTextForNode: function(node, config, excludes) {
-		var doc = node.ownerDocument, cur=null, text="", ret = "";
+	_getTextForNode: function (node, config, excludes) {
+		var doc = node.ownerDocument, cur = null, text = "", ret = "";
 		var tw = doc.createTreeWalker(node, NodeFilter.SHOW_ALL, textUtils._filter(config, excludes), true);
 		while ((cur = tw.nextNode()) !== null) {
 			if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {

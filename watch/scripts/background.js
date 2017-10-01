@@ -36,14 +36,68 @@ function scanPage(url, callback) {
 }
 
 var messageListener = function (request, sender, sendResponse) {
+    var hiddenConfig = ["configVersion","includes","excludes","scanOnLoad","highlightOnLoad","enableContextMenu"];
     if (request.command == "openChanged") {
         pageUtils.listChanged(function (urls) {
             for (var i = 0; i < urls.length; i++) {
                 tabUtils.openResource("show.htm?" + urls[i]);
             }
         });
-    }
+    } else if(request.command == "transferCaps") {
+		sendResponse({name: "SiteDelta Watch", id: "sitedelta-watch", import: ["config"], export: ["config", "pages"]});
+	} else if(request.command == "transferImport") {
+		if(request.scope == "config") {
+			configUtils.getDefaultConfig(config => {
+				var update = {};
+				var newConfig = JSON.parse(request.data);
+				for(var key in newConfig) {
+                    if(hiddenConfig.indexOf(key) >= 0) continue;
+					if(key in config) {
+						update[key] = newConfig[key];
+					}
+				}
+				configUtils.setDefaultConfigProperties(update);
+			});
+		}
+	} else if(request.command == "transferExport") {
+		if(request.scope == "config") {
+			configUtils.getDefaultConfig(config => {
+				var send = {};
+				for(var key in config) {
+					if(hiddenConfig.indexOf(key) >= 0) continue;
+					send[key] = config[key];
+				}
+				sendResponse(JSON.stringify(send, null, "  "))
+			});
+			return true;
+		} else if(request.scope == "pages") {
+			pageUtils.list((urls) => {
+				collectPages(urls, [],  pages => {
+					sendResponse(JSON.stringify(pages, null, "  "));
+				});
+			});
+			return true;
+		}
+	}
 };
+
+function collectPages(urls, pages, callback) {
+	if(urls.length == 0) return callback(pages);
+	var url = urls.shift();
+	pageUtils.getTitle(url, title => {
+		pageUtils.getConfig(url, config => {
+            pageUtils.getContent(url, content => {
+                var page = {url: url, title: title, content: content};
+                for(var key in config) {
+                    page[key] = config[key];
+                }
+                pages.push(page);
+                collectPages(urls, pages, callback);
+            });
+		});
+	});
+}
+
 
 var notificationListener = function (url) {
     tabUtils.openResource("show.htm?" + url);

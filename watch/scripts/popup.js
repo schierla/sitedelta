@@ -41,6 +41,12 @@ tabUtils.getActive(function (tab) {
 	url = tab.url;
 	title = tab.title;
 
+	if(url == "https://sitedelta.schierla.de/transfer/") {
+		tabUtils._executeScripts(tabId, ["/common/scripts/transferScript.js"]);
+		window.close();
+		return;
+	}
+
 	pageUtils.listChanged(function (urls) {
 		if (urls.length > 0) document.body.classList.add("changes");
 		for (var i = 0; i < urls.length; i++) {

@@ -100,6 +100,7 @@ var contextMenuListener = function (info, tab) {
 };
 
 var messageListener = function (request, sender, sendResponse) {
+	var hiddenConfig = ["configVersion","autoDelayPercent","autoDelayMin","autoDelayMax","watchDelay","includes","excludes"];
 	if (request.command == "addIncludeRegion") {
 		tabUtils.selectRegion(request.tab, function (xpath) {
 			pageUtils.addInclude(request.url, xpath);
@@ -118,11 +119,12 @@ var messageListener = function (request, sender, sendResponse) {
 				var update = {};
 				var newConfig = JSON.parse(request.data);
 				for(var key in newConfig) {
+					if(hiddenConfig.indexOf(key) >= 0) continue;
 					if(key in config) {
 						update[key] = newConfig[key];
 					}
 				}
-				configUtils.setDefaultConfigProperties(update);
+				configUtils.setDefaultConfigProperties(update, initialize);
 			});
 		}
 	} else if(request.command == "transferExport") {
@@ -130,16 +132,16 @@ var messageListener = function (request, sender, sendResponse) {
 			configUtils.getDefaultConfig(config => {
 				var send = {};
 				for(var key in config) {
-					if(["configVersion","autoDelayPercent","autoDelayMin","autoDelayMax","watchDelay","includes","excludes"].indexOf(key) >= 0) continue;
+					if(hiddenConfig.indexOf(key) >= 0) continue;
 					send[key] = config[key];
 				}
-				sendResponse(JSON.stringify(send, null, " "))
+				sendResponse(JSON.stringify(send, null, "  "))
 			});
 			return true;
 		} else if(request.scope == "pages") {
 			pageUtils.list((urls) => {
 				collectPages(urls, [],  pages => {
-					sendResponse(JSON.stringify(pages, null, " "));
+					sendResponse(JSON.stringify(pages, null, "  "));
 				});
 			});
 			return true;
@@ -152,12 +154,14 @@ function collectPages(urls, pages, callback) {
 	var url = urls.shift();
 	pageUtils.getTitle(url, title => {
 		pageUtils.getConfig(url, config => {
-			var page = {url: url, title: title};
-			for(var key in config) {
-				page[key] = config[key];
-			}
-			pages.push(page);
-			collectPages(urls, pages, callback);
+            pageUtils.getContent(url, content => {
+                var page = {url: url, title: title, content: content};
+                for(var key in config) {
+                    page[key] = config[key];
+                }
+                pages.push(page);
+                collectPages(urls, pages, callback);
+            });
 		});
 	});
 }

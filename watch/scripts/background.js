@@ -39,14 +39,14 @@ var messageListener = function (request, sender, sendResponse) {
     if (request.command == "openChanged") {
         pageUtils.listChanged(function (urls) {
             for (var i = 0; i < urls.length; i++) {
-                tabUtils.openResource("watch/show.htm?" + urls[i]);
+                tabUtils.openResource("show.htm?" + urls[i]);
             }
         });
     }
 };
 
 var notificationListener = function (url) {
-    tabUtils.openResource("watch/show.htm?" + url);
+    tabUtils.openResource("show.htm?" + url);
 }
 
 var index = {};

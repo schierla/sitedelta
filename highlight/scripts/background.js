@@ -95,7 +95,7 @@ var contextMenuListener = function (info, tab) {
 			});
 		});
 	} else if (info.menuItemId == menuOptions().id) {
-		tabUtils.openResource("highlight/manage.htm");
+		tabUtils.openResource("manage.htm");
 	}
 };
 

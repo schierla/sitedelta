@@ -1,3 +1,3 @@
 document.querySelector("#options").addEventListener("click", (e) => {
-    tabUtils.openResource("highlight/manage.htm");
+    tabUtils.openResource("manage.htm");
 });

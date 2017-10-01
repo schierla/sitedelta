@@ -37,7 +37,7 @@
 			"64": "common/icons/watch-64.png"
 		},
 		"default_title": "__MSG_watchExtensionName__",
-		"default_popup": "popup/watch.htm"
+		"default_popup": "popup.htm"
 	},
 	
 	"sidebar_action": {
@@ -48,12 +48,12 @@
 			"48": "common/icons/neutral-48.png",
 			"64": "common/icons/neutral-64.png"
 		},
-		"default_panel": "watch/pages.htm",
+		"default_panel": "pages.htm",
 		"browser_style": true
 	},
 	
 	"options_ui": {
-		"page": "watch/options.htm",
+		"page": "options.htm",
 		"browser_style": true
 	},
 	

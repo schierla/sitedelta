@@ -32,11 +32,11 @@
 			"64": "common/icons/watch-64.png"
 		},
 		"default_title": "__MSG_watchExtensionName__",
-		"default_popup": "popup/watch.htm"
+		"default_popup": "popup.htm"
 	},
 	
 	"options_ui": {
-		"page": "watch/options.htm",
+		"page": "options.htm",
 		"chrome_style": true
 	},
 

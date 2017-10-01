@@ -17,7 +17,7 @@ function openSelected() {
 	for (var i = 0; i < options.length; i++) {
 		if (options[i].selected) {
 			options[i].selected = false;
-			tabUtils.openResource("watch/show.htm?" + options[i].value);
+			tabUtils.openResource("show.htm?" + options[i].value);
 		}
 	}
 }

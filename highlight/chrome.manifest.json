@@ -35,12 +35,12 @@
 			"64": "common/icons/neutral-64.png"
 		},
 		"default_title": "__MSG_highlightExtensionName__",
-		"default_popup": "popup/highlight.htm",
+		"default_popup": "popup.htm",
 		"chrome_style": true
 	},
 
 	"options_ui": {
-		"page": "highlight/options.htm",
+		"page": "options.htm",
 		"chrome_style": true
 	},
 	

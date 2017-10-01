@@ -1,10 +1,10 @@
 document.querySelector("#watch").addEventListener("click", function (e) {
-	var showPrefix = chrome.runtime.getURL("watch/show.htm?");
+	var showPrefix = chrome.runtime.getURL("show.htm?");
 	chrome.tabs.update(tabId, { url: showPrefix + url }, () => { window.close(); });
 });
 
 document.querySelector("#options").addEventListener("click", function (e) {
-	tabUtils.openResource("watch/manage.htm");
+	tabUtils.openResource("manage.htm");
 	window.close();
 });
 
@@ -15,7 +15,7 @@ document.querySelector("#open").addEventListener("click", function (e) {
 
 document.querySelector("#changed").addEventListener("dblclick", function () {
 	if (document.querySelector("#changed").value) {
-		tabUtils.openResource("watch/show.htm?" + document.querySelector("#changed").value);
+		tabUtils.openResource("show.htm?" + document.querySelector("#changed").value);
 		window.close();
 	}
 });
@@ -48,7 +48,7 @@ tabUtils.getActive(function (tab) {
 		}
 	});
 
-	var showPrefix = chrome.runtime.getURL("watch/show.htm?");
+	var showPrefix = chrome.runtime.getURL("show.htm?");
 	if (url.startsWith(showPrefix)) url = url.substr(showPrefix.length); 
 
 	if (url.substr(0, 4) != "http") {

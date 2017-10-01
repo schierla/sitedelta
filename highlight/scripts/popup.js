@@ -138,7 +138,7 @@ registerListeners();
 
 
 document.querySelector("#setup").addEventListener("click", function (e) {
-	tabUtils.openResource("highlight/manage.htm");
+	tabUtils.openResource("manage.htm");
 	window.close();
 });
 
@@ -235,7 +235,9 @@ tabUtils.getActive(function (tab) {
 	}
 	
 	if(url == "https://sitedelta.schierla.de/transfer/") {
-		tabUtils._executeScripts(tabId, ["../common/scripts/transferScript.js"]);
+		tabUtils._executeScripts(tabId, ["/common/scripts/transferScript.js"]);
+		window.close();
+		return;
 	}
 
 	tabUtils.getStatus(tabId, fillStatus);

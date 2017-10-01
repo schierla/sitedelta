@@ -106,10 +106,10 @@ function showPages() {
 				pageNodes[url].setAttribute("title", url);
 			} else if (index[url]["changes"] == 0) {
 				pageNodes[url].classList.add("unchanged");
-				pageNodes[url].setAttribute("title", url + "\n" + chrome.i18n.getMessage("watchNextScan", new Date(nextScan).toLocaleString()));
+				pageNodes[url].setAttribute("title", url + (nextScan == 0 ? "" : "\n" + chrome.i18n.getMessage("watchNextScan", new Date(nextScan).toLocaleString())));
 			} else if (index[url]["changes"] == -1) {
 				pageNodes[url].classList.add("failed");
-				pageNodes[url].setAttribute("title", url + "\n" + chrome.i18n.getMessage("watchNextScan", new Date(nextScan).toLocaleString()));
+				pageNodes[url].setAttribute("title", url + (nextScan == 0 ? "" : "\n" + chrome.i18n.getMessage("watchNextScan", new Date(nextScan).toLocaleString())));
 			}
 		}
 	});

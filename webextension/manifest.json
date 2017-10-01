@@ -1,12 +1,15 @@
 {
 	"name": "SiteDelta",
-	"version": "0.14.1",
+	"version": "0.14.2",
 	"manifest_version": 2,
 	"background": {
 		"scripts": [
 			"background.js"
 		]
 	},
+	"permissions": [
+		"activeTab"
+	],
 	"browser_action": {
 		"browser_style": true,
 		"default_icon": {

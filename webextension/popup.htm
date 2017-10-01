@@ -2,23 +2,33 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="popup.css">
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="popup.css">
 </head>
 
 <body>
-    <div class="browser-style title">
-        SiteDelta will no longer work with Firefox 57 🙁
-    </div>
-    <div class="browser-style">
-        Instead, this extension allows you to transfer your existing configuration and watched pages to the two successor extensions,
-        <a href="https://addons.mozilla.org/firefox/addon/sitedelta-highlight/" target="_blank">SiteDelta Highlight</a> (for
-        highlighting changes on visited pages) and <a href="https://addons.mozilla.org/firefox/addon/sitedelta-watch/" target="_blank">SiteDelta Watch</a> (to regularly check pages in background).
-    </div>
-    <div class="browser-style">
-        Enter the configuration dialog of the corresponding extension and click "Import from SiteDelta" to perform the transfer.
-        Afterwards, you can uninstall this extension.
-    </div>
+	<div class="browser-style title">
+		SiteDelta will no longer work with Firefox 57 🙁
+	</div>
+	<div class="browser-style">
+		Instead, this extension allows you to transfer your existing configuration and watched pages to the two successor extensions,
+		<a href="https://addons.mozilla.org/firefox/addon/sitedelta-highlight/" target="_blank">SiteDelta Highlight</a> (for highlighting
+		changes on visited pages) and <a href="https://addons.mozilla.org/firefox/addon/sitedelta-watch/" target="_blank">SiteDelta Watch</a>	
+		(to regularly check pages in background).
+	</div>
+	<div class="browser-style" id="direct">
+		Enter the configuration dialog of the corresponding extension and click "Import from SiteDelta" to perform the transfer.
+		To get more control over the transfer, you can also take these manual steps:
+	</div>
+	<div class="browser-style" id="indirect">
+		Open the <a href="https://sitedelta.schierla.de/transfer/" target="blank">Transfer page</a> and click this toolbar button
+		of this extension as well as the toolbar button of the target extension. Then, you can use the corresponding import and 
+		export buttons to transfer selected data.
+	</div>
+	<div class="browser-style">
+		Once you have transferred all relevant data, you can uninstall this extension.
+	</div>
+	<script src="popup.js"></script>
 </body>
 
 </html>

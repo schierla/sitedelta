@@ -10,7 +10,7 @@ function getPresets(callback) {
 	var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
 	file.append("sitedelta");
 	var presets = [];
-	if(file.exists()) {
+	if (file.exists()) {
 		var entries = file.directoryEntries;
 		while (entries.hasMoreElements()) {
 			var entry = entries.getNext();
@@ -26,7 +26,7 @@ function getPages(callback) {
 	var file = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
 	file.append("sitedelta");
 	var ret = [];
-	if(file.exists()) {
+	if (file.exists()) {
 		var entries = file.directoryEntries;
 		while (entries.hasMoreElements()) {
 			var entry = entries.getNext();
@@ -71,6 +71,43 @@ function getSettings(callback) {
 	ret.autoMaxDelay = prefs.getIntPref("autoMaxDelay");
 	ret.autoDelayPercent = prefs.getIntPref("autoDelayPercent");
 	callback(ret);
+}
+
+function configExport(callback) {
+	getSettings(config => {
+		config["watchDelay"] = config["watchScanDelay"];
+		delete config["watchScanDelay"];
+		callback(JSON.stringify(config, null, "  "));
+	})
+}
+
+function pagesExport(callback) {
+	getPages(pages => {
+		for (var i = 0; i < pages.length; i++) {
+			pages[i].content = pages[i].content.substr(1);
+			_cleanPage(pages[i]);
+		}
+		callback(JSON.stringify(pages, null, "  "));
+	});
+}
+
+function presetsExport(callback) {
+	getPresets(pages => {
+		for (var i = 0; i < pages.length; i++) {
+			_cleanPage(pages[i]);
+		}
+		callback(JSON.stringify(pages, null, "  "));
+	});
+}
+
+function _cleanPage(page) {
+	page.title = page.name;
+	delete page.name;
+	for (var key in page) if (page[key] == null) delete page[key];
+	if (page.watchDelay == 0) delete page.watchDelay;
+	else if (page.watchDelay == -1) page.watchDelay = 0;
+	if(page.user == "") delete page.user;
+	if(page.pass == "") delete page.pass;
 }
 
 function _loadFile(fn) {
@@ -145,5 +182,5 @@ function _loadFile(fn) {
 }
 
 var SiteDeltaExport = {
-	getSettings, getPages, getPresets
+	getSettings, getPages, getPresets, pagesExport, configExport, presetsExport
 };

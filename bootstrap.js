@@ -27,6 +27,12 @@ function startup({ webExtension }) {
 				SiteDeltaExport.getPages(sendReply);
 			} else if (msg == "getPresets") {
 				SiteDeltaExport.getPresets(sendReply);
+			} else if(msg == "pagesExport") {
+				SiteDeltaExport.pagesExport(sendReply);
+			} else if(msg == "configExport") {
+				SiteDeltaExport.configExport(sendReply);
+			} else if(msg == "presetsExport") {
+				SiteDeltaExport.presetsExport(sendReply);
 			}
 		});
 	});

@@ -41,7 +41,7 @@ function markSeen(url, callback) {
 			if (doc === null) return pageUtils.setChanges(url, -1, callback);
 			var newContent = textUtils.getText(doc, config);
 			pageUtils.setContent(url, newContent, () => {
-				pageUtils.setChanges(url, 0, callback);
+				watchUtils.setChanges(url, 0, callback);
 			});
 		});
 	});

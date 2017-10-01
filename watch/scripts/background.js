@@ -98,6 +98,7 @@ function scheduleWatch() {
 	if (nextUrl == "") return;
 	var nextScan = index[nextUrl].nextScan;
 	if (nextScan < lastScan + 5000) nextScan = lastScan + 5000;
+	console.log("SiteDelta: Scheduled " + nextUrl + " for " + new Date(nextScan).toLocaleString());
 	if (nextScan <= Date.now()) {
 		scanPage(nextUrl);
 	} else {

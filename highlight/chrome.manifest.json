@@ -2,7 +2,6 @@
 	"manifest_version": 2,
 	"name": "__MSG_highlightExtensionName__",
 	"version": "0.14.3",
-	
 	"default_locale": "en",
 	"description": "__MSG_highlightExtensionDescription__",
 	"icons": {
@@ -12,20 +11,17 @@
 		"48": "common/icons/neutral-48.png",
 		"64": "common/icons/neutral-64.png"
 	},
-	
 	"permissions": [
-		"activeTab", 
+		"activeTab",
 		"storage",
 		"unlimitedStorage"
 	],
-
 	"optional_permissions": [
 		"contextMenus",
 		"notifications",
 		"webNavigation",
 		"<all_urls>"
 	],
-	
 	"browser_action": {
 		"default_icon": {
 			"16": "common/icons/neutral-16.png",
@@ -38,20 +34,19 @@
 		"default_popup": "popup.htm",
 		"chrome_style": true
 	},
-
 	"options_ui": {
 		"page": "options.htm",
 		"chrome_style": true
 	},
-	
 	"background": {
 		"scripts": [
-			"common/scripts/ioUtils.js", 
-			"common/scripts/textUtils.js", 
-			"common/scripts/configUtils.js", 			
-			"common/scripts/tabUtils.js", 
-			"common/scripts/pageUtils.js", 
-			"common/scripts/watchUtils.js", 
+			"common/scripts/ioUtils.js",
+			"common/scripts/textUtils.js",
+			"common/scripts/configUtils.js",
+			"common/scripts/tabUtils.js",
+			"common/scripts/pageUtils.js",
+			"common/scripts/watchUtils.js",
+			"common/scripts/transferUtils.js",
 			"scripts/background.js"
 		]
 	}

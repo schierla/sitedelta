@@ -2,7 +2,9 @@ function addImportButton(scope, name) {
     var button = document.createElement("button");
     button.appendChild(document.createTextNode(name));
     button.addEventListener("click", e => {
-        chrome.runtime.sendMessage({ command: "transferImport", scope: scope, data: document.querySelector("#" + scope).value });
+        chrome.runtime.sendMessage({ command: "transferImport", scope: scope, data: document.querySelector("#" + scope).value }, message => {
+            alert(message);
+        });
     });
     document.querySelector("#" + scope + "-import").appendChild(button);
 }
@@ -18,7 +20,7 @@ function addExportButton(scope, name) {
     document.querySelector("#" + scope + "-export").appendChild(button);
 }
 
-chrome.runtime.sendMessage({ command: "transferCaps" }, caps => {
+chrome.runtime.sendMessage({ command: "transferInfo" }, caps => {
     if(document.body.classList.contains(caps.id)) return;
     if (caps.import.indexOf("config") >= 0) addImportButton("config", caps.name);
     if (caps.import.indexOf("pages") >= 0) addImportButton("pages", caps.name);

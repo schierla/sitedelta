@@ -67,14 +67,6 @@ function scanNow(url, callback) {
 			pageUtils.getContent(url, function (oldContent) {
 				if (textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
 					watchUtils.setChanges(url, 1, callback);
-					pageUtils.getTitle(url, function (title) {
-						chrome.notifications.create(url, {
-							"type": "basic",
-							"iconUrl": chrome.extension.getURL("common/icons/changed-64.png"),
-							"title": chrome.i18n.getMessage("watchExtensionName"),
-							"message": title
-						});
-					});
 				} else {
 					watchUtils.setChanges(url, 0, callback);
 				}

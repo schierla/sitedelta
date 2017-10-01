@@ -65,6 +65,7 @@
 			"common/scripts/tabUtils.js", 
 			"common/scripts/pageUtils.js", 
 			"common/scripts/watchUtils.js", 
+			"common/scripts/transferUtils.js", 
 			"scripts/background.js"
 		]
 	}

@@ -2,7 +2,6 @@
 	"manifest_version": 2,
 	"name": "__MSG_highlightExtensionName__",
 	"version": "0.14.3",
-	
 	"default_locale": "en",
 	"description": "__MSG_highlightExtensionDescription__",
 	"icons": {
@@ -12,26 +11,22 @@
 		"48": "common/icons/neutral-48.png",
 		"64": "common/icons/neutral-64.png"
 	},
-
 	"applications": {
 		"gecko": {
 			"id": "sitedelta-highlight@schierla.de"
 		}
 	},
-	
 	"permissions": [
-		"activeTab", 
+		"activeTab",
 		"storage",
 		"unlimitedStorage",
 		"notifications",
 		"contextMenus"
 	],
-
 	"optional_permissions": [
 		"webNavigation",
 		"<all_urls>"
 	],
-	
 	"browser_action": {
 		"default_icon": {
 			"16": "common/icons/neutral-16.png",
@@ -44,12 +39,10 @@
 		"default_popup": "popup.htm",
 		"browser_style": true
 	},
-
 	"options_ui": {
 		"page": "options.htm",
 		"browser_style": true
 	},
-
 	"sidebar_action": {
 		"default_icon": {
 			"16": "common/icons/neutral-16.png",
@@ -58,18 +51,18 @@
 			"48": "common/icons/neutral-48.png",
 			"64": "common/icons/neutral-64.png"
 		},
-		"default_panel": "highlight/pages.htm",
+		"default_panel": "pages.htm",
 		"browser_style": true
 	},
-	
 	"background": {
 		"scripts": [
-			"common/scripts/ioUtils.js", 
-			"common/scripts/textUtils.js", 
-			"common/scripts/configUtils.js", 			
-			"common/scripts/tabUtils.js", 
-			"common/scripts/pageUtils.js", 
-			"common/scripts/watchUtils.js", 
+			"common/scripts/ioUtils.js",
+			"common/scripts/textUtils.js",
+			"common/scripts/configUtils.js",
+			"common/scripts/tabUtils.js",
+			"common/scripts/pageUtils.js",
+			"common/scripts/watchUtils.js",
+			"common/scripts/transferUtils.js",
 			"scripts/background.js"
 		]
 	}

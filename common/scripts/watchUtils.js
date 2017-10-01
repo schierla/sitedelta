@@ -24,7 +24,6 @@ var watchUtils = {
 
 	setChanges: function (url, changes, callback) {
 		pageUtils.setChanges(url, changes, function () {
-			watchUtils.showChanges();
 			pageUtils.getEffectiveConfig(url, config => {
 				if (changes <= 0) {
 					var next = Date.now() + Math.abs(config.watchDelay) * 60 * 1000;
@@ -34,15 +33,6 @@ var watchUtils = {
 					pageUtils.setNextScan(url, 0, callback);
 				}
 			});
-		});
-	},
-
-	showChanges: function () {
-		pageUtils.listChanged(function (changed) {
-			if (changed.length > 0)
-				chrome.browserAction.setBadgeText({ text: "" + changed.length });
-			else
-				chrome.browserAction.setBadgeText({ text: "" });
 		});
 	},
 

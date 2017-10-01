@@ -90,8 +90,10 @@ var lastScan = 0;
 
 function scheduleWatch() {
 	var nextUrl = "";
+	var changed = 0;
 	for (var url in index) {
-		if (index[url].nextScan == 0) continue;
+		if ("changes" in index[url] && index[url].changes > 0) changed++;
+		if (!("nextScan" in index[url]) || index[url].nextScan == 0) continue;
 		if (nextUrl == "" || index[nextUrl].nextScan > index[url].nextScan) nextUrl = url;
 	}
 
@@ -105,7 +107,10 @@ function scheduleWatch() {
 		chrome.alarms.create({ "when": nextScan });
 	}
 
-	watchUtils.showChanges();
+	if (changed > 0)
+		chrome.browserAction.setBadgeText({ text: "" + changed });
+	else
+		chrome.browserAction.setBadgeText({ text: "" });
 }
 
 ioUtils.observeIndex(newIndex => { index = newIndex; scheduleWatch(); });
@@ -113,5 +118,3 @@ chrome.alarms.onAlarm.addListener(scheduleWatch);
 
 chrome.runtime.onMessage.addListener(messageListener);
 chrome.notifications.onClicked.addListener(notificationListener);
-
-watchUtils.showChanges();

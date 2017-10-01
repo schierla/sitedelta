@@ -31,8 +31,8 @@ var transferUtils = {
                 if (config !== null) 
                     return transferUtils.importPages(pages, callback, imported, skipped + 1);
                 pageUtils.create(page.url, page.title, () => {
-                    var settings = { "includes": page.includes, "excludes": page.excludes };
-                    if (page.includes !== undefined) settings["incudes"] = page.includes;
+                    var settings = { };
+                    if (page.includes !== undefined) settings["includes"] = page.includes;
                     if (page.excludes !== undefined) settings["excludes"] = page.excludes;
                     if (page.checkDeleted !== undefined) settings["checkDeleted"] = page.checkDeleted;
                     if (page.scanImages !== undefined) settings["scanImages"] = page.scanImages;

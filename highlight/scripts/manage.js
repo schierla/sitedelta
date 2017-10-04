@@ -74,13 +74,13 @@ function requirePermission(name, callback) {
 		try {
 			chrome.permissions.request(permissions[name], (success) => {
 				if (success) delete (permissions[name]);
-				if (callback !== undefined) callback(success);
+				return (callback !== undefined) ? callback(success) : null;
 			});
 		} catch (e) {
-			if (callback !== undefined) callback(false);
+			return (callback !== undefined) ? callback(false) : null;
 		}
 	} else {
-		if (callback !== undefined) callback(true);
+		return (callback !== undefined) ? callback(true) : null;
 	}
 }
 
@@ -91,16 +91,16 @@ var permissions = {
 
 function checkScanOnLoad(selected, callback) {
 	requirePermission("scanonload", (success) => {
-		if (callback !== undefined) callback(selected & success);
+		return (callback !== undefined) ? callback(selected & success) : null;
 	});
 }
 function checkHighlightOnLoad(selected, callback) {
-	if (callback !== undefined) callback(selected & document.querySelector("#scanonload").checked);
+	return (callback !== undefined) ? callback(selected & document.querySelector("#scanonload").checked) : null;
 }
 
 function checkContextMenu(selected, callback) {
 	requirePermission("contextmenu", (success) => {
-		if (callback !== undefined) callback(selected & success);
+		return (callback !== undefined) ? callback(selected & success) : null;
 	});
 };
 

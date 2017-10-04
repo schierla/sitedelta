@@ -169,7 +169,7 @@ function importConfig(config, hiddenFields, callback) {
 
 function importPages(pages, imported, skipped, callback) {
 	if (pages.length == 0) {
-		if (callback !== undefined) callback(imported, skipped);
+		return (callback !== undefined) ? callback(imported, skipped) : null;
 	} else {
 		var page = pages.shift();
 		pageUtils.getConfig(page.url, (config) => {

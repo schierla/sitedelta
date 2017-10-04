@@ -60,8 +60,7 @@ function loadPage(callback) {
 	watchUtils.loadPage(url, function (doc) {
 		if (doc === null) {
 			document.body.classList.add("loadfail");
-			if (callback !== undefined) callback();
-			return;
+			return (callback !== undefined) ? callback() : null;
 		} 
 		document.body.classList.add("loaded");
 		var idoc = iframe.contentWindow.document;
@@ -72,7 +71,7 @@ function loadPage(callback) {
 		var adopted = idoc.adoptNode(doc.documentElement);
 		idoc.appendChild(adopted);
 		idoc.body.addEventListener("click", stopIt, true);
-		if (callback !== undefined) callback();
+		return (callback !== undefined) ? callback() : null;
 	});
 }
 
@@ -192,12 +191,12 @@ function selectRegion(callback) {
 		regionUtils.abortSelect();
 		document.body.classList.remove("selecting");
 		var region = prompt(chrome.i18n.getMessage("configRegionXpath"), "");
-		if (region && callback !== undefined) callback(region);
+		return (region && callback !== undefined) ? callback(region) : null;
 	} else {
 		document.body.classList.add("selecting");
 		regionUtils.selectRegion(idoc, region => {
 			document.body.classList.remove("selecting");
-			if (region && callback !== undefined) callback(region);
+			return (region && callback !== undefined) ? callback(region) : null;
 		});
 	}
 }
@@ -215,7 +214,7 @@ function showOutline(outline, color) {
 function addBodyIfEmpty(list, callback) {
 	if (list.length == 0) list.push("/html/body[1]");
 	if (list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
-	if (callback !== undefined) callback(list);
+	return (callback !== undefined) ? callback(list) : null;
 }
 
 

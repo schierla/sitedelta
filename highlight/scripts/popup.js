@@ -46,9 +46,9 @@ function registerListener(option) {
 		document.querySelector("#" + option.elem).addEventListener("dblclick", function (e) {
 			if (option.edit) {
 				var oldValue = document.querySelector("#" + option.elem).value;
-				if (oldValue === null) return;
+				if (oldValue === "") return;
 				option.edit(oldValue, newValue => {
-					if (newValue === null) return;
+					if (newValue === null || newValue === "") return;
 					var newlist = [];
 					for (var i = 0; i < option.contents.length; i++) {
 						if (option.contents[i] != oldValue)
@@ -118,11 +118,11 @@ function showOutline(region, color) {
 function addBodyIfEmpty(list, callback) {
 	if (list.length == 0) list.push("/html/body[1]");
 	if (list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
-	if (callback !== undefined) callback(list);
+	return (callback !== undefined) ? callback(list) : null;
 }
 
 function editXpath(xpath, callback) {
-	if (callback !== undefined) callback(prompt(chrome.i18n.getMessage("configRegionXpath"), xpath));
+	return (callback !== undefined) ? callback(prompt(chrome.i18n.getMessage("configRegionXpath"), xpath)) : null;
 }
 
 var options = [

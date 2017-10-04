@@ -5,7 +5,7 @@ var tabUtils = {
 	},
 	getActive: function (callback) {
 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-			if (callback !== undefined) callback(tabs[0]);
+			return (callback !== undefined) ? callback(tabs[0]) : null;
 		});
 	},
 	showIcon: function (tabId, name, callback) {
@@ -21,7 +21,7 @@ var tabUtils = {
 			},
 				callback);
 		} else {
-			if (callback !== undefined) callback();
+			return (callback !== undefined) ? callback() : null;
 		}
 	},
 	getStatus: function (tabId, callback) {
@@ -30,7 +30,7 @@ var tabUtils = {
 	getContent: function (tabId, url, callback) {
 		pageUtils.getEffectiveConfig(url, function (config) {
 			tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {
-				if (callback !== undefined) callback(content);
+				return (callback !== undefined) ? callback(content) : null;
 			});
 		});
 	},
@@ -42,7 +42,7 @@ var tabUtils = {
 					if (oldcontent === null) oldcontent = "";
 					pageUtils.setContent(url, content, function () {
 						tabUtils._callContentScript(tabId, { command: "highlightChanges", config: config, content: oldcontent }, function (status) {
-							if (callback !== undefined) callback(status);
+							return (callback !== undefined) ? callback(status) : null;
 						});
 					});
 				});
@@ -84,20 +84,20 @@ var tabUtils = {
 						if (status === undefined) {
 							console.log("Error calling content script '" + command.command + "': " +
 								chrome.runtime.lastError);
-							if (callback !== undefined) callback();
+							return (callback !== undefined) ? callback() : null;
 						} else {
-							if (callback !== undefined) callback(status);
+							return (callback !== undefined) ? callback(status) : null;
 						}
 					});
 				});
 			} else {
-				if (callback !== undefined) callback(status);
+				return (callback !== undefined) ? callback(status) : null;
 			}
 		});
 	},
 	_executeScripts: function (tabId, files, callback) {
 		if (files.length == 0) {
-			if (callback !== undefined) callback();
+			return (callback !== undefined) ? callback() : null;
 		} else {
 			var file = files.splice(0, 1);
 			chrome.tabs.executeScript(tabId, { file: file[0] }, function (results) {

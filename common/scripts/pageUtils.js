@@ -22,13 +22,13 @@ var pageUtils = {
 		pageUtils.getStatus(url, status => {
 			if (status === null) return (callback !== undefined) ? callback(null) : null;
 			if ("title" in status)
-				if (callback !== undefined) callback(status["title"]);
-				else
-					ioUtils.get(url, "title", title => {
-						pageUtils.setTitle(url, title, () => {
-							if (callback !== undefined) callback(title);
-						});
+				return (callback !== undefined) ? callback(status["title"]) : null;
+			else
+				ioUtils.get(url, "title", title => {
+					pageUtils.setTitle(url, title, () => {
+						return (callback !== undefined) ? callback(title) : null;
 					});
+				});
 		});
 	},
 	getContent: function (url, callback) {
@@ -39,7 +39,7 @@ var pageUtils = {
 	},
 	getEffectiveConfig: function (url, callback) {
 		pageUtils.getConfig(url, (config) => {
-			if (config === null) (callback !== undefined) ? callback(null) : null;
+			if (config === null) return (callback !== undefined) ? callback(null) : null;
 			else configUtils.getEffectiveConfig(config, callback);
 		});
 	},
@@ -52,7 +52,7 @@ var pageUtils = {
 				pageUtils.create(url, title,
 					() => pageUtils.getEffectiveConfig(url, callback));
 			} else {
-				if (callback !== undefined) callback(config);
+				return (callback !== undefined) ? callback(config) : null;
 			}
 		});
 	},

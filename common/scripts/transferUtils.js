@@ -24,7 +24,7 @@ var transferUtils = {
             return transferUtils.importPages(pages, callback, 0, 0);
         }
         if (pages.length == 0) {
-            if (callback !== undefined) callback(imported, skipped);
+            return (callback !== undefined) ? callback(imported, skipped) : null;
         } else {
             var page = pages.shift();
             pageUtils.getConfig(page.url, (config) => {

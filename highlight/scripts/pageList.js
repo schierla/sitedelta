@@ -10,7 +10,6 @@ function deleteSelected() {
 			return;
 		}
 	}
-	load();
 }
 
 function openSelected() {

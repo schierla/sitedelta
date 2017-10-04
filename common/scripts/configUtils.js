@@ -4,7 +4,7 @@ var configUtils = {
 			if (configUtils._upgrade(config)) {
 				ioUtils.setConfig(config);
 			}
-			if (callback !== undefined) callback(config);
+			return (callback !== undefined) ? callback(config) : null;
 		});
 	},
 	setDefaultConfigProperties: function (update, callback) {
@@ -15,7 +15,7 @@ var configUtils = {
 	},
 
 	getPresetConfig: function (uri, callback) {
-		if (callback !== undefined) callback({});
+		return (callback !== undefined) ? callback({}) : null;
 	},
 
 	getEffectiveConfig: function (override, callback) {
@@ -23,7 +23,7 @@ var configUtils = {
 			var ret = {};
 			for (var key in config) ret[key] = config[key];
 			for (var key in override) ret[key] = override[key];
-			if (callback !== undefined) callback(ret);
+			return (callback !== undefined) ? callback(ret) : null;
 		});
 	},
 

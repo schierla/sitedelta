@@ -3,13 +3,11 @@ function scanPage(url, callback) {
 	lastScan = Date.now();
 	pageUtils.getEffectiveConfig(url, function (config) {
 		if (config === null) {
-			if (callback !== undefined) callback();
-			return;
+			return (callback !== undefined) ? callback() : null;
 		}
 		watchUtils.loadPage(url, function (doc) {
 			if (doc === null) {
-				watchUtils.setChanges(url, -1, callback);
-				return;
+				return watchUtils.setChanges(url, -1, callback);
 			}
 			var newContent = textUtils.getText(doc, config);
 			pageUtils.getContent(url, function (oldContent) {
@@ -24,11 +22,11 @@ function scanPage(url, callback) {
 					});
 					watchUtils.adaptDelay(url, 1);
 					watchUtils.setChanges(url, 1);
-					if (callback !== undefined) callback();
+					return (callback !== undefined) ? callback() : null;
 				} else {
 					watchUtils.adaptDelay(url, 0);
 					watchUtils.setChanges(url, 0);
-					if (callback !== undefined) callback();
+					return (callback !== undefined) ? callback() : null;
 				}
 			});
 		});

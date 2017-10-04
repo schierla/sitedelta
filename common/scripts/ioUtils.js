@@ -6,9 +6,9 @@ var ioUtils = {
 	getConfig: function (callback) {
 		chrome.storage.local.get("config", function (existing) {
 			if ("config" in existing) {
-				if (callback !== undefined) callback(existing["config"]);
+				return (callback !== undefined) ? callback(existing["config"]) : null;
 			} else {
-				if (callback !== undefined) callback({});
+				return (callback !== undefined) ? callback({}) : null;
 			}
 		});
 	},
@@ -18,16 +18,16 @@ var ioUtils = {
 	listIndex: function (callback) {
 		chrome.storage.local.get("index", function (existing) {
 			if ("index" in existing) {
-				if (callback !== undefined) callback(existing["index"]);
+				return (callback !== undefined) ? callback(existing["index"]) : null;
 			} else {
-				if (callback !== undefined) callback({});
+				return (callback !== undefined) ? callback({}) : null;
 			}
 		});
 	},
 	observeIndex: function (callback) {
 		chrome.storage.onChanged.addListener((changes, scope) => {
 			if (scope == "local" && "index" in changes) {
-				if (callback !== undefined) callback(changes["index"].newValue);
+				return (callback !== undefined) ? callback(changes["index"].newValue) : null;
 			}
 		});
 		ioUtils.listIndex(callback);
@@ -41,7 +41,7 @@ var ioUtils = {
 					if (result !== null) ret.push(result);
 				}
 			}
-			if (callback !== undefined) callback(ret);
+			return (callback !== undefined) ? callback(ret) : null;
 		});
 	},
 	setInIndex: function (url, status, callback) {
@@ -55,9 +55,9 @@ var ioUtils = {
 		var storagekey = ioUtils.clean(url);
 		chrome.storage.local.get(storagekey, function (existing) {
 			if (storagekey in existing && key in existing[storagekey]) {
-				if (callback !== undefined) callback(existing[storagekey][key]);
+				return (callback !== undefined) ? callback(existing[storagekey][key]) : null;
 			} else {
-				if (callback !== undefined) callback(null);
+				return (callback !== undefined) ? callback(null) : null;
 			}
 		});
 	},

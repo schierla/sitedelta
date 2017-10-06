@@ -5,11 +5,11 @@
 	"default_locale": "en",
 	"description": "__MSG_highlightExtensionDescription__",
 	"icons": {
-		"16": "common/icons/neutral-16.png",
-		"24": "common/icons/neutral-24.png",
-		"32": "common/icons/neutral-32.png",
-		"48": "common/icons/neutral-48.png",
-		"64": "common/icons/neutral-64.png"
+		"16": "common/icons/highlight-16.png",
+		"24": "common/icons/highlight-24.png",
+		"32": "common/icons/highlight-32.png",
+		"48": "common/icons/highlight-48.png",
+		"64": "common/icons/highlight-64.png"
 	},
 	"permissions": [
 		"activeTab",
@@ -23,11 +23,11 @@
 	],
 	"browser_action": {
 		"default_icon": {
-			"16": "common/icons/neutral-16.png",
-			"24": "common/icons/neutral-24.png",
-			"32": "common/icons/neutral-32.png",
-			"48": "common/icons/neutral-48.png",
-			"64": "common/icons/neutral-64.png"
+			"16": "common/icons/highlight-16.png",
+			"24": "common/icons/highlight-24.png",
+			"32": "common/icons/highlight-32.png",
+			"48": "common/icons/highlight-48.png",
+			"64": "common/icons/highlight-64.png"
 		},
 		"default_title": "__MSG_highlightExtensionName__",
 		"default_popup": "popup.htm",

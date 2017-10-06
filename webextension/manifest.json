@@ -1,6 +1,6 @@
 {
 	"name": "SiteDelta",
-	"version": "0.14.2",
+	"version": "0.14.3",
 	"manifest_version": 2,
 	"background": {
 		"scripts": [

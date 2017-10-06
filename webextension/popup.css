@@ -1,5 +1,5 @@
-body {padding: 4px;}
+body {padding: 4px 4px 0 4px;}
 .title {font-weight: bold; text-align: center; }
-div.browser-style {max-width: 30em; }
+div.browser-style {max-width: 30em; margin-bottom: 4px; }
 #direct {display: none; }
 .direct #direct {display: block; }

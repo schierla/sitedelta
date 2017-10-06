@@ -18,7 +18,6 @@
 	],
 	"optional_permissions": [
 		"contextMenus",
-		"notifications",
 		"webNavigation",
 		"<all_urls>"
 	],

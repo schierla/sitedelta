@@ -1,27 +1,28 @@
 
 var webNavigationBeforeListener = function (details) {
 	if (details.frameId != 0) return;
-	tabUtils.showIcon(details.tabId, "inactive");
-	if (chrome.notifications) chrome.notifications.clear("highlight");
+	tabUtils.showIcon(details.tabId);
 };
 
 var webNavigationCompletedListener = function (details) {
 	if (details.frameId != 0) return;
 	pageUtils.getEffectiveConfig(details.url, function (config) {
 		if (config === null) {
-			tabUtils.showIcon(details.tabId, "neutral");
+			tabUtils.showIcon(details.tabId);
 		} else {
 			pageUtils.getContent(details.url, function (oldcontent) {
 				if (oldcontent !== null) {
 					tabUtils.getContent(details.tabId, details.url, function (content) {
 						if (textUtils.clean(content, config) == textUtils.clean(oldcontent, config)) {
 							// unchanged
-							tabUtils.showIcon(details.tabId, "unchanged");
+							tabUtils.showIcon(details.tabId, 0, 0);
 						} else {
 							// changed
-							tabUtils.showIcon(details.tabId, "changed");
+							tabUtils.showIcon(details.tabId, "*", 1);
 							if (config.highlightOnLoad) {
-								tabUtils.highlightChanges(details.tabId, details.url);
+								tabUtils.highlightChanges(details.tabId, details.url, status => {
+									tabUtils.showIcon(details.tabId, status.current, status.changes);
+								});
 							}
 						}
 					});
@@ -60,38 +61,12 @@ function menuOptions() {
 var contextMenuListener = function (info, tab) {
 	if (info.menuItemId == menuHighlight().id || info.menuItemId == menuHighlightPage().id) {
 		if (tab.url.substr(0, 4) != "http") {
-			chrome.notifications.create("highlight", {
-				"type": "basic",
-				"iconUrl": chrome.extension.getURL("common/icons/inactive.svg"),
-				"title": chrome.i18n.getMessage("highlightExtensionName"),
-				"message": chrome.i18n.getMessage("highlightUnsupported")
-			});
+			tabUtils.showIcon(tab.id, 0, -1);
 			return;
 		}
 		pageUtils.getOrCreateEffectiveConfig(tab.url, tab.title, function (config) {
 			tabUtils.highlightChanges(tab.id, tab.url, function (status) {
-				if (status.changes == 0) {
-					chrome.notifications.create("highlight", {
-						"type": "basic",
-						"iconUrl": chrome.extension.getURL("common/icons/unchanged.svg"),
-						"title": chrome.i18n.getMessage("highlightExtensionName"),
-						"message": chrome.i18n.getMessage("pageUnchanged")
-					});
-				} else if (status.changes > 0) {
-					chrome.notifications.create("highlight", {
-						"type": "basic",
-						"iconUrl": chrome.extension.getURL("common/icons/changed.svg"),
-						"title": chrome.i18n.getMessage("highlightExtensionName"),
-						"message": chrome.i18n.getMessage("pageChanged", [status.current, status.changes])
-					});
-				} else {
-					chrome.notifications.create("highlight", {
-						"type": "basic",
-						"iconUrl": chrome.extension.getURL("common/icons/inactive.svg"),
-						"title": chrome.i18n.getMessage("highlightExtensionName"),
-						"message": chrome.i18n.getMessage("pageFailed")
-					});
-				}
+				tabUtils.showIcon(tab.id, status.current, status.changes);
 			});
 		});
 	} else if (info.menuItemId == menuOptions().id) {
@@ -148,97 +123,14 @@ var messageListener = function (request, sender, sendResponse) {
 	}
 };
 
-function importConfig(config, hiddenFields, callback) {
-	configUtils.getDefaultConfig(oldConfig => {
-		var update = {};
-		var imported = 0, skipped = 0;
-		for (var key in config) {
-			if (hiddenFields.indexOf(key) >= 0) continue;
-			if (key in oldConfig) {
-				if (oldConfig[key] == config[key]) {
-					skipped++;
-				} else {
-					oldConfig[key] = config[key];
-					imported++;
-				}
-			}
-		}
-		configUtils.setDefaultConfigProperties(update, () => callback(imported, skipped));
-	});
-}
-
-function importPages(pages, imported, skipped, callback) {
-	if (pages.length == 0) {
-		return (callback !== undefined) ? callback(imported, skipped) : null;
-	} else {
-		var page = pages.shift();
-		pageUtils.getConfig(page.url, (config) => {
-			if (config !== null) return importPages(pages, imported, skipped + 1, callback);
-			pageUtils.create(page.url, page.title, () => {
-				var settings = { "includes": page.includes, "excludes": page.excludes };
-				if (page.includes !== undefined) settings["incudes"] = page.includes;
-				if (page.excludes !== undefined) settings["excludes"] = page.excludes;
-				if (page.checkDeleted !== undefined) settings["checkDeleted"] = page.checkDeleted;
-				if (page.scanImages !== undefined) settings["scanImages"] = page.scanImages;
-				if (page.ignoreCase !== undefined) settings["ignoreCase"] = page.ignoreCase;
-				if (page.ignoreNumbers !== undefined) settings["ignoreNumbers"] = page.ignoreNumbers;
-				if (page.watchDelay !== undefined) settings["watchDelay"] = page.watchDelay;
-
-				pageUtils.setConfig(page.url, settings, () => {
-					pageUtils.setContent(page.url, page.content, () => {
-						pageUtils.setChanges(page.url, -1, () => {
-							importPages(pages, imported + 1, skipped, callback);
-						});
-					});
-				})
-			});
-		});
-	}
-}
-
-function exportConfig(hiddenFields, callback) {
-	configUtils.getDefaultConfig(config => {
-		var send = {};
-		for (var key in config) {
-			if (hiddenFields.indexOf(key) >= 0) continue;
-			send[key] = config[key];
-		}
-		callback(send);
-	});
-}
-
-function exportPages(callback, urls, pages) {
-	if(urls === undefined) {
-		pageUtils.list(urls => {
-			exportPages(callback, urls, []);
-		});
-		return;
-	}
-	if (urls.length == 0) {
-		return callback(pages);
-	}
-	var url = urls.shift();
-	pageUtils.getTitle(url, title => {
-		pageUtils.getConfig(url, config => {
-			pageUtils.getContent(url, content => {
-				var page = { url: url, title: title, content: content };
-				for (var key in config) {
-					page[key] = config[key];
-				}
-				pages.push(page);
-				exportPages(callback, urls, pages);
-			});
-		});
-	});
-}
 
 function initialize() {
 	configUtils.getDefaultConfig((config) => {
 		if (chrome.webNavigation) {
 			chrome.webNavigation.onBeforeNavigate.removeListener(webNavigationBeforeListener);
 			chrome.webNavigation.onCompleted.removeListener(webNavigationCompletedListener);
+			chrome.webNavigation.onBeforeNavigate.addListener(webNavigationBeforeListener);
 			if (config.scanOnLoad) {
-				chrome.webNavigation.onBeforeNavigate.addListener(webNavigationBeforeListener);
 				chrome.webNavigation.onCompleted.addListener(webNavigationCompletedListener);
 			}
 		}

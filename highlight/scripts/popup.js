@@ -149,10 +149,9 @@ document.querySelector("#pagetitle").addEventListener("change", function (e) {
 });
 
 document.querySelector("#delete").addEventListener("click", function (e) {
-	tabUtils.showIcon(tabId, "neutral", () => {
-		pageUtils.remove(url, () => {
-			window.close();
-		});
+	pageUtils.remove(url, () => {
+		tabUtils.showIcon(tabId);
+		window.close();
 	});
 });
 
@@ -216,6 +215,7 @@ function fillStatus(status) {
 				document.body.classList.add("failed");
 				expand();
 			}
+			tabUtils.showIcon(tabId, status.current, status.changes);
 			break;
 		case STATE.SELECTREGION:
 			document.body.classList.add("selecting");

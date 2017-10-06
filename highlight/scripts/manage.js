@@ -86,7 +86,7 @@ function requirePermission(name, callback) {
 
 var permissions = {
 	"scanonload": { permissions: ["webNavigation"], origins: ["<all_urls>"] },
-	"contextmenu": { permissions: ["contextMenus", "notifications"] }
+	"contextmenu": { permissions: ["contextMenus"] }
 };
 
 function checkScanOnLoad(selected, callback) {

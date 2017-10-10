@@ -4,3 +4,4 @@ document.querySelector("#expand").addEventListener("click", e => document.body.c
 document.querySelector("#pages").addEventListener("click", e => document.body.classList.remove("expand"));
 document.querySelector("#delete").addEventListener("click", e => document.body.classList.remove("expand"));
 document.querySelector("#open").addEventListener("click", e => document.body.classList.remove("expand"));
+document.querySelector("#scannow").addEventListener("click", e => document.body.classList.remove("expand"));

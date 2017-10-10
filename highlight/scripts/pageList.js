@@ -22,6 +22,45 @@ function openSelected() {
 	}
 }
 
+function scanNowSelected() {
+	chrome.tabs.create({ url: "about:blank" }, tab => {
+		scanNowNext(tab.id);
+	});
+}
+
+function scanNowNext(tabId) {
+	var options = document.querySelector("#pages").options;
+	for (var i = 0; i < options.length; i++) {
+		if (options[i].selected) {
+			options[i].selected = false;
+			tabUtils.loadInTab(tabId, options[i].value, (url) => {
+				pageUtils.getEffectiveConfig(url, function (config) {
+					if (config === null) {
+						console.log("error getting config.")
+					} else {
+						pageUtils.getContent(url, function (oldcontent) {
+							if (oldcontent !== null) {
+								tabUtils.getContent(tabId, url, function (content) {
+									if (textUtils.clean(content, config) == textUtils.clean(oldcontent, config)) {
+										// unchanged
+										scanNowNext(tabId);
+									} else {
+										if(!config.scanOnLoad) {
+											tabUtils.showIcon(tabId, "*", 1);
+										}
+									}
+								});
+							}
+						});
+					}
+				});
+			});
+			return;
+		}
+	}
+	chrome.tabs.remove(tabId);
+}
+
 function showPages() {
 	ioUtils.observeIndex(function (index) {
 		var pages = document.querySelector("#pages");
@@ -48,9 +87,11 @@ function showPages() {
 	});
 }
 
-
 document.querySelector("#delete").addEventListener("click", deleteSelected);
 document.querySelector("#open").addEventListener("click", openSelected);
+document.querySelector("#scannow").addEventListener("click", scanNowSelected);
 document.querySelector("#pages").addEventListener("dblclick", openSelected);
+
+if (!chrome.webNavigation) document.querySelector("#scannow").style.display = "none";
 
 showPages();

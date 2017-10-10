@@ -10,17 +10,17 @@ var tabUtils = {
 	},
 	showIcon: function (tabId, current, changes) {
 		if (chrome.webNavigation) {
-			if(changes === undefined) {
-				chrome.browserAction.setBadgeText({text: "", tabId: tabId});
+			if (changes === undefined) {
+				chrome.browserAction.setBadgeText({ text: "", tabId: tabId });
 			} else if (changes == 0) {
-				chrome.browserAction.setBadgeText({text: " ", tabId: tabId});
-				chrome.browserAction.setBadgeBackgroundColor({color: "#0c0", tabId: tabId});
+				chrome.browserAction.setBadgeText({ text: " ", tabId: tabId });
+				chrome.browserAction.setBadgeBackgroundColor({ color: "#0c0", tabId: tabId });
 			} else if (changes > 0) {
-				chrome.browserAction.setBadgeText({text: "" + current, tabId: tabId});
-				chrome.browserAction.setBadgeBackgroundColor({color: "#c00", tabId: tabId});
+				chrome.browserAction.setBadgeText({ text: "" + current, tabId: tabId });
+				chrome.browserAction.setBadgeBackgroundColor({ color: "#c00", tabId: tabId });
 			} else {
-				chrome.browserAction.setBadgeText({text: "X", tabId: tabId});
-				chrome.browserAction.setBadgeBackgroundColor({color: "#ccc", tabId: tabId});
+				chrome.browserAction.setBadgeText({ text: "X", tabId: tabId });
+				chrome.browserAction.setBadgeBackgroundColor({ color: "#ccc", tabId: tabId });
 			}
 		}
 	},
@@ -60,6 +60,9 @@ var tabUtils = {
 	},
 	selectExclude: function (tabId, url, callback) {
 		tabUtils._callBackgroundScript({ command: "addExcludeRegion", tab: tabId, url: url }, callback);
+	},
+	loadInTab: function (tabId, url, callback) {
+		tabUtils._callBackgroundScript({ command: "loadInTab", tab: tabId, url: url }, callback);
 	},
 	selectRegion: function (tabId, callback) {
 		tabUtils._callContentScript(tabId, { command: "selectRegion" }, callback);

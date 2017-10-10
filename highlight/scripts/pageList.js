@@ -34,10 +34,9 @@ function scanNowNext(tabId) {
 		if (options[i].selected) {
 			options[i].selected = false;
 			tabUtils.loadInTab(tabId, options[i].value, (url) => {
+				console.log("loaded " + url);
 				pageUtils.getEffectiveConfig(url, function (config) {
-					if (config === null) {
-						console.log("error getting config.")
-					} else {
+					if (config !== null) {
 						pageUtils.getContent(url, function (oldcontent) {
 							if (oldcontent !== null) {
 								tabUtils.getContent(tabId, url, function (content) {
@@ -47,6 +46,7 @@ function scanNowNext(tabId) {
 									} else {
 										if(!config.scanOnLoad) {
 											tabUtils.showIcon(tabId, "*", 1);
+											pageUtils.setChanges(url, 1);
 										}
 									}
 								});
@@ -71,18 +71,29 @@ function showPages() {
 		}
 		for (var url in index) {
 			if (url === null) continue;
-			if (url in pageNodes) {
-				if ("title" in index[url])
-					pageNodes[url].firstChild.data = index[url]["title"];
-				continue;
+
+			var title = "title" in index[url] ? index[url].title : url;
+			if (!(url in pageNodes)) {
+				if (!("title" in index[url])) pageUtils.getTitle(url);
+				pageNodes[url] = document.createElement("option");
+				pageNodes[url].setAttribute("value", url);
+				pageNodes[url].setAttribute("title", url);
+				pageNodes[url].appendChild(document.createTextNode(title));
+				pages.appendChild(pageNodes[url]);
 			}
-			pageNodes[url] = document.createElement("option");
-			pageNodes[url].setAttribute("value", url);
-			pageNodes[url].setAttribute("title", url);
-			var title = url;
-			if ("title" in index[url]) title = index[url]["title"]; else pageUtils.getTitle(url);
-			pageNodes[url].appendChild(document.createTextNode(title));
-			pages.appendChild(pageNodes[url]);
+			pageNodes[url].firstChild.data = index[url]["title"];
+			pageNodes[url].classList.remove("changed");
+			pageNodes[url].classList.remove("unchanged");
+			pageNodes[url].classList.remove("failed");
+			pageNodes[url].classList.remove("scanning");
+			var changes = index[url].changes;
+			if (changes > 0) {
+				pageNodes[url].classList.add("changed");
+			} else if (index[url]["changes"] == 0) {
+				pageNodes[url].classList.add("unchanged");
+			} else if (index[url]["changes"] == -1) {
+				pageNodes[url].classList.add("failed");
+			}
 		}
 	});
 }

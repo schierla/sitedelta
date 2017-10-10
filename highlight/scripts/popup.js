@@ -216,6 +216,7 @@ function fillStatus(status) {
 				expand();
 			}
 			tabUtils.showIcon(tabId, status.current, status.changes);
+			pageUtils.setChanges(url, status.changes < 0 ? -1 : 0);
 			break;
 		case STATE.SELECTREGION:
 			document.body.classList.add("selecting");

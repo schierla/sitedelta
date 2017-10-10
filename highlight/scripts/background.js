@@ -8,7 +8,7 @@ var webNavigationBeforeListener = function (details) {
 
 var webNavigationCompletedListener = function (details) {
 	if (details.frameId != 0) return;
-	if (openTabRequest.tabId !== undefined && openTabRequest.tabId == details.tabId) {
+	if (openTabRequest.tabId !== undefined && openTabRequest.tabId == details.tabId && details.url != "about:blank") {
 		openTabRequest.callback(details.url);
 		openTabRequest = {};
 	}
@@ -23,12 +23,15 @@ var webNavigationCompletedListener = function (details) {
 							if (textUtils.clean(content, config) == textUtils.clean(oldcontent, config)) {
 								// unchanged
 								tabUtils.showIcon(details.tabId, 0, 0);
+								pageUtils.setChanges(details.url, 0);
 							} else {
 								// changed
 								tabUtils.showIcon(details.tabId, "*", 1);
+								pageUtils.setChanges(details.url, 1);
 								if (defaultConfig.highlightOnLoad) {
 									tabUtils.highlightChanges(details.tabId, details.url, status => {
 										tabUtils.showIcon(details.tabId, status.current, status.changes);
+										pageUtils.setChanges(details.url, status.changes < 0 ? -1 : 0);
 									});
 								}
 							}
@@ -75,6 +78,7 @@ var contextMenuListener = function (info, tab) {
 		pageUtils.getOrCreateEffectiveConfig(tab.url, tab.title, function (config) {
 			tabUtils.highlightChanges(tab.id, tab.url, function (status) {
 				tabUtils.showIcon(tab.id, status.current, status.changes);
+				pageUtils.setChanges(tab.url, status.changes < 0 ? -1 : 0);
 			});
 		});
 	} else if (info.menuItemId == menuOptions().id) {

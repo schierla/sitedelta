@@ -1,23 +1,23 @@
 body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding: 0; background: #ddd; font-size: 75%;  -webkit-user-select: none;  -moz-user-select: none; user-select: none;}
-#content {position: fixed; left: 2.7em; top: 2.7em; right: 0; bottom: 0; padding: 0; margin: 0; transition: left 0.3s; }
+#content {position: fixed; left: 0; top: 2.7em; right: 0; bottom: 0; padding: 0; margin: 0; transition: left 0.3s; }
 #status {position: fixed; left: 0; right: 0; top: 0; height: 2.6em; padding: 0; margin: 0; }
 #status {background: #ffc; border-bottom: solid #777 1px; }
-#status #buttons {float: right; margin: 4px; }
+#status #buttons {float: right; margin: 4px 40px 4px 4px; }
 #status #statustext {text-align: center; font-size: 130%; line-height: 2em; vertical-align: middle; }
-#settings {position: fixed; left: 0; top: 2.7em; bottom: 0; padding: 0; margin: 0; transition: width 0.3s;}
+#settings {position: fixed; right: 0; top: 2.7em; bottom: 0; padding: 0; margin: 0; transition: width 0.3s;}
 #settings {background: #eee; border-right: solid #777 1px; overflow-x: hidden; overflow-y: auto; }
 #settings #config {min-width: 16em; }
 #settings {overflow-y: auto; }
 #settings>div {margin: 4px; }
 
 #settings { width: 0; }
-#content { left: 0; }
+#content { right: 0; }
 #delete { display: none; }
-#expand { position: fixed; left: 4px; top: 4px; }
-.expanded #expand {display: none; }
+#expand { position: fixed; right: 4px; top: 4px; }
+.expanded #expand { display: none; }
 
-.expanded #settings { width: 18em; }
-.expanded #content { left: 18.1em; }
+.expanded #settings { width: 20em; }
+.expanded #content { right: 20.1em; }
 .expanded #expand {display: none; }
 .unchanged #highlight {visibility: hidden; }
 .known #delete {display: inline; }

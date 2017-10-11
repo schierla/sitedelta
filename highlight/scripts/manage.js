@@ -182,7 +182,6 @@ function load() {
 	checkPermissions();
 	registerListeners();
 	showOptions();
-	pageList.showPages();
 }
 
 function notifyChanged() {

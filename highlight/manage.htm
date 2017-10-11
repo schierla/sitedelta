@@ -11,21 +11,31 @@
 
 <body>
 
+	<div class="browser-style" id="advancedUnsupported">
+		<div class="browser-style i18n">__MSG_configAdvancedUnsupported__</div>
+	</div>
+	<div class="browser-style" id="advancedDisabled">
+		<div class="browser-style i18n">__MSG_configAdvancedDisabled__</div>
+		<div class="browser-style buttons">
+			<button id="enableAdvanced" class="browser-style i18n">__MSG_configEnableAdvanced__</button>
+		</div>
+	</div>
+
 	<div class="browser-style section i18n">__MSG_pageList__</div>
 	<select id="pages" size="10" multiple></select>
 	<div class="buttons browser-style">
 		<button id="importPages" class="browser-style i18n import">__MSG_configImport__</button>
-		<button id="scannow" class="browser-style i18n">__MSG_pageScanNow__</button>	
+		<button id="scannow" class="browser-style advanced i18n">__MSG_pageScanNow__</button>
 		<button id="delete" class="browser-style i18n">__MSG_pageDelete__</button>
 		<button id="open" class="browser-style i18n default">__MSG_pageOpen__</button>
 	</div>
 
 	<div class="browser-style section i18n">__MSG_configBehavior__</div>
-	<div class="browser-style">
+	<div class="browser-style advanced">
 		<input checked id="scanonload" type="checkbox" class="browser-style">
 		<label for="scanonload" class="i18n">__MSG_configScanOnLoad__</label>
 	</div>
-	<div class="browser-style">
+	<div class="browser-style advanced">
 		<input checked id="highlightonload" type="checkbox" class="browser-style">
 		<label for="highlightonload" class="i18n">__MSG_configHighlightOnLoad__</label>
 	</div>
@@ -64,23 +74,35 @@
 	</div>
 
 	<div class="browser-style section i18n">__MSG_configChecks__</div>
-	<div class="browser-style"><input checked id="checkdeleted" type="checkbox" class="browser-style"> <label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label></div>
-	<div class="browser-style"><input checked id="checkimages" type="checkbox" class="browser-style"> <label for="checkimages" class="i18n">__MSG_configCheckImages__</label></div>
+	<div class="browser-style">
+		<input checked id="checkdeleted" type="checkbox" class="browser-style">
+		<label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label>
+	</div>
+	<div class="browser-style">
+		<input checked id="checkimages" type="checkbox" class="browser-style">
+		<label for="checkimages" class="i18n">__MSG_configCheckImages__</label>
+	</div>
 
 	<div class="browser-style section i18n">__MSG_configIgnores__</div>
-	<div class="browser-style"><input checked id="ignorecase" type="checkbox" class="browser-style"> <label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label></div>
-	<div class="browser-style"><input checked id="ignorenumbers" type="checkbox" class="browser-style"> <label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label></div>
+	<div class="browser-style">
+		<input checked id="ignorecase" type="checkbox" class="browser-style">
+		<label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label>
+	</div>
+	<div class="browser-style">
+		<input checked id="ignorenumbers" type="checkbox" class="browser-style">
+		<label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label>
+	</div>
 
 	<div class="buttons">
 		<button id="importConfig" class="browser-style i18n import">__MSG_configImport__</button>
 	</div>
-	
+
 	<script src="common/scripts/configUtils.js"></script>
 	<script src="common/scripts/ioUtils.js"></script>
 	<script src="common/scripts/uiUtils.js"></script>
 	<script src="common/scripts/pageUtils.js"></script>
 	<script src="common/scripts/tabUtils.js"></script>
-    <script src="common/scripts/textUtils.js"></script>
+	<script src="common/scripts/textUtils.js"></script>
 	<script src="scripts/pageList.js"></script>
 	<script src="scripts/manage.js"></script>
 </body>

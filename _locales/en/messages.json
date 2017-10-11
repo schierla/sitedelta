@@ -238,7 +238,19 @@
 	"configImport": {
 		"message": "Import from SiteDelta",
 		"description": "Button to import settings / pages from SiteDelta"
-	}
+	}, 
 
+	"configAdvancedDisabled" : {
+		"message": "Advanced features (that require additional permissions) are disabled.", 
+		"description": "Text that advanced features are disabled."
+	},
+	"configAdvancedUnsupported" : {
+		"message": "Your browser version does not support advanced features.", 
+		"description": "Text that advanced features are unsupported with the current browser version."
+	},
+	"configEnableAdvanced" : {
+		"message": "Enable advanced features...", 
+		"description": "Button to enable advanced features."
+	}
 }
 

@@ -14,10 +14,10 @@
 	"permissions": [
 		"activeTab",
 		"storage",
-		"unlimitedStorage"
+		"unlimitedStorage",
+		"contextMenus"
 	],
 	"optional_permissions": [
-		"contextMenus",
 		"webNavigation",
 		"<all_urls>"
 	],

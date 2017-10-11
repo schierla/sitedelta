@@ -1,22 +1,5 @@
 
 
-document.querySelector("#importConfig").addEventListener("click", function (e) {
-	chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
-		if (config === null) {
-			console.warn("Error importing configuration: " + chrome.runtime.lastError);
-		}
-		configUtils.getDefaultConfig((defaultConfig) => {
-			var update = {};
-			if ("scanonload" in permissions) delete config["scanOnLoad"];
-			for (var key in config) {
-				if (key in defaultConfig)
-					update[key] = config[key];
-			}
-			configUtils.setDefaultConfigProperties(update, notifyChanged);
-		});
-	});
-});
-
 document.querySelector("#importPages").addEventListener("click", function (e) {
 	chrome.runtime.sendMessage("sitedelta@schierla.de", "getPages", (pages) => {
 		if (pages === undefined) {
@@ -56,53 +39,61 @@ chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
 	}
 });
 
-function checkPermission(name) {
-	if (chrome.permissions) {
-		chrome.permissions.contains(permissions[name], (success) => {
-			if (success) delete permissions[name];
-		});
-	}
-}
+var advancedEnabled = false;
+var advancedPermission = { permissions: ["webNavigation"], origins: ["<all_urls>"] };
+
 function checkPermissions() {
-	for (var name in permissions) {
-		checkPermission(name);
-	}
-}
-
-function requirePermission(name, callback) {
-	if (name in permissions) {
-		try {
-			chrome.permissions.request(permissions[name], (success) => {
-				if (success) delete (permissions[name]);
-				return (callback !== undefined) ? callback(success) : null;
-			});
-		} catch (e) {
-			return (callback !== undefined) ? callback(false) : null;
-		}
+	document.body.classList.remove("advancedEnabled");
+	document.body.classList.remove("advancedUnsupported");
+	if (chrome.permissions) {
+		chrome.permissions.contains(advancedPermission, (success) => {
+			advancedEnabled = success;
+			if(success) document.body.classList.add("advancedEnabled");
+		});
 	} else {
-		return (callback !== undefined) ? callback(true) : null;
+		document.body.classList.add("advancedUnsupported");
 	}
 }
 
-var permissions = {
-	"scanonload": { permissions: ["webNavigation"], origins: ["<all_urls>"] },
-	"contextmenu": { permissions: ["contextMenus"] }
-};
+function requestPermission() {
+	try {
+		chrome.permissions.request(advancedPermission, (success) => {
+			checkPermissions();
+			notifyChanged();
+		});
+	} catch (e) {
+		checkPermissions();
+	}
+}
+
+document.querySelector("#enableAdvanced").addEventListener("click", function (e) {
+	requestPermission();
+});
+
+document.querySelector("#importConfig").addEventListener("click", function (e) {
+	chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
+		if (config === null) {
+			console.warn("Error importing configuration: " + chrome.runtime.lastError);
+		}
+		configUtils.getDefaultConfig((defaultConfig) => {
+			var update = {};
+			if ("scanonload" in permissions) delete config["scanOnLoad"];
+			for (var key in config) {
+				if (key in defaultConfig)
+					update[key] = config[key];
+			}
+			configUtils.setDefaultConfigProperties(update, notifyChanged);
+		});
+	});
+});
 
 function checkScanOnLoad(selected, callback) {
-	requirePermission("scanonload", (success) => {
-		return (callback !== undefined) ? callback(selected & success) : null;
-	});
+	return (callback !== undefined) ? callback(selected & advancedEnabled) : null;
 }
+
 function checkHighlightOnLoad(selected, callback) {
 	return (callback !== undefined) ? callback(selected & document.querySelector("#scanonload").checked) : null;
 }
-
-function checkContextMenu(selected, callback) {
-	requirePermission("contextmenu", (success) => {
-		return (callback !== undefined) ? callback(selected & success) : null;
-	});
-};
 
 var options = [
 	{ type: "checkbox", key: "checkDeleted", elem: "checkdeleted" },
@@ -112,7 +103,7 @@ var options = [
 	{ type: "checkbox", key: "showRegions", elem: "showregions" },
 	{ type: "checkbox", key: "scanOnLoad", elem: "scanonload", pre: checkScanOnLoad, post: notifyChanged },
 	{ type: "checkbox", key: "highlightOnLoad", elem: "highlightonload", pre: checkHighlightOnLoad, post: notifyChanged },
-	{ type: "checkbox", key: "enableContextMenu", elem: "contextmenu", pre: checkContextMenu, post: notifyChanged },
+	{ type: "checkbox", key: "enableContextMenu", elem: "contextmenu", post: notifyChanged },
 	{ type: "color", key: "addBackground", elem: "addbackground", post: updatePreview },
 	{ type: "color", key: "addBorder", elem: "addborder", post: updatePreview },
 	{ type: "color", key: "removeBackground", elem: "removebackground", post: updatePreview },
@@ -191,7 +182,7 @@ function load() {
 	checkPermissions();
 	registerListeners();
 	showOptions();
-	showPages();
+	pageList.showPages();
 }
 
 function notifyChanged() {

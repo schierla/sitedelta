@@ -5,3 +5,5 @@
 .expand #expanded {display: block; }
 
 #pages {position: fixed; left: 0; top: 30px; width: 100%; bottom: 0; right: 0;}
+#expanded button.advanced {display: none; }
+.advancedEnabled #expanded button.advanced {display: block; }

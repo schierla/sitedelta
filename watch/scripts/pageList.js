@@ -28,7 +28,7 @@ var pageList = {
 		for (var i = 0; i < options.length; i++) {
 			if (options[i].selected) {
 				options[i].selected = false;
-				markSeen(options[i].value, pageList.markSeenSelected);
+				pageList.markSeen(options[i].value, pageList.markSeenSelected);
 				return;
 			}
 		}

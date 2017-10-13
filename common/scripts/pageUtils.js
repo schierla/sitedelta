@@ -73,8 +73,8 @@ var pageUtils = {
 	},
 	setStatusKey: function (url, key, value, callback) {
 		pageUtils.getStatus(url, (status) => {
-			if (key in status && status[key] == value) return (callback !== undefined) ? callback() : null;
 			if (status === null) status = {};
+			if (key in status && status[key] == value) return (callback !== undefined) ? callback() : null;
 			status[key] = value; pageUtils.setStatus(url, status, callback);
 		});
 	},

@@ -34,6 +34,23 @@ var tabUtils = {
 			});
 		});
 	},
+	checkChanges: function(tabId, url, callback) {
+		pageUtils.getEffectiveConfig(url, function (config) {
+			if (config === null) return (callback !== undefined) ? callback(-1) : null;
+			pageUtils.getContent(url, function (oldcontent) {
+				if (oldcontent === null) return (callback !== undefined) ? callback(-1) : null;
+				tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {
+					if (content === undefined) return (callback !== undefined) ? callback(-1) : null;
+					if (textUtils.clean(content, config) == textUtils.clean(oldcontent, config)) {
+						// unchanged
+						return (callback !== undefined) ? callback(0) : null;
+					} else {
+						return (callback !== undefined) ? callback(1) : null
+					}
+				});
+			});
+		});
+	},
 	highlightChanges: function (tabId, url, callback) {
 		pageUtils.getEffectiveConfig(url, function (config) {
 			tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {

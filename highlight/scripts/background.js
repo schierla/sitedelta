@@ -12,31 +12,23 @@ var webNavigationCompletedListener = function (details) {
 		openTabRequest.callback(details.url);
 		openTabRequest = {};
 	}
+
 	configUtils.getDefaultConfig((defaultConfig) => {
 		if (!defaultConfig.scanOnLoad) return;
+		tabUtils.checkChanges(details.tabId, details.url, (changes) => {
+			if (changes == 0) {
+				// unchanged
+				tabUtils.showIcon(details.tabId, 0, 0);
+				pageUtils.setChanges(details.url, 0);
+			} else if (changes > 0) {
+				// changed
+				tabUtils.showIcon(details.tabId, "*", 1);
+				pageUtils.setChanges(details.url, 1);
 
-		pageUtils.getEffectiveConfig(details.url, function (config) {
-			if (config !== null) {
-				pageUtils.getContent(details.url, function (oldcontent) {
-					if (oldcontent !== null) {
-						tabUtils.getContent(details.tabId, details.url, function (content) {
-							if (textUtils.clean(content, config) == textUtils.clean(oldcontent, config)) {
-								// unchanged
-								tabUtils.showIcon(details.tabId, 0, 0);
-								pageUtils.setChanges(details.url, 0);
-							} else {
-								// changed
-								tabUtils.showIcon(details.tabId, "*", 1);
-								pageUtils.setChanges(details.url, 1);
-								if (defaultConfig.highlightOnLoad) {
-									tabUtils.highlightChanges(details.tabId, details.url, status => {
-										tabUtils.showIcon(details.tabId, status.current, status.changes);
-										pageUtils.setChanges(details.url, status.changes < 0 ? -1 : 0);
-									});
-								}
-							}
-						});
-					}
+				if (!defaultConfig.highlightOnLoad) return;
+				tabUtils.highlightChanges(details.tabId, details.url, status => {
+					tabUtils.showIcon(details.tabId, status.current, status.changes);
+					pageUtils.setChanges(details.url, status.changes < 0 ? -1 : 0);
 				});
 			}
 		});

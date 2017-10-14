@@ -1,129 +1,59 @@
 var pageList = {
-	pageNodes: {},
 
-	deleteSelected: function () {
-		var options = document.querySelector("#pages").options;
-		for (var i = 0; i < options.length; i++) {
-			if (options[i].selected) {
-				options[i].selected = false;
-				ioUtils.remove(options[i].value, pageList.deleteSelected);
-				return;
-			}
+	deletePage: function (key, data, callback) {
+		ioUtils.remove(key, callback);
+	},
+
+	openPage: function (key, data, callback) {
+		tabUtils.openResource("show.htm?" + key); callback();
+	},
+
+	scanPage: function (key, data, callback) {
+		watchUtils.scanPage(key, callback);
+	},
+
+	markSeen: function(key, data, callback) {
+		watchUtils.markSeen(key, callback);
+	},
+
+	createItem: function (key, data) {
+		var title = "title" in data ? data.title : key;
+		if (!("title" in data)) pageUtils.getTitle(key);
+		var ret = document.createElement("option");
+		ret.setAttribute("value", key);
+		ret.appendChild(document.createTextNode(title));
+		return ret;
+	},
+
+
+	updateItem: function (element, data) {
+		element.firstChild.data = data["title"];
+		element.classList.remove("changed", "unchanged", "failed", "scanning");
+		var title = element.getAttribute("value");
+		if (data.nextScan != 0)
+			title += "\n" + chrome.i18n.getMessage("watchNextScan", new Date(data.nextScan).toLocaleString());
+		element.setAttribute("title", title);
+
+		if (data.changes === undefined) {
+		} else if (data.changes > 0) {
+			element.classList.add("changed");
+		} else if (data.changes == 0) {
+			element.classList.add("unchanged");
+		} else if (data.changes == -1) {
+			element.classList.add("failed");
 		}
-	},
-
-	openSelected: function () {
-		var options = document.querySelector("#pages").options;
-		for (var i = 0; i < options.length; i++) {
-			if (options[i].selected) {
-				options[i].selected = false;
-				tabUtils.openResource("show.htm?" + options[i].value);
-			}
-		}
-	},
-
-
-	markSeenSelected: function () {
-		var options = document.querySelector("#pages").options;
-		for (var i = 0; i < options.length; i++) {
-			if (options[i].selected) {
-				options[i].selected = false;
-				pageList.markSeen(options[i].value, pageList.markSeenSelected);
-				return;
-			}
-		}
-	},
-
-	markSeen: function (url, callback) {
-		pageUtils.getEffectiveConfig(url, function (config) {
-			if (config === null) return (callback !== undefined) ? callback() : null;
-			watchUtils.loadPage(url, function (doc) {
-				if (doc === null) return pageUtils.setChanges(url, -1, callback);
-				var newContent = textUtils.getText(doc, config);
-				pageUtils.setContent(url, newContent, () => {
-					watchUtils.setChanges(url, 0, callback);
-				});
-			});
-		});
-	},
-
-	scanNowSelected: function () {
-		var options = document.querySelector("#pages").options;
-		for (var i = 0; i < options.length; i++) {
-			if (options[i].selected) {
-				options[i].selected = false;
-				pageList.scanNow(options[i].value, pageList.scanNowSelected);
-				return;
-			}
-		}
-	},
-
-	scanNow: function (url, callback) {
-		pageUtils.getEffectiveConfig(url, function (config) {
-			if (config === null) return;
-			watchUtils.loadPage(url, function (doc) {
-				if (doc === null) return pageUtils.setChanges(url, -1, callback);
-				var newContent = textUtils.getText(doc, config);
-				pageUtils.getContent(url, function (oldContent) {
-					if (textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
-						watchUtils.setChanges(url, 1, callback);
-					} else {
-						watchUtils.setChanges(url, 0, callback);
-					}
-				});
-			});
-		});
-	},
-
-	showPages: function () {
-		ioUtils.observeIndex(function (index) {
-			var pages = document.querySelector("#pages");
-			for (var url in pageList.pageNodes) {
-				if (url in index) continue;
-				pages.removeChild(pageList.pageNodes[url]);
-				delete pageList.pageNodes[url];
-			}
-			for (var url in index) {
-				if (url === null) continue;
-
-				var title = "title" in index[url] ? index[url].title : url;
-				if (!(url in pageList.pageNodes)) {
-					if (!("title" in index[url])) pageUtils.getTitle(url);
-					pageList.pageNodes[url] = document.createElement("option");
-					pageList.pageNodes[url].setAttribute("value", url);
-					pageList.pageNodes[url].appendChild(document.createTextNode(title));
-					pages.appendChild(pageList.pageNodes[url]);
-				}
-				pageList.pageNodes[url].firstChild.data = index[url]["title"];
-				pageList.pageNodes[url].classList.remove("changed");
-				pageList.pageNodes[url].classList.remove("unchanged");
-				pageList.pageNodes[url].classList.remove("failed");
-				pageList.pageNodes[url].classList.remove("scanning");
-				var changes = index[url].changes;
-				var nextScan = index[url].nextScan;
-				if (changes > 0) {
-					pageList.pageNodes[url].classList.add("changed");
-					pageList.pageNodes[url].setAttribute("title", url);
-				} else if (index[url]["changes"] == 0) {
-					pageList.pageNodes[url].classList.add("unchanged");
-					pageList.pageNodes[url].setAttribute("title", url + (nextScan == 0 ? "" : "\n" + chrome.i18n.getMessage("watchNextScan", new Date(nextScan).toLocaleString())));
-				} else if (index[url]["changes"] == -1) {
-					pageList.pageNodes[url].classList.add("failed");
-					pageList.pageNodes[url].setAttribute("title", url + (nextScan == 0 ? "" : "\n" + chrome.i18n.getMessage("watchNextScan", new Date(nextScan).toLocaleString())));
-				}
-			}
-		});
 	},
 
 	load: function () {
-		document.querySelector("#scannow").addEventListener("click", pageList.scanNowSelected);
-		document.querySelector("#markseen").addEventListener("click", pageList.markSeenSelected);
-		document.querySelector("#delete").addEventListener("click", pageList.deleteSelected);
-		document.querySelector("#open").addEventListener("click", pageList.openSelected);
-		document.querySelector("#pages").addEventListener("dblclick", pageList.openSelected);
-
-		pageList.showPages();
+		var list = uiUtils.sortedList("pages", this.createItem, this.updateItem);
+		list.isBefore = (keya, a, keyb, b) => keya < keyb;
+		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
+		document.querySelector("#open").addEventListener("click", () => list.foreachSelected(this.openPage));
+		document.querySelector("#scannow").addEventListener("click", () => list.foreachSelected(this.scanPage));
+		document.querySelector("#markseen").addEventListener("click", () => list.foreachSelected(this.markSeen));
+		document.querySelector("#pages").addEventListener("dblclick", () => list.foreachSelected(this.openPage));
+		ioUtils.observeIndex(index => list.updateAll(index));
 	}
-}
+};
 
 pageList.load();

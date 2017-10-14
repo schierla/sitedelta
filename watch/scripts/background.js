@@ -1,35 +1,21 @@
 function scanPage(url, callback) {
 	console.log("SiteDelta: Scanning " + url);
 	lastScan = Date.now();
-	pageUtils.getEffectiveConfig(url, function (config) {
-		if (config === null) {
-			return (callback !== undefined) ? callback() : null;
-		}
-		watchUtils.loadPage(url, function (doc) {
-			if (doc === null) {
-				return watchUtils.setChanges(url, -1, callback);
-			}
-			var newContent = textUtils.getText(doc, config);
-			pageUtils.getContent(url, function (oldContent) {
-				if (textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
-					pageUtils.getTitle(url, function (title) {
-						chrome.notifications.create(url, {
-							"type": "basic",
-							"iconUrl": chrome.extension.getURL("common/icons/changed-64.png"),
-							"title": chrome.i18n.getMessage("watchExtensionName"),
-							"message": title
-						});
-					});
-					watchUtils.adaptDelay(url, 1);
-					watchUtils.setChanges(url, 1);
-					return (callback !== undefined) ? callback() : null;
-				} else {
-					watchUtils.adaptDelay(url, 0);
-					watchUtils.setChanges(url, 0);
-					return (callback !== undefined) ? callback() : null;
-				}
+	watchUtils.scanPage(url, changes => {
+		if(changes == 0) {
+			watchUtils.adaptDelay(url, 0);
+		} else if(changes == 1) {
+			pageUtils.getTitle(url, function (title) {
+				chrome.notifications.create(url, {
+					"type": "basic",
+					"iconUrl": chrome.extension.getURL("common/icons/watch-64.png"),
+					"title": chrome.i18n.getMessage("watchExtensionName"),
+					"message": title
+				});
 			});
-		});
+			watchUtils.adaptDelay(url, 1);
+		}
+		return (callback !== undefined) ? callback() : null;
 	});
 }
 

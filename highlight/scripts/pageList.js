@@ -6,8 +6,7 @@ var pageList = {
 	},
 
 	openPage: function (key, data, callback) {
-		chrome.tabs.create({ url: key });
-		callback();
+		chrome.tabs.create({ url: key }); callback();
 	},
 
 	scanPage: function (key, data, callback, tabId) {
@@ -16,8 +15,11 @@ var pageList = {
 				if (changes == 0) { // unchanged
 					callback();
 				} else if (changes > 0) {
-					tabUtils.showIcon(tabId, "*", 1);
-					pageUtils.setChanges(url, 1);
+					configUtils.getDefaultConfig(config => {
+						if (config.scanOnLoad) return;
+						tabUtils.showIcon(tabId, "*", 1);
+						pageUtils.setChanges(url, 1);
+					});
 				}
 			});
 		});

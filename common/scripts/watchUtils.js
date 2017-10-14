@@ -36,6 +36,37 @@ var watchUtils = {
 		});
 	},
 
+	scanPage: function(url, callback) {
+		pageUtils.getEffectiveConfig(url, function (config) {
+			if (config === null) return (callback !== undefined) ? callback(-1) : null;
+			watchUtils.loadPage(url, function (doc) {
+				if (doc === null) return pageUtils.setChanges(url, -1, () => (callback !== undefined) ? callback(-1) : null);
+				var newContent = textUtils.getText(doc, config);
+				pageUtils.getContent(url, function (oldContent) {
+					if(oldContent === null) return pageUtils.setChanges(url, -1, () => (callback !== undefined) ? callback(-1) : null);
+					if (textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
+						watchUtils.setChanges(url, 1, () => (callback !== undefined) ? callback(1) : null);
+					} else {
+						watchUtils.setChanges(url, 0, () => (callback !== undefined) ? callback(0) : null);
+					}
+				});
+			});
+		});
+	},
+
+	markSeen: function(url, callback) {
+		pageUtils.getEffectiveConfig(url, function (config) {
+			if (config === null) return (callback !== undefined) ? callback() : null;
+			watchUtils.loadPage(url, function (doc) {
+				if (doc === null) return pageUtils.setChanges(url, -1, callback);
+				var newContent = textUtils.getText(doc, config);
+				pageUtils.setContent(url, newContent, () => {
+					watchUtils.setChanges(url, 0, callback);
+				});
+			});
+		});
+	},
+
 	_downloadPage: function (url, mime, callback) {
 		var xhr = new XMLHttpRequest();
 		xhr.timeout = 60000;

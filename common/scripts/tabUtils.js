@@ -34,6 +34,7 @@ var tabUtils = {
 			});
 		});
 	},
+
 	checkChanges: function(tabId, url, callback) {
 		pageUtils.getEffectiveConfig(url, function (config) {
 			if (config === null) return (callback !== undefined) ? callback(-1) : null;

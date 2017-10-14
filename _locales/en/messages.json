@@ -226,6 +226,11 @@
 		"message": "Outline include and exclude regions",
 		"description": "Label for check box to outline include and exclude regions"
 	},
+	"configStripStyles": {
+		"message": "Remove page styles (CSS)",
+		"description": "Label for check box to remove CSS from highlighted pages"
+	},
+
 	"configWatch": {
 		"message": "Watch settings:",
 		"description": "Label for text fields concerning watch / delay settings"

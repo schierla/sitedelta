@@ -100,6 +100,7 @@ var options = [
 	{ type: "checkbox", key: "scanImages", elem: "checkimages" },
 	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
+	{ type: "checkbox", key: "stripStyles", elem: "stripstyles" },
 	{ type: "checkbox", key: "showRegions", elem: "showregions" },
 	{ type: "checkbox", key: "scanOnLoad", elem: "scanonload", pre: checkScanOnLoad, post: notifyChanged },
 	{ type: "checkbox", key: "highlightOnLoad", elem: "highlightonload", pre: checkHighlightOnLoad, post: notifyChanged },

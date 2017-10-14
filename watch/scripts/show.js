@@ -1,10 +1,7 @@
 function highlight() {
 	if (document.body.classList.contains("selecting")) regionUtils.abortSelect();
-	if(document.body.classList.contains("loadfail")) return;
-	document.body.classList.remove("selecting");
-	document.body.classList.remove("unchanged");
-	document.body.classList.remove("changed");
-	document.body.classList.remove("expanded");
+	if (document.body.classList.contains("loadfail")) return;
+	document.body.classList.remove("selecting", "unchanged", "changed", "expanded");
 	document.body.classList.add("known");
 	pageUtils.getOrCreateEffectiveConfig(url, title, (config) => {
 		window.config = config;
@@ -32,7 +29,7 @@ function highlight() {
 }
 
 function stopIt(e) {
-	if (document.body.classList.contains("selecting")) {
+	if (document.body.classList.contains("expanded")) {
 		e.preventDefault();
 		e.stopPropagation();
 		return;
@@ -50,28 +47,32 @@ function stopIt(e) {
 	e.stopPropagation();
 }
 
-function loadPage(callback) {
-	document.body.classList.remove("loaded");
-	document.body.classList.remove("loadfail");
-	var iframe = document.getElementById("iframe");
-	changes = -1; current = -1;
+function showPage(doc, callback) {
+	if (doc === null) return (callback !== undefined) ? callback() : null;
 	var idoc = iframe.contentWindow.document;
 	while (idoc.firstChild) idoc.removeChild(idoc.firstChild);
+	if (title == "") title = doc.title;
+	var adopted = idoc.importNode(doc.documentElement, true);
+	idoc.appendChild(adopted);
+	idoc.body.addEventListener("click", stopIt, true);
+	return (callback !== undefined) ? callback() : null;
+}
+
+function loadPage(callback) {
+	document.body.classList.remove("loaded", "loadfail");
+	var iframe = document.getElementById("iframe");
+	changes = -1; current = -1; loadedDocument = null;
 	watchUtils.loadPage(url, function (doc) {
 		if (doc === null) {
 			document.body.classList.add("loadfail");
-			return (callback !== undefined) ? callback() : null;
-		} 
-		document.body.classList.add("loaded");
-		var idoc = iframe.contentWindow.document;
-		if (title == "") title = doc.title;
+		} else {
+			document.body.classList.add("loaded");
+		}
 		var base = doc.createElement("base");
 		base.setAttribute("href", url);
 		doc.head.insertBefore(base, doc.head.firstChild);
-		var adopted = idoc.adoptNode(doc.documentElement);
-		idoc.appendChild(adopted);
-		idoc.body.addEventListener("click", stopIt, true);
-		return (callback !== undefined) ? callback() : null;
+		loadedDocument = doc;
+		showPage(loadedDocument, callback);
 	});
 }
 
@@ -223,6 +224,7 @@ var options = [
 	{ type: "checkbox", key: "scanImages", elem: "checkimages" },
 	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
+	{ type: "checkbox", key: "stripStyles", elem: "stripstyles", post: expand },
 	{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: xpath => showOutline(xpath, config.includeRegion), add: selectRegion, edit: editRegion, pre: addBodyIfEmpty, post: showOptions },
 	{ type: "list", key: "excludes", elem: "exclude", addelem: "excludeadd", delelem: "excludedel", select: xpath => showOutline(xpath, config.excludeRegion), add: selectRegion, edit: editRegion, post: showOptions },
 	{ type: "text", key: "watchDelay", elem: "watchDelay", pre: (value, callback) => callback(parseInt(value)) }
@@ -235,7 +237,7 @@ var known = false;
 var title = "";
 var changes = -1, current = -1;
 var config = {};
-
+var loadedDocument = null;
 
 pageUtils.getTitle(url, pagetitle => {
 	if (pagetitle !== null) {
@@ -261,29 +263,29 @@ document.querySelector("#pagetitle").addEventListener("change", function (e) {
 
 document.querySelector("#delete").addEventListener("click", function (e) {
 	pageUtils.remove(url, function () {
-		document.body.classList.remove("unchanged");
-		document.body.classList.remove("changed");
-		document.body.classList.remove("failed");
-		document.body.classList.remove("known");
-		document.body.classList.remove("expanded");
+		document.body.classList.remove("unchanged", "changed", "failed", "known", "expanded");
+		changes = -1, current = -1;
 		known = false;
-		loadPage(showData);
+		showPage(loadedDocument, showData);
 	});
 });
 
-document.querySelector("#expand").addEventListener("click", function (e) {
+
+function expand() {
 	pageUtils.getOrCreateEffectiveConfig(url, title, config => {
-		document.body.classList.remove("unchanged");
-		document.body.classList.remove("changed");
-		document.body.classList.remove("failed");
-		document.body.classList.add("known");
-		document.body.classList.add("expanded");
+		document.body.classList.remove("unchanged", "changed", "failed");
+		document.body.classList.add("expanded", "known");
+		changes = -1, current = -1;
 		known = true;
 		window.config = config;
-		loadPage(showData);
+		showPage(loadedDocument, showData);
+		if (config.stripStyles)
+			highlightUtils._stripStyles(document.getElementById("iframe").contentWindow.document);
 		showOptions();
 	});
-});
+}
+
+document.querySelector("#expand").addEventListener("click", expand);
 
 document.querySelector("#highlight").addEventListener("click", function (e) {
 	document.body.classList.remove("expanded");

@@ -30,8 +30,7 @@ var configUtils = {
 	_upgrade: function (config) {
 		var upgraded = false;
 		if (!("configVersion" in config)) {
-			config.configVersion = 0;
-			upgraded = true;
+			config.configVersion = 0, upgraded = true;
 		}
 		if (config.configVersion == 0) {
 			config.addBackground = "#ff8";
@@ -49,23 +48,24 @@ var configUtils = {
 			config.ignoreNumbers = false;
 			config.includes = ["/html/body[1]"];
 			config.excludes = [];
-			config.configVersion = 1,
-				upgraded = true;
+			config.configVersion = 1, upgraded = true;
 		}
 		if (config.configVersion == 1) {
 			config.scanOnLoad = false;
 			config.highlightOnLoad = false;
 			config.enableContextMenu = false;
-			config.configVersion = 2,
-				upgraded = true;
+			config.configVersion = 2, upgraded = true;
 		}
 		if (config.configVersion == 2) {
 			config.autoDelayPercent = 150;
 			config.autoDelayMin = 10;
 			config.autoDelayMax = 10080;
 			config.watchDelay = 1440;
-			config.configVersion = 3,
-				upgraded = true;
+			config.configVersion = 3, upgraded = true;
+		}
+		if (config.configVersion == 3) {
+			config.stripStyles = false;
+			config.configVersion = 4, upgraded = true;
 		}
 		return upgraded;
 	},

@@ -13,6 +13,7 @@ var highlightUtils = {
 	},
 
 	highlightChanges: function (doc, config, oldContent) {
+		if (config.stripStyles) highlightUtils._stripStyles(doc);
 		var current = textUtils.getText(doc, config);
 
 		var excludes = textUtils._findElements(doc, config.excludes);
@@ -441,6 +442,22 @@ var highlightUtils = {
 						break;
 					}
 				}
+			}
+		}
+	},
+
+	_stripStyles: function (elem) {
+		if (elem.nodeName.toLowerCase() == "style") {
+			elem.parentNode.removeChild(elem);
+		} else if (elem.nodeName.toLowerCase() == "link" && elem.getAttribute("rel").toLowerCase() == "stylesheet") {
+			elem.parentNode.removeChild(elem);
+		} else {
+			if (elem instanceof HTMLElement) elem.removeAttribute("style");
+			var child = elem.firstChild;
+			while (child) {
+				var next = child.nextSibling;
+				highlightUtils._stripStyles(child);
+				child = next;
 			}
 		}
 	},

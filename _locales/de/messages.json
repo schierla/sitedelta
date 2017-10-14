@@ -227,6 +227,11 @@
 		"message": "Bereiche hervorheben",
 		"description": "Label for check box to outline include and exclude regions"
 	},
+	"configStripStyles": {
+		"message": "Seitengestaltung (CSS) entfernen",
+		"description": "Label for check box to remove CSS from highlighted pages"
+	},
+
 	"configWatch": {
 		"message": "Überwachungseinstellungen:",
 		"description": "Label for text fields concerning watch / delay settings"

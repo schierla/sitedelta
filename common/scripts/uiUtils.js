@@ -36,8 +36,9 @@ var uiUtils = {
 					}
 				}
 				for (var i = 0; i < this.shown.length - 1; i++) {
+					if (i < 0) continue;
 					if (!this.isBefore(this.shown[i], this.elements[this.shown[i]].data, this.shown[i + 1], this.elements[this.shown[i + 1]].data)) {
-						this.container.removeChild(this.elements[this.shown[i]].element); this.shown.splice(i, 1); i--;
+						this.container.removeChild(this.elements[this.shown[i]].element); this.shown.splice(i, 1); i -= 2;
 					}
 				}
 				for (var key in this.elements) {
@@ -79,7 +80,7 @@ var uiUtils = {
 			},
 
 			foreachSelected: function (callback, after, before) {
-				if(before !== undefined) before();
+				if (before !== undefined) before();
 				var options = this.container.options;
 				for (var i = 0; i < options.length; i++) {
 					if (options[i].selected) {
@@ -88,7 +89,7 @@ var uiUtils = {
 						return;
 					}
 				}
-				if(after !== undefined) after();
+				if (after !== undefined) after();
 			}
 		};
 	}

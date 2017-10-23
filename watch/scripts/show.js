@@ -6,6 +6,7 @@ function highlight() {
 	pageUtils.getOrCreateEffectiveConfig(url, title, (config) => {
 		window.config = config;
 		pageUtils.getContent(url, function (content) {
+			window.oldcontent = content;
 			var iframe = document.getElementById("iframe");
 			var idoc = iframe.contentWindow.document;
 			known = true;
@@ -238,6 +239,7 @@ var title = "";
 var changes = -1, current = -1;
 var config = {};
 var loadedDocument = null;
+var oldcontent = null;
 
 pageUtils.getTitle(url, pagetitle => {
 	if (pagetitle !== null) {
@@ -270,8 +272,8 @@ document.querySelector("#delete").addEventListener("click", function (e) {
 	});
 });
 
-
 function expand() {
+	if(window.oldcontent !== null) pageUtils.setContent(url, window.oldcontent);
 	pageUtils.getOrCreateEffectiveConfig(url, title, config => {
 		document.body.classList.remove("unchanged", "changed", "failed");
 		document.body.classList.add("expanded", "known");

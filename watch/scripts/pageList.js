@@ -54,7 +54,7 @@ var pageList = {
 
 	load: function () {
 		var list = uiUtils.sortedList("pages", this.createItem, this.updateItem);
-		list.isBefore = (keya, a, keyb, b) => a.title && b.title && a.title.toLowerCase() < b.title.toLowerCase();
+		list.isBefore = (keya, a, keyb, b) => a.title!==undefined && b.title!==undefined && a.title.toLowerCase() < b.title.toLowerCase();
 		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
 		document.querySelector("#open").addEventListener("click", () => list.foreachSelected(this.openPage));
 		document.querySelector("#scannow").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.scanPage) });

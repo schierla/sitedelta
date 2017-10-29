@@ -4,6 +4,8 @@ document.querySelector("#expand").addEventListener("click", e => {
     if(chrome.webNavigation) document.body.classList.add("advancedEnabled");
     document.body.classList.toggle("expand");
 });
+
+document.querySelector("#configure").addEventListener("click", e => { tabUtils.openResource("manage.htm"); document.body.classList.remove("expand")});
 document.querySelector("#pages").addEventListener("click", e => document.body.classList.remove("expand"));
 document.querySelector("#delete").addEventListener("click", e => document.body.classList.remove("expand"));
 document.querySelector("#open").addEventListener("click", e => document.body.classList.remove("expand"));

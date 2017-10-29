@@ -472,7 +472,7 @@ var highlightUtils = {
 				elem[i].style.transition = "box-shadow 0.5s ease 0s";
 				elem[i].style.boxShadow = "0 0 0 0 #c0c0c080";
 			}
-		}, 10);
+		}, 50);
 	},
 
 	_blink: function (elem) {

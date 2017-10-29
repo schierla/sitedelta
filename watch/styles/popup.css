@@ -11,6 +11,8 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; }
 .changes #changedPages {display: block; }
 .unsupported #watch {display: none; }
 .disabled #watchDisabled, .enabled #watchEnabled, .unsupported #watchUnsupported {display: inline; }
+span.enabled, span.disabled { display: none; }
+.enabled span.enabled, .disabled span.disabled { display: inline; }
 #open {display: none; }
 .open #open {display: inline; }
 .open #watch {display: none; }

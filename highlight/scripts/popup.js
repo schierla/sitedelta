@@ -170,6 +170,8 @@ document.querySelector("#highlight").addEventListener("click", function (e) {
 function expand() {
 	pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, (pageconfig) => {
 		document.body.classList.add("expanded");
+		document.body.classList.remove("disabled");
+		document.body.classList.add("enabled");
 		config = pageconfig;
 		showOptions();
 	});
@@ -242,13 +244,13 @@ tabUtils.getActive(function (tab) {
 		return;
 	}
 
-	tabUtils.getStatus(tabId, fillStatus);
 	pageUtils.getTitle(url, (title) => {
 		if (title === null) {
 			showTitle(tab.title);
 			document.body.classList.add("disabled");
 		} else {
 			showTitle(title);
+			tabUtils.getStatus(tabId, fillStatus);
 			document.body.classList.add("enabled");
 		}
 	});

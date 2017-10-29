@@ -17,7 +17,7 @@ var uiUtils = {
 	},
 
 	sortedList: function (id, creator, updater) {
-		return {
+		var ret = {
 			elements: {},
 			shown: [],
 			container: document.querySelector("#" + id),
@@ -26,6 +26,19 @@ var uiUtils = {
 
 			createElement: creator,
 			updateElement: updater,
+
+			afterSelect: null,
+
+			select: function() {
+				document.body.classList.remove(id+"None", id+"One", id+"Multiple");
+				var options = this.container.options;
+				var selected = 0;
+				for (var i = 0; i < options.length; i++) if (options[i].selected) selected++;
+				if(selected == 0) document.body.classList.add(id+"None");
+				else if(selected == 1) document.body.classList.add(id+"One");
+				else document.body.classList.add(id+"Multiple");
+				if(this.afterSelect) this.afterSelect();
+			},
 
 			refresh: function () {
 				for (var i = 0; i < this.shown.length; i++) {
@@ -56,6 +69,7 @@ var uiUtils = {
 					this.container.appendChild(this.elements[key].element);
 					this.shown.push(key);
 				}
+				this.select();
 			},
 
 			updateItem: function (key, data) {
@@ -85,6 +99,7 @@ var uiUtils = {
 				for (var i = 0; i < options.length; i++) {
 					if (options[i].selected) {
 						options[i].selected = false;
+						this.select();
 						callback(this.shown[i], this.elements[this.shown[i]].data, () => this.foreachSelected(callback, after));
 						return;
 					}
@@ -92,6 +107,8 @@ var uiUtils = {
 				if (after !== undefined) after();
 			}
 		};
+		ret.container.addEventListener("change", () => ret.select());
+		return ret;
 	}
 };
 

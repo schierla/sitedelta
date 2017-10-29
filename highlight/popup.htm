@@ -9,7 +9,8 @@
 
 <body>
 	<div class="browser-style i18n" type="text" id="title">
-		<span id="loaded" class="i18n">__MSG_highlightTitle__</span>
+		<span id="disabled" class="i18n">__MSG_highlightDisabled__</span>
+		<span id="enabled" class="i18n">__MSG_highlightEnabled__</span>
 		<span id="unavailable" class="i18n">__MSG_highlightUnsupported__</span>
 		<span id="selecting" class="i18n">__MSG_pageSelectRegion__</span>
 		<span id="unchanged" class="i18n">__MSG_pageUnchanged__</span>
@@ -24,8 +25,13 @@
 
 	<div id="buttons">
 		<div class="browser-style buttons">
-			<button id="delete" class="browser-style i18n">__MSG_pageDelete__</button>
-			<button id="highlight" class="browser-style default i18n">__MSG_pageHighlight__</button>
+			<button class="browser-style i18n" id="setup">__MSG_pagesConfiguration__</button>
+			<button id="delete" class="browser-style i18n">__MSG_pageDisable__</button>
+			<button id="highlight" class="browser-style default">
+				<span id="enable" class="i18n">__MSG_pageEnable__</span>
+				<span id="showChanges" class="i18n">__MSG_pageShowChanges__</span>
+				<span id="showNext" class="i18n">__MSG_pageNextChange__</span>
+			</button>
 		</div>
 		<div>
 			<button id="expand" class="browser-style expander"></button>
@@ -72,10 +78,6 @@
 			<button class="browser-style i18n" id="excludeadd">__MSG_configRegionsAdd__</button> 
 			<button class="browser-style i18n" disabled="disabled" id="excludedel">__MSG_configRegionsRemove__</button>
 		</div>
-	</div>
-
-	<div id="settings">
-		<div class="browser-style buttons"><button class="browser-style i18n" id="setup">__MSG_highlightButtonOptions__</button></div>
 	</div>
 
 	<script src="common/scripts/uiUtils.js"></script>

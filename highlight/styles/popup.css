@@ -1,20 +1,20 @@
 body {padding: 12px 8px 4px 8px; min-width: 20em; }
 #title {font-weight: bold; margin: 0 0 8px 0; }
 #config {display: none; margin-top: 8px;}
-#settings {display: none; margin-top: 8px; }
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 .buttons {text-align: right; }
 .browser-style input[type="text"], .browser-style select {width: 100%; }
 
-#failed, #unavailable, #loaded, #highlighted, #unchanged, #changed, #selecting {display: none; }
-.failed #failed, .unavailable #unavailable, .loaded #loaded, .unchanged #unchanged, .changed #changed, .selecting #selecting {display: block; }
+#failed, #unavailable, #enabled, #disabled, #highlighted, #unchanged, #changed, #selecting {display: none; }
+.failed #failed, .unavailable #unavailable, .enabled #enabled, .disabled #disabled, .unchanged #unchanged, .changed #changed, .selecting #selecting {display: block; }
+.enabled.unchanged #enabled, .enabled.changed #enabled, .disabled.changed #changed, .disabled.unchanged #unchanged { display: none; }
+
+#showNext, #showChanges, #enable, .enabled.changed #showChanges, .disabled #delete  { display: none; }
+.disabled #enable, .enabled #showChanges, .changed #showNext { display: inline; }
 
 .unavailable #unavailable {display: block; }
-.unavailable #settings {display: block; }
-.unavailable #buttons {display: none; }
 .unavailable #textfields {display: none; }
-
-.disabled #delete {visibility: hidden; }
+.unavailable #highlight, .unavailable #delete, .unavailable #expand { display: none; }
 
 .unchanged #highlight {visibility: hidden; }
 

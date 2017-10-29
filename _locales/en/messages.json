@@ -8,19 +8,18 @@
 		"description": "Description of the highlight extension"
 	},
 
-	"highlightTitle": {
-		"message": "SiteDelta Highlight",
-		"description": "Title of the page action popup"
+	"highlightDisabled": {
+		"message": "SiteDelta Highlight is disabled for this page.",
+		"description": "Text that monitoring of the current page is disabled"
+	},
+	"highlightEnabled": {
+		"message": "SiteDelta Highlight is enabled for this page.",
+		"description": "Text that monitoring of the current page is enabled"
 	},
 	"highlightUnsupported": {
 		"message": "SiteDelta Highlight does not support monitoring this page.",
 		"description": "Title of the page action popup when not available for the current page"
 	},
-	"highlightButtonOptions": {
-		"message": "Configure SiteDelta Highlight...",
-		"description": "Button to open options dialog"
-	},
-
 
 
 	"watchExtensionName": {
@@ -37,11 +36,11 @@
 		"description": "Text that the current page is unsupported"
 	},
 	"watchDisabled": {
-		"message": "SiteDelta Watch does not monitor this page.",
+		"message": "SiteDelta Watch is disabled for this page.",
 		"description": "Text that watching of the current page is disabled"
 	},
 	"watchEnabled": {
-		"message": "SiteDelta Watch monitors this page.",
+		"message": "SiteDelta Watch is enabled for this page.",
 		"description": "Text that watching of the current page is enabled"
 	},
 	"watchFailed": {
@@ -51,18 +50,6 @@
 	"watchChangedPages": {
 		"message": "Pages modified since last visit:",
 		"description": "Headline for changed pages"
-	},
-	"watchButtonOpenAll": {
-		"message": "Open all...",
-		"description": "Button to open all changed pages"
-	},
-	"watchButtonWatch": {
-		"message": "Configure Page...",
-		"description": "Button to configure/enable SiteDelta Watch for the current page"
-	},
-	"watchButtonOptions": {
-		"message": "Configure SiteDelta Watch...",
-		"description": "Button to open options dialog"
 	},
 	"watchNextScan": {
 		"message": "Next scan: $TIME$",
@@ -102,29 +89,82 @@
 		"message": "Click to select a region",
 		"description": "Title of the page action popup while selecting a region"
 	},
-	"pageList": {
-		"message": "Monitored pages:",
-		"description": "Headline for the list of monitored pages"
+	"pageEnable": {
+		"message": "Enable",
+		"description": "Button to enable monitoring the current page"
 	},
-	"pageDelete": {
-		"message": "Forget Page",
-		"description": "Button to delete the selected page"
+	"pageDisable": {
+		"message": "Disable",
+		"description": "Button to disable monitoring of the current page"
+	},
+	"pageShowChanges": {
+		"message": "Show Changes",
+		"description": "Button to show changes on the current page"
+	},
+	"pageNextChange": {
+		"message": "Next Change",
+		"description": "Button to show the next change on the current page"
 	},
 	"pageOpen": {
 		"message": "Open Page...",
+		"description": "Button to open the current page"
+	},
+	"pageScan": {
+		"message": "Scan Page...",
+		"description": "Button to scan the current page"
+	},
+
+	"pagesList": {
+		"message": "Monitored pages:",
+		"description": "Headline for the list of monitored pages"
+	},
+	"pagesDeleteOne": {
+		"message": "Delete Page",
+		"description": "Button to delete the selected page"
+	},	
+	"pagesDeleteMultiple": {
+		"message": "Delete Pages",
+		"description": "Button to delete the selected pages"
+	},
+	"pagesOpenOne": {
+		"message": "Open Page...",
 		"description": "Button to open the selected page"
 	},
-	"pageHighlight": {
-		"message": "Highlight Changes",
-		"description": "Button to highlight changes on the current page"
+	"pagesOpenMultiple": {
+		"message": "Open Pages...",
+		"description": "Button to open the selected pages"
 	},
-	"pageScanNow": {
-		"message": "Scan Page Now",
-		"description": "Button to scan the current page now"
+	"pagesOpenChanged": {
+		"message": "Open Changed...",
+		"description": "Button to open the changed pages"
 	},
-	"pageMarkSeen": {
+	"pagesScanOne": {
+		"message": "Scan Page",
+		"description": "Button to scan the selected page now"
+	},
+	"pagesScanMultiple": {
+		"message": "Scan Pages",
+		"description": "Button to scan the selected pages now"
+	},
+	"pagesScanAll": {
+		"message": "Scan All",
+		"description": "Button to scan all pages now"
+	},
+	"pagesMarkSeenOne": {
 		"message": "Mark Page As Seen",
-		"description": "Button to mark the current page as seen"
+		"description": "Button to mark the selected page as seen"
+	},
+	"pagesMarkSeenMultiple": {
+		"message": "Mark Pages As Seen",
+		"description": "Button to mark the selected pages as seen"
+	},
+	"pagesMarkSeenAll": {
+		"message": "Mark All As Seen",
+		"description": "Button to mark all pages as seen"
+	},
+	"pagesConfiguration": {
+		"message": "Configuration...",
+		"description": "Button to open options dialog"
 	},
 
 	"configRegionsInclude": {

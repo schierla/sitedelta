@@ -6,7 +6,8 @@ var pageList = {
 	},
 
 	openPage: function (key, data, callback) {
-		chrome.tabs.create({ url: key }); callback();
+		chrome.tabs.create({ url: key }); 
+		setTimeout(callback, 500);
 	},
 
 	scanPage: function (key, data, callback, tabId) {
@@ -31,6 +32,15 @@ var pageList = {
 			if(options[i].selected) return;
 		for(var i = 0; i < options.length; i++)
 			options[i].selected = true;
+	},
+
+	selectChangedIfNone: function () {
+		var options = document.querySelector("#pages").options;
+		for (var i = 0; i < options.length; i++)
+			if (options[i].selected) return;
+		for (var i = 0; i < options.length; i++)
+			if(options[i].classList.contains("changed")) 
+				options[i].selected = true;
 	},
 
 	createItem: function (key, data) {
@@ -60,7 +70,7 @@ var pageList = {
 		var list = uiUtils.sortedList("pages", this.createItem, this.updateItem);
 		list.isBefore = (keya, a, keyb, b) => a.title!==undefined && b.title!==undefined && a.title.toLowerCase() < b.title.toLowerCase();
 		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
-		document.querySelector("#open").addEventListener("click", () => list.foreachSelected(this.openPage));
+		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage) });
 		document.querySelector("#scannow").addEventListener("click",
 			() => chrome.tabs.create({ url: "about:blank" }, tab => {
 				pageList.selectAllIfNone();

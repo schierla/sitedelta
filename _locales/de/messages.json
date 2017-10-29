@@ -8,19 +8,18 @@
 		"description": "Description of the highlight extension"
 	},
 
-	"highlightTitle": {
-		"message": "SiteDelta Highlight",
-		"description": "Title of the page action popup"
+	"highlightDisabled": {
+		"message": "SiteDelta Highlight ist auf deser Seite nicht aktiv.",
+		"description": "Text that monitoring of the current page is disabled"
+	},
+	"highlightEnabled": {
+		"message": "SiteDelta Highlight ist auf deser Seite aktiv.",
+		"description": "Text that monitoring of the current page is enabled"
 	},
 	"highlightUnsupported": {
 		"message": "SiteDelta Highlight ist auf dieser Seite nicht verfügbar.",
 		"description": "Title of the page action popup when not available for the current page"
 	},
-	"highlightButtonOptions": {
-		"message": "SiteDelta Highlight konfigurieren...",
-		"description": "Button to open options dialog"
-	},
-
 
 
 	"watchExtensionName": {
@@ -51,18 +50,6 @@
 	"watchChangedPages": {
 		"message": "Seit dem letzten Besuch geänderte Seiten:",
 		"description": "Headline for changed pages"
-	},
-	"watchButtonOpenAll": {
-		"message": "Alle öffnen...",
-		"description": "Button to open all changed pages"
-	},
-	"watchButtonWatch": {
-		"message": "Seiteneinstellungen...",
-		"description": "Button to configure/enable SiteDelta Watch for the current page"
-	},
-	"watchButtonOptions": {
-		"message": "SiteDelta Watch konfigurieren...",
-		"description": "Button to open options dialog"
 	},
 	"watchNextScan": {
 		"message": "Nächste Überprüfung: $TIME$",
@@ -102,31 +89,84 @@
 		"message": "Klicken, um einen Bereich auszuwählen.",
 		"description": "Title of the page action popup while selecting a region"
 	},
-	"pageList": {
-		"message": "Überwachte Seiten:",
-		"description": "Headline for the list of monitored pages"
+
+	"pageEnable": {
+		"message": "Aktivieren",
+		"description": "Button to enable monitoring the current page"
 	},
-	"pageDelete": {
-		"message": "Seite vergessen",
-		"description": "Button to delete the selected page"
+	"pageDisable": {
+		"message": "Deaktivieren",
+		"description": "Button to disable monitoring of the current page"
+	},
+	"pageShowChanges": {
+		"message": "Änderungen zeigen",
+		"description": "Button to show changes on the current page"
+	},
+	"pageNextChange": {
+		"message": "Nächste Änderung",
+		"description": "Button to show the next change on the current page"
 	},
 	"pageOpen": {
 		"message": "Seite öffnen...",
 		"description": "Button to open the selected page"
 	},
-	"pageHighlight": {
-		"message": "Änderungen hervorheben",
-		"description": "Button to highlight changes on the current page"
+	"pageScan": {
+		"message": "Seite prüfen...",
+		"description": "Button to scan the current page"
 	},
-	"pageScanNow": {
-		"message": "Seite jetzt prüfen",
-		"description": "Button to scan the current page now"
+
+	"pagesList": {
+		"message": "Überwachte Seiten:",
+		"description": "Headline for the list of monitored pages"
 	},
-	"pageMarkSeen": {
+	"pagesDeleteOne": {
+		"message": "Seite löschen",
+		"description": "Button to delete the selected page"
+	},	
+	"pagesDeleteMultiple": {
+		"message": "Seiten löschen",
+		"description": "Button to delete the selected pages"
+	},
+	"pagesOpenOne": {
+		"message": "Seite öffnen...",
+		"description": "Button to open the selected page"
+	},
+	"pagesOpenMultiple": {
+		"message": "Seiten öffnen...",
+		"description": "Button to open the selected pages"
+	},
+	"pagesOpenChanged": {
+		"message": "Geänderte öffnen...",
+		"description": "Button to open the changed pages"
+	},
+	"pagesScanOne": {
+		"message": "Seite prüfen",
+		"description": "Button to scan the selected page now"
+	},
+	"pagesScanMultiple": {
+		"message": "Seiten prüfen",
+		"description": "Button to scan the selected pages now"
+	},
+	"pagesScanAll": {
+		"message": "Alle prüfen",
+		"description": "Button to scan all pages now"
+	},
+	"pagesMarkSeenOne": {
 		"message": "Seite als gesehen markieren",
-		"description": "Button to mark the current page as seen"
+		"description": "Button to mark the selected page as seen"
 	},
-	
+	"pagesMarkSeenMultiple": {
+		"message": "Seiten als gesehen markieren",
+		"description": "Button to mark the selected pages as seen"
+	},
+	"pagesMarkSeenAll": {
+		"message": "Alle als gesehen markieren",
+		"description": "Button to mark all pages as seen"
+	},
+	"pagesConfiguration": {
+		"message": "Konfiguration...",
+		"description": "Button to open options dialog"
+	},
 
 	"configRegionsInclude": {
 		"message": "Überwachte Bereiche:", 

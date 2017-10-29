@@ -15,8 +15,13 @@
 		<span class="i18n" id="watchEnabled">__MSG_watchEnabled__</span>
 	</div>
 	<div class="browser-style buttons">
-		<button class="browser-style i18n default" id="watch">__MSG_watchButtonWatch__</button>
-		<button class="browser-style i18n default" id="open">__MSG_pageOpen__</button>
+		<button class="browser-style i18n" id="options">__MSG_pagesConfiguration__</button>
+		<button class="browser-style default" id="watch">
+			<span class="disabled i18n">__MSG_pageEnable__</span><span class="enabled i18n">__MSG_pageShowChanges__</span>...
+		</button>
+		<button class="browser-style default" id="open">
+			<span class="i18n">__MSG_pageOpen__</span>
+		</button>
 	</div>
 
 	<div id="changedPages">
@@ -25,8 +30,7 @@
 	</div>
 
 	<div class="browser-style buttons">
-		<button class="browser-style i18n" id="openAll">__MSG_watchButtonOpenAll__</button>
-		<button class="browser-style i18n" id="options">__MSG_watchButtonOptions__</button>
+		<button class="browser-style i18n" id="openAll">__MSG_pagesOpenChanged__</button>
 	</div>
 
 	<script src="common/scripts/uiUtils.js"></script>

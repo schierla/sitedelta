@@ -19,14 +19,19 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 .expanded #settings { width: 20em; }
 .expanded #content { right: 20.1em; }
 .expanded #expand {display: none; }
-.unchanged #highlight {visibility: hidden; }
+#highlight {display: none; }
 .known #delete {display: inline; }
+.loaded #highlight, .expanded #highlight { display: inline; }
+.unchanged #highlight { visibility: hidden; }
 
 #disabled {display: inline; }
 .known #disabled, .loadfail #disabled {display: none; }
 #unchanged, #changed, #known, #selecting, #failed, #loadfail {display: none; }
 .changed #changed, .unchanged #unchanged, .known #known, .selecting #selecting, .failed #failed, .loadfail #loadfail {display: inline; }
 .known.changed #known, .known.unchanged #known, .known.selecting #known, .known.failed #known, .loadfail #known {display: none; }
+
+#showNext, #showChanges, .known #enable { display: none; }
+.expanded #showChanges, .changed #showNext, .unchanged #showNext { display: inline; }
 
 #loading {position: absolute; left: 0; top: 0; bottom: 0; right: 0; }
 #loading img {position: absolute; left: 50%; top: 50%; transform: translateY(-50%) translateY(-50%); animation: animate 2s linear infinite; height: 2em; height: 2em; }

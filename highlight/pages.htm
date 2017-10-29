@@ -10,14 +10,24 @@
 </head>
 
 <body>
-    <h2 id="title" class="browser-style i18n">__MSG_pageList__</h2>
+    <h2 id="title" class="browser-style i18n">__MSG_pagesList__</h2>
 	<select id="pages" size="10" multiple></select>
     <div id="actions" class="buttons browser-style">
         <button id="expand" class="browser-style expander"></button>
         <div id="expanded">
-            <button id="scannow" class="browser-style advanced i18n">__MSG_pageScanNow__</button>
-            <button id="delete" class="browser-style i18n">__MSG_pageDelete__</button>
-            <button id="open" class="browser-style i18n default">__MSG_pageOpen__</button>
+            <button id="scannow" class="browser-style advanced">
+                <span class="pagesOne i18n">__MSG_pagesScanOne__</span><span class="pagesMultiple i18n">__MSG_pagesScanMultiple__</span><span class="pagesNone i18n">__MSG_pagesScanAll__</span>...
+            </button>
+            <button id="delete" class="browser-style">
+                <span class="pagesOne i18n">__MSG_pagesDeleteOne__</span>
+                <span class="pagesMultiple i18n">__MSG_pagesDeleteMultiple__</span>
+            </button>
+            <button id="open" class="browser-style">
+                <span class="pagesOne i18n">__MSG_pagesOpenOne__</span>
+                <span class="pagesMultiple i18n">__MSG_pagesOpenMultiple__</span>
+                <span class="pagesNone i18n">__MSG_pagesOpenChanged__</span>	
+            </button>
+            <button id="configure" class="browser-style i18n">__MSG_pagesConfiguration__</button>
         </div>
     </div>
 

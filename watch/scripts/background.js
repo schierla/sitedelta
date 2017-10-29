@@ -19,13 +19,18 @@ function scanPage(url, callback) {
 	});
 }
 
+function openPages(pages) {
+	if(pages.length == 0) return;
+	var url = pages.shift();
+	tabUtils.openResource("show.htm?" + url);
+	setTimeout(() => openPages(pages), 500);
+}
+
 var messageListener = function (request, sender, sendResponse) {
 	var hiddenFields = ["configVersion", "includes", "excludes", "scanOnLoad", "highlightOnLoad", "enableContextMenu"];
 	if (request.command == "openChanged") {
 		pageUtils.listChanged(function (urls) {
-			for (var i = 0; i < urls.length; i++) {
-				tabUtils.openResource("show.htm?" + urls[i]);
-			}
+			openPages(urls);
 		});
 	} else if (request.command == "transferInfo") {
 		sendResponse({ name: "SiteDelta Watch", id: "sitedelta-watch", import: ["config", "pages"], export: ["config", "pages"] });

@@ -1,5 +1,5 @@
 window.addEventListener("contextmenu", e => { e.preventDefault(); return false; });
-
+document.querySelector("#configure").addEventListener("click", e => {document.body.classList.remove("expand"); tabUtils.openResource("manage.htm"); });
 
 document.querySelector("#expand").addEventListener("click", e => document.body.classList.toggle("expand"));
 document.querySelector("#pages").addEventListener("click", e => document.body.classList.remove("expand"));

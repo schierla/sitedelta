@@ -39,7 +39,7 @@ var webNavigationCompletedListener = function (details) {
 function menuHighlightPage() {
 	return {
 		id: "highlightPage",
-		title: chrome.i18n.getMessage("pageHighlight"),
+		title: chrome.i18n.getMessage("pageScan"),
 		documentUrlPatterns: ["http://*/*", "https://*/*"],
 		contexts: ["page"]
 	}
@@ -48,7 +48,7 @@ function menuHighlightPage() {
 function menuHighlight() {
 	return {
 		id: "highlight",
-		title: chrome.i18n.getMessage("pageHighlight"),
+		title: chrome.i18n.getMessage("pageScan"),
 		contexts: ["browser_action"]
 	}
 };
@@ -56,7 +56,7 @@ function menuHighlight() {
 function menuOptions() {
 	return {
 		id: "options",
-		title: chrome.i18n.getMessage("highlightButtonOptions"),
+		title: chrome.i18n.getMessage("pagesConfiguration"),
 		contexts: ["browser_action"]
 	}
 };

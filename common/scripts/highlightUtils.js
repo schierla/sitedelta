@@ -465,12 +465,12 @@ var highlightUtils = {
 	_fade: function (elem) {
 		for (var i = 0; i < elem.length; i++) {
 			elem[i].style.transition = "box-shadow 0s ease 0s";
-			elem[i].style.boxShadow = "0 0 25px 50px #60606080";
+			elem[i].style.boxShadow = "0 0 25px 50px rgba(100,100,100,0.5)";
 		}
 		setTimeout(() => {
 			for (var i = 0; i < elem.length; i++) {
-				elem[i].style.transition = "box-shadow 0.5s ease 0s";
-				elem[i].style.boxShadow = "0 0 0 0 #c0c0c080";
+				elem[i].style.transition = "-webkit-box-shadow 0.5s ease 0s";
+				elem[i].style.WebkitBoxShadow = "0 0 0 0 rgba(200,200,200,0.5)";
 			}
 		}, 50);
 	},

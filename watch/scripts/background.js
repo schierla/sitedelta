@@ -26,11 +26,22 @@ function openPages(pages) {
 	setTimeout(() => openPages(pages), 500);
 }
 
+
+function scanPages(pages) {
+	if(pages.length == 0) return;
+	var url = pages.shift();
+	scanPage(url, () => scanPages(pages));
+}
+
 var messageListener = function (request, sender, sendResponse) {
 	var hiddenFields = ["configVersion", "includes", "excludes", "scanOnLoad", "highlightOnLoad", "enableContextMenu"];
 	if (request.command == "openChanged") {
 		pageUtils.listChanged(function (urls) {
 			openPages(urls);
+		});
+	} else if(request.command == "scanAll") {
+		pageUtils.list(function (urls) {
+			scanPages(urls);
 		});
 	} else if (request.command == "transferInfo") {
 		sendResponse({ name: "SiteDelta Watch", id: "sitedelta-watch", import: ["config", "pages"], export: ["config", "pages"] });

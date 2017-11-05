@@ -5,10 +5,9 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; }
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 .buttons {text-align: right; }
 .browser-style input[type="text"], .browser-style select {width: 100%; }
-#openAll, #changedPages, #watchUnsupported, #watchEnabled, #watchDisabled {display: none; }
+#openAll, #watchUnsupported, #watchEnabled, #watchDisabled {display: none; }
 #changed {height: 6em; }
 .changes #openAll {display: inline; }
-.changes #changedPages {display: block; }
 .unsupported #watch {display: none; }
 .disabled #watchDisabled, .enabled #watchEnabled, .unsupported #watchUnsupported {display: inline; }
 span.enabled, span.disabled { display: none; }

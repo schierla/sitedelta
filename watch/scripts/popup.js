@@ -14,6 +14,12 @@ document.querySelector("#options").addEventListener("click", function (e) {
 	window.close();
 });
 
+
+document.querySelector("#scanAll").addEventListener("click", function (e) {
+	chrome.runtime.sendMessage({ command: "scanAll" });
+	window.close();
+});
+
 document.querySelector("#openAll").addEventListener("click", function (e) {
 	chrome.runtime.sendMessage({ command: "openChanged" });
 	window.close();

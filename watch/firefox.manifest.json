@@ -24,6 +24,7 @@
 		"notifications",
 		"activeTab", 
 		"storage",
+		"unlimitedStorage",
 		"alarms",
 		"<all_urls>"
 	],

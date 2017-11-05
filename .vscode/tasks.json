@@ -46,7 +46,7 @@
         {
             "taskName": "Debug in Firefox",
             "type": "shell",
-            "command": "web-ext run -f \"C:\\Program Files (x86)\\Mozilla Firefox\\Stable\\firefox.exe\" -s build/unpacked",
+            "command": "web-ext run -s build/unpacked",
             "group": "build",
             "problemMatcher": []
         }

@@ -1,6 +1,8 @@
 document.querySelector("#watch").addEventListener("click", function (e) {
-	var showPrefix = chrome.runtime.getURL("show.htm?");
-	chrome.tabs.update(tabId, { url: showPrefix + url }, () => { window.close(); });
+	pageUtils.getOrCreateEffectiveConfig(url, title, (config) => {
+		var showPrefix = chrome.runtime.getURL("show.htm?");
+		chrome.tabs.update(tabId, { url: showPrefix + url }, () => { window.close(); });
+	});
 });
 
 document.querySelector("#open").addEventListener("click", function (e) {

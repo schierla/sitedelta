@@ -1,10 +1,10 @@
 // watch operations
 var watchUtils = {
 
-	loadPage: function (url, callback) {
+	loadPage: function (url, callback, progress) {
 		watchUtils._downloadPage(url, "", function (mime, content) {
-			watchUtils._parsePage(url, mime, content, callback);
-		});
+			watchUtils._parsePage(url, mime, content, callback, progress);
+		}, progress);
 	},
 
 	adaptDelay: function (url, changes) {
@@ -67,10 +67,13 @@ var watchUtils = {
 		});
 	},
 
-	_downloadPage: function (url, mime, callback) {
+	_downloadPage: function (url, mime, callback, progress) {
 		var xhr = new XMLHttpRequest();
 		xhr.timeout = 60000;
 		if (mime != "") xhr.overrideMimeType(mime);
+		xhr.onprogress = function(e) {
+			if(progress !== undefined && e.lengthComputable) progress(e.loaded, e.total);
+		}
 		xhr.onreadystatechange = function () {
 			if (xhr.readyState == 4) {
 				if (mime == "" && xhr.getResponseHeader("content-type"))
@@ -87,7 +90,7 @@ var watchUtils = {
 		xhr.send();
 	},
 
-	_parsePage: function (url, mime, content, callback) {
+	_parsePage: function (url, mime, content, callback, progress) {
 		var parser = new DOMParser();
 		if (content === null) {
 			console.log("Error loading " + url + ": " + mime);
@@ -101,8 +104,8 @@ var watchUtils = {
 					mime = metas.item(i).getAttribute("content");
 					if (mime.toLowerCase().indexOf("charset") > 0) {
 						watchUtils._downloadPage(url, mime, function (mime, content) {
-							watchUtils._parsePage(url, mime, content, callback);
-						});
+							watchUtils._parsePage(url, mime, content, callback, progress);
+						}, progress);
 						return;
 					}
 				}

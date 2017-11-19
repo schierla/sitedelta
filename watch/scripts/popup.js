@@ -1,12 +1,12 @@
 document.querySelector("#watch").addEventListener("click", function (e) {
 	pageUtils.getOrCreateEffectiveConfig(url, title, (config) => {
 		var showPrefix = chrome.runtime.getURL("show.htm?");
-		chrome.tabs.update(tabId, { url: showPrefix + url }, () => { window.close(); });
+		chrome.tabs.update(tabId, { url: showPrefix + url, active: true }, () => { window.close(); });
 	});
 });
 
 document.querySelector("#open").addEventListener("click", function (e) {
-	chrome.tabs.update(tabId, { url: url }, () => { window.close(); });
+	chrome.tabs.update(tabId, { url: url, active: true }, () => { window.close(); });
 });
 
 document.querySelector("#options").addEventListener("click", function (e) {

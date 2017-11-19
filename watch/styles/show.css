@@ -10,6 +10,13 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 #settings {overflow-y: auto; }
 #settings>div {margin: 4px; }
 
+@media(max-width: 30em) {
+    #status #buttons {float: none; text-align: left; }
+    #status #statustext {line-height: 1.3em; white-space: nowrap; }
+    #status {height: 4.9em; }
+    #settings, #content {top: 5.0em; }
+}
+
 #settings { width: 0; }
 #content { right: 0; }
 #delete { display: none; }
@@ -35,11 +42,13 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 
 #loading {position: absolute; left: 0; top: 0; bottom: 0; right: 0; }
 #loading img {position: absolute; left: 50%; top: 50%; transform: translateY(-50%) translateY(-50%); animation: animate 2s linear infinite; height: 2em; height: 2em; }
+#progress {position: absolute; left: 0; top: 0; height: 4px; background: #0c0; width: 0%; }
 #iframe {position: absolute; left: 0; top: 0; width: 100%; height: 100%; border: none 0px; background: #fff; }
 .loadfail #loading img {animation: none; transform: translateY(-50%) translateY(-50%) scale(2); }
 
 #iframe {visibility: hidden; }
 .loaded #iframe {visibility: visible; }
+.loaded #progress {display: none; }
 
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 .buttons {text-align: right; }

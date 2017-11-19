@@ -74,6 +74,8 @@ function loadPage(callback) {
 		doc.head.insertBefore(base, doc.head.firstChild);
 		loadedDocument = doc;
 		showPage(loadedDocument, callback);
+	}, (loaded, total) => {
+		document.getElementById("progress").style.width = ((loaded / total) * 100) + "%";
 	});
 }
 

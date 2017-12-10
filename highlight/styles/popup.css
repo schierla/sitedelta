@@ -18,6 +18,7 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; }
 
 .unchanged #highlight {visibility: hidden; }
 
+#expand {float: left; float: left; }
 .loaded #expand {display: block; }
 
 .highlighted #expand {display: none; }
@@ -31,3 +32,6 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; }
 .expanded #delete {visibility: visible; }
 
 .expanded #expand {display: none; }
+
+#sidebar {display: none; }
+.supportsSidebar #sidebar {display: inline; }

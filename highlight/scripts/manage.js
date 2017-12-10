@@ -1,44 +1,3 @@
-
-
-document.querySelector("#importPages").addEventListener("click", function (e) {
-	chrome.runtime.sendMessage("sitedelta@schierla.de", "getPages", (pages) => {
-		if (pages === undefined) {
-			console.warn("Error importing pages: " + chrome.runtime.lastError);
-		}
-		importPages(pages);
-	});
-});
-
-function importPages(pages) {
-	if (pages.length > 0) {
-		var page = pages.shift();
-		pageUtils.getConfig(page.url, (config) => {
-			if (config !== null) return importPages(pages);
-			pageUtils.create(page.url, page.name, () => {
-				var settings = { "includes": page.includes, "excludes": page.excludes };
-				if (page.checkDeleted !== null) settings["checkDeleted"] = page.checkDeleted;
-				if (page.scanImages !== null) settings["scanImages"] = page.scanImages;
-				if (page.ignoreCase !== null) settings["ignoreCase"] = page.ignoreCase;
-				if (page.ignoreNumbers !== null) settings["ignoreNumbers"] = page.ignoreNumbers;
-
-				pageUtils.setConfig(page.url, settings, () => {
-					pageUtils.setContent(page.url, page.content, () => { importPages(pages); });
-				})
-			});
-		});
-	}
-}
-
-chrome.runtime.sendMessage("sitedelta@schierla.de", "getVersion", (version) => {
-	if (version === undefined) {
-		console.log("SiteDelta not found, not offering import: " + chrome.runtime.lastError);
-	} else if (version == "0.14.0") {
-		document.body.classList.add("canimport");
-	} else {
-		console.log("Unsupported SiteDelta Version " + version);
-	}
-});
-
 var advancedEnabled = false;
 var advancedPermission = { permissions: ["webNavigation"], origins: ["<all_urls>"] };
 
@@ -70,21 +29,8 @@ document.querySelector("#enableAdvanced").addEventListener("click", function (e)
 	requestPermission();
 });
 
-document.querySelector("#importConfig").addEventListener("click", function (e) {
-	chrome.runtime.sendMessage("sitedelta@schierla.de", "getSettings", (config) => {
-		if (config === null) {
-			console.warn("Error importing configuration: " + chrome.runtime.lastError);
-		}
-		configUtils.getDefaultConfig((defaultConfig) => {
-			var update = {};
-			if ("scanonload" in permissions) delete config["scanOnLoad"];
-			for (var key in config) {
-				if (key in defaultConfig)
-					update[key] = config[key];
-			}
-			configUtils.setDefaultConfigProperties(update, notifyChanged);
-		});
-	});
+document.querySelector("#importExport").addEventListener("click", function (e) {
+	chrome.tabs.create({ url: "https://sitedelta.schierla.de/transfer/" }); 
 });
 
 function checkScanOnLoad(selected, callback) {

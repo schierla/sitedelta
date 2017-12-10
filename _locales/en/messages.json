@@ -166,6 +166,11 @@
 		"message": "Configuration...",
 		"description": "Button to open options dialog"
 	},
+	"pagesSidebar": {
+		"message": "Sidebar...",
+		"description": "Button to open the sidebar"
+	},
+	
 
 	"configRegionsInclude": {
 		"message": "Included regions:", 
@@ -280,9 +285,9 @@
 		"description": "Label for scan frequency"
 	}, 
 
-	"configImport": {
-		"message": "Import from SiteDelta",
-		"description": "Button to import settings / pages from SiteDelta"
+	"configTransfer": {
+		"message": "Import / Export",
+		"description": "Button to import or export settings / pages"
 	}, 
 
 	"configAdvancedDisabled" : {

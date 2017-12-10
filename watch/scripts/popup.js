@@ -14,6 +14,10 @@ document.querySelector("#options").addEventListener("click", function (e) {
 	window.close();
 });
 
+document.querySelector("#sidebar").addEventListener("click", function (e) {
+	chrome.sidebarAction.open();
+	window.close();	
+});
 
 document.querySelector("#scanAll").addEventListener("click", function (e) {
 	chrome.runtime.sendMessage({ command: "scanAll" });
@@ -84,3 +88,5 @@ tabUtils.getActive(function (tab) {
 		}
 	});
 });
+
+if(chrome && chrome.sidebarAction && chrome.sidebarAction.open) document.body.classList.add("supportsSidebar");

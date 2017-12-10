@@ -167,6 +167,11 @@ document.querySelector("#highlight").addEventListener("click", function (e) {
 	});
 });
 
+document.querySelector("#sidebar").addEventListener("click", function (e) {
+	chrome.sidebarAction.open();
+	window.close();	
+});
+
 function expand() {
 	pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value, (pageconfig) => {
 		document.body.classList.add("expanded");
@@ -255,3 +260,5 @@ tabUtils.getActive(function (tab) {
 		}
 	});
 });
+
+if(chrome && chrome.sidebarAction && chrome.sidebarAction.open) document.body.classList.add("supportsSidebar");

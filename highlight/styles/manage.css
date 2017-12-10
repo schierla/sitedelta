@@ -3,8 +3,6 @@ select {width: 100%; }
 .buttons {text-align: right; margin-top: 8px; }
 .section.browser-style {font-weight: bold; margin-top: 8px; }
 
-.import {display: none; }
-.canimport .import {display: inline; }
 input[type=color] {vertical-align: middle; }
 #includepreview, #excludepreview, #addpreview, #removepreview, #movepreview {padding: 1px 0.5em; vertical-align: middle; }
 

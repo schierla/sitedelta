@@ -4,6 +4,6 @@ option.unchanged {background-image: url(../common/icons/unchanged.svg); }
 option.changed {background-image: url(../common/icons/changed.svg); }
 option.failed {background-image: url(../common/icons/inactive.svg); }
 
-.pagesNone #delete { display: none; }
+.pagesNone #delete, .pagesNone #watchdelay { display: none; }
 span.pagesNone, span.pagesMultiple, span.pagesOne { display: none; }
 .pagesNone span.pagesNone, .pagesOne span.pagesOne, .pagesMultiple span.pagesMultiple { display: inline; }

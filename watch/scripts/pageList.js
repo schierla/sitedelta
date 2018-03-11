@@ -70,6 +70,10 @@ var pageList = {
 		document.querySelector("#scannow").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.scanPage) });
 		document.querySelector("#markseen").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.markSeen) });
 		document.querySelector("#pages").addEventListener("dblclick", () => list.foreachSelected(this.openPage));
+		document.querySelector("#watchdelay").addEventListener("click", () => configUtils.getDefaultConfig(config => {
+			var delay = prompt(chrome.i18n.getMessage("configWatchDelay"), config.watchDelay);
+			if(delay !== null) list.foreachSelected((key,data,callback) => pageUtils.setConfigProperty(key, "watchDelay", parseInt(delay), () => this.scanPage(key, data, callback)));
+		}));
 		ioUtils.observeIndex(index => list.updateAll(index));
 	}
 };

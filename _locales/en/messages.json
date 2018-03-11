@@ -162,8 +162,12 @@
 		"message": "Mark All As Seen",
 		"description": "Button to mark all pages as seen"
 	},
+	"pagesWatchDelay": {
+		"message": "Set Scan Frequency...", 
+		"description": "Button to set scan frequency"
+	},
 	"pagesConfiguration": {
-		"message": "Configuration...",
+		"message": "SiteDelta Settings...",
 		"description": "Button to open options dialog"
 	},
 	"pagesSidebar": {

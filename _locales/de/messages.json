@@ -163,8 +163,12 @@
 		"message": "Alle als gesehen markieren",
 		"description": "Button to mark all pages as seen"
 	},
+	"pagesWatchDelay": {
+		"message": "Überprüfungshäufigkeit...", 
+		"description": "Button to set scan frequency"
+	},	
 	"pagesConfiguration": {
-		"message": "Konfiguration...",
+		"message": "SiteDelta-Konfiguration...",
 		"description": "Button to open options dialog"
 	},
 	"pagesSidebar": {

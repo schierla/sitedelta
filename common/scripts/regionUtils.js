@@ -90,7 +90,7 @@ var regionUtils = {
 
 		if (e.button == 0 && !e.ctrlKey) {
 			regionUtils._needText = false;
-			if (e.target != regionUtils._destelement && (e.target.firstChild.data || e.target.id)) {
+			if (e.target != regionUtils._destelement && ((e.target.firstChild && e.target.firstChild.data) || e.target.id)) {
 				var to = regionUtils._buildXPath(regionUtils._destelement, false).split("/");
 				var from = regionUtils._buildXPath(e.target, false).split("/");
 				var common = "";

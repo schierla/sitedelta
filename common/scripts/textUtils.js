@@ -21,9 +21,13 @@ var textUtils = {
 	_findElements: function (doc, xpaths) {
 		var ret = [];
 		for (var i = 0; i < xpaths.length; i++) {
-			var elements = doc.evaluate(xpaths[i], doc, null, XPathResult.ANY_TYPE, null);
-			for (var element = elements.iterateNext(); element != null; element = elements.iterateNext()) {
-				ret.push(element);
+			var xpath = xpaths[i];
+			if(xpath.startsWith("/") || xpath.startsWith("id(")) {
+				var elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+				for (var element = elements.iterateNext(); element != null; element = elements.iterateNext()) ret.push(element);
+			} else {
+				var elements = doc.querySelectorAll(xpath);
+				for(var j=0; j<elements.length; j++) ret.push(elements.item(j));
 			}
 		}
 		return ret;

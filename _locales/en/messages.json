@@ -193,8 +193,8 @@
 		"description": "Button to add a new region"
 	},
 	"configRegionXpath": {
-		"message": "XPath expression identifying the region",
-		"description": "Text for manual xpath entry"
+		"message": "XPath expression or CSS selector identifying the region",
+		"description": "Text for manual xpath or css selector entry"
 	},
 	"configBehavior": {
 		"message": "Overall behavior:",

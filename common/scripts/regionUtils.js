@@ -4,12 +4,17 @@ var regionUtils = {
 	showOutline: function (doc, xpath, color) {
 		if (regionUtils._outlined.length > 0)
 			regionUtils.removeOutline();
-		var elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
-		var element = elements.iterateNext();
-		while (element) {
-			var outlined = { "e": element, "o": element.style.outline };
-			regionUtils._outlined.push(outlined);
-			element = elements.iterateNext();
+
+		if(xpath.startsWith("/") || xpath.startsWith("id(")) {
+			var elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+			for(var element = elements.iterateNext(); element != null; element = elements.iterateNext()) {
+				regionUtils._outlined.push({ "e": element, "o": element.style.outline });
+			}
+		} else {
+			var elements = doc.querySelectorAll(xpath);
+			for(var j=0; j<elements.length; j++) {
+				regionUtils._outlined.push({ "e": elements.item(j), "o": elements.item(j).style.outline });
+			} 
 		}
 		for (var i = 0; i < regionUtils._outlined.length; i++) {
 			regionUtils._outlined[i].e.style.outline = color + " dotted 2px";

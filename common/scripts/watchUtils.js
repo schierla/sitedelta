@@ -40,10 +40,10 @@ var watchUtils = {
 		pageUtils.getEffectiveConfig(url, function (config) {
 			if (config === null) return (callback !== undefined) ? callback(-1) : null;
 			watchUtils.loadPage(url, function (doc) {
-				if (doc === null) return pageUtils.setChanges(url, -1, () => (callback !== undefined) ? callback(-1) : null);
+				if (doc === null) return watchUtils.setChanges(url, -1, () => (callback !== undefined) ? callback(-1) : null);
 				var newContent = textUtils.getText(doc, config);
 				pageUtils.getContent(url, function (oldContent) {
-					if(oldContent === null) return pageUtils.setChanges(url, -1, () => (callback !== undefined) ? callback(-1) : null);
+					if(oldContent === null) return watchUtils.setChanges(url, -1, () => (callback !== undefined) ? callback(-1) : null);
 					if (textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
 						watchUtils.setChanges(url, 1, () => (callback !== undefined) ? callback(1) : null);
 					} else {
@@ -58,7 +58,7 @@ var watchUtils = {
 		pageUtils.getEffectiveConfig(url, function (config) {
 			if (config === null) return (callback !== undefined) ? callback() : null;
 			watchUtils.loadPage(url, function (doc) {
-				if (doc === null) return pageUtils.setChanges(url, -1, callback);
+				if (doc === null) return watchUtils.setChanges(url, -1, callback);
 				var newContent = textUtils.getText(doc, config);
 				pageUtils.setContent(url, newContent, () => {
 					watchUtils.setChanges(url, 0, callback);

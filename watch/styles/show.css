@@ -35,7 +35,7 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 .known #disabled, .loadfail #disabled {display: none; }
 #unchanged, #changed, #known, #selecting, #failed, #loadfail {display: none; }
 .changed #changed, .unchanged #unchanged, .known #known, .selecting #selecting, .failed #failed, .loadfail #loadfail {display: inline; }
-.known.changed #known, .known.unchanged #known, .known.selecting #known, .known.failed #known, .loadfail #known {display: none; }
+.known.changed #known, .known.unchanged #known, .known.selecting #known, .known.failed #known, .loadfail #known, .loaded.failed #highlight {display: none; }
 
 #showNext, #showChanges, .known #enable { display: none; }
 .expanded #showChanges, .changed #showNext, .unchanged #showNext { display: inline; }

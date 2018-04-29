@@ -9,6 +9,18 @@ var pageList = {
 		setTimeout(callback, 500);
 	},
 
+	previewPage: function(list) {
+		var preview = document.querySelector("#preview"); 
+		if(!preview || window.getComputedStyle(preview).display == "none") return;
+		var options = document.querySelector("#pages").options;
+		var selectCount = 0, selected = ""; for (var i = 0; i < options.length; i++) if (options[i].selected) { selectCount++; selected = options[i].value; }
+		if(selectCount == 1 && preview.src != chrome.runtime.getURL("show.htm?" + selected)) {
+			preview.src = chrome.runtime.getURL("show.htm?" + selected);
+		} else if(selectCount == 0) {
+			preview.src = "about:blank";
+		}
+	},
+
 	scanPage: function (key, data, callback) {
 		watchUtils.scanPage(key, callback);
 	},
@@ -70,6 +82,7 @@ var pageList = {
 		document.querySelector("#scannow").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.scanPage) });
 		document.querySelector("#markseen").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.markSeen) });
 		document.querySelector("#pages").addEventListener("dblclick", () => list.foreachSelected(this.openPage));
+		document.querySelector("#pages").addEventListener("change", () => this.previewPage(list));
 		document.querySelector("#watchdelay").addEventListener("click", () => configUtils.getDefaultConfig(config => {
 			var delay = prompt(chrome.i18n.getMessage("configWatchDelay"), config.watchDelay);
 			if(delay !== null) list.foreachSelected((key,data,callback) => pageUtils.setConfigProperty(key, "watchDelay", parseInt(delay), () => this.scanPage(key, data, callback)));

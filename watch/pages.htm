@@ -11,38 +11,41 @@
 </head>
 
 <body>
-    <h2 id="title" class="browser-style i18n">__MSG_pagesList__</h2>
-	<select id="pages" size="10" multiple></select>
-    <div id="actions" class="buttons browser-style">
-        <button id="expand" class="browser-style expander"></button>
-        <div id="expanded">
-            <button id="scannow" class="browser-style">
-                <span class="pagesOne i18n">__MSG_pagesScanOne__</span>
-                <span class="pagesMultiple i18n">__MSG_pagesScanMultiple__</span>
-                <span class="pagesNone i18n">__MSG_pagesScanAll__</span>
-            </button>
-            <button id="markseen" class="browser-style">
-                <span class="pagesOne i18n">__MSG_pagesMarkSeenOne__</span>
-                <span class="pagesMultiple i18n">__MSG_pagesMarkSeenMultiple__</span>
-                <span class="pagesNone i18n">__MSG_pagesMarkSeenAll__</span>
-            </button>
-            <button id="delete" class="browser-style">
-                <span class="pagesOne i18n">__MSG_pagesDeleteOne__</span>
-                <span class="pagesMultiple i18n">__MSG_pagesDeleteMultiple__</span>
-            </button>
-            <button id="open" class="browser-style">
-                <span class="pagesOne i18n">__MSG_pagesOpenOne__</span>
-                <span class="pagesMultiple i18n">__MSG_pagesOpenMultiple__</span>
-                <span class="pagesNone i18n">__MSG_pagesOpenChanged__</span>	
-            </button>
-            <button id="watchdelay" class="browser-style">
-                <span class="pagesOne i18n">__MSG_pagesWatchDelay__</span>
-                <span class="pagesMultiple i18n">__MSG_pagesWatchDelay__</span>
-            </button>
-            <button id="configure" class="browser-style i18n">__MSG_pagesConfiguration__</button>
+    <div id="pagesdiv">
+        <h2 id="title" class="browser-style i18n">__MSG_pagesList__</h2>
+        <select id="pages" size="10" multiple></select>
+        <div id="actions" class="buttons browser-style">
+            <button id="expand" class="browser-style expander"></button>
+            <div id="expanded">
+                <button id="scannow" class="browser-style">
+                    <span class="pagesOne i18n">__MSG_pagesScanOne__</span>
+                    <span class="pagesMultiple i18n">__MSG_pagesScanMultiple__</span>
+                    <span class="pagesNone i18n">__MSG_pagesScanAll__</span>
+                </button>
+                <button id="markseen" class="browser-style">
+                    <span class="pagesOne i18n">__MSG_pagesMarkSeenOne__</span>
+                    <span class="pagesMultiple i18n">__MSG_pagesMarkSeenMultiple__</span>
+                    <span class="pagesNone i18n">__MSG_pagesMarkSeenAll__</span>
+                </button>
+                <button id="delete" class="browser-style">
+                    <span class="pagesOne i18n">__MSG_pagesDeleteOne__</span>
+                    <span class="pagesMultiple i18n">__MSG_pagesDeleteMultiple__</span>
+                </button>
+                <button id="open" class="browser-style">
+                    <span class="pagesOne i18n">__MSG_pagesOpenOne__</span>
+                    <span class="pagesMultiple i18n">__MSG_pagesOpenMultiple__</span>
+                    <span class="pagesNone i18n">__MSG_pagesOpenChanged__</span>	
+                </button>
+                <button id="watchdelay" class="browser-style">
+                    <span class="pagesOne i18n">__MSG_pagesWatchDelay__</span>
+                    <span class="pagesMultiple i18n">__MSG_pagesWatchDelay__</span>
+                </button>
+                <button id="configure" class="browser-style i18n">__MSG_pagesConfiguration__</button>
+            </div>
         </div>
     </div>
-    
+        
+    <div id="previewdiv"><iframe id="preview"></iframe></div>
     
     <script src="common/scripts/configUtils.js"></script>
     <script src="common/scripts/ioUtils.js"></script>

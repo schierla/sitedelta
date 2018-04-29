@@ -15,6 +15,3 @@ span.enabled, span.disabled { display: none; }
 #open {display: none; }
 .open #open {display: inline; }
 .open #watch {display: none; }
-
-#sidebar {display: none; }
-.supportsSidebar #sidebar {display: inline; }

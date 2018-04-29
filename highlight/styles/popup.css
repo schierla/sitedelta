@@ -32,6 +32,3 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; }
 .expanded #delete {visibility: visible; }
 
 .expanded #expand {display: none; }
-
-#sidebar {display: none; }
-.supportsSidebar #sidebar {display: inline; }

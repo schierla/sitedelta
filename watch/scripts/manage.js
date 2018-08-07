@@ -9,6 +9,8 @@ var options = [
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
 	{ type: "checkbox", key: "stripStyles", elem: "stripstyles" },
 	{ type: "checkbox", key: "showRegions", elem: "showregions" },
+	{ type: "checkbox", key: "notifyChanged", elem: "notifychanged" },
+	{ type: "checkbox", key: "notifyFailed", elem: "notifyfailed" },
 	{ type: "color", key: "addBackground", elem: "addbackground", post: updatePreview },
 	{ type: "color", key: "addBorder", elem: "addborder", post: updatePreview },
 	{ type: "color", key: "removeBackground", elem: "removebackground", post: updatePreview },

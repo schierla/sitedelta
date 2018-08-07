@@ -1,21 +1,36 @@
 function scanPage(url, callback) {
-	console.log("SiteDelta: Scanning " + url);
-	lastScan = Date.now();
-	watchUtils.scanPage(url, changes => {
-		if(changes == 0) {
-			watchUtils.adaptDelay(url, 0);
-		} else if(changes == 1) {
-			pageUtils.getTitle(url, function (title) {
-				chrome.notifications.create(url, {
-					"type": "basic",
-					"iconUrl": chrome.extension.getURL("common/icons/watch-64.png"),
-					"title": chrome.i18n.getMessage("watchExtensionName"),
-					"message": title
-				});
-			});
-			watchUtils.adaptDelay(url, 1);
-		}
-		return (callback !== undefined) ? callback() : null;
+	configUtils.getDefaultConfig(config => {
+		console.log("SiteDelta: Scanning " + url);
+		lastScan = Date.now();
+		watchUtils.scanPage(url, changes => {
+			if(changes == 0) {
+				watchUtils.adaptDelay(url, 0);
+			} else if(changes == 1) {
+				if(config.notifyChanged) {
+					pageUtils.getTitle(url, function (title) {
+						chrome.notifications.create(url, {
+							"type": "basic",
+							"iconUrl": chrome.extension.getURL("common/icons/changed.svg"),
+							"title": chrome.i18n.getMessage("watchNotificationChanged"),
+							"message": title
+						});
+					});
+				}
+				watchUtils.adaptDelay(url, 1);
+			} else if(changes == -1) {
+				if(config.notifyFailed) {
+					pageUtils.getTitle(url, function (title) {
+						chrome.notifications.create(url, {
+							"type": "basic",
+							"iconUrl": chrome.extension.getURL("common/icons/inactive.svg"),
+							"title": chrome.i18n.getMessage("watchNotificationFailed"),
+							"message": title
+						});
+					});
+				}
+			}
+			return (callback !== undefined) ? callback() : null;
+		});
 	});
 }
 

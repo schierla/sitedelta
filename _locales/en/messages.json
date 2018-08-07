@@ -61,7 +61,14 @@
 			}
 		}
 	},
-
+	"watchNotificationChanged": {
+		"message": "SiteDelta: Page change detected",
+		"description": "Notification title when a change is detected"
+	},
+	"watchNotificationFailed": {
+		"message": "SiteDelta: Failed to load page", 
+		"description": "Notification title when a page cannot be loaded"
+	},
 
 	"pageFailed": {
 		"message": "Error getting page contents. Check the included regions.",
@@ -288,6 +295,14 @@
 		"message": "Scan frequency in minutes",
 		"description": "Label for scan frequency"
 	}, 
+	"configNotifyChanged": {
+		"message": "Show a notification when a page is changed",
+		"description": "Label for check box to enable notifications for changed pages"
+	},
+	"configNotifyFailed": {
+		"message": "Show a notification when a page cannot be loaded",
+		"description": "Label for check box to enable notifications for failed pages"
+	},
 
 	"configTransfer": {
 		"message": "Import / Export",

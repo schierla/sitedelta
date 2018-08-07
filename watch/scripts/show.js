@@ -24,7 +24,10 @@ function highlight() {
 				document.body.classList.add("failed");
 			}
 			showData();
-			watchUtils.setChanges(url, 0);
+			if(changes >= 0)
+				watchUtils.setChanges(url, 0);
+			else
+				watchUtils.setChanges(url, -1);
 		});
 	});
 }

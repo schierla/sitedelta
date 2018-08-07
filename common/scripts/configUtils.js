@@ -67,6 +67,11 @@ var configUtils = {
 			config.stripStyles = false;
 			config.configVersion = 4, upgraded = true;
 		}
+		if(config.configVersion == 4) {
+			config.notifyFailed = false;
+			config.notifyChanged = true;
+			config.configVersion = 5; upgraded = true;
+		}
 		return upgraded;
 	},
 

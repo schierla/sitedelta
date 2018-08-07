@@ -3,6 +3,7 @@ var textUtils = {
 	getText: function (doc, config) {
 		var regions = textUtils._findElements(doc, config.includes);
 		var excludes = textUtils._findElements(doc, config.excludes);
+		if(regions.length == 0) return null;
 		var text = "";
 		for (var i = 0; i < regions.length; i++) {
 			text += textUtils._getTextForNode(regions[i], config, excludes);

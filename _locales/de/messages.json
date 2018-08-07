@@ -61,7 +61,14 @@
 			}
 		}
 	},
-
+	"watchNotificationChanged": {
+		"message": "SiteDelta: Änderung erkannt",
+		"description": "Notification title when a change is detected"
+	},
+	"watchNotificationFailed": {
+		"message": "SiteDelta: Fehler beim Laden", 
+		"description": "Notification title when a page cannot be loaded"
+	},
 
 	"pageFailed": {
 		"message": "Fehler beim Abrufen der Seiteninhalte. Bitte überwachte Bereiche prüfen.",
@@ -288,6 +295,14 @@
 		"message": "Häufigkeit (in Minuten)",
 		"description": "Label for scan frequency"
 	}, 
+	"configNotifyChanged": {
+		"message": "Benachrichtigung zeigen, wenn Änderungen gefunden werden",
+		"description": "Label for check box to enable notifications for changed pages"
+	},
+	"configNotifyFailed": {
+		"message": "Benachrichtigung zeigen, wenn Seite nicht geladen werden kann",
+		"description": "Label for check box to enable notifications for failed pages"
+	},	
 
 	"configTransfer": {
 		"message": "Import / Export",

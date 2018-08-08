@@ -46,9 +46,25 @@ var regionUtils = {
 		regionUtils._destelement = null;
 		regionUtils._callback = callback;
 		regionUtils._overlay = overlay;
+
+		while(overlay.firstChild) overlay.removeChild(overlay.firstChild);
+		var overlaycontent = document.createElement("div");
+		overlaycontent.style.position="absolute"; 
+		overlaycontent.style.left = "0px"; 
+		overlaycontent.style.top="0px";
+		overlaycontent.style.width = idoc.body.scrollWidth + "px";
+		overlaycontent.style.height = idoc.body.scrollHeight + "px";
+		overlay.appendChild(overlaycontent);
+
+		overlay.style.display = 'block';
+		overlay.scrollTop = idoc.body.scrollTop; 
+		overlay.scrollLeft = idoc.body.scrollLeft;
+
 		overlay.addEventListener("mousemove", regionUtils._overlaymousemove);
 		overlay.addEventListener("mousedown", regionUtils._overlaymousedown);
 		overlay.addEventListener("mouseup", regionUtils._overlaymouseup);
+		overlay.addEventListener("scroll", regionUtils._overlayscroll);
+		window.addEventListener("resize", regionUtils._overlayresize);
 	},
 
 	abortSelect: function () {
@@ -57,9 +73,13 @@ var regionUtils = {
 		if (regionUtils._doc === null) return;
 
 		if(regionUtils._overlay !== null) {
+			overlay.style.display = 'none';
+
 			regionUtils._overlay.removeEventListener("mousemove", regionUtils._overlaymousemove);
 			regionUtils._overlay.removeEventListener("mousedown", regionUtils._overlaymousedown);
 			regionUtils._overlay.removeEventListener("mouseup", regionUtils._overlaymouseup);
+			regionUtils._overlay.removeEventListener("scroll", regionUtils._overlayscroll);
+			window.removeEventListener("resize", regionUtils._overlayresize);
 			regionUtils._overlay = null;
 		} else {
 			regionUtils._doc.removeEventListener("mouseover", regionUtils._mouseover, true);
@@ -172,6 +192,16 @@ var regionUtils = {
 		if(regionUtils._overlayelem !== null) {
 			regionUtils._mouseup({target: regionUtils._overlayelem, button: e.button, ctrlKey: e.ctrlKey, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
 		}
+	},
+
+	_overlayscroll: function(e) {
+		regionUtils._doc.body.scrollTop = regionUtils._overlay.scrollTop; 
+		regionUtils._doc.body.scrollLeft = regionUtils._overlay.scrollLeft;
+	},
+
+	_overlayresize: function(e) {
+		regionUtils._overlay.firstChild.style.width = regionUtils._doc.body.scrollWidth + "px";
+		regionUtils._overlay.firstChild.style.height = regionUtils._doc.body.scrollHeight + "px";
 	},
 
 	_buildXPath: function (t, allowId) {

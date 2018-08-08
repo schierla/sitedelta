@@ -9,9 +9,9 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 #settings #config {min-width: 16em; }
 #settings {overflow-y: auto; }
 #settings>div {margin: 4px; }
-#overlay {overflow: auto; }
-#overlaycontent { position: absolute; left: 0; top: 0; background-color: rgba(238,238,238,0.5); transition: background-color 0.6s; }
-#overlaycontent:hover {background-color: rgba(255,255,255,0.1); }
+#overlay {overflow: auto; display: none; }
+#overlay div { background-color: rgba(238,238,238,0.5); transition: background-color 0.6s; }
+#overlay div:hover {background-color: rgba(255,255,255,0.1); }
 
 @media(max-width: 30em) {
     #status #buttons {float: none; text-align: left; }

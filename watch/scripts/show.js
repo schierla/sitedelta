@@ -1,6 +1,5 @@
 function highlight() {
 	if (document.body.classList.contains("selecting")) {
-		overlay.style.display = 'none';
 		regionUtils.abortSelect();
 	}
 	if (document.body.classList.contains("loadfail")) return;
@@ -62,9 +61,6 @@ function showPage(doc, callback) {
 	var adopted = idoc.importNode(doc.documentElement, true);
 	idoc.appendChild(adopted);
 	idoc.body.addEventListener("click", stopIt, true);
-	var overlayContent = document.querySelector("#overlaycontent");	
-	overlayContent.style.width = idoc.body.scrollWidth + "px";
-	overlayContent.style.height = idoc.body.scrollHeight + "px";	
 	return (callback !== undefined) ? callback() : null;
 }
 
@@ -200,17 +196,12 @@ function editRegion(xpath, callback) {
 function selectRegion(callback) {
 	var iframe = document.getElementById("iframe");
 	var idoc = iframe.contentWindow.document;
-	var overlay = document.querySelector("#overlay");
 	if (document.body.classList.contains("selecting") || document.body.classList.contains("loadfail")) {
-		overlay.style.display = 'none';
 		regionUtils.abortSelect();
 		document.body.classList.remove("selecting");
 		var region = prompt(chrome.i18n.getMessage("configRegionXpath"), "");
 		return (region && callback !== undefined) ? callback(region) : null;
 	} else {
-		overlay.style.display = 'block';
-		overlay.scrollTop = idoc.body.scrollTop; 
-		overlay.scrollLeft = idoc.body.scrollLeft;
 		document.body.classList.add("selecting");
 		// regionUtils.selectRegion(idoc, region => {
 		//	document.body.classList.remove("selecting");
@@ -218,7 +209,6 @@ function selectRegion(callback) {
 		//});
 		regionUtils.selectRegionOverlay(document.querySelector("#overlay"), idoc, region => {
 			document.body.classList.remove("selecting");
-			overlay.style.display = 'none';
 			return (region && callback !== undefined) ? callback(region) : null;
 		});
 	}
@@ -323,22 +313,3 @@ document.querySelector("#highlight").addEventListener("click", function (e) {
 		highlight();
 	};
 });
-
-
-var overlay = document.querySelector("#overlay");
-overlay.style.display = 'none';
-var overlayContent = document.querySelector("#overlaycontent");
-overlay.addEventListener("scroll", function(e) {
-  iframe.contentDocument.body.scrollTop = overlay.scrollTop; 
-  iframe.contentDocument.body.scrollLeft = overlay.scrollLeft;
-});
-window.addEventListener("resize", function(e) {
-  overlayContent.style.width = iframe.contentDocument.body.scrollWidth + "px";
-  overlayContent.style.height = iframe.contentDocument.body.scrollHeight + "px";
-});
-overlay.addEventListener("mousemove", function(e) {
-  var elem = iframe.contentDocument.elementFromPoint(e.clientX - overlay.offsetLeft, e.clientY - overlay.offsetTop);
-  if(window.last) window.last.style.outline=""; window.last = elem; if(elem) elem.style.outline = "solid red 1px";
-  // selected.innerHTML = (e.clientX - overlay.offsetLeft) + " " + (e.clientY - overlay.offsetTop) + ": " + elem;
-});
-

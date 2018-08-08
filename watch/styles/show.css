@@ -1,5 +1,5 @@
 body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding: 0; background: #ddd; font-size: 75%;  -webkit-user-select: none;  -moz-user-select: none; user-select: none;}
-#content {position: fixed; left: 0; top: 2.7em; right: 0; bottom: 0; padding: 0; margin: 0; transition: left 0.3s; }
+#content, #overlay {position: fixed; left: 0; top: 2.7em; right: 0; bottom: 0; padding: 0; margin: 0; transition: left 0.3s; }
 #status {position: fixed; left: 0; right: 0; top: 0; height: 2.6em; padding: 0; margin: 0; }
 #status {background: #ffc; border-bottom: solid #777 1px; }
 #status #buttons {float: right; margin: 4px 40px 4px 4px; }
@@ -9,12 +9,15 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 #settings #config {min-width: 16em; }
 #settings {overflow-y: auto; }
 #settings>div {margin: 4px; }
+#overlay {overflow: auto; }
+#overlaycontent { position: absolute; left: 0; top: 0; background-color: rgba(238,238,238,0.5); transition: background-color 0.6s; }
+#overlaycontent:hover {background-color: rgba(255,255,255,0.1); }
 
 @media(max-width: 30em) {
     #status #buttons {float: none; text-align: left; }
     #status #statustext {line-height: 1.3em; white-space: nowrap; }
     #status {height: 4.9em; }
-    #settings, #content {top: 5.0em; }
+    #settings, #content, #overlay {top: 5.0em; }
 }
 
 #settings { width: 0; }
@@ -24,7 +27,7 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 .expanded #expand { display: none; }
 
 .expanded #settings { width: 20em; }
-.expanded #content { right: 20.1em; }
+.expanded #content, .expanded #overlay { right: 20.1em; }
 .expanded #expand {display: none; }
 #highlight {display: none; }
 .known #delete {display: inline; }

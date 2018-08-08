@@ -40,15 +40,33 @@ var regionUtils = {
 		doc.addEventListener("mouseout", regionUtils._mouseout, true);
 	},
 
+	selectRegionOverlay: function(overlay, idoc, callback) {
+		regionUtils._doc = idoc;
+		regionUtils._needText = false;
+		regionUtils._destelement = null;
+		regionUtils._callback = callback;
+		regionUtils._overlay = overlay;
+		overlay.addEventListener("mousemove", regionUtils._overlaymousemove);
+		overlay.addEventListener("mousedown", regionUtils._overlaymousedown);
+		overlay.addEventListener("mouseup", regionUtils._overlaymouseup);
+	},
+
 	abortSelect: function () {
 		if (regionUtils._destelement !== null)
 			regionUtils._destelement.style.outline = "none";
 		if (regionUtils._doc === null) return;
 
-		regionUtils._doc.removeEventListener("mouseover", regionUtils._mouseover, true);
-		regionUtils._doc.removeEventListener("mousedown", regionUtils._mousedown, true);
-		regionUtils._doc.removeEventListener("mouseup", regionUtils._mouseup, true);
-		regionUtils._doc.removeEventListener("mouseout", regionUtils._mouseout, true);
+		if(regionUtils._overlay !== null) {
+			regionUtils._overlay.removeEventListener("mousemove", regionUtils._overlaymousemove);
+			regionUtils._overlay.removeEventListener("mousedown", regionUtils._overlaymousedown);
+			regionUtils._overlay.removeEventListener("mouseup", regionUtils._overlaymouseup);
+			regionUtils._overlay = null;
+		} else {
+			regionUtils._doc.removeEventListener("mouseover", regionUtils._mouseover, true);
+			regionUtils._doc.removeEventListener("mousedown", regionUtils._mousedown, true);
+			regionUtils._doc.removeEventListener("mouseup", regionUtils._mouseup, true);
+			regionUtils._doc.removeEventListener("mouseout", regionUtils._mouseout, true);
+		}
 
 		regionUtils._needText = false;
 		regionUtils._destelement = null;
@@ -131,6 +149,31 @@ var regionUtils = {
 		return false;
 	},
 
+	_overlaymousemove: function(e) {
+		var elem = regionUtils._doc.elementFromPoint(e.clientX - regionUtils._overlay.offsetLeft, e.clientY - regionUtils._overlay.offsetTop);
+		if(elem == regionUtils._doc.firstChild) elem = null;
+		if(regionUtils._overlayelem !== null && regionUtils._overlayelem != elem) {
+			regionUtils._mouseout({target: regionUtils._overlayelem, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
+			regionUtils._overlayelem = null;
+		}
+		if(regionUtils._overlayelem != elem) {
+			regionUtils._overlayelem = elem;
+			regionUtils._mouseover({target: regionUtils._overlayelem, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
+		}
+	},
+
+	_overlaymousedown: function(e) {
+		if(regionUtils._overlayelem !== null) {
+			regionUtils._mousedown({target: regionUtils._overlayelem, button: e.button, ctrlKey: e.ctrlKey, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
+		}
+	}, 
+	
+	_overlaymouseup: function(e) {
+		if(regionUtils._overlayelem !== null) {
+			regionUtils._mouseup({target: regionUtils._overlayelem, button: e.button, ctrlKey: e.ctrlKey, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
+		}
+	},
+
 	_buildXPath: function (t, allowId) {
 		var path = "";
 		if (allowId && t.id != "" && t.id.indexOf('sitedelta') == -1) return 'id("' + t.id + '")';
@@ -154,5 +197,7 @@ var regionUtils = {
 	_needText: false,
 	_destelement: null,
 	_callback: null,
-	_doc: null
+	_doc: null, 
+	_overlay: null,
+	_overlayelem: null
 };

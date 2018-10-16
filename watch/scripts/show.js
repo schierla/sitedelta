@@ -298,7 +298,13 @@ function expand() {
 	});
 }
 
+function openPage() {
+	window.location.href = url;
+}
+
 document.querySelector("#expand").addEventListener("click", expand);
+
+document.querySelector("#open").addEventListener("click", openPage);
 
 document.querySelector("#highlight").addEventListener("click", function (e) {
 	document.body.classList.remove("expanded");

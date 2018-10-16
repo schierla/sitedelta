@@ -120,6 +120,19 @@
 		"message": "Scan Page...",
 		"description": "Button to scan the current page"
 	},
+	"pageRequirePermission": {
+		"message": "SiteDelta requires your permission to access this page.", 
+		"description": "Text that SiteDelta requires permission to access this page"
+	},
+	"pageGrantHost": {
+		"message": "Grant access to this page",
+		"description": "Button to grant access to a given URL"
+	},
+	"pageGrantAll": {
+		"message": "Grant access to all pages",
+		"description": "Button to grant access to all addresses"
+	},
+	
 
 	"pagesList": {
 		"message": "Monitored pages:",

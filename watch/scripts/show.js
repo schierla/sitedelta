@@ -252,20 +252,43 @@ var config = {};
 var loadedDocument = null;
 var oldcontent = null;
 
-pageUtils.getTitle(url, pagetitle => {
-	if (pagetitle !== null) {
-		document.body.classList.add("known");
-		known = true;
-		title = pagetitle;
-	}
-	loadPage(() => {
-		showData();
-		if (known) highlight();
+function init() {
+	pageUtils.getTitle(url, pagetitle => {
+		if (pagetitle !== null) {
+			document.body.classList.add("known");
+			known = true;
+			title = pagetitle;
+		}
+		chrome.permissions.contains({origins: [url] }, function(result) {
+			if (result) {
+				loadPage(() => {
+					showData();
+					if (known) highlight();
+				});
+			} else {
+				document.body.classList.add("permissionDenied");
+				var parser = document.createElement("a"); parser.href = url;
+				document.querySelector("#permissionHost").appendChild(document.createTextNode(parser.origin));
+			}
+		});
 	});
-});
+}
 
-
+init();
 registerListeners();
+
+function requestPermission(url) {
+	chrome.permissions.request({ origins: [url] }, function(granted) {
+		if (granted) {
+			document.body.classList.remove("permissionDenied");
+			init();
+		} else {
+		}
+	  });
+}
+
+document.querySelector("#grantHost").addEventListener("click", function(e) { requestPermission(url); });
+document.querySelector("#grantAll").addEventListener("click", function(e) { requestPermission("<all_urls>"); });
 
 document.querySelector("#pagetitle").addEventListener("change", function (e) {
 	title = document.querySelector("#pagetitle").value;

@@ -32,7 +32,7 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 .expanded #expand {display: none; }
 #highlight {display: none; }
 .known #delete {display: inline; }
-.loaded #highlight, .expanded #highlight { display: inline; }
+.loaded #highlight, .expanded #highlight  { display: inline; }
 .unchanged #highlight { visibility: hidden; }
 
 #disabled {display: inline; }
@@ -58,6 +58,14 @@ body {position: fixed; left: 0; top: 0; right: 0; bottom: 0; margin: 0; padding:
 .buttons {text-align: right; }
 .browser-style .wide {width: 100%; }
 #settings #textfields {margin-right: 4px; }
+
+#permissionDenied {display: none; position: absolute; left: 0; top: 0; bottom: 0; right: 0; background: #eee; text-align: center; padding: 3em; }
+#permissionDenied p {font-size: 1.3em; }
+#permissionDenied button {display: block; margin: 1.2em auto; width: 20em; }
+.permissionDenied #permissionDenied {display: block; }
+.permissionDenied #overlay {display: none; }
+.permissionDenied #expand {visibility: hidden; }
+
 
 @keyframes animate {
     0% {transform: translateY(-50%) translateY(-50%) scale(1); }

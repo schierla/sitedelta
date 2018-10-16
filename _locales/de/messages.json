@@ -121,6 +121,19 @@
 		"message": "Seite prüfen...",
 		"description": "Button to scan the current page"
 	},
+	"pageRequirePermission": {
+		"message": "SiteDelta benötigt Ihre Erlaubnis, um auf diese Seite zugreifen zu dürfen.", 
+		"description": "Text that SiteDelta requires permission to access this page"
+	},
+	"pageGrantHost": {
+		"message": "Zugriff auf diese Seite gewähren",
+		"description": "Button to grant access to a given URL"
+
+	},
+	"pageGrantAll": {
+		"message": "Zugriff auf alle Seiten gewähren",
+		"description": "Button to grant access to all addresses"
+	},
 
 	"pagesList": {
 		"message": "Überwachte Seiten:",

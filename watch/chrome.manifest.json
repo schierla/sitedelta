@@ -18,7 +18,9 @@
 		"activeTab", 
 		"storage",
 		"unlimitedStorage",
-		"alarms",
+		"alarms"
+	],
+	"optional_permissions": [
 		"<all_urls>"
 	],
 	

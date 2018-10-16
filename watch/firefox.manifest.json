@@ -25,10 +25,13 @@
 		"activeTab", 
 		"storage",
 		"unlimitedStorage",
-		"alarms",
-		"<all_urls>"
+		"alarms"
 	],
 	
+	"optional_permissions": [
+		"<all_urls>"
+	],
+
 	"browser_action": {
 		"browser_style": true,		
 		"default_icon": {"64": "common/icons/watch.svg"},

@@ -426,15 +426,15 @@ var highlightUtils = {
 		for(var i=0; i<includes.length; i++) 
 			for(var e = includes[i].parentNode; e != doc; e = e.parentNode) parents.push(e);
 		
-		highlightUtils._isolateRegionsRecursively(doc.body, includes, parents);
+		if(includes.indexOf(doc.body) == -1) 
+			highlightUtils._isolateRegionsRecursively(doc.body, includes, parents);
 	}, 
 
 	_isolateRegionsRecursively: function(elem, includes, parents) {
 		for(var e = elem.firstChild; e != null; e = e.nextSibling) {
-			if(!(e instanceof HTMLElement)) continue;
-			else if(includes.indexOf(e) != -1) continue; 
-			else if(parents.indexOf(e) == -1) e.style.display = "none";
-			else highlightUtils._isolateRegionsRecursively(e, includes, parents);
+			if(includes.indexOf(e) != -1) continue; 
+			else if(parents.indexOf(e) == -1 && e.style) e.style.display = "none";
+			else if(e.firstChild) highlightUtils._isolateRegionsRecursively(e, includes, parents);
 		}
 	},
 

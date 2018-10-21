@@ -299,6 +299,10 @@
 		"message": "Seitengestaltung (CSS) entfernen",
 		"description": "Label for check box to remove CSS from highlighted pages"
 	},
+	"configIsolateRegions": {
+		"message": "Nur überwachte Bereiche anzeigen",
+		"description": "Label for check box to remove elements not scanned by SiteDelta"
+	},
 
 	"configWatch": {
 		"message": "Überwachungseinstellungen:",

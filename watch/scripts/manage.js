@@ -8,6 +8,7 @@ var options = [
 	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
 	{ type: "checkbox", key: "stripStyles", elem: "stripstyles" },
+	{ type: "checkbox", key: "isolateRegions", elem: "isolateregions" },
 	{ type: "checkbox", key: "showRegions", elem: "showregions" },
 	{ type: "checkbox", key: "notifyChanged", elem: "notifychanged" },
 	{ type: "checkbox", key: "notifyFailed", elem: "notifyfailed" },

@@ -72,6 +72,10 @@ var configUtils = {
 			config.notifyChanged = true;
 			config.configVersion = 5; upgraded = true;
 		}
+		if(config.configVersion == 5) {
+			config.isolateRegions = false;
+			config.configVersion = 6; upgraded = true;
+		}
 		return upgraded;
 	},
 

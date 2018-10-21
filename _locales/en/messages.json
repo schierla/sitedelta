@@ -299,6 +299,10 @@
 		"message": "Remove page styles (CSS)",
 		"description": "Label for check box to remove CSS from highlighted pages"
 	},
+	"configIsolateRegions": {
+		"message": "Isolate scanned regions",
+		"description": "Label for check box to remove elements not scanned by SiteDelta"
+	},
 
 	"configWatch": {
 		"message": "Watch settings:",

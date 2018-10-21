@@ -14,6 +14,8 @@ var highlightUtils = {
 
 	highlightChanges: function (doc, config, oldContent) {
 		if (config.stripStyles) highlightUtils._stripStyles(doc);
+		if (config.isolateRegions) highlightUtils._isolateRegions(doc, config);
+
 		var current = textUtils.getText(doc, config);
 
 		var excludes = textUtils._findElements(doc, config.excludes);
@@ -411,6 +413,28 @@ var highlightUtils = {
 					}
 				}
 			}
+		}
+	},
+
+	_isolateRegions: function(doc, config) {
+		var excludes = textUtils._findElements(doc, config.excludes);
+		var includes = textUtils._findElements(doc, config.includes);
+		for(var i=0; i<excludes.length; i++) {
+			excludes[i].style.display = "none";
+		}
+		var parents = [];
+		for(var i=0; i<includes.length; i++) 
+			for(var e = includes[i].parentNode; e != doc; e = e.parentNode) parents.push(e);
+		
+		highlightUtils._isolateRegionsRecursively(doc.body, includes, parents);
+	}, 
+
+	_isolateRegionsRecursively: function(elem, includes, parents) {
+		for(var e = elem.firstChild; e != null; e = e.nextSibling) {
+			if(!(e instanceof HTMLElement)) continue;
+			else if(includes.indexOf(e) != -1) continue; 
+			else if(parents.indexOf(e) == -1) e.style.display = "none";
+			else highlightUtils._isolateRegionsRecursively(e, includes, parents);
 		}
 	},
 

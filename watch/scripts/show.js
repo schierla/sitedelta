@@ -55,11 +55,10 @@ function stopIt(e) {
 
 function showPage(doc, callback) {
 	if (doc === null) return (callback !== undefined) ? callback() : null;
-	var idoc = iframe.contentWindow.document;
-	while (idoc.firstChild) idoc.removeChild(idoc.firstChild);
 	if (title == "") title = doc.title;
-	var adopted = idoc.importNode(doc.documentElement, true);
-	idoc.appendChild(adopted);
+	var idoc = iframe.contentWindow.document;
+//	idoc.open(); idoc.write(new XMLSerializer().serializeToString(doc)); idoc.close(); 
+	while (idoc.firstChild) idoc.removeChild(idoc.firstChild); idoc.appendChild(idoc.importNode(doc.documentElement, true)); 
 	idoc.body.addEventListener("click", stopIt, true);
 	return (callback !== undefined) ? callback() : null;
 }

@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "__MSG_watchExtensionName__",
-	"version": "0.19.0",
+	"version": "0.19.1",
 	
 	"default_locale": "en",
 	"description": "__MSG_watchExtensionDescription__",

@@ -441,7 +441,7 @@ var highlightUtils = {
 	_stripStyles: function (elem) {
 		if (elem.nodeName.toLowerCase() == "style") {
 			elem.parentNode.removeChild(elem);
-		} else if (elem.nodeName.toLowerCase() == "link" && elem.getAttribute("rel").toLowerCase() == "stylesheet") {
+		} else if (elem.nodeName.toLowerCase() == "link" && elem.getAttribute("rel") && elem.getAttribute("rel").toLowerCase() == "stylesheet") {
 			elem.parentNode.removeChild(elem);
 		} else {
 			if (elem instanceof HTMLElement) elem.removeAttribute("style");

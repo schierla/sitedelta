@@ -242,7 +242,7 @@ var options = [
 	{ type: "text", key: "watchDelay", elem: "watchDelay", pre: (value, callback) => callback(parseInt(value)) }
 ];
 
-var url = window.location.search.substr(1);
+var url = window.location.search.substr(1) + window.location.hash;
 if (url == "") url = "about:blank";
 
 var known = false;

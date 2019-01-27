@@ -7,6 +7,7 @@ var options = [
 	{ type: "checkbox", key: "scanImages", elem: "checkimages" },
 	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
+	{ type: "checkbox", key: "makeVisible", elem: "makevisiblewww" },
 	{ type: "checkbox", key: "stripStyles", elem: "stripstyles" },
 	{ type: "checkbox", key: "isolateRegions", elem: "isolateregions" },
 	{ type: "checkbox", key: "showRegions", elem: "showregions" },

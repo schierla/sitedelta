@@ -130,6 +130,7 @@ var options = [
 	{ type: "checkbox", key: "scanImages", elem: "checkimages" },
 	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
+	{ type: "checkbox", key: "makeVisible", elem: "makevisible" },
 	{ type: "checkbox", key: "stripStyles", elem: "stripstyles" },
 	{ type: "checkbox", key: "isolateRegions", elem: "isolateregions" },
 	{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: xpath => showOutline(xpath, config.includeRegion), add: selectInclude, pre: addBodyIfEmpty, post: showOptions },

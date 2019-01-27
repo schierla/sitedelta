@@ -15,7 +15,8 @@ var highlightUtils = {
 	highlightChanges: function (doc, config, oldContent) {
 		if (config.stripStyles) highlightUtils._stripStyles(doc);
 		if (config.isolateRegions) highlightUtils._isolateRegions(doc, config);
-
+		if (config.makeVisible) highlightUtils.makeVisible(doc, config);
+		
 		var current = textUtils.getText(doc, config);
 
 		var excludes = textUtils._findElements(doc, config.excludes);

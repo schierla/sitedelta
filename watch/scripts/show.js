@@ -57,7 +57,6 @@ function showPage(doc, callback) {
 	if (doc === null) return (callback !== undefined) ? callback() : null;
 	if (title == "") title = doc.title;
 	var idoc = iframe.contentWindow.document;
-//	idoc.open(); idoc.write(new XMLSerializer().serializeToString(doc)); idoc.close(); 
 	while (idoc.firstChild) idoc.removeChild(idoc.firstChild); idoc.appendChild(idoc.importNode(doc.documentElement, true)); 
 	idoc.body.addEventListener("click", stopIt, true);
 	return (callback !== undefined) ? callback() : null;
@@ -185,6 +184,11 @@ function showData() {
 	document.querySelector("#pagetitle").value = title;
 	document.title = title;
 	document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("pageChanged", [current, changes]);
+	if(config.makeVisible) {
+		setTimeout(function() {
+			highlightUtils.makeVisible(document.getElementById("iframe").contentWindow.document, config);
+		}, 200);
+	}
 }
 
 function editRegion(xpath, callback) {
@@ -202,10 +206,6 @@ function selectRegion(callback) {
 		return (region && callback !== undefined) ? callback(region) : null;
 	} else {
 		document.body.classList.add("selecting");
-		// regionUtils.selectRegion(idoc, region => {
-		//	document.body.classList.remove("selecting");
-		//	return (region && callback !== undefined) ? callback(region) : null;
-		//});
 		regionUtils.selectRegionOverlay(document.querySelector("#overlay"), idoc, region => {
 			document.body.classList.remove("selecting");
 			return (region && callback !== undefined) ? callback(region) : null;
@@ -229,12 +229,12 @@ function addBodyIfEmpty(list, callback) {
 	return (callback !== undefined) ? callback(list) : null;
 }
 
-
 var options = [
 	{ type: "checkbox", key: "checkDeleted", elem: "checkdeleted" },
 	{ type: "checkbox", key: "scanImages", elem: "checkimages" },
 	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
 	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
+	{ type: "checkbox", key: "makeVisible", elem: "makevisible", post: expand },
 	{ type: "checkbox", key: "stripStyles", elem: "stripstyles", post: expand },
 	{ type: "checkbox", key: "isolateRegions", elem: "isolateregions", post: expand },
 	{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: xpath => showOutline(xpath, config.includeRegion), add: selectRegion, edit: editRegion, pre: addBodyIfEmpty, post: showOptions },

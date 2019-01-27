@@ -438,6 +438,43 @@ var highlightUtils = {
 		}
 	},
 
+
+	makeVisible: function(doc, config) {
+		var excludes = textUtils._findElements(doc, config.excludes);
+		var regions = textUtils._findElements(doc, config.includes);
+		for(var i=0; i<regions.length; i++) {
+			highlightUtils._makeVisible(regions[i]);
+		}
+	},
+
+	_makeVisible: function(elem) {
+		highlightUtils._makeParentsVisible(elem);
+		highlightUtils._makeChildrenVisible(elem);
+	},
+
+	_makeElementVisible: function(elem) {
+		if(elem.offsetHeight === 0 && elem.textContent !== "") {
+			if(elem.nodeName && (elem.nodeName.toLowerCase()=="script" || elem.nodeName.toLowerCase()=="style")) return;
+			elem.style.display="block";
+			elem.style.height="auto";
+		}
+	},
+
+	_makeParentsVisible: function(elem) {
+		if(elem.parentNode != null) highlightUtils._makeParentsVisible(elem.parentNode);
+		highlightUtils._makeElementVisible(elem);
+	},
+
+	_makeChildrenVisible: function(elem) {
+		highlightUtils._makeElementVisible(elem);
+		var child = elem.firstChild;
+		while(child) {
+			var next = child.nextSibling;
+			highlightUtils._makeChildrenVisible(child);
+			child = next;
+		}
+	},
+
 	_stripStyles: function (elem) {
 		if (elem.nodeName.toLowerCase() == "style") {
 			elem.parentNode.removeChild(elem);

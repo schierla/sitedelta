@@ -76,6 +76,10 @@ var configUtils = {
 			config.isolateRegions = false;
 			config.configVersion = 6; upgraded = true;
 		}
+		if(config.configVersion == 6) {
+			config.makeVisisble = false;
+			config.configVersion = 7; upgraded = true;
+		}
 		return upgraded;
 	},
 

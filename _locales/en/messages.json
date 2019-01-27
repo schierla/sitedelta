@@ -295,8 +295,12 @@
 		"message": "Outline include and exclude regions",
 		"description": "Label for check box to outline include and exclude regions"
 	},
+	"configMakeVisible": {
+		"message": "Make hidden elements visible",
+		"description": "Label for check box to make hidden elements visible on highlighted pages"
+	},
 	"configStripStyles": {
-		"message": "Remove page styles (CSS)",
+		"message": "Remove all page styles (CSS)",
 		"description": "Label for check box to remove CSS from highlighted pages"
 	},
 	"configIsolateRegions": {

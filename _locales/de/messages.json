@@ -295,6 +295,10 @@
 		"message": "Bereiche hervorheben",
 		"description": "Label for check box to outline include and exclude regions"
 	},
+	"configMakeVisible": {
+		"message": "Versteckte Inhalte sichtbar machen",
+		"description": "Label for check box to make hidden elements visible on highlighted pages"
+	},
 	"configStripStyles": {
 		"message": "Seitengestaltung (CSS) entfernen",
 		"description": "Label for check box to remove CSS from highlighted pages"

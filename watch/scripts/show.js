@@ -19,7 +19,10 @@ function highlight() {
 			changes = highlightUtils.highlightChanges(idoc, config, content);
 			if (changes > 0) {
 				document.body.classList.add("changed");
-				current = highlightUtils.highlightNext(idoc, 0);
+				setTimeout(() => {
+					current = highlightUtils.highlightNext(idoc, 0);
+					showData();
+				}, 200);
 			} else if (changes == 0) {
 				document.body.classList.add("unchanged");
 			} else {

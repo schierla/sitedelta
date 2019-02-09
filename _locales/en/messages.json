@@ -113,11 +113,11 @@
 		"description": "Button to show the next change on the current page"
 	},
 	"pageOpen": {
-		"message": "Open Page...",
+		"message": "Open Page",
 		"description": "Button to open the current page"
 	},
 	"pageScan": {
-		"message": "Scan Page...",
+		"message": "Scan Page",
 		"description": "Button to scan the current page"
 	},
 	"pageRequirePermission": {
@@ -125,11 +125,11 @@
 		"description": "Text that SiteDelta requires permission to access this page"
 	},
 	"pageGrantHost": {
-		"message": "Grant access to this page",
+		"message": "Grant access to this page...",
 		"description": "Button to grant access to a given URL"
 	},
 	"pageGrantAll": {
-		"message": "Grant access to all pages",
+		"message": "Grant access to all pages...",
 		"description": "Button to grant access to all addresses"
 	},
 	
@@ -137,6 +137,10 @@
 	"pagesList": {
 		"message": "Monitored pages:",
 		"description": "Headline for the list of monitored pages"
+	},
+	"pagesFilter": {
+		"message": "Search monitored pages",
+		"description": "Placeholder text for page filter input"
 	},
 	"pagesDeleteOne": {
 		"message": "Delete Page",
@@ -147,15 +151,15 @@
 		"description": "Button to delete the selected pages"
 	},
 	"pagesOpenOne": {
-		"message": "Open Page...",
+		"message": "Open Page",
 		"description": "Button to open the selected page"
 	},
 	"pagesOpenMultiple": {
-		"message": "Open Pages...",
+		"message": "Open Pages",
 		"description": "Button to open the selected pages"
 	},
 	"pagesOpenChanged": {
-		"message": "Open Changed...",
+		"message": "Open Changed",
 		"description": "Button to open the changed pages"
 	},
 	"pagesScanOne": {
@@ -187,11 +191,11 @@
 		"description": "Button to set scan frequency"
 	},
 	"pagesConfiguration": {
-		"message": "SiteDelta Settings...",
+		"message": "SiteDelta Settings",
 		"description": "Button to open options dialog"
 	},
 	"pagesSidebar": {
-		"message": "Sidebar...",
+		"message": "Sidebar",
 		"description": "Button to open the sidebar"
 	},
 	

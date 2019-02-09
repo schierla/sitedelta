@@ -12,7 +12,7 @@
 
 <body>
     <div id="pagesdiv">
-        <h2 id="title" class="browser-style i18n">__MSG_pagesList__</h2>
+        <h2 id="title" class="browser-style"><input id="filter" class="i18n" placeholder="__MSG_pagesFilter__"></h2>
         <select id="pages" size="10" multiple></select>
         <div id="actions" class="buttons browser-style">
             <button id="expand" class="browser-style expander"></button>
@@ -46,7 +46,8 @@
     </div>
         
     <div id="previewdiv"><iframe id="preview"></iframe></div>
-    
+   
+    <script src="common/scripts/sidebarDialogFix.js"></script>
     <script src="common/scripts/configUtils.js"></script>
     <script src="common/scripts/ioUtils.js"></script>
     <script src="common/scripts/tabUtils.js"></script>

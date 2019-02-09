@@ -57,8 +57,8 @@ var regionUtils = {
 		overlay.appendChild(overlaycontent);
 
 		overlay.style.display = 'block';
-		overlay.scrollTop = idoc.body.scrollTop; 
-		overlay.scrollLeft = idoc.body.scrollLeft;
+		overlay.scrollTop = idoc.defaultView.scrollY; 
+		overlay.scrollLeft = idoc.defaultView.scrollX;
 
 		overlay.addEventListener("mousemove", regionUtils._overlaymousemove);
 		overlay.addEventListener("mousedown", regionUtils._overlaymousedown);
@@ -195,8 +195,7 @@ var regionUtils = {
 	},
 
 	_overlayscroll: function(e) {
-		regionUtils._doc.body.scrollTop = regionUtils._overlay.scrollTop; 
-		regionUtils._doc.body.scrollLeft = regionUtils._overlay.scrollLeft;
+		regionUtils._doc.defaultView.scrollTo(regionUtils._overlay.scrollLeft, regionUtils._overlay.scrollTop);
 	},
 
 	_overlayresize: function(e) {

@@ -1,5 +1,6 @@
 #pagesdiv {position: absolute; left: 0; width: 100%; top: 0; height: 100%; }
-#title {position: absolute; font-size: 1em; font-weight: bold; padding: 0; margin: 0; line-height: 27px; vertical-align: middle; left: 4px; top: 4px; height: 27px; right: 34px;}
+#title {position: absolute; font-size: 1em; font-weight: bold; padding: 0; margin: 0; line-height: 24px; vertical-align: middle; left: 4px; top: 4px; height: 24px; right: 34px;}
+#filter {width: 99%; }
 #expanded {display: none; position: absolute; right: 4px; top: 32px; padding: 0; background: #ccc; }
 #expand {position: absolute; right: 4px; top: 4px; }
 #expanded button {display: block; width: 100%; margin: 0; padding: 0 1.5em;}

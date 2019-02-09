@@ -1,4 +1,6 @@
-#title {position: fixed; font-size: 1em; font-weight: bold; padding: 0; margin: 0; line-height: 26px; vertical-align: middle; left: 4px; top: 4px; height: 26px; right: 34px;}
+#title {position: absolute; font-size: 1em; font-weight: bold; padding: 0; margin: 0; line-height: 24px; vertical-align: middle; left: 4px; top: 4px; height: 24px; right: 34px;}
+#filter {width: 99%; }
+
 #expanded {display: none; position: fixed; right: 4px; top: 32px; padding: 2px 2px 0 2px; background: #ccc; }
 #expand {position: fixed; right: 4px; top: 4px; }
 #expanded button {display: block; width: 100%; margin: 0 0 2px 0; padding: 0 1.5em;}

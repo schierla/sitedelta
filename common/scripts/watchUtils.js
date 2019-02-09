@@ -45,7 +45,7 @@ var watchUtils = {
 				if (newContent === null) return watchUtils.setChanges(url, -1, () => (callback !== undefined) ? callback(-1) : null);				
 				pageUtils.getContent(url, function (oldContent) {
 					if(oldContent === null) return watchUtils.setChanges(url, -1, () => (callback !== undefined) ? callback(-1) : null);
-					if (textUtils.clean(newContent, config) != textUtils.clean(oldContent, config)) {
+					if(!textUtils.isEqual(oldContent, newContent, config)) {
 						watchUtils.setChanges(url, 1, () => (callback !== undefined) ? callback(1) : null);
 					} else {
 						watchUtils.setChanges(url, 0, () => (callback !== undefined) ? callback(0) : null);

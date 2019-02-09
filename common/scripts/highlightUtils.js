@@ -5,7 +5,7 @@ var highlightUtils = {
 			nr = 0;
 		var elem = doc.getElementById("sitedelta-change" + nr);
 		elem.scrollIntoView(true);
-		window.scrollBy(0, elem.getBoundingClientRect().top - (window.innerHeight / 2));
+		doc.defaultView.scrollBy(0, elem.getBoundingClientRect().top - (doc.defaultView.innerHeight / 2));
 		var elems = doc.getElementsByClassName("sitedelta-change" + nr);
 		highlightUtils._fade(elems);
 		nr++;

@@ -4,6 +4,8 @@ var uiUtils = {
 		for (var i = 0; i < elems.length; i++) {
 			if (elems[i].getAttribute("title"))
 				elems[i].setAttribute("title", uiUtils._translate(elems[i].getAttribute("title")));
+			if (elems[i].getAttribute("placeholder"))
+				elems[i].setAttribute("placeholder", uiUtils._translate(elems[i].getAttribute("placeholder")));
 			if (elems[i].firstChild && elems[i].firstChild.data)
 				elems[i].firstChild.data = uiUtils._translate(elems[i].firstChild.data);
 		}
@@ -21,8 +23,8 @@ var uiUtils = {
 			elements: {},
 			shown: [],
 			container: document.querySelector("#" + id),
-			isBefore: (a, b) => true,
-			isShown: (e) => true,
+			isBefore: (keya, a, keyb, b) => true,
+			isShown: (key, data) => true,
 
 			createElement: creator,
 			updateElement: updater,
@@ -44,7 +46,7 @@ var uiUtils = {
 				for (var i = 0; i < this.shown.length; i++) {
 					if (!(this.shown[i] in this.elements)) {
 						this.shown.splice(i, 1); i--;
-					} else if (!this.isShown(this.elements[this.shown[i]].data)) {
+					} else if (!this.isShown(this.shown[i], this.elements[this.shown[i]].data)) {
 						this.container.removeChild(this.elements[this.shown[i]].element); this.shown.splice(i, 1); i--;
 					}
 				}
@@ -56,7 +58,7 @@ var uiUtils = {
 				}
 				for (var key in this.elements) {
 					if (this.shown.indexOf(key) !== -1) continue;
-					if (!this.isShown(this.elements[key].element)) continue;
+					if (!this.isShown(key, this.elements[key].data)) continue;
 					for (var i = 0; i < this.shown.length; i++) {
 						var before = this.isBefore(this.shown[i], this.elements[this.shown[i]].data, key, this.elements[key].data);
 						if (!before) {

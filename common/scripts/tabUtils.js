@@ -42,7 +42,7 @@ var tabUtils = {
 				if (oldcontent === null) return (callback !== undefined) ? callback(-1) : null;
 				tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {
 					if (content === undefined) return (callback !== undefined) ? callback(-1) : null;
-					if (textUtils.clean(content, config) == textUtils.clean(oldcontent, config)) {
+					if (textUtils.isEqual(oldcontent, content, config)) { 
 						// unchanged
 						return (callback !== undefined) ? callback(0) : null;
 					} else {

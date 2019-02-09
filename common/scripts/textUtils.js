@@ -19,6 +19,19 @@ var textUtils = {
 		return text;
 	},
 
+	isEqual: function(oldContent, newContent, config) {
+		var oldt = textUtils.clean(oldContent, config), newt = textUtils.clean(newContent, config);
+		if(config.checkDeleted) {
+			return oldt == newt;
+		} else {
+			for(var i=0, j=0; i<newt.length; i++, j++) {
+				while(j<oldt.length && newt[i]!=oldt[j]) j++;
+				if(j>=oldt.length) return false;
+			}
+			return true;
+		}
+	},
+
 	_findElements: function (doc, xpaths) {
 		var ret = [];
 		for (var i = 0; i < xpaths.length; i++) {

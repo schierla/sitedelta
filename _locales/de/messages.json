@@ -114,11 +114,11 @@
 		"description": "Button to show the next change on the current page"
 	},
 	"pageOpen": {
-		"message": "Seite öffnen...",
+		"message": "Seite öffnen",
 		"description": "Button to open the selected page"
 	},
 	"pageScan": {
-		"message": "Seite prüfen...",
+		"message": "Seite prüfen",
 		"description": "Button to scan the current page"
 	},
 	"pageRequirePermission": {
@@ -126,18 +126,22 @@
 		"description": "Text that SiteDelta requires permission to access this page"
 	},
 	"pageGrantHost": {
-		"message": "Zugriff auf diese Seite gewähren",
+		"message": "Zugriff auf diese Seite gewähren...",
 		"description": "Button to grant access to a given URL"
 
 	},
 	"pageGrantAll": {
-		"message": "Zugriff auf alle Seiten gewähren",
+		"message": "Zugriff auf alle Seiten gewähren...",
 		"description": "Button to grant access to all addresses"
 	},
 
 	"pagesList": {
 		"message": "Überwachte Seiten:",
 		"description": "Headline for the list of monitored pages"
+	},
+	"pagesFilter": {
+		"message": "Überwachte Seiten durchsuchen",
+		"description": "Placeholder text for page filter input"
 	},
 	"pagesDeleteOne": {
 		"message": "Seite löschen",
@@ -148,15 +152,15 @@
 		"description": "Button to delete the selected pages"
 	},
 	"pagesOpenOne": {
-		"message": "Seite öffnen...",
+		"message": "Seite öffnen",
 		"description": "Button to open the selected page"
 	},
 	"pagesOpenMultiple": {
-		"message": "Seiten öffnen...",
+		"message": "Seiten öffnen",
 		"description": "Button to open the selected pages"
 	},
 	"pagesOpenChanged": {
-		"message": "Geänderte öffnen...",
+		"message": "Geänderte öffnen",
 		"description": "Button to open the changed pages"
 	},
 	"pagesScanOne": {
@@ -188,11 +192,11 @@
 		"description": "Button to set scan frequency"
 	},	
 	"pagesConfiguration": {
-		"message": "SiteDelta-Konfiguration...",
+		"message": "SiteDelta-Konfiguration",
 		"description": "Button to open options dialog"
 	},
 	"pagesSidebar": {
-		"message": "Sidebar...",
+		"message": "Sidebar",
 		"description": "Button to open the sidebar"
 	},
 

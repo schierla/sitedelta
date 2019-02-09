@@ -77,6 +77,12 @@ var pageList = {
 	load: function () {
 		var list = uiUtils.sortedList("pages", this.createItem, this.updateItem);
 		list.isBefore = (keya, a, keyb, b) => a.title!==undefined && b.title!==undefined && a.title.toLowerCase() < b.title.toLowerCase();
+
+		var filter = document.querySelector("#filter");
+		if(filter) {
+			list.isShown = (key, data) => key.indexOf(filter.value) != -1 || (data.title!==undefined && data.title.indexOf(filter.value) != -1);
+			filter.addEventListener("input", () => list.refresh());
+		}
 		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
 		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage) });
 		document.querySelector("#scannow").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.scanPage) });

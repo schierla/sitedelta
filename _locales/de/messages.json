@@ -98,11 +98,11 @@
 	},
 
 	"pageEnable": {
-		"message": "Aktivieren",
+		"message": "Überwachen",
 		"description": "Button to enable monitoring the current page"
 	},
 	"pageDisable": {
-		"message": "Deaktivieren",
+		"message": "Überwachung beenden",
 		"description": "Button to disable monitoring of the current page"
 	},
 	"pageShowChanges": {
@@ -172,7 +172,7 @@
 		"description": "Button to scan the selected pages now"
 	},
 	"pagesScanAll": {
-		"message": "Alle prüfen",
+		"message": "Alle Seiten prüfen",
 		"description": "Button to scan all pages now"
 	},
 	"pagesMarkSeenOne": {
@@ -196,7 +196,7 @@
 		"description": "Button to open options dialog"
 	},
 	"pagesSidebar": {
-		"message": "Sidebar",
+		"message": "SiteDelta Sidebar",
 		"description": "Button to open the sidebar"
 	},
 

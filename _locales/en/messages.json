@@ -97,11 +97,11 @@
 		"description": "Title of the page action popup while selecting a region"
 	},
 	"pageEnable": {
-		"message": "Enable",
+		"message": "Monitor",
 		"description": "Button to enable monitoring the current page"
 	},
 	"pageDisable": {
-		"message": "Disable",
+		"message": "Stop Monitoring",
 		"description": "Button to disable monitoring of the current page"
 	},
 	"pageShowChanges": {
@@ -171,7 +171,7 @@
 		"description": "Button to scan the selected pages now"
 	},
 	"pagesScanAll": {
-		"message": "Scan All",
+		"message": "Scan All Pages",
 		"description": "Button to scan all pages now"
 	},
 	"pagesMarkSeenOne": {
@@ -195,7 +195,7 @@
 		"description": "Button to open options dialog"
 	},
 	"pagesSidebar": {
-		"message": "Sidebar",
+		"message": "SiteDelta Sidebar",
 		"description": "Button to open the sidebar"
 	},
 	

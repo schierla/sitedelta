@@ -9,10 +9,12 @@ document.querySelector("#open").addEventListener("click", function (e) {
 	chrome.tabs.update(tabId, { url: url, active: true }, () => { window.close(); });
 });
 
+/*
 document.querySelector("#options").addEventListener("click", function (e) {
 	tabUtils.openResource("manage.htm");
 	window.close();
 });
+*/
 
 document.querySelector("#sidebar").addEventListener("click", function (e) {
 	if(chrome && chrome.sidebarAction && chrome.sidebarAction.open) chrome.sidebarAction.open(); else tabUtils.openResource("pages.htm");

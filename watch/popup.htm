@@ -27,15 +27,17 @@
 
 	<div class="browser-style buttons">
 		<button class="browser-style i18n" id="sidebar">__MSG_pagesSidebar__</button>
-		<button class="browser-style i18n" id="options">__MSG_pagesConfiguration__</button>
+		<!--<button class="browser-style i18n" id="options">__MSG_pagesConfiguration__</button>-->
+		<button class="browser-style i18n" id="scanAll">__MSG_pagesScanAll__</button>
 	</div>
 
-	<div class="browser-style section i18n">__MSG_watchChangedPages__</div>
-	<div class="browser-style"><select id="changed" size="5"></select></div>
+	<div id="changedPages">
+		<div class="browser-style section i18n">__MSG_watchChangedPages__</div>
+		<div class="browser-style"><select id="changed" size="5"></select></div>
 
-	<div class="browser-style buttons">
-		<button class="browser-style i18n" id="openAll">__MSG_pagesOpenChanged__</button>
-		<button class="browser-style i18n" id="scanAll">__MSG_pagesScanAll__</button>
+		<div class="browser-style buttons">
+			<button class="browser-style i18n" id="openAll">__MSG_pagesOpenChanged__</button>
+		</div>
 	</div>
 
 	<script src="common/scripts/uiUtils.js"></script>

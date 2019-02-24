@@ -69,6 +69,7 @@ tabUtils.getActive(function (tab) {
 		if (urls.length > 0) document.body.classList.add("changes");
 		for (var i = 0; i < urls.length; i++) {
 			addChangedUrl(urls[i]);
+			if(urls[i] == url) document.body.classList.add("changed");
 		}
 	});
 

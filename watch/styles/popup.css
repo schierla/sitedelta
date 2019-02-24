@@ -16,3 +16,7 @@ span.enabled, span.disabled { display: none; }
 #open {display: none; }
 .open #open {display: inline; }
 .open #watch {display: none; }
+#status {background-position: left top; background-repeat: no-repeat; background-size: 2em; min-height: 2em; padding-left: 2.5em; }
+.enabled #status {background-image: url(../common/icons/unchanged.svg); }
+.enabled.changed #status {background-image: url(../common/icons/changed.svg); }
+.disabled #status {background-image: url(../common/icons/inactive.svg); }

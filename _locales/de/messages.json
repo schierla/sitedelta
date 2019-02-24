@@ -9,11 +9,11 @@
 	},
 
 	"highlightDisabled": {
-		"message": "SiteDelta Highlight ist auf deser Seite nicht aktiv.",
+		"message": "SiteDelta Highlight ist auf dieser Seite nicht aktiv.",
 		"description": "Text that monitoring of the current page is disabled"
 	},
 	"highlightEnabled": {
-		"message": "SiteDelta Highlight ist auf deser Seite aktiv.",
+		"message": "SiteDelta Highlight ist auf dieser Seite aktiv.",
 		"description": "Text that monitoring of the current page is enabled"
 	},
 	"highlightUnsupported": {
@@ -36,11 +36,11 @@
 		"description": "Text that the current page is unsupported"
 	},
 	"watchDisabled": {
-		"message": "SiteDelta Watch ist auf deser Seite nicht aktiv.",
+		"message": "SiteDelta Watch ist auf dieser Seite nicht aktiv.",
 		"description": "Text that watching of the current page is disabled"
 	},
 	"watchEnabled": {
-		"message": "SiteDelta Watch ist auf deser Seite aktiv.",
+		"message": "SiteDelta Watch ist auf dieser Seite aktiv.",
 		"description": "Text that watching of the current page is enabled"
 	},
 	"watchFailed": {

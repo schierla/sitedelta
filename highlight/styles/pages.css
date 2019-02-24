@@ -1,11 +1,11 @@
-#title {position: absolute; font-size: 1em; font-weight: bold; padding: 0; margin: 0; line-height: 24px; vertical-align: middle; left: 4px; top: 4px; height: 24px; right: 34px;}
-#filter {width: 99%; }
+#sidebar {position: absolute; left: 0; top: 0; bottom: 0; right: 0; display: flex; flex-direction: column; }
+#title {display: flex; align-items: center; }
+#filter, #pages {flex-grow: 1; }
+#filter, #expand {margin: 2px; }
 
 #expanded {display: none; position: fixed; right: 4px; top: 32px; padding: 2px 2px 0 2px; background: #ccc; }
-#expand {position: fixed; right: 4px; top: 4px; }
 #expanded button {display: block; width: 100%; margin: 0 0 2px 0; padding: 0 1.5em;}
 .expand #expanded {display: block; }
 
-#pages {position: fixed; left: 0; top: 30px; width: 100%; bottom: 0; right: 0;}
 #expanded button.advanced {display: none; }
 .advancedEnabled #expanded button.advanced {display: block; }

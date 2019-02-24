@@ -1,23 +1,23 @@
-#pagesdiv {position: absolute; left: 0; width: 100%; top: 0; height: 100%; }
-#title {position: absolute; font-size: 1em; font-weight: bold; padding: 0; margin: 0; line-height: 24px; vertical-align: middle; left: 4px; top: 4px; height: 24px; right: 34px;}
-#filter {width: 99%; }
-#expanded {display: none; position: absolute; right: 4px; top: 32px; padding: 0; background: #ccc; }
-#expand {position: absolute; right: 4px; top: 4px; }
+#sidebar {position: absolute; left: 0; width: 100%; top: 0; height: 100%; display: flex; flex-direction: column; }
+#title {display: flex; align-items: center; }
+#filter, #pages {flex-grow: 1; }
+#filter, #expand {margin: 2px; }
+
+#expanded {display: none; position: absolute; right: 4px; top: 30px; padding: 0; background: #ccc; }
 #expanded button {display: block; width: 100%; margin: 0; padding: 0 1.5em;}
 .expand #expanded {display: block; }
-#pages {position: absolute; left: 0; top: 31px; width: 100%; bottom: 0; }
 
-#previewdiv {position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+#content {position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
 #preview {position: absolute; left: 0; right: 0; bottom: 0; top: 0; width: 100%; height: 100%; border: none 0px; margin: 0; padding: 0; }
-#previewdiv, #preview {display: none; }
+#content, #preview {display: none; }
 
 @media (min-width: 45em) and (max-width: 85em) {
-    div#pagesdiv {width: 30%; }
-    div#previewdiv {left: 30%; }
-    div#previewdiv, iframe#preview {display: block; }
+    div#sidebar {width: 30%; }
+    div#content {left: 30%; }
+    div#content, iframe#preview {display: block; }
 }
 @media (min-width: 85em) {
-    div#pagesdiv {width: 25.5em; }
-    div#previewdiv {left: 25.5em; }
-    div#previewdiv, iframe#preview {display: block; }
+    div#sidebar {width: 25.5em; }
+    div#content {left: 25.5em; }
+    div#content, iframe#preview {display: block; }
 }

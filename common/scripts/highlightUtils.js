@@ -458,7 +458,9 @@ var highlightUtils = {
 			if(elem.nodeName && (elem.nodeName.toLowerCase()=="script" || elem.nodeName.toLowerCase()=="style")) return;
 			elem.style.display="block";
 			elem.style.height="auto";
+			elem.style.opacity="1";
 		}
+		if(elem.style) elem.style.opacity="1";
 	},
 
 	_makeParentsVisible: function(elem) {

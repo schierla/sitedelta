@@ -77,7 +77,7 @@ function loadPage(callback) {
 		}
 		var base = doc.createElement("base");
 		base.setAttribute("href", url);
-		doc.head.insertBefore(base, doc.head.firstChild);
+		if(!doc.querySelector("base[href]")) doc.head.insertBefore(base, doc.head.firstChild);
 		loadedDocument = doc;
 		showPage(loadedDocument, callback);
 	}, (loaded, total) => {

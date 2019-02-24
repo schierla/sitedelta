@@ -95,7 +95,6 @@ var regionUtils = {
 	},
 
 	_mouseover: function (e) {
-		if(e.target.nodeName == 'IMG') e.target = e.target.parentNode;
 		if (regionUtils.needText && !e.target.firstChild.data &&
 			(!e.target.id || e.target.id.substr(0, 16) == "sitedelta-change"))
 			return;
@@ -106,7 +105,6 @@ var regionUtils = {
 	},
 
 	_mouseout: function (e) {
-		if(e.target.nodeName == 'IMG') e.target = e.target.parentNode;
 		if (e.target && e.target != regionUtils._destelement)
 			e.target.style.outline = "none";
 		e.preventDefault();
@@ -115,7 +113,6 @@ var regionUtils = {
 	},
 
 	_mousedown: function (e) {
-		if(e.target.nodeName == 'IMG') e.target = e.target.parentNode;
 		regionUtils._needText = true;
 		regionUtils._destelement = e.target;
 		e.target.style.outline = "green solid 2px;";
@@ -125,7 +122,6 @@ var regionUtils = {
 	},
 
 	_mouseup: function (e) {
-		if(e.target.nodeName == 'IMG') e.target = e.target.parentNode;		
 		e.preventDefault();
 		e.stopPropagation();
 		regionUtils._mouseout(e);

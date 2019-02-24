@@ -38,175 +38,138 @@ var highlightUtils = {
 		if (config.showRegions) regions.forEach(function (v, i, a) { v.style.outline = config.includeRegion + " dotted 2px"; });
 
 
-		var pos = 0, wpos = 0, npos = 0, opos = 0;
-		var changes = 0;
-		var ret = "";
+		var wpos = 0, npos = 0, opos = 0;
+		var changes = 0, assignNumber = true;
 		for (var i = 0; i < regions.length; i++) {
 
-			var ot = "",
-				nt = "",
-				wc = 0;
 			var doc = regions[i].ownerDocument;
 
 			var domactions = [], last = "", action = "", text = "";
-			var count = true;
-			var tw = doc.createTreeWalker(regions[i], NodeFilter.SHOW_ALL, textUtils._filter(config, excludes), true), cur = null;
-			while ((cur = tw.nextNode()) != null) {
-				var drop = [];
-				while (cur) {
-					if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {
-						if (cur.nodeName == 'IMG' && cur.hasAttribute("src"))
-							text = "[" + cur.getAttribute("src") + "] ";
-						else text = cur.data.replace(/\[/, "[ ") + " ";
-						text = text.replace(/\s+/g, ' ').replace(/^ +/, '').replace(/ +$/, ' ');
-						if (text != "" && text != " ")
-							ret += text;
-						if (newt[npos] && ret.length >= newt[npos].length)
-							break;
-						drop.push(cur);
-					}
-					cur = tw.nextNode();
-				}
-				text = ret;
-				ret = "";
-				var words = highlightUtils._split(text),
-					txt = "",
-					replace = null,
-					wpos = 0;
-				wc += words.length;
-				while (true) {
-					if (config.checkDeleted) {
-						if (npos == diff.newWords.length && opos == diff.oldWords.length)
-							action = "";
-						else if (opos == diff.oldWords.length)
-							action = "I";
-						else if (npos == diff.newWords.length)
-							action = "D";
-						else if (diff.newToOld[npos] == null)
-							action = "I";
-						else if (diff.oldToNew[opos] == null)
-							action = "D";
-						else if (diff.oldToNew[opos] == npos)
-							action = "K";
-						else if (diff.oldToNew[opos] - npos < 0)
-							action = "I";
-						else if (diff.newToOld[npos] - opos < 0)
-							action = "D";
-						else if (diff.oldToNew[opos] - npos <= diff.newToOld[npos] - opos)
-							action = "I";
-						else
-							action = "D";
-					} else {
-						if (npos == diff.newWords.length)
-							action = "";
-						else if (diff.newToOld[npos] == null)
-							action = "I";
-						else
-							action = "K";
-					}
+			var filter = textUtils._filter(config, excludes);
+			var tw = doc.createTreeWalker(regions[i], NodeFilter.SHOW_ALL, filter, true);
+			if (filter.acceptNode(regions[i]) == NodeFilter.FILTER_REJECT) continue;
+			for (var cur = regions[i]; cur != null; cur = tw.nextNode()) {
+				if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {
+					if (cur.nodeName == 'IMG' && cur.hasAttribute("src")) 
+						text = "[" + cur.getAttribute("src") + "]";
+					else 
+						text = cur.data.replace(/\[/g, "[ ");
+					text = text.replace(/\s+/g, ' ').replace(/^ +/, '').replace(/ +$/, '').replace(/[\u0000-\u001f]/g, "");
+					if(text == "") continue;
+					var words = highlightUtils._split(text + " "), wpos = 0;
+					var lastelem = null, replace = [], replaceRequired = false;
 
-					if ((last != action && txt != "") ||
-						((replace != null || last != "K") && wpos >= words.length && action != "D") ||
-						((replace != null || last != "K") && wpos < words.length && npos < newt.length && textUtils.clean(words[wpos], config).length < newt[npos].length)) {
-						if (replace == null)
-							replace = doc.createElement("SITEDELTA_SPAN");
-						if (last == "K") {
-							replace.appendChild(highlightUtils._DOMChanged(doc, txt, (1 - changes), last, config));
-							if (txt.match(/\[[^ ]+\] /))
-								replace = null;
-						} else if (last == "D" || last == "m") {
-							if (txt.replace(/\s+/, "") != "") {
-								replace.appendChild(highlightUtils._DOMChanged(doc, txt, (count ? (++changes - 1) : (1 - changes)), last, config));
-							}
-						} else if (last == "I" || last == "M") {
-							replace.appendChild(highlightUtils._DOMChanged(doc, txt, (count ? (++changes - 1) : (1 - changes)), last, config));
+					while (true) {
+						if (config.checkDeleted) {
+							if (npos == diff.newWords.length && opos == diff.oldWords.length)
+								action = ""; // end of document
+							else if (opos == diff.oldWords.length)
+								action = "I"; // end of old text - everything remaining has been inserted
+							else if (npos == diff.newWords.length)
+								action = "D"; // end of new text - everything remaining has been removed
+							else if (diff.newToOld[npos] == null)
+								action = "I"; // not found in old text - this has been inserted
+							else if (diff.oldToNew[opos] == null)
+								action = "D"; // not found in new text - this has been deleted
+							else if (diff.oldToNew[opos] == npos)
+								action = "K"; // unchanged - this has been kept
+							else if (diff.oldToNew[opos] - npos < 0)
+								action = "I"; // old text here has already appeared previously - show as insertion
+							else if (diff.newToOld[npos] - opos < 0)
+								action = "D"; // new text here should have been earlier - show as deletion
+							else if (diff.oldToNew[opos] - npos <= diff.newToOld[npos] - opos)
+								action = "I"; // insertion is shorter than deletion - start with insertion
+							else
+								action = "D"; // otherwise start with deletion
+						} else {
+							if (npos == diff.newWords.length)
+								action = ""; // end of new text - we are done
+							else if (diff.newToOld[npos] == null)
+								action = "I"; // not found in old text - this has been inserted
+							else
+								action = "K"; // unchanged - this has been kept
 						}
-						if (last == "K") count = true; else count = false;
-						txt = "";
+
+						if (wpos >= words.length && action != "D") break;
+
+						if(action == "K") {
+							if(lastelem == null || last != "K") {
+								lastelem = doc.createTextNode("");
+								replace.push(lastelem);
+							}
+							if(words.length == 2 && wpos == 0)
+								replace.push(cur.cloneNode(true)); 
+							else 
+								lastelem.data += words[wpos];
+							assignNumber = true;
+						} else if(action == "D") {
+							if(lastelem == null || last != "D") {
+								var nr = assignNumber ? changes++ : changes - 1;
+								var lastelem = doc.createElement("IMG");
+								if(assignNumber) lastelem.id = "sitedelta-change" + nr;
+								lastelem.className = "sitedelta-change" + nr;
+								lastelem.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAK3RFWHRDcmVhdGlvbiBUaW1lAE1vIDI4IE1haSAyMDA3IDE5OjI5OjA2ICswMTAwKyfyCQAAAAd0SU1FB9cFHBElAZPQyFYAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAEZ0FNQQAAsY8L/GEFAAAA2ElEQVR42pXRMQsBYRzH8edYDDKgSFlI2aTcYmPwBm6x3OIFyNswGW0Wg2QxyeAFoCQlKZTEoJTJYOL7uOfquhBXn7vu//zu+T/PPUL8ez2ESKKM2JeMBq/9ssQcG5hy0BUOoI7G6yNuA1WsYYWgq/sQY2Tt4gktTNFDWC2hhB3aiDhbFlQXuaQLrip4xwwGEvDJvObcGI8UmsigizjSwupww9YOe1HFGUfojonkWBR5VJzL2qOv9tKB590vtosGFjAxQsia5/PB6JhgjQOKv5y4XwaR+5Z7AvWEaQDm0aTzAAAAAElFTkSuQmCC");
+								lastelem.setAttribute("border", "0");
+								lastelem.setAttribute("title", "");
+								replace.push(lastelem);
+							}
+							lastelem.setAttribute("title", lastelem.getAttribute("title") + old2[opos]);
+							replaceRequired = true;
+							assignNumber = false;
+						} else if(action == "I") {
+							if(lastelem == null || last != "I") {
+								var nr = assignNumber ? changes++ : changes - 1;
+								var lastelem = doc.createElement("SITEDELTA_INS");
+								if(assignNumber) lastelem.id = "sitedelta-change" + nr;
+								lastelem.className = "sitedelta-change" + nr;
+								lastelem.style.display = "inline"; 
+								lastelem.style.outline = config.addBorder + " dotted 1px";
+								lastelem.style.background = config.addBackground; 
+								lastelem.style.color = "#000";
+								lastelem.appendChild(doc.createTextNode(""));
+								replace.push(lastelem);
+							}
+							if(words.length == 2 && wpos == 0) 
+								lastelem.appendChild(cur.cloneNode(true));
+							else
+								lastelem.firstChild.data += words[wpos];
+
+							replaceRequired = true;
+							assignNumber = false;
+						} else if(action == "") {
+							break;
+						}
+
+						if (action == "K") {
+							wpos++;
+							opos++;
+							npos++;
+						} else if (action == "I") {
+							wpos++
+							npos++;
+						} else if (action == "D") {
+							opos++
+						}
+						last = action;
+						
 					}
-					if (wpos >= words.length && action != "D" && action != "m") break;
-					if (wpos < words.length && (npos >= newt.length || textUtils.clean(words[wpos], config).length < newt[npos].length)) {
-						ret = words[wpos];
-						break;
+					if (replaceRequired) {
+						domactions.push({
+							elem: cur,
+							repl: replace
+						});
 					}
-					last = action;
-					if (action == "K") {
-						txt += words[wpos++];
-						pos++;
-						opos++;
-						npos++;
-					} else if (action == "I" || action == "M") {
-						txt += words[wpos++];
-						pos++;
-						npos++;
-					} else if (action == "D" || action == "m") {
-						txt += old2[opos++];
-						pos++;
-					}
-				}
-				if (replace != null && cur != null) {
-					domactions.push({
-						elem: cur,
-						repl: replace,
-						drop: drop
-					});
 				}
 			}
-			for (var ii = 0; ii < domactions.length; ii++) {
-				for (var j = 0; j < domactions[ii].drop.length; j++)
-					domactions[ii].drop[j].parentNode.removeChild(domactions[ii].drop[j]);
-				domactions[ii].elem.parentNode.replaceChild(domactions[ii].repl, domactions[ii].elem);
+			for (var j = 0; j < domactions.length; j++) {
+				var elem = domactions[j].elem, repl = domactions[j].repl, parent = elem.parentNode;
+				parent.replaceChild(repl[repl.length - 1], elem);
+				for(var k = repl.length - 2; k >= 0; k--) {
+					parent.insertBefore(repl[k], repl[k+1]);
+				}
 			}
 		}
 		return changes;
-	},
-
-	_DOMChanged: function (doc, text, nr, type, config) {
-		if (type == "D" || type == "m") {
-			if (text == "") 
-				return doc.createElement("SITEDELTA_SPAN");
-			var del = doc.createElement("IMG");
-			if (type == "D") {
-				del.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAK3RFWHRDcmVhdGlvbiBUaW1lAE1vIDI4IE1haSAyMDA3IDE5OjI5OjA2ICswMTAwKyfyCQAAAAd0SU1FB9cFHBElAZPQyFYAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAEZ0FNQQAAsY8L/GEFAAAA2ElEQVR42pXRMQsBYRzH8edYDDKgSFlI2aTcYmPwBm6x3OIFyNswGW0Wg2QxyeAFoCQlKZTEoJTJYOL7uOfquhBXn7vu//zu+T/PPUL8ez2ESKKM2JeMBq/9ssQcG5hy0BUOoI7G6yNuA1WsYYWgq/sQY2Tt4gktTNFDWC2hhB3aiDhbFlQXuaQLrip4xwwGEvDJvObcGI8UmsigizjSwupww9YOe1HFGUfojonkWBR5VJzL2qOv9tKB590vtosGFjAxQsia5/PB6JhgjQOKv5y4XwaR+5Z7AvWEaQDm0aTzAAAAAElFTkSuQmCC");
-			} else {
-				del.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAK3RFWHRDcmVhdGlvbiBUaW1lAE1vIDI4IE1haSAyMDA3IDE5OjI5OjA2ICswMTAwKyfyCQAAAAd0SU1FB9cGAw4dMfo2nVUAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAEZ0FNQQAAsY8L/GEFAAABMUlEQVR42pWRzStEURjGf/eO0BBNEk3ZkJqdna0sKCsLJfkoe1sbWfEXWJClyIaVUmKoWVlRKFbGxtYGJRkf43fvTAaNhff2nPPc93nOed9zDvw79ujigDGypP/0FAnYJhHRQPOl46u8USwywKb/xW8bNhEyb66WB2ZDyS1v9CmtaJtzg9SP6gn3DtVDNhjlPdTUY3LJeVxcUSCMWzhg0HxWdsczw1Y+i/aIxEnRrpAS/dRxrS2vtuv/vdhxYQM56ktnqETAId0uXo2rBmzxQYdzRrSpP4l8TWyNbqCZGY3z4tW6Q7Zw8qW1+r3QKcuUKuzbSsCa7Fyk5TccM8GCNX5FWB5HHC883JQVjuQtmotUiZpy9+vKyyTjNpLy6fi5qkTl0DkfrkCvmUcv9PSvR/8EAddN/cjvW0QAAAAASUVORK5CYII=");
-			}
-			del.setAttribute("border", "0");
-			del.setAttribute("title", text);
-			if (nr > -1) del.id = "sitedelta-change" + nr;
-			del.className = "sitedelta-change" + Math.abs(nr);
-			return del;
-		} else if (type == "I" || type == "M") {
-			var ins = doc.createElement("SITEDELTA_INS");
-			if (type == "I")
-				ins.setAttribute("style", "display: inline; outline: " + config.addBorder + " dotted 1px; background: " + config.addBackground + "; color: #000;");
-			else
-				ins.setAttribute("style", "display: inline; outline: " + config.moveBorder + " dotted 1px; background: " + config.moveBackground + "; color: #000;");
-
-			if (nr > -1) ins.id = "sitedelta-change" + nr;
-			ins.className = "sitedelta-change" + Math.abs(nr);
-
-			while (text.indexOf("[") != - 1) {
-				ins.appendChild(doc.createTextNode(text.substring(0, text.indexOf("["))));
-				text = text.substr(text.indexOf("[") + 1);
-				if (text.charAt(0) == " ") {
-					ins.appendChild(doc.createTextNode("["));
-				} else {
-					var img = doc.createElement("IMG");
-					img.setAttribute("src", text.substring(0, text.indexOf("]")));
-					img.setAttribute("border", 0);
-					ins.appendChild(img);
-					text = text.substr(text.indexOf("]") + 1);
-				}
-			}
-			if (text != "")
-				ins.appendChild(doc.createTextNode(text));
-			return ins;
-		} else {
-			var elem = doc.createElement("SITEDELTA_SPAN");
-			elem.appendChild(document.createTextNode(text));
-			return elem;
-		}
 	},
 
 	_split: function (text) {
@@ -385,32 +348,35 @@ var highlightUtils = {
 	_processDeleted: function (diff) {
 		for (var opos = 0, npos = 0; opos <= diff.oldWords.length && npos <= diff.newWords.length;) {
 			if (opos == diff.oldWords.length) {
-				diff.newToOld[npos++] = null;
+				diff.newToOld[npos++] = null; // end of old text - everything else has been inserted
 			} else if (npos == diff.newWords.length) {
-				diff.oldToNew[opos++] = null;
+				diff.oldToNew[opos++] = null; // end of new text - everything else has been deleted
 			} else if (diff.newToOld[npos] == null) {
-				npos++;
+				npos++; // not found in old text - this has been inserted
 			} else if (diff.oldToNew[opos] == null) {
-				opos++;
+				opos++; // not found in new text - this has been deleted
 			} else if (diff.oldToNew[opos] == npos) {
-				opos++; npos++;
+				opos++; npos++; // unchanged - this has been kept
 			} else if (diff.oldToNew[opos] - npos < 0) {
-				diff.oldToNew[opos++] = null;
+				diff.oldToNew[opos++] = null; // old text has appeared in new one earlier - mark as insertion
 			} else if (diff.newToOld[npos] - opos < 0) {
-				diff.newToOld[npos++] = null;
+				diff.newToOld[npos++] = null; // new text has appeared in old one earlier - mark as deletion
 			} else {
+				// moved text - check length to find out whether to prefer deletion or insertion here
 				for (var i = 1; opos + i < diff.oldWords.length && npos + i < diff.newWords.length; i++) {
+					// check length of old text at current position
 					if (diff.oldToNew[opos + i] != diff.oldToNew[opos] + i) {
 						for (var j = opos; j < opos + i; j++)
 							diff.oldToNew[j] = null;
-						opos = opos + i - 1;
-						break;
+						opos = opos + i - 1; // if shorter, mark as deletion
+						break; 
 					}
+					// check length of new text at current position
 					if (diff.newToOld[npos + i] != diff.newToOld[npos] + i) {
 						for (var j = npos; j < npos + i; j++)
 							diff.newToOld[j] = null;
 						npos = npos + i - 1;
-						break;
+						break; // if shorter, mark as insertion
 					}
 				}
 			}

@@ -17,8 +17,6 @@ var options = [
 	{ type: "color", key: "addBorder", elem: "addborder", post: updatePreview },
 	{ type: "color", key: "removeBackground", elem: "removebackground", post: updatePreview },
 	{ type: "color", key: "removeBorder", elem: "removeborder", post: updatePreview },
-	{ type: "color", key: "moveBackground", elem: "movebackground", post: updatePreview },
-	{ type: "color", key: "moveBorder", elem: "moveborder", post: updatePreview },
 	{ type: "color", key: "includeRegion", elem: "includeborder", post: updatePreview },
 	{ type: "color", key: "excludeRegion", elem: "excludeborder", post: updatePreview },
 	{ type: "text", key: "watchDelay", elem: "watchDelay", pre: (value, callback) => callback(parseInt(value)) }
@@ -72,10 +70,6 @@ function updatePreview() {
 	removepreview.style.border = "dotted black 1px";
 	removepreview.style.background = document.querySelector("#removebackground").value;
 	removepreview.style.borderColor = document.querySelector("#removeborder").value;
-	var movepreview = document.querySelector("#movepreview");
-	movepreview.style.border = "dotted black 1px";
-	movepreview.style.background = document.querySelector("#movebackground").value;
-	movepreview.style.borderColor = document.querySelector("#moveborder").value;
 	var includepreview = document.querySelector("#includepreview");
 	includepreview.style.border = "dotted white 2px";
 	includepreview.style.borderColor = document.querySelector("#includeborder").value;

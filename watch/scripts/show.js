@@ -77,7 +77,12 @@ function loadPage(callback) {
 		}
 		var base = doc.createElement("base");
 		base.setAttribute("href", url);
-		if(!doc.querySelector("base[href]")) doc.head.insertBefore(base, doc.head.firstChild);
+		var existingbase = doc.querySelector("base[href]");
+		if(existingbase) {
+			existingbase.parentNode.removeChild(existingbase);
+			base.setAttribute("href", new URL(existingbase.getAttribute("href"), url).href);
+		}
+		doc.head.insertBefore(base, doc.head.firstChild);
 		loadedDocument = doc;
 		showPage(loadedDocument, callback);
 	}, (loaded, total) => {
@@ -270,8 +275,7 @@ function init() {
 				});
 			} else {
 				document.body.classList.add("permissionDenied");
-				var parser = document.createElement("a"); parser.href = url;
-				document.querySelector("#permissionHost").appendChild(document.createTextNode(parser.origin));
+				document.querySelector("#permissionHost").appendChild(document.createTextNode(new URL(url).origin));
 			}
 		});
 	});

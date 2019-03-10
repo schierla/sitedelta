@@ -1,4 +1,4 @@
-body {padding: 12px 8px 4px 8px; min-width: 20em; }
+body {padding: 12px 8px 4px 8px; min-width: 20em; user-select: none; }
 #title {font-weight: bold; margin: 0 0 8px 0; }
 #config {display: none; margin-top: 8px;}
 .section.browser-style {font-weight: bold; margin-top: 8px; }

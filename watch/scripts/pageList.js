@@ -6,7 +6,12 @@ var pageList = {
 
 	openPage: function (key, data, callback) {
 		tabUtils.openResource("show.htm?" + key); 
-		setTimeout(callback, 500);
+		setTimeout(callback, 300);
+	},
+
+	openPageInBackground: function (key, data, callback) {
+		tabUtils.openResourceInBackground("show.htm?" + key); 
+		setTimeout(callback, 300);
 	},
 
 	previewPage: function(list) {
@@ -84,7 +89,7 @@ var pageList = {
 			filter.addEventListener("input", () => list.refresh());
 		}
 		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
-		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage) });
+		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage, this.openPageInBackground) });
 		document.querySelector("#scannow").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.scanPage) });
 		document.querySelector("#markseen").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.markSeen) });
 		document.querySelector("#pages").addEventListener("dblclick", () => list.foreachSelected(this.openPage));

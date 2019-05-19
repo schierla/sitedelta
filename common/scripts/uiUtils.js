@@ -95,14 +95,14 @@ var uiUtils = {
 				this.refresh();
 			},
 
-			foreachSelected: function (callback, after, before) {
-				if (before !== undefined) before();
+			foreachSelected: function (firstcallback, nextcallback, after) {
+				if (nextcallback === undefined) nextcallback = firstcallback;
 				var options = this.container.options;
 				for (var i = 0; i < options.length; i++) {
 					if (options[i].selected) {
 						options[i].selected = false;
 						this.select();
-						callback(this.shown[i], this.elements[this.shown[i]].data, () => this.foreachSelected(callback, after));
+						firstcallback(this.shown[i], this.elements[this.shown[i]].data, () => this.foreachSelected(nextcallback, nextcallback, after));
 						return;
 					}
 				}

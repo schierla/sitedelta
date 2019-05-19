@@ -4,10 +4,15 @@ var pageList = {
 	deletePage: function (key, data, callback) {
 		ioUtils.remove(key, callback);
 	},
-
+	
 	openPage: function (key, data, callback) {
 		chrome.tabs.create({ url: key }); 
-		setTimeout(callback, 500);
+		setTimeout(callback, 300);
+	},
+
+	openPageInBackground: function (key, data, callback) {
+		chrome.tabs.create({ url: key, active: false }); 
+		setTimeout(callback, 300);
 	},
 
 	scanPage: function (key, data, callback, tabId) {
@@ -77,11 +82,12 @@ var pageList = {
 		}
 
 		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
-		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage) });
+		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage, this.openPageInBackground) });
 		document.querySelector("#scannow").addEventListener("click",
 			() => chrome.tabs.create({ url: "about:blank" }, tab => {
 				pageList.selectAllIfNone();
 				list.foreachSelected(
+					(key, data, callback) => this.scanPage(key, data, callback, tab.id),
 					(key, data, callback) => this.scanPage(key, data, callback, tab.id),
 					() => { chrome.tabs.remove(tab.id) }
 				)

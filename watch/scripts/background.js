@@ -38,9 +38,15 @@ function openPages(pages) {
 	if(pages.length == 0) return;
 	var url = pages.shift();
 	tabUtils.openResource("show.htm?" + url);
-	setTimeout(() => openPages(pages), 500);
+	setTimeout(() => openPagesInBackground(pages), 300);
 }
 
+function openPagesInBackground(pages) {
+	if(pages.length == 0) return;
+	var url = pages.shift();
+	tabUtils.openResourceInBackground("show.htm?" + url);
+	setTimeout(() => openPagesInBackground(pages), 300);
+}
 
 function scanPages(pages) {
 	if(pages.length == 0) return;

@@ -3,6 +3,9 @@ var tabUtils = {
 	openResource: function (url) {
 		chrome.tabs.create({ url: chrome.runtime.getURL(url) });
 	},
+	openResourceInBackground: function (url) {
+		chrome.tabs.create({ url: chrome.runtime.getURL(url), active: false });
+	},
 	getActive: function (callback) {
 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 			return (callback !== undefined) ? callback(tabs[0]) : null;

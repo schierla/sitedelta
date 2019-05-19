@@ -35,6 +35,7 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; user-select: none; }
 
 body {background-position: 8px 12px; background-repeat: no-repeat; background-size: 2em; padding-left: 2.5em; }
 #title {padding-left: 2.5em; }
+#textfields {padding-left: 2.5em; }
 body.enabled {background-image: url(../common/icons/unchanged.svg); }
 body.enabled.changed {background-image: url(../common/icons/changed.svg); }
 body.disabled {background-image: url(../common/icons/inactive.svg); }

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "build/typescript",
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "module": "none",
+        "target": "es2017",
+        "allowJs": true
+    },
+    "include": [
+        "./common/scripts/",
+        "./highlight/scripts/",
+        "./watch/scripts/"
+    ]
+}

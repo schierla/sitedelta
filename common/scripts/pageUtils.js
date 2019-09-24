@@ -1,144 +1,135 @@
 // page operations
 var pageUtils = {
-	list: function (callback) {
-		ioUtils.findInIndex((url, status) => url, callback);
+	list: async function () {
+		return await ioUtils.findInIndex((url, status) => url);
 	},
-	listChanged: function (callback) {
-		ioUtils.findInIndex((url, status) => status["changes"] <= 0 ? null : url, callback);
+	listChanged: async function () {
+		return await ioUtils.findInIndex((url, status) => status["changes"] <= 0 ? null : url);
 	},
-	getStatus: function (url, callback) {
-		ioUtils.findInIndex((furl, fstatus) => (url == furl ? fstatus : null),
-			(result) => (callback !== undefined) ? callback(result.length > 0 ? result[0] : null) : null);
+	getStatus: async function (url) {
+		var result = await ioUtils.findInIndex((furl, fstatus) => (url == furl ? fstatus : null));
+		return result.length > 0 ? result[0] : null;
 	},
-	getChanges: function (url, callback) {
-		pageUtils.getStatus(url,
-			(status) => (callback !== undefined) ? callback(status !== null && "changes" in status ? status["changes"] : 0) : null);
+	getChanges: async function (url) {
+		var status = await pageUtils.getStatus(url);
+		return status !== null && "changes" in status ? status["changes"] : 0;
 	},
-	getNextScan: function (url, callback) {
-		pageUtils.getStatus(url,
-			(status) => (callback !== undefined) ? callback(status !== null && "nextScan" in status ? status["nextScan"] : Date.now() + 60000) : null);
+	getNextScan: async function (url) {
+		var status = pageUtils.getStatus(url);
+		return status !== null && "nextScan" in status ? status["nextScan"] : Date.now() + 60000;
 	},
-	getTitle: function (url, callback) {
-		pageUtils.getStatus(url, status => {
-			if (status === null) return (callback !== undefined) ? callback(null) : null;
-			if ("title" in status)
-				return (callback !== undefined) ? callback(status["title"]) : null;
-			else
-				ioUtils.get(url, "title", title => {
-					pageUtils.setTitle(url, title, () => {
-						return (callback !== undefined) ? callback(title) : null;
-					});
-				});
-		});
+	getTitle: async function (url) {
+		var status = await pageUtils.getStatus(url);
+		if (status === null) return null;
+		if ("title" in status)
+			return status["title"];
+		else {
+			var title = await ioUtils.get(url, "title");
+			await pageUtils.setTitle(url, title);
+			return title;
+		}
 	},
-	getContent: function (url, callback) {
-		ioUtils.get(url, "content", callback);
+	getContent: async function (url) {
+		return await ioUtils.get(url, "content");
 	},
-	getConfig: function (url, callback) {
-		ioUtils.get(url, "config", callback);
+	getConfig: async function (url) {
+		return await ioUtils.get(url, "config");
 	},
-	getEffectiveConfig: function (url, callback) {
-		pageUtils.getConfig(url, (config) => {
-			if (config === null) return (callback !== undefined) ? callback(null) : null;
-			else configUtils.getEffectiveConfig(config, callback);
-		});
+	getEffectiveConfig: async function (url) {
+		var config = await pageUtils.getConfig(url);
+		if (config === null) return null;
+		return await configUtils.getEffectiveConfig(config);
 	},
-	getEffectiveConfigProperty: function (url, property, callback) {
-		pageUtils.getEffectiveConfig(url, (config) => (callback !== undefined) ? callback(config[property]) : null);
+	getEffectiveConfigProperty: async function (url, property) {
+		var config = await pageUtils.getEffectiveConfig(url);
+		return config[property];
 	},
-	getOrCreateEffectiveConfig: function (url, title, callback) {
-		pageUtils.getEffectiveConfig(url, function (config) {
-			if (config === null) {
-				pageUtils.create(url, title,
-					() => pageUtils.getEffectiveConfig(url, callback));
-			} else {
-				return (callback !== undefined) ? callback(config) : null;
-			}
-		});
+	getOrCreateEffectiveConfig: async function (url, title) {
+		var config = await pageUtils.getEffectiveConfig(url);
+		if (config === null) {
+			await pageUtils.create(url, title);
+			return await pageUtils.getEffectiveConfig(url);
+		} else {
+			return config;
+		}
 	},
-	create: function (url, title, callback) {
+	create: async function (url, title) {
 		var pagetitle = title.replace(/[\n\r]/g, ' ');
-		configUtils.getPresetConfig(url, (config) => {
-			pageUtils.setStatus(url, { "title": title },
-				() => pageUtils.setTitle(url, pagetitle,
-					() => pageUtils.setConfig(url, config,
-						() => (callback !== undefined) ? callback() : null)));
-		});
+		var config = await configUtils.getPresetConfig(url);
+		await pageUtils.setStatus(url, { "title": title });
+		await pageUtils.setTitle(url, pagetitle);
+		await pageUtils.setConfig(url, config);
 	},
-	remove: function (url, callback) {
-		ioUtils.remove(url, callback);
+	remove: async function (url) {
+		await ioUtils.remove(url);
 	},
-	setStatus: function (url, status, callback) {
-		ioUtils.setInIndex(url, status, callback);
+	setStatus: async function (url, status) {
+		await ioUtils.setInIndex(url, status);
 	},
-	setStatusKey: function (url, key, value, callback) {
-		pageUtils.getStatus(url, (status) => {
-			if (status === null) status = {};
-			if (key in status && status[key] == value) return (callback !== undefined) ? callback() : null;
-			status[key] = value; pageUtils.setStatus(url, status, callback);
-		});
+	setStatusKey: async function (url, key, value) {
+		var status = await pageUtils.getStatus(url);
+		if (status === null) status = {};
+		if (key in status && status[key] == value) return;
+		status[key] = value; 
+		await pageUtils.setStatus(url, status);
 	},
-	setNextScan: function (url, nextScan, callback) {
-		pageUtils.setStatusKey(url, "nextScan", nextScan, callback);
+	setNextScan: async function (url, nextScan) {
+		await pageUtils.setStatusKey(url, "nextScan", nextScan);
 	},
-	setChanges: function (url, changes, callback) {
-		pageUtils.setStatusKey(url, "changes", changes, callback);
+	setChanges: async function (url, changes) {
+		await pageUtils.setStatusKey(url, "changes", changes);
 	},
-	setTitle: function (url, title, callback) {
-		ioUtils.put(url, "title", title, () => {
-			pageUtils.setStatusKey(url, "title", title, callback);
-		});
+	setTitle: async function (url, title) {
+		await ioUtils.put(url, "title", title);
+		await pageUtils.setStatusKey(url, "title", title);
 	},
-	setContent: function (url, content, callback) {
-		ioUtils.put(url, "content", content, callback);
+	setContent: async function (url, content) {
+		await ioUtils.put(url, "content", content);
 	},
-	setConfig: function (url, config, callback) {
-		ioUtils.put(url, "config", config, callback);
+	setConfig: async function (url, config) {
+		await ioUtils.put(url, "config", config);
 	},
-	setConfigProperty: function (url, property, value, callback) {
-		pageUtils.getConfig(url,
-			(config) => { config[property] = value; pageUtils.setConfig(url, config, callback); });
+	setConfigProperty: async function (url, property, value) {
+		var config = await pageUtils.getConfig(url);
+		config[property] = value; 
+		await pageUtils.setConfig(url, config);
 	},
-	removeInclude: function (url, region, callback) {
-		pageUtils.getEffectiveConfigProperty(url, "includes", function (includes) {
-			var newlist = [];
-			for (var i = 0; i < includes.length; i++) {
-				if (includes[i] != region) newlist.push(includes[i]);
-			}
-			if (newlist.length == 0) newlist.push("/html/body[1]");
-			pageUtils.setConfigProperty(url, "includes", newlist, callback);
-		});
+	removeInclude: async function (url, region) {
+		var includes = await pageUtils.getEffectiveConfigProperty(url, "includes");
+		var newlist = [];
+		for (var i = 0; i < includes.length; i++) {
+			if (includes[i] != region) newlist.push(includes[i]);
+		}
+		if (newlist.length == 0) newlist.push("/html/body[1]");
+		await pageUtils.setConfigProperty(url, "includes", newlist);
 	},
-	removeExclude: function (url, region, callback) {
-		pageUtils.getEffectiveConfigProperty(url, "excludes", function (excludes) {
-			var newlist = [];
-			for (var i = 0; i < excludes.length; i++) {
-				if (excludes[i] != region) newlist.push(excludes[i]);
-			}
-			pageUtils.setConfigProperty(url, "excludes", newlist, callback);
-		});
+	removeExclude: async function (url, region) {
+		var excludes = await pageUtils.getEffectiveConfigProperty(url, "excludes");
+		var newlist = [];
+		for (var i = 0; i < excludes.length; i++) {
+			if (excludes[i] != region) newlist.push(excludes[i]);
+		}
+		await pageUtils.setConfigProperty(url, "excludes", newlist);
 	},
-	addInclude: function (url, xpath, callback) {
+	addInclude: async function (url, xpath) {
 		if (xpath === null) return;
-		pageUtils.getEffectiveConfigProperty(url, "includes", function (includes) {
-			var newlist = [];
-			for (var i = 0; i < includes.length; i++) {
-				if (includes[i] != "/html/body[1]") newlist.push(includes[i]);
-			}
-			newlist.push(xpath);
-			pageUtils.setConfigProperty(url, "includes", newlist, callback);
-		});
+		var includes = await pageUtils.getEffectiveConfigProperty(url, "includes");
+		var newlist = [];
+		for (var i = 0; i < includes.length; i++) {
+			if (includes[i] != "/html/body[1]") newlist.push(includes[i]);
+		}
+		newlist.push(xpath);
+		await pageUtils.setConfigProperty(url, "includes", newlist);
 	},
-	addExclude: function (url, xpath, callback) {
+	addExclude: async function (url, xpath) {
 		if (xpath === null) return;
-		pageUtils.getEffectiveConfigProperty(url, "excludes", function (excludes) {
-			var newlist = [];
-			for (var i = 0; i < excludes.length; i++) {
-				newlist.push(excludes[i]);
-			}
-			newlist.push(xpath);
-			pageUtils.setConfigProperty(url, "excludes", newlist, callback);
-		});
+		var excludes = await pageUtils.getEffectiveConfigProperty(url, "excludes");
+		var newlist = [];
+		for (var i = 0; i < excludes.length; i++) {
+			newlist.push(excludes[i]);
+		}
+		newlist.push(xpath);
+		await pageUtils.setConfigProperty(url, "excludes", newlist);
 	}
 };
 

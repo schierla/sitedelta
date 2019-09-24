@@ -1,17 +1,21 @@
 // tab operations
 var tabUtils = {
-	openResource: function (url) {
-		chrome.tabs.create({ url: chrome.runtime.getURL(url) });
-	},
-	openResourceInBackground: function (url) {
-		chrome.tabs.create({ url: chrome.runtime.getURL(url), active: false });
-	},
-	getActive: function (callback) {
-		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-			return (callback !== undefined) ? callback(tabs[0]) : null;
+	openResource: async function (url) {
+		return new Promise(resolve => {
+			chrome.tabs.create({ url: chrome.runtime.getURL(url) }, resolve);
 		});
 	},
-	showIcon: function (tabId, current, changes) {
+	openResourceInBackground: async function (url) {
+		return new Promise(resolve => {
+			chrome.tabs.create({ url: chrome.runtime.getURL(url), active: false }, resolve);
+		});
+	},
+	getActive: async function () {
+		return new Promise(resolve => {
+			chrome.tabs.query({ active: true, currentWindow: true }, tabs => resolve(tabs[0]));
+		});
+	},
+	showIcon: async function (tabId, current, changes) {
 		if (chrome.webNavigation) {
 			if (changes === undefined) {
 				chrome.browserAction.setBadgeText({ text: "", tabId: tabId });
@@ -27,107 +31,91 @@ var tabUtils = {
 			}
 		}
 	},
-	getStatus: function (tabId, callback) {
-		tabUtils._callContentScript(tabId, { command: "getStatus" }, callback);
+	getStatus: async function (tabId) {
+		return await tabUtils._callContentScript(tabId, { command: "getStatus" });
 	},
-	getContent: function (tabId, url, callback) {
-		pageUtils.getEffectiveConfig(url, function (config) {
-			tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {
-				return (callback !== undefined) ? callback(content) : null;
-			});
-		});
+	getContent: async function (tabId, url) {
+		var config = await pageUtils.getEffectiveConfig(url);
+		var content = await tabUtils._callContentScript(tabId, { command: "getContent", config: config });
+		return content;
 	},
 
-	checkChanges: function(tabId, url, callback) {
-		pageUtils.getEffectiveConfig(url, function (config) {
-			if (config === null) return (callback !== undefined) ? callback(-1) : null;
-			pageUtils.getContent(url, function (oldcontent) {
-				if (oldcontent === null) return (callback !== undefined) ? callback(-1) : null;
-				tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {
-					if (content === undefined) return (callback !== undefined) ? callback(-1) : null;
-					if (textUtils.isEqual(oldcontent, content, config)) { 
-						// unchanged
-						return (callback !== undefined) ? callback(0) : null;
-					} else {
-						return (callback !== undefined) ? callback(1) : null
-					}
-				});
-			});
-		});
+	checkChanges: async function(tabId, url) {
+		var config = await pageUtils.getEffectiveConfig(url);
+		if (config === null) return -1;
+		var oldcontent = await pageUtils.getContent(url);
+		if (oldcontent === null) return -1;
+		var content = await tabUtils._callContentScript(tabId, { command: "getContent", config: config });
+		if (content === undefined) return -1;
+		if (textUtils.isEqual(oldcontent, content, config)) { 
+			// unchanged
+			return 0;
+		} else {
+			return 1;
+		}
 	},
-	highlightChanges: function (tabId, url, callback) {
-		pageUtils.getEffectiveConfig(url, function (config) {
-			tabUtils._callContentScript(tabId, { command: "getContent", config: config }, function (content) {
-				if (content === undefined) return (callback !== undefined) ? callback() : null;
-				pageUtils.getContent(url, function (oldcontent) {
-					if (oldcontent === null) oldcontent = "";
-					pageUtils.setContent(url, content, function () {
-						tabUtils._callContentScript(tabId, { command: "highlightChanges", config: config, content: oldcontent }, function (status) {
-							return (callback !== undefined) ? callback(status) : null;
-						});
-					});
-				});
-			});
-		});
+	highlightChanges: async function (tabId, url) {
+		var config = await pageUtils.getEffectiveConfig(url);
+		var content = await tabUtils._callContentScript(tabId, { command: "getContent", config: config });
+		if (content === undefined) return;
+		var oldcontent = await pageUtils.getContent(url);
+		if (oldcontent === null) oldcontent = "";
+		await pageUtils.setContent(url, content);
+		var status = await tabUtils._callContentScript(tabId, { command: "highlightChanges", config: config, content: oldcontent });
+		return status; 
 	},
-	showOutline: function (tabId, xpath, color, callback) {
-		tabUtils._callContentScript(tabId, { command: "showOutline", xpath: xpath, color: color }, callback);
+	showOutline: async function (tabId, xpath, color) {
+		await tabUtils._callContentScript(tabId, { command: "showOutline", xpath: xpath, color: color });
 	},
-	removeOutline: function (tabId, callback) {
-		tabUtils._callContentScript(tabId, { command: "removeOutline" }, callback);
+	removeOutline: async function (tabId) {
+		await tabUtils._callContentScript(tabId, { command: "removeOutline" });
 	},
-	selectInclude: function (tabId, url, callback) {
-		tabUtils._callBackgroundScript({ command: "addIncludeRegion", tab: tabId, url: url }, callback);
+	selectInclude: async function (tabId, url) {
+		return await tabUtils._callBackgroundScript({ command: "addIncludeRegion", tab: tabId, url: url });
 	},
-	selectExclude: function (tabId, url, callback) {
-		tabUtils._callBackgroundScript({ command: "addExcludeRegion", tab: tabId, url: url }, callback);
+	selectExclude: async function (tabId, url) {
+		return await tabUtils._callBackgroundScript({ command: "addExcludeRegion", tab: tabId, url: url });
 	},
-	loadInTab: function (tabId, url, callback) {
-		tabUtils._callBackgroundScript({ command: "loadInTab", tab: tabId, url: url }, callback);
+	loadInTab: async function (tabId, url) {
+		return await tabUtils._callBackgroundScript({ command: "loadInTab", tab: tabId, url: url });
 	},
-	selectRegion: function (tabId, callback) {
-		tabUtils._callContentScript(tabId, { command: "selectRegion" }, callback);
+	selectRegion: async function (tabId) {
+		return await tabUtils._callContentScript(tabId, { command: "selectRegion" });
 	},
 
 	// internal functions
-	_callBackgroundScript: function (command, callback) {
-		chrome.runtime.sendMessage(command, callback);
-	},
-	_callContentScript: function (tabId, command, callback) {
-		chrome.tabs.sendMessage(tabId, command, function (status) {
-			if (status === undefined) {
-				var ignore = chrome.runtime.lastError;
-				var scripts = [
-					"/common/scripts/textUtils.js",
-					"/common/scripts/regionUtils.js",
-					"/common/scripts/highlightUtils.js",
-					"/common/scripts/contentScript.js"
-				];
-				tabUtils._executeScripts(tabId, scripts, function () {
-					chrome.tabs.sendMessage(tabId, command, function (status) {
-						if (status === undefined) {
-							console.log("Error calling content script '" + command.command + "': " +
-								chrome.runtime.lastError);
-							return (callback !== undefined) ? callback() : null;
-						} else {
-							return (callback !== undefined) ? callback(status) : null;
-						}
-					});
-				});
-			} else {
-				return (callback !== undefined) ? callback(status) : null;
-			}
+	_callBackgroundScript: async function (command) {
+		return new Promise(resolve => {
+			chrome.runtime.sendMessage(command, resolve);
 		});
 	},
-	_executeScripts: function (tabId, files, callback) {
-		if (files.length == 0) {
-			return (callback !== undefined) ? callback() : null;
+	_callContentScript: async function (tabId, command) {
+		var status = await new Promise(resolve => chrome.tabs.sendMessage(tabId, command, resolve));
+		if (status === undefined) {
+			var ignore = chrome.runtime.lastError;
+			var scripts = [
+				"/common/scripts/textUtils.js",
+				"/common/scripts/regionUtils.js",
+				"/common/scripts/highlightUtils.js",
+				"/common/scripts/contentScript.js"
+			];
+			await tabUtils._executeScripts(tabId, scripts);
+			var status = await new Promise(resolve => chrome.tabs.sendMessage(tabId, command, resolve));
+			if (status === undefined) {
+				console.log("Error calling content script '" + command.command + "': " +
+					chrome.runtime.lastError);
+				return;
+			} else {
+				return status;
+			}
 		} else {
-			var file = files.splice(0, 1);
-			chrome.tabs.executeScript(tabId, { file: file[0] }, function (results) {
-				if (results === undefined) console.log("Error executing script: " + chrome.runtime.lastError);
-				tabUtils._executeScripts(tabId, files, callback);
-			});
+			return status;
+		}
+	},
+	_executeScripts: async function (tabId, files) {
+		for(var i=0; i<files.length; i++) {
+			var results = await new Promise(resolve => chrome.tabs.executeScript(tabId, { file: files[i] }, resolve));
+			if (results === undefined) console.log("Error executing script: " + chrome.runtime.lastError);
 		}
 	}
 };

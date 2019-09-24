@@ -1,85 +1,89 @@
-
 var ioUtils = {
 	clean: function (url) {
 		return url.replace(/http:\/\/[^\/]+@/i, "http://").replace(/https:\/\/[^\/]+@/i, "https://");
 	},
-	getConfig: function (callback) {
-		chrome.storage.local.get("config", function (existing) {
-			if ("config" in existing) {
-				return (callback !== undefined) ? callback(existing["config"]) : null;
-			} else {
-				return (callback !== undefined) ? callback({}) : null;
-			}
-		});
+	getConfig: async function () {
+		var config = await ioUtils._get("config");
+		if(config) return config; else return {};
 	},
-	setConfig: function (config, callback) {
-		chrome.storage.local.set({ "config": config }, callback);
+	setConfig: async function (config) {
+		await ioUtils._set("config", config);
 	},
-	listIndex: function (callback) {
-		chrome.storage.local.get("index", function (existing) {
-			if ("index" in existing) {
-				return (callback !== undefined) ? callback(existing["index"]) : null;
-			} else {
-				return (callback !== undefined) ? callback({}) : null;
-			}
-		});
+	listIndex: async function () {
+		var index = await ioUtils._get("index");
+		if(index) return index; else return {};
 	},
-	observeIndex: function (callback) {
+	observeIndex: async function (observer) {
 		chrome.storage.onChanged.addListener((changes, scope) => {
 			if (scope == "local" && "index" in changes) {
-				return (callback !== undefined) ? callback(changes["index"].newValue) : null;
+				observer(changes["index"].newValue);
 			}
 		});
-		ioUtils.listIndex(callback);
+		observer(await ioUtils.listIndex());
 	},
-	findInIndex: function (selector, callback) {
-		chrome.storage.local.get("index", function (existing) {
-			var ret = [];
-			if ("index" in existing) {
-				for (var url in existing["index"]) {
-					var result = selector(url, existing["index"][url]);
-					if (result !== null) ret.push(result);
-				}
+	findInIndex: async function (selector) {
+		var index = await ioUtils._get("index");
+		var ret = [];
+		if (index) {
+			for (var url in index) {
+				var result = selector(url, index[url]);
+				if (result !== null) ret.push(result);
 			}
-			return (callback !== undefined) ? callback(ret) : null;
-		});
+		}
+		return ret;
 	},
-	setInIndex: function (url, status, callback) {
-		chrome.storage.local.get("index", function (existing) {
-			if (!("index" in existing)) existing["index"] = {};
-			existing["index"][ioUtils.clean(url)] = status;
-			chrome.storage.local.set(existing, callback);
-		});
+	setInIndex: async function (url, status) {
+		var index = await ioUtils._get("index");
+		if (!index) index = {};
+		index[ioUtils.clean(url)] = status;
+		await ioUtils._set("index", index);
 	},
-	get: function (url, key, callback) {
+	get: async function (url, key) {
 		var storagekey = ioUtils.clean(url);
-		chrome.storage.local.get(storagekey, function (existing) {
-			if (storagekey in existing && key in existing[storagekey]) {
-				return (callback !== undefined) ? callback(existing[storagekey][key]) : null;
-			} else {
-				return (callback !== undefined) ? callback(null) : null;
-			}
-		});
+		var data = await ioUtils._get(storagekey);
+		if (data && key in data) {
+			return data[key];
+		} else {
+			return null; 
+		}
 	},
-	put: function (url, key, data, callback) {
+	put: async function (url, key, data) {
 		var storagekey = ioUtils.clean(url);
-		chrome.storage.local.get(storagekey, function (existing) {
-			if (!(storagekey in existing)) {
-				existing = {};
-				existing[storagekey] = {};
-				ioUtils.setInIndex(url, {});
-			}
-			existing[storagekey][key] = data;
-			chrome.storage.local.set(existing, callback);
-		});
+		var olddata = await ioUtils._get(storagekey);
+		if (!olddata) {
+			olddata = {};
+			await ioUtils.setInIndex(url, {});
+		}
+		olddata[key] = data;
+		await ioUtils._set(storagekey, olddata);
 	},
-	remove: function (url, callback) {
-		url = ioUtils.clean(url);
-		chrome.storage.local.remove(url, function () {
-			chrome.storage.local.get("index", function (existing) {
-				delete existing["index"][url];
-				chrome.storage.local.set(existing, callback);
+	remove: async function (url) {
+		var storagekey = ioUtils.clean(url);
+		await ioUtils._remove(storagekey);
+		var index = await ioUtils._get("index");
+		delete index[url];
+		await ioUtils._set("index", index);
+	}, 
+	_get: async function(key) {
+		return new Promise(resolve => {
+			chrome.storage.local.get(key, data => {
+				if(key in data) 
+					resolve(data[key]); 
+				else 
+					resolve(null); 
 			});
+		});
+	}, 
+	_set: async function(key, value) {
+		var data = {}; 
+		data[key] = value;
+		return new Promise(resolve => {
+			chrome.storage.local.set(data, resolve);
+		});
+	}, 
+	_remove: async function(key) {
+		return new Promise(resolve => {
+			chrome.storage.local.remove(key, resolve);
 		});
 	}
 };

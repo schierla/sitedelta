@@ -1,87 +1,74 @@
-function scanPage(url, callback) {
-	configUtils.getDefaultConfig(config => {
-		console.log("SiteDelta: Scanning " + url);
-		lastScan = Date.now();
-		watchUtils.scanPage(url, changes => {
-			if(changes == 0) {
-				watchUtils.adaptDelay(url, 0);
-			} else if(changes == 1) {
-				if(config.notifyChanged) {
-					pageUtils.getTitle(url, function (title) {
-						chrome.notifications.create(url, {
-							"type": "basic",
-							"iconUrl": chrome.extension.getURL("common/icons/changed.svg"),
-							"title": chrome.i18n.getMessage("watchNotificationChanged"),
-							"message": title
-						});
-					});
-				}
-				watchUtils.adaptDelay(url, 1);
-			} else if(changes == -1) {
-				if(config.notifyFailed) {
-					pageUtils.getTitle(url, function (title) {
-						chrome.notifications.create(url, {
-							"type": "basic",
-							"iconUrl": chrome.extension.getURL("common/icons/inactive.svg"),
-							"title": chrome.i18n.getMessage("watchNotificationFailed"),
-							"message": title
-						});
-					});
-				}
-			}
-			return (callback !== undefined) ? callback() : null;
-		});
-	});
+async function scanPage(url) {
+	var config = await configUtils.getDefaultConfig();
+	console.log("SiteDelta: Scanning " + url);
+	lastScan = Date.now();
+	var changes = await watchUtils.scanPage(url);
+	if(changes == 0) {
+		await watchUtils.adaptDelay(url, 0);
+	} else if(changes == 1) {
+		if(config.notifyChanged) {
+			var title = await pageUtils.getTitle(url);
+			chrome.notifications.create(url, {
+				"type": "basic",
+				"iconUrl": chrome.extension.getURL("common/icons/changed.svg"),
+				"title": chrome.i18n.getMessage("watchNotificationChanged"),
+				"message": title
+			});
+		}
+		await watchUtils.adaptDelay(url, 1);
+	} else if(changes == -1) {
+		if(config.notifyFailed) {
+			var title = await pageUtils.getTitle(url);
+			chrome.notifications.create(url, {
+				"type": "basic",
+				"iconUrl": chrome.extension.getURL("common/icons/inactive.svg"),
+				"title": chrome.i18n.getMessage("watchNotificationFailed"),
+				"message": title
+			});
+		}
+	}
 }
 
-function openPages(pages) {
-	if(pages.length == 0) return;
-	var url = pages.shift();
-	tabUtils.openResource("show.htm?" + url);
-	setTimeout(() => openPagesInBackground(pages), 300);
+async function openPages(pages) {
+	for(var i=0; i<pages.length; i++) {
+		if(i==0) 
+			await tabUtils.openResource("show.htm?" + pages[i]);
+		else 
+			await tabUtils.openResourceInBackground("show.htm?" + pages[i]);
+		await new Promise(resolve => setTimeout(resolve, 300));
+	}
 }
 
-function openPagesInBackground(pages) {
-	if(pages.length == 0) return;
-	var url = pages.shift();
-	tabUtils.openResourceInBackground("show.htm?" + url);
-	setTimeout(() => openPagesInBackground(pages), 300);
-}
-
-function scanPages(pages) {
-	if(pages.length == 0) return;
-	var url = pages.shift();
-	scanPage(url, () => scanPages(pages));
+async function scanPages(pages) {
+	for(var i=0; i<pages.length; i++) {
+		await scanPage(pages[i]);
+	}
 }
 
 var messageListener = function (request, sender, sendResponse) {
 	var hiddenFields = ["configVersion", "includes", "excludes", "scanOnLoad", "highlightOnLoad", "enableContextMenu"];
 	if (request.command == "openChanged") {
-		pageUtils.listChanged(function (urls) {
-			openPages(urls);
-		});
+		pageUtils.listChanged().then(openPages);
 	} else if(request.command == "scanAll") {
-		pageUtils.list(function (urls) {
-			scanPages(urls);
-		});
+		pageUtils.list().then(scanPages);
 	} else if (request.command == "transferInfo") {
 		sendResponse({ name: "SiteDelta Watch", id: "sitedelta-watch", import: ["config", "pages"], export: ["config", "pages"] });
 	} else if (request.command == "transferImport") {
 		if (request.scope == "config") {
 			try {
 				var config = JSON.parse(request.data);
-				transferUtils.importConfig(config, hiddenFields, (imported, skipped) => {
-					sendResponse("Configuration import completed: \n" + imported + " imported, " + skipped + " skipped")
-				});
+				var result = transferUtils.importConfig(config, hiddenFields).then(result => 
+					sendResponse("Configuration import completed: \n" + result.imported + " imported, " + result.skipped + " skipped")
+				);
 			} catch (e) {
 				sendResponse("Configuration import failed: \n" + e);
 			}
 		} else if (request.scope == "pages") {
 			try {
 				var pages = JSON.parse(request.data);
-				transferUtils.importPages(pages, (imported, skipped) => {
-					sendResponse("Page import completed: \n" + imported + " imported, " + skipped + " skipped")
-				});
+				transferUtils.importPages(pages).then(result => 
+					sendResponse("Page import completed: \n" + result.imported + " imported, " + result.skipped + " skipped")
+				);
 			} catch (e) {
 				sendResponse("Page import failed: \n" + e);
 			}
@@ -89,13 +76,13 @@ var messageListener = function (request, sender, sendResponse) {
 		return true;
 	} else if (request.command == "transferExport") {
 		if (request.scope == "config") {
-			transferUtils.exportConfig(hiddenFields, config => {
+			transferUtils.exportConfig(hiddenFields).then(config =>
 				sendResponse(JSON.stringify(config, null, "  "))
-			});
+			);
 		} else if (request.scope == "pages") {
-			transferUtils.exportPages(pages => {
-				sendResponse(JSON.stringify(pages, null, "  "));
-			});
+			transferUtils.exportPages().then(pages => 
+				sendResponse(JSON.stringify(pages, null, "  "))
+			);
 		}
 		return true;
 	}

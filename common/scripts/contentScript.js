@@ -37,15 +37,15 @@ if (contentscript === undefined) {
 				if (contentscript.state == STATE.SELECTREGION) {
 					regionUtils.abortSelect();
 					contentscript.state = STATE.LOADED;
-					contentscript.callback(null);
-					contentscript.callback = null;
+					contentscript.regionResult(null);
+					contentscript.regionResult = null;
 					sendResponse(prompt(chrome.i18n.getMessage("configRegionXpath"), ""));
 				} else {
 					contentscript.state = STATE.SELECTREGION;
-					contentscript.callback = sendResponse;
-					regionUtils.selectRegion(document, function (xpath) {
+					contentscript.regionResult = sendResponse;
+					regionUtils.selectRegion(document).then(function(xpath) {
 						contentscript.state = STATE.LOADED;
-						contentscript.callback = null;
+						contentscript.regionResult = null;
 						sendResponse(xpath);
 					});
 					return true;
@@ -63,7 +63,7 @@ if (contentscript === undefined) {
 		numChanges: 0,
 		currentChange: 0,
 		content: null,
-		callback: null
+		regionResult: null
 	}
 
 	chrome.runtime.onMessage.addListener(contentscript.messageHandler);

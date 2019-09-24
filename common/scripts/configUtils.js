@@ -1,30 +1,27 @@
 var configUtils = {
-	getDefaultConfig: function (callback) {
-		ioUtils.getConfig((config) => {
-			if (configUtils._upgrade(config)) {
-				ioUtils.setConfig(config);
-			}
-			return (callback !== undefined) ? callback(config) : null;
-		});
+	getDefaultConfig: async function () {
+		var config = await ioUtils.getConfig();
+		if (configUtils._upgrade(config)) {
+			ioUtils.setConfig(config);
+		}
+		return config;
 	},
-	setDefaultConfigProperties: function (update, callback) {
-		configUtils.getDefaultConfig((config) => {
-			for (var key in update) config[key] = update[key];
-			ioUtils.setConfig(config, callback);
-		});
+	setDefaultConfigProperties: async function (update) {
+		var config = await configUtils.getDefaultConfig();
+		for (var key in update) config[key] = update[key];
+		await ioUtils.setConfig(config);
 	},
 
-	getPresetConfig: function (uri, callback) {
-		return (callback !== undefined) ? callback({}) : null;
+	getPresetConfig: async function (uri) {
+		return {};
 	},
 
-	getEffectiveConfig: function (override, callback) {
-		configUtils.getDefaultConfig((config) => {
-			var ret = {};
-			for (var key in config) ret[key] = config[key];
-			for (var key in override) ret[key] = override[key];
-			return (callback !== undefined) ? callback(ret) : null;
-		});
+	getEffectiveConfig: async function (override) {
+		var config = await configUtils.getDefaultConfig();
+		var ret = {};
+		for (var key in config) ret[key] = config[key];
+		for (var key in override) ret[key] = override[key];
+		return ret;
 	},
 
 	_upgrade: function (config) {

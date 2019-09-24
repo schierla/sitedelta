@@ -29,42 +29,46 @@ var regionUtils = {
 		}
 	},
 
-	selectRegion: function (doc, callback) {
-		regionUtils._doc = doc;
-		regionUtils._needText = false;
-		regionUtils._destelement = null;
-		regionUtils._callback = callback;
-		doc.addEventListener("mouseover", regionUtils._mouseover, true);
-		doc.addEventListener("mousedown", regionUtils._mousedown, true);
-		doc.addEventListener("mouseup", regionUtils._mouseup, true);
-		doc.addEventListener("mouseout", regionUtils._mouseout, true);
+	selectRegion: function (doc) {
+		return new Promise(resolve => {
+			regionUtils._doc = doc;
+			regionUtils._needText = false;
+			regionUtils._destelement = null;
+			regionUtils._resolve = resolve;
+			doc.addEventListener("mouseover", regionUtils._mouseover, true);
+			doc.addEventListener("mousedown", regionUtils._mousedown, true);
+			doc.addEventListener("mouseup", regionUtils._mouseup, true);
+			doc.addEventListener("mouseout", regionUtils._mouseout, true);
+		});
 	},
 
-	selectRegionOverlay: function(overlay, idoc, callback) {
-		regionUtils._doc = idoc;
-		regionUtils._needText = false;
-		regionUtils._destelement = null;
-		regionUtils._callback = callback;
-		regionUtils._overlay = overlay;
-
-		while(overlay.firstChild) overlay.removeChild(overlay.firstChild);
-		var overlaycontent = document.createElement("div");
-		overlaycontent.style.position="absolute"; 
-		overlaycontent.style.left = "0px"; 
-		overlaycontent.style.top="0px";
-		overlaycontent.style.width = idoc.body.scrollWidth + "px";
-		overlaycontent.style.height = idoc.body.scrollHeight + "px";
-		overlay.appendChild(overlaycontent);
-
-		overlay.style.display = 'block';
-		overlay.scrollTop = idoc.defaultView.scrollY; 
-		overlay.scrollLeft = idoc.defaultView.scrollX;
-
-		overlay.addEventListener("mousemove", regionUtils._overlaymousemove);
-		overlay.addEventListener("mousedown", regionUtils._overlaymousedown);
-		overlay.addEventListener("mouseup", regionUtils._overlaymouseup);
-		overlay.addEventListener("scroll", regionUtils._overlayscroll);
-		window.addEventListener("resize", regionUtils._overlayresize);
+	selectRegionOverlay: function(overlay, idoc) {
+		return new Promise(resolve => {
+			regionUtils._doc = idoc;
+			regionUtils._needText = false;
+			regionUtils._destelement = null;
+			regionUtils._resolve = resolve;
+			regionUtils._overlay = overlay;
+	
+			while(overlay.firstChild) overlay.removeChild(overlay.firstChild);
+			var overlaycontent = document.createElement("div");
+			overlaycontent.style.position="absolute"; 
+			overlaycontent.style.left = "0px"; 
+			overlaycontent.style.top="0px";
+			overlaycontent.style.width = idoc.body.scrollWidth + "px";
+			overlaycontent.style.height = idoc.body.scrollHeight + "px";
+			overlay.appendChild(overlaycontent);
+	
+			overlay.style.display = 'block';
+			overlay.scrollTop = idoc.defaultView.scrollY; 
+			overlay.scrollLeft = idoc.defaultView.scrollX;
+	
+			overlay.addEventListener("mousemove", regionUtils._overlaymousemove);
+			overlay.addEventListener("mousedown", regionUtils._overlaymousedown);
+			overlay.addEventListener("mouseup", regionUtils._overlaymouseup);
+			overlay.addEventListener("scroll", regionUtils._overlayscroll);
+			window.addEventListener("resize", regionUtils._overlayresize);
+		})
 	},
 
 	abortSelect: function () {
@@ -90,7 +94,7 @@ var regionUtils = {
 
 		regionUtils._needText = false;
 		regionUtils._destelement = null;
-		regionUtils._callback = null;
+		regionUtils._resolve = null;
 		regionUtils._doc = null;
 	},
 
@@ -164,7 +168,7 @@ var regionUtils = {
 		} else {
 			var xpath = null;
 		}
-		regionUtils._callback(xpath);
+		regionUtils._resolve(xpath);
 		regionUtils.abortSelect();
 		return false;
 	},
@@ -225,7 +229,7 @@ var regionUtils = {
 	_outlined: [],
 	_needText: false,
 	_destelement: null,
-	_callback: null,
+	_resolve: null,
 	_doc: null, 
 	_overlay: null,
 	_overlayelem: null

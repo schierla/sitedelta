@@ -95,18 +95,16 @@ var uiUtils = {
 				this.refresh();
 			},
 
-			foreachSelected: function (firstcallback, nextcallback, after) {
-				if (nextcallback === undefined) nextcallback = firstcallback;
+			foreachSelected: async function (fist, rest) {
 				var options = this.container.options;
 				for (var i = 0; i < options.length; i++) {
 					if (options[i].selected) {
 						options[i].selected = false;
 						this.select();
-						firstcallback(this.shown[i], this.elements[this.shown[i]].data, () => this.foreachSelected(nextcallback, nextcallback, after));
-						return;
+						await Promise.resolve(fist(this.shown[i], this.elements[this.shown[i]].data));
+						if(rest !== undefined) fist = rest;
 					}
 				}
-				if (after !== undefined) after();
 			}
 		};
 		ret.container.addEventListener("change", () => ret.select());

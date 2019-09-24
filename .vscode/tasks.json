@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "Package all",
+            "label": "Package all",
             "type": "shell",
             "command": "./buildall.sh",
             "group": "build",
@@ -12,7 +12,7 @@
         },
 
         {
-            "taskName": "SiteDelta Watch for Chrome",
+            "label": "SiteDelta Watch for Chrome",
             "type": "shell",
             "command": "./build.sh watch chrome",
             "group": "build",
@@ -20,7 +20,7 @@
         },
 
         {
-            "taskName": "SiteDelta Highlight for Chrome",
+            "label": "SiteDelta Highlight for Chrome",
             "type": "shell",
             "command": "./build.sh highlight chrome",
             "group": "build",
@@ -28,7 +28,7 @@
         },
 
         {
-            "taskName": "SiteDelta Highlight for Firefox",
+            "label": "SiteDelta Highlight for Firefox",
             "type": "shell",
             "command": "./build.sh highlight firefox",
             "group": "build",
@@ -36,7 +36,7 @@
         }, 
 
         {
-            "taskName": "SiteDelta Watch for Firefox",
+            "label": "SiteDelta Watch for Firefox",
             "type": "shell",
             "command": "./build.sh watch firefox",
             "group": "build",
@@ -44,9 +44,17 @@
         },
 
         {
-            "taskName": "Debug in Firefox",
+            "label": "Debug in Firefox",
             "type": "shell",
             "command": "web-ext run -s build/unpacked",
+            "group": "build",
+            "problemMatcher": []
+        },
+        
+        {
+            "label": "Check for errors",
+            "type": "shell",
+            "command": "web-ext lint -s build/unpacked",
             "group": "build",
             "problemMatcher": []
         }

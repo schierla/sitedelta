@@ -1,34 +1,30 @@
 
 var pageList = {
 
-	deletePage: function (key, data, callback) {
-		ioUtils.remove(key, callback);
+	deletePage: async function (key, data) {
+		await ioUtils.remove(key);
 	},
 	
-	openPage: function (key, data, callback) {
+	openPage: async function (key, data) {
 		chrome.tabs.create({ url: key }); 
-		setTimeout(callback, 300);
+		await new Promise(resolve => setTimeout(resolve, 300));
 	},
 
-	openPageInBackground: function (key, data, callback) {
+	openPageInBackground: async function (key, data) {
 		chrome.tabs.create({ url: key, active: false }); 
-		setTimeout(callback, 300);
+		await new Promise(resolve => setTimeout(resolve, 300));
 	},
 
-	scanPage: function (key, data, callback, tabId) {
-		tabUtils.loadInTab(tabId, key, (url) => {
-			tabUtils.checkChanges(tabId, url, (changes) => {
-				if (changes == 0) { // unchanged
-					callback();
-				} else if (changes > 0) {
-					configUtils.getDefaultConfig(config => {
-						if (config.scanOnLoad) return;
-						tabUtils.showIcon(tabId, "*", 1);
-						pageUtils.setChanges(url, 1);
-					});
-				}
-			});
-		});
+	scanPage: async function (key, data, tabId) {
+		var url = await tabUtils.loadInTab(tabId, key);
+		var changes = await tabUtils.checkChanges(tabId, url);
+		
+		if (changes == 0) { // unchanged
+			return;
+		} else if (changes > 0) {
+			await tabUtils.showIcon(tabId, "*", 1);
+			await pageUtils.setChanges(url, 1);
+		}
 	},
 
 	selectAllIfNone: function() {
@@ -71,7 +67,7 @@ var pageList = {
 		}
 	},
 
-	load: function () {
+	load: async function () {
 		var list = uiUtils.sortedList("pages", this.createItem, this.updateItem);
 		list.isBefore = (keya, a, keyb, b) => a.title!==undefined && b.title!==undefined && a.title.toLowerCase() < b.title.toLowerCase();
 
@@ -84,13 +80,10 @@ var pageList = {
 		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
 		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage, this.openPageInBackground) });
 		document.querySelector("#scannow").addEventListener("click",
-			() => chrome.tabs.create({ url: "about:blank" }, tab => {
+			() => chrome.tabs.create({ url: "about:blank" }, async tab => {
 				pageList.selectAllIfNone();
-				list.foreachSelected(
-					(key, data, callback) => this.scanPage(key, data, callback, tab.id),
-					(key, data, callback) => this.scanPage(key, data, callback, tab.id),
-					() => { chrome.tabs.remove(tab.id) }
-				)
+				await list.foreachSelected((key, data) => this.scanPage(key, data, tab.id));
+				chrome.tabs.remove(tab.id);
 			}));
 		document.querySelector("#pages").addEventListener("dblclick", () => list.foreachSelected(this.openPage));
 		ioUtils.observeIndex(index => list.updateAll(index));

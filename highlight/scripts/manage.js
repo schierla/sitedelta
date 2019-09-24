@@ -33,12 +33,12 @@ document.querySelector("#importExport").addEventListener("click", function (e) {
 	chrome.tabs.create({ url: "https://sitedelta.schierla.de/transfer/" }); 
 });
 
-function checkScanOnLoad(selected, callback) {
-	return (callback !== undefined) ? callback(selected & advancedEnabled) : null;
+function checkScanOnLoad(selected) {
+	return selected & advancedEnabled;
 }
 
-function checkHighlightOnLoad(selected, callback) {
-	return (callback !== undefined) ? callback(selected & document.querySelector("#scanonload").checked) : null;
+function checkHighlightOnLoad(selected) {
+	return selected & document.querySelector("#scanonload").checked;
 }
 
 var options = [
@@ -67,36 +67,37 @@ function registerListeners() {
 	}
 }
 function registerListener(option) {
-	document.querySelector("#" + option.elem).addEventListener("change", function (e) {
+	document.querySelector("#" + option.elem).addEventListener("change", async function (e) {
 		var value = "";
 		if (option.type == "text" || option.type == 'color')
 			value = document.querySelector("#" + option.elem).value;
 		else if (option.type == "checkbox")
 			value = document.querySelector("#" + option.elem).checked;
-		var performUpdate = (value) => {
-			var update = {}; update[option.key] = value;
-			configUtils.setDefaultConfigProperties(update, () => {
-				if (option.post) option.post();
-			});
-		};
-		if (option.pre) option.pre(value, performUpdate); else performUpdate(value);
+		if(option.pre) 
+			value = await Promise.resolve(option.pre(value));
+		var update = {}; update[option.key] = value;
+		await configUtils.setDefaultConfigProperties(update);
+		if (option.post) 
+			await Promise.resolve(option.post());
 	});
 }
 function hexColor(color) {
-	if (color.length == 4) return color[0] + color[1] + color[1] + color[2] + color[2] + color[3] + color[3]; else return color;
+	if (color.length == 4) 
+		return color[0] + color[1] + color[1] + color[2] + color[2] + color[3] + color[3]; 
+	else
+		return color;
 }
-function showOptions() {
-	configUtils.getDefaultConfig((config) => {
-		for (var i = 0; i < options.length; i++) {
-			if (options[i].type == "text")
-				document.querySelector("#" + options[i].elem).value = config[options[i].key];
-			else if (options[i].type == "color")
-				document.querySelector("#" + options[i].elem).value = hexColor(config[options[i].key]);
-			else if (options[i].type == "checkbox")
-				document.querySelector("#" + options[i].elem).checked = config[options[i].key];
-		}
-		updatePreview();
-	});
+async function showOptions() {
+	var config = await configUtils.getDefaultConfig();
+	for (var i = 0; i < options.length; i++) {
+		if (options[i].type == "text")
+			document.querySelector("#" + options[i].elem).value = config[options[i].key];
+		else if (options[i].type == "color")
+			document.querySelector("#" + options[i].elem).value = hexColor(config[options[i].key]);
+		else if (options[i].type == "checkbox")
+			document.querySelector("#" + options[i].elem).checked = config[options[i].key];
+	}
+	updatePreview();
 }
 
 function updatePreview() {

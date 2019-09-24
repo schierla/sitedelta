@@ -1,17 +1,17 @@
 var pageList = {
 
-	deletePage: function (key, data, callback) {
-		ioUtils.remove(key, callback);
+	deletePage: async function (key, data) {
+		await ioUtils.remove(key);
 	},
 
-	openPage: function (key, data, callback) {
-		tabUtils.openResource("show.htm?" + key); 
-		setTimeout(callback, 300);
+	openPage: async function (key, data) {
+		await tabUtils.openResource("show.htm?" + key); 
+		await new Promise(resolve => setTimeout(resolve, 300));
 	},
 
-	openPageInBackground: function (key, data, callback) {
-		tabUtils.openResourceInBackground("show.htm?" + key); 
-		setTimeout(callback, 300);
+	openPageInBackground: async function (key, data) {
+		await tabUtils.openResourceInBackground("show.htm?" + key); 
+		await new Promise(resolve => setTimeout(resolve, 300));
 	},
 
 	previewPage: function(list) {
@@ -26,12 +26,12 @@ var pageList = {
 		}
 	},
 
-	scanPage: function (key, data, callback) {
-		watchUtils.scanPage(key, callback);
+	scanPage: async function (key, data) {
+		await watchUtils.scanPage(key);
 	},
 
-	markSeen: function (key, data, callback) {
-		watchUtils.markSeen(key, callback);
+	markSeen: async function (key, data) {
+		await watchUtils.markSeen(key);
 	},
 
 	selectAllIfNone: function () {
@@ -94,10 +94,15 @@ var pageList = {
 		document.querySelector("#markseen").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.markSeen) });
 		document.querySelector("#pages").addEventListener("dblclick", () => list.foreachSelected(this.openPage));
 		document.querySelector("#pages").addEventListener("change", () => this.previewPage(list));
-		document.querySelector("#watchdelay").addEventListener("click", () => configUtils.getDefaultConfig(config => {
+		document.querySelector("#watchdelay").addEventListener("click", async () => {
+			var config = await configUtils.getDefaultConfig();
 			var delay = prompt(chrome.i18n.getMessage("configWatchDelay"), config.watchDelay);
-			if(delay !== null) list.foreachSelected((key,data,callback) => pageUtils.setConfigProperty(key, "watchDelay", parseInt(delay), () => this.scanPage(key, data, callback)));
-		}));
+			if(delay !== null) 
+				list.foreachSelected(async (key,data) => {
+					await pageUtils.setConfigProperty(key, "watchDelay", parseInt(delay));
+					await this.scanPage(key, data);
+				});
+		});
 		ioUtils.observeIndex(index => list.updateAll(index));
 	}
 };

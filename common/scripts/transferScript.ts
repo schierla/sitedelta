@@ -1,23 +1,38 @@
-function addImportButton(scope, name) {
+function addImportButton(scope: string, name: string) {
+    var target = document.querySelector("#" + scope) as HTMLTextAreaElement;
+    var container = document.querySelector("#" + scope + "-import");
+    if(!container || !target) return;
     var button = document.createElement("button");
     button.appendChild(document.createTextNode(name));
     button.addEventListener("click", e => {
-        chrome.runtime.sendMessage({ command: "transferImport", scope: scope, data: document.querySelector("#" + scope).value }, message => {
-            alert(message);
-        });
+        chrome.runtime.sendMessage(
+            { 
+                command: "transferImport", 
+                scope: scope, 
+                data: target.value 
+            }, 
+            message => { alert(message); }
+        );
     });
-    document.querySelector("#" + scope + "-import").appendChild(button);
+    container.appendChild(button);
 }
 
-function addExportButton(scope, name) {
+function addExportButton(scope: string, name: string) {
+    var target = document.querySelector("#" + scope) as HTMLTextAreaElement;
+    var container = document.querySelector("#" + scope + "-export");
+    if(!target || !container) return;
     var button = document.createElement("button");
     button.appendChild(document.createTextNode(name));
     button.addEventListener("click", e => {
-        chrome.runtime.sendMessage({ command: "transferExport", scope: scope }, data => {
-            document.querySelector("#" + scope).value = data;
-        });
+        chrome.runtime.sendMessage(
+            { 
+                command: "transferExport", 
+                scope: scope 
+            },
+            data => { target.value = data; }
+        );
     });
-    document.querySelector("#" + scope + "-export").appendChild(button);
+    container.appendChild(button);
 }
 
 chrome.runtime.sendMessage({ command: "transferInfo" }, caps => {

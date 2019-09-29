@@ -1,70 +1,70 @@
-var pageList = {
+namespace pageList {
 
-	deletePage: async function (key, data) {
+	async function deletePage(key: string, data: any) {
 		await ioUtils.remove(key);
-	},
+	}
 
-	openPage: async function (key, data) {
+	async function openPage(key: string, data: any) {
 		await tabUtils.openResource("show.htm?" + key); 
 		await new Promise(resolve => setTimeout(resolve, 300));
-	},
+	}
 
-	openPageInBackground: async function (key, data) {
+	async function openPageInBackground(key: string, data: any) {
 		await tabUtils.openResourceInBackground("show.htm?" + key); 
 		await new Promise(resolve => setTimeout(resolve, 300));
-	},
+	}
 
-	previewPage: function(list) {
-		var preview = document.querySelector("#preview"); 
+	function previewPage(list: uiUtils.SortedList<any>) {
+		var preview = document.querySelector("#preview") as HTMLIFrameElement; 
 		if(!preview || window.getComputedStyle(preview).display == "none") return;
-		var options = document.querySelector("#pages").options;
+		var options = (document.querySelector("#pages") as HTMLSelectElement).options;
 		var selectCount = 0, selected = ""; for (var i = 0; i < options.length; i++) if (options[i].selected) { selectCount++; selected = options[i].value; }
 		if(selectCount == 1 && preview.src != chrome.runtime.getURL("show.htm?" + selected)) {
 			preview.src = chrome.runtime.getURL("show.htm?" + selected);
 		} else if(selectCount == 0) {
 			preview.src = "about:blank";
 		}
-	},
+	}
 
-	scanPage: async function (key, data) {
+	async function scanPage(key: string, data: any) {
 		await watchUtils.scanPage(key);
-	},
+	}
 
-	markSeen: async function (key, data) {
+	async function markSeen(key: string, data: any) {
 		await watchUtils.markSeen(key);
-	},
+	}
 
-	selectAllIfNone: function () {
-		var options = document.querySelector("#pages").options;
+	function selectAllIfNone(): void {
+		var options = (document.querySelector("#pages") as HTMLSelectElement).options;
 		for (var i = 0; i < options.length; i++)
 			if (options[i].selected) return;
 		for (var i = 0; i < options.length; i++)
 			options[i].selected = true;
-	},
+	}
 
-	selectChangedIfNone: function () {
-		var options = document.querySelector("#pages").options;
+	function selectChangedIfNone(): void {
+		var options = (document.querySelector("#pages") as HTMLSelectElement).options;
 		for (var i = 0; i < options.length; i++)
 			if (options[i].selected) return;
 		for (var i = 0; i < options.length; i++)
 			if(options[i].classList.contains("changed")) 
 				options[i].selected = true;
-	},
+	}
 
-	createItem: function (key, data) {
+	function createItem(key: string, data: any): HTMLOptionElement {
 		var title = "title" in data ? data.title : key;
 		if (!("title" in data)) pageUtils.getTitle(key);
 		var ret = document.createElement("option");
 		ret.setAttribute("value", key);
 		ret.appendChild(document.createTextNode(title));
 		return ret;
-	},
+	}
 
 
-	updateItem: function (element, data) {
-		element.firstChild.data = data["title"];
+	function updateItem(element: HTMLOptionElement, data: any) {
+		(element.firstChild as CharacterData).data = data["title"];
 		element.classList.remove("changed", "unchanged", "failed", "scanning");
-		var title = element.getAttribute("value");
+		var title = element.getAttribute("value") || "";
 		if (data.nextScan != 0)
 			title += "\n" + chrome.i18n.getMessage("watchNextScan", new Date(data.nextScan).toLocaleString());
 		element.setAttribute("title", title);
@@ -77,34 +77,34 @@ var pageList = {
 		} else if (data.changes == -1) {
 			element.classList.add("failed");
 		}
-	},
+	}
 
-	load: function () {
-		var list = uiUtils.sortedList("pages", this.createItem, this.updateItem);
-		list.isBefore = (keya, a, keyb, b) => a.title!==undefined && b.title!==undefined && a.title.toLowerCase() < b.title.toLowerCase();
+	export function load(): void {
+		var list = new uiUtils.SortedList("pages", createItem, updateItem);
+		list.isBefore = (keya: string, a: any, keyb: string, b: any) => a.title !== undefined && b.title !== undefined && a.title.toLowerCase() < b.title.toLowerCase();
 
-		var filter = document.querySelector("#filter");
+		var filter = document.querySelector("#filter") as HTMLInputElement;
 		if(filter) {
-			list.isShown = (key, data) => key.indexOf(filter.value) != -1 || (data.title!==undefined && data.title.indexOf(filter.value) != -1);
+			list.isShown = (key: string, data: any) => key.indexOf(filter.value) != -1 || (data.title !== undefined && data.title.indexOf(filter.value) != -1);
 			filter.addEventListener("input", () => list.refresh());
 		}
-		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
-		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage, this.openPageInBackground) });
-		document.querySelector("#scannow").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.scanPage) });
-		document.querySelector("#markseen").addEventListener("click", () => { pageList.selectAllIfNone(); list.foreachSelected(this.markSeen) });
-		document.querySelector("#pages").addEventListener("dblclick", () => list.foreachSelected(this.openPage));
-		document.querySelector("#pages").addEventListener("change", () => this.previewPage(list));
-		document.querySelector("#watchdelay").addEventListener("click", async () => {
+		(document.querySelector("#delete") as HTMLElement).addEventListener("click", () => list.foreachSelected(deletePage));
+		(document.querySelector("#open") as HTMLElement).addEventListener("click", () => { selectChangedIfNone(); list.foreachSelected(openPage, openPageInBackground) });
+		(document.querySelector("#scannow") as HTMLElement).addEventListener("click", () => { selectAllIfNone(); list.foreachSelected(scanPage) });
+		(document.querySelector("#markseen") as HTMLElement).addEventListener("click", () => { selectAllIfNone(); list.foreachSelected(markSeen) });
+		(document.querySelector("#pages") as HTMLElement).addEventListener("dblclick", () => list.foreachSelected(openPage));
+		(document.querySelector("#pages") as HTMLElement).addEventListener("change", () => previewPage(list));
+		(document.querySelector("#watchdelay") as HTMLElement).addEventListener("click", async () => {
 			var config = await configUtils.getDefaultConfig();
-			var delay = prompt(chrome.i18n.getMessage("configWatchDelay"), config.watchDelay);
+			var delay = prompt(chrome.i18n.getMessage("configWatchDelay"), config.watchDelay + "") ;
 			if(delay !== null) 
 				list.foreachSelected(async (key,data) => {
-					await pageUtils.setConfigProperty(key, "watchDelay", parseInt(delay));
-					await this.scanPage(key, data);
+					await pageUtils.setConfigProperty(key, "watchDelay", parseInt(delay || "0"));
+					await scanPage(key, data);
 				});
 		});
 		ioUtils.observeIndex(index => list.updateAll(index));
 	}
-};
+}
 
 pageList.load();

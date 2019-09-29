@@ -1,6 +1,19 @@
-var transferUtils = {
+namespace transferUtils {
 
-    importConfig: async function (config, hiddenFields) {
+    interface PageExport {
+        url: string;
+        title: string;
+        content: string,
+        includes?: string[];
+        excludes?: string[];
+        checkDeleted?: boolean;
+        scanImages?: boolean;
+        ignoreCase?: boolean;
+        ignoreNumbers?: boolean;
+        watchDelay?: number;
+    };
+
+    export async function importConfig(config: Partial<Config>, hiddenFields: string[]) {
         var oldConfig = await configUtils.getDefaultConfig();
         var update = {};
         var imported = 0, skipped = 0;
@@ -17,9 +30,9 @@ var transferUtils = {
         }
         await configUtils.setDefaultConfigProperties(update);
         return {imported: imported, skipped: skipped};
-    },
+    }
 
-    importPages: async function (pages) {
+    export async function importPages(pages: PageExport[]) {
         var imported = 0, skipped = 0;
         for(var i=0; i<pages.length; i++) {
             var page = pages[i];
@@ -44,9 +57,9 @@ var transferUtils = {
             imported++;
         }
         return {imported: imported, skipped: skipped};
-    },
+    }
     
-    exportConfig: async function (hiddenFields) {
+    export async function exportConfig(hiddenFields: string[]): Promise<Partial<Config>> {
         var config = await configUtils.getDefaultConfig();
         var send = {};
         for (var key in config) {
@@ -54,14 +67,14 @@ var transferUtils = {
             send[key] = config[key];
         }
         return send;
-    },
+    }
 
-    exportPages: async function () {
+    export async function exportPages(): Promise<Partial<PageExport>[]> {
         var urls = await pageUtils.list();
-        var pages = [];
+        var pages: Partial<PageExport>[] = [];
         for(var i=0; i<urls.length; i++) {
             var url = urls[i];
-            var title = await pageUtils.getTitle(url);
+            var title = await pageUtils.getTitle(url) as string;
             var config = await pageUtils.getConfig(url);
             var content = await pageUtils.getContent(url);
             var page = { url: url, title: title, content: content };

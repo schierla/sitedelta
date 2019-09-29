@@ -1,25 +1,25 @@
-var textUtils = {
+namespace textUtils {
 
-	getText: function (doc, config) {
-		var regions = textUtils._findElements(doc, config.includes);
-		var excludes = textUtils._findElements(doc, config.excludes);
+	export function getText(doc: Document, config: Config): string | null {
+		var regions = findElements(doc, config.includes);
+		var excludes = findElements(doc, config.excludes);
 		if(regions.length == 0) return null;
 		var text = "";
 		for (var i = 0; i < regions.length; i++) {
-			text += textUtils._getTextForNode(regions[i], config, excludes);
+			text += _getTextForNode(regions[i], config, excludes);
 		}
 		return text;
-	},
+	}
 
-	clean: function (text, config) {
+	export function clean(text: string, config: Config): string {
 		if (config.ignoreCase)
 			text = text.toLowerCase();
 		if (config.ignoreNumbers)
 			text = text.replace(/[0-9]+/g, "xxx");
 		return text;
-	},
+	}
 
-	isEqual: function(oldContent, newContent, config) {
+	export function isEqual(oldContent: string, newContent: string, config: Config): boolean {
 		var oldt = textUtils.clean(oldContent, config), newt = textUtils.clean(newContent, config);
 		if(config.checkDeleted) {
 			return oldt == newt;
@@ -30,49 +30,57 @@ var textUtils = {
 			}
 			return true;
 		}
-	},
+	}
 
-	_findElements: function (doc, xpaths) {
-		var ret = [];
+	export function findElements(doc: Document, xpaths: string[]): Element[] {
+		var ret: Element[] = [];
 		for (var i = 0; i < xpaths.length; i++) {
 			var xpath = xpaths[i];
 			if(xpath.startsWith("/") || xpath.startsWith("id(")) {
-				var elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
-				for (var element = elements.iterateNext(); element != null; element = elements.iterateNext()) ret.push(element);
+				let elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+				for (var element = elements.iterateNext(); element != null; element = elements.iterateNext()) 
+					if(element instanceof Element) 
+						ret.push(element);
 			} else {
-				var elements = doc.querySelectorAll(xpath);
-				for(var j=0; j<elements.length; j++) ret.push(elements.item(j));
+				let elements = doc.querySelectorAll(xpath);
+				for(var j=0; j<elements.length; j++) 
+					ret.push(elements.item(j));
 			}
 		}
 		return ret;
-	},
+	}
 
-	_filter: function (config, excludes) {
+	export function createFilter(config: Config, excludes: Node[]) {
 		return {
-			acceptNode: function (cur) {
+			acceptNode: function (cur: Node) {
 				for (var i = 0; i < excludes.length; i++)
 					if (excludes[i] == cur)
 						return NodeFilter.FILTER_REJECT;
 				if (cur.nodeName == 'SCRIPT' || cur.nodeName == 'STYLE')
 					return NodeFilter.FILTER_REJECT;
-				if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG' && cur.hasAttribute("src") && cur.getAttribute("src").indexOf("chrome:") != 0))
+				if (cur.nodeType == 3) 
 					return NodeFilter.FILTER_ACCEPT;
+				if (config.scanImages && cur.nodeName == 'IMG') {
+					var src = (cur as HTMLElement).getAttribute("src");
+					if(src && src.indexOf("chrome:") != 0) return NodeFilter.FILTER_ACCEPT;
+				}
 				return NodeFilter.FILTER_SKIP;
 			}
 		};
-	},
+	}
 
-	_getTextForNode: function (node, config, excludes) {
+	function _getTextForNode(node: Node, config: Config, excludes: Node[]): string {
 		var doc = node.ownerDocument, text = "", ret = "";
-		var filter = textUtils._filter(config, excludes);
+		if(!doc) return "";
+		var filter = createFilter(config, excludes);
 		var tw = doc.createTreeWalker(node, NodeFilter.SHOW_ALL, filter, true);
 		if (filter.acceptNode(node)==NodeFilter.FILTER_REJECT) return ret;
-		for (var cur = node; cur != null; cur = tw.nextNode()) {
+		for (var cur: Node | null = node; cur != null; cur = tw.nextNode()) {
 			if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {
-				if (cur.nodeName == 'IMG' && cur.hasAttribute("src")) 
-					text = "[" + cur.getAttribute("src") + "]";
+				if (cur.nodeName == 'IMG' && (cur as Element).hasAttribute("src")) 
+					text = "[" + (cur as Element).getAttribute("src") + "]";
 				else 
-					text = cur.data.replace(/\[/g, "[ ");
+					text = (cur as CharacterData).data.replace(/\[/g, "[ ");
 				text = text.replace(/\s+/g, ' ').replace(/^ +/, '').replace(/ +$/, '').replace(/[\u0000-\u001f]/g, "");
 				if (text != "")
 					ret += text + " ";

@@ -1,271 +1,310 @@
-function registerListeners() {
-	for (var i = 0; i < options.length; i++) {
-		registerListener(options[i]);
-	}
-}
-function registerListener(option) {
-	var performUpdate = async (value) => {
-		await pageUtils.setConfigProperty(url, option.key, value);
-		if (option.post) 
-			await Promise.resolve(option.post());
-		if (option.type == "text") 
-			document.querySelector("#" + option.elem).value = value;
-		else if (option.type == "checkbox") 
-			document.querySelector("#" + option.elem).checked = value;
-	};
-	document.querySelector("#" + option.elem).addEventListener("change", async function (e) {
-		var value = "";
-		if (option.type == "text") {
-			value = document.querySelector("#" + option.elem).value;
-		} else if (option.type == "checkbox") {
-			value = document.querySelector("#" + option.elem).checked;
-		} else if (option.type == "list") {
-			value = document.querySelector("#" + option.elem).value;
-			for (var i = 0; i < options.length; i++) {
-				if (options[i] != option && options[i].type == "list") {
-					document.querySelector("#" + options[i].delelem).setAttribute("disabled", "disabled");
-					document.querySelector("#" + options[i].elem).value = null;
-					if (options[i].select) options[i].select(null);
-				}
-			}
-			document.querySelector("#" + option.delelem).removeAttribute("disabled");
-			if (option.select) option.select(value);
-			return;
+namespace highlightPopup {
+
+	function registerListeners() {
+		for (var i = 0; i < options.length; i++) {
+			registerListener(options[i]);
 		}
-		if (option.pre) 
-			value = await Promise.resolve(option.pre(value));
-		await performUpdate(value);
-	});
-	if (option.type == "list") {
-		document.querySelector("#" + option.addelem).addEventListener("click", async function (e) {
-			var value = await Promise.resolve(option.add());
-			var newlist = [];
-			for (var i = 0; i < option.contents.length; i++) {
-				newlist.push(option.contents[i]);
-			}
-			newlist.push(value);
-			if (option.pre) 
-				newlist = await Promise.resolve(option.pre(newlist));
-			await performUpdate(newlist);
-		});
-		document.querySelector("#" + option.elem).addEventListener("dblclick", async function (e) {
-			if (option.edit) {
-				var oldValue = document.querySelector("#" + option.elem).value;
-				if (oldValue === "") return;
-				var newValue = await Promise.resolve(option.edit(oldValue));
-				if (newValue === null || newValue === "") return;
-				var newlist = [];
-				for (var i = 0; i < option.contents.length; i++) {
-					if (option.contents[i] != oldValue)
-						newlist.push(option.contents[i]);
-					else
-						newlist.push(newValue);
+	}
+
+	function registerListener(option: CheckboxOption | ListOption) {
+		var performUpdate = async (value) => {
+			await pageUtils.setConfigProperty(url, option.key, value);
+			if (option.post) 
+				await Promise.resolve(option.post());
+			if (option.type == "checkbox") 
+				inputElement(option.elem).checked = value;
+		};
+		inputElement(option.elem).addEventListener("change", async function (e) {
+			var value: any;
+			if (option.type == "checkbox") {
+				value = inputElement(option.elem).checked;
+			} else if (option.type == "list") {
+				value = selectElement(option.elem).value;
+				for (var i = 0; i < options.length; i++) {
+					var otheroption = options[i];
+					if (otheroption != option && otheroption.type == "list") {
+						element(otheroption.delelem || "").setAttribute("disabled", "disabled");
+						selectElement(options[i].elem).value = "";
+						var onselect = otheroption.select; 
+						if(onselect) onselect(null);
+					}
 				}
+				element(option.delelem).removeAttribute("disabled");
+				if (option.select) await Promise.resolve(option.select(value));
+				return;
+			}
+			if (option.pre) 
+				value = await Promise.resolve(option.pre(value));
+			await performUpdate(value);
+		});
+		if (option.type == "list") {
+			element(option.addelem).addEventListener("click", async function (e) {
+				var value = await Promise.resolve(option.add());
+				var newlist: string[] = [];
+				if(option.contents) for (var i = 0; i < option.contents.length; i++) {
+					newlist.push(option.contents[i]);
+				}
+				newlist.push(value);
 				if (option.pre) 
 					newlist = await Promise.resolve(option.pre(newlist));
 				await performUpdate(newlist);
-			}
-		});
-		document.querySelector("#" + option.delelem).addEventListener("click", async function (e) {
-			var value = document.querySelector("#" + option.elem).value, newlist = [];
-			for (var i = 0; i < option.contents.length; i++) {
-				if (option.contents[i] != value) newlist.push(option.contents[i]);
-			}
-			if (option.select) 
-				await Promise.resolve(option.select(null));
-			if (option.pre) 
-				newlist = await Promise.resolve(option.pre(newlist));
-			await performUpdate(newlist);
-		});
+			});
+			element(option.elem).addEventListener("dblclick", async function (e) {
+				if (option.edit) {
+					var oldValue = selectElement(option.elem).value;
+					if (oldValue === "") return;
+					var newValue = await Promise.resolve(option.edit(oldValue));
+					if (newValue === null || newValue === "") return;
+					var newlist : string[] = [];
+					if(option.contents) for (var i = 0; i < option.contents.length; i++) {
+						if (option.contents[i] != oldValue)
+							newlist.push(option.contents[i]);
+						else
+							newlist.push(newValue);
+					}
+					if (option.pre) 
+						newlist = await Promise.resolve(option.pre(newlist));
+					await performUpdate(newlist);
+				}
+			});
+			element(option.delelem).addEventListener("click", async function (e) {
+				var value = selectElement(option.elem).value, newlist: string[] = [];
+				if(option.contents) for (var i = 0; i < option.contents.length; i++) {
+					if (option.contents[i] != value) newlist.push(option.contents[i]);
+				}
+				if (option.select) 
+					await Promise.resolve(option.select(null));
+				if (option.pre) 
+					newlist = await Promise.resolve(option.pre(newlist));
+				await performUpdate(newlist);
+			});
+		}
 	}
-}
 
-async function showOptions() {
-	var config = await pageUtils.getEffectiveConfig(url);
-	for (var i = 0; i < options.length; i++) {
-		if (options[i].type == "text")
-			document.querySelector("#" + options[i].elem).value = config[options[i].key];
-		else if (options[i].type == "checkbox")
-			document.querySelector("#" + options[i].elem).checked = config[options[i].key];
-		else if (options[i].type == "list") {
-			var list = document.querySelector("#" + options[i].elem);
-			while (list.firstChild) list.removeChild(list.firstChild);
-			options[i].contents = config[options[i].key];
-			for (var j = 0; j < config[options[i].key].length; j++) {
-				var item = config[options[i].key][j];
-				var node = document.createElement("option");
-				node.setAttribute("value", item);
-				node.appendChild(document.createTextNode(item));
-				list.appendChild(node);
+	async function showOptions(): Promise<void> {
+		var config = await pageUtils.getEffectiveConfig(url);
+		if(!config) return;
+		for (var i = 0; i < options.length; i++) {
+			var option = options[i];
+			if (option.type == "checkbox")
+				inputElement(options[i].elem).checked = config[option.key] as boolean;
+			else if (option.type == "list") {
+				var list = selectElement(option.elem);
+				while (list.firstChild) list.removeChild(list.firstChild);
+				var contents = config[option.key] as string[];
+				option.contents = contents;
+				for (var j = 0; j < contents.length; j++) {
+					var item = config[option.key][j];
+					var node = document.createElement("option");
+					node.setAttribute("value", item);
+					node.appendChild(document.createTextNode(item));
+					list.appendChild(node);
+				}
+				element(option.delelem || "").setAttribute("disabled", "disabled");
 			}
-			document.querySelector("#" + options[i].delelem).setAttribute("disabled", "disabled");
+		}
+	}
+
+
+	async function selectExclude() {
+		var ret = await tabUtils.selectExclude(tabId, url);
+		fillStatus({ state: tabUtils.PageState.SELECTREGION });
+		await new Promise(resolve => setTimeout(resolve, 5000));
+		return ret;
+	}
+
+	async function selectInclude() {
+		var ret = await tabUtils.selectInclude(tabId, url);
+		fillStatus({ state: tabUtils.PageState.SELECTREGION });
+		await new Promise(resolve => setTimeout(resolve, 5000));
+		return ret;
+	}
+
+	async function showOutline(region: string | null, color: string) {
+		if (region) 
+			await tabUtils.showOutline(tabId, region, color);
+		else 
+			await tabUtils.removeOutline(tabId);
+	}
+
+	async function addBodyIfEmpty(list: string[]): Promise<string[]> {
+		if (list.length == 0) list.push("/html/body[1]");
+		if (list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
+		return list;
+	}
+
+	function editXpath(xpath) {
+		return prompt(chrome.i18n.getMessage("configRegionXpath"), xpath);
+	}
+
+
+	interface CheckboxOption {
+		type: "checkbox", 
+		key: keyof Config, 
+		elem: string,
+		pre?: (data: boolean) => (Promise<boolean> | boolean), 
+		post?: () => (Promise<void> | void)
+	}
+
+	interface ListOption {
+		type: "list", 
+		key: keyof Config, 
+		elem: string, 
+		addelem: string,
+		delelem: string, 
+		contents?: string[],
+		select: (data: string | null) => (Promise<void> | void), 
+		add: () => (Promise<string> | string), 
+		edit?: (data: string) => (Promise<string> | string),
+		pre?: (data: string[]) => (Promise<string[]> | string[]), 
+		post?: () => (Promise<void> | void)
+	}
+
+	var options: (CheckboxOption | ListOption)[] = [
+		{ type: "checkbox", key: "checkDeleted", elem: "checkdeleted" },
+		{ type: "checkbox", key: "scanImages", elem: "checkimages" },
+		{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
+		{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
+		{ type: "checkbox", key: "makeVisible", elem: "makevisible" },
+		{ type: "checkbox", key: "stripStyles", elem: "stripstyles" },
+		{ type: "checkbox", key: "isolateRegions", elem: "isolateregions" },
+		{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: (xpath: string) => showOutline(xpath, config ? config.includeRegion : "f00"), add: selectInclude, pre: addBodyIfEmpty, post: showOptions },
+		{ type: "list", key: "excludes", elem: "exclude", addelem: "excludeadd", delelem: "excludedel", select: (xpath: string) => showOutline(xpath, config ? config.excludeRegion : "f00"), add: selectExclude, post: showOptions }
+	];
+
+	async function expand() {
+		var pageconfig = await pageUtils.getOrCreateEffectiveConfig(url, inputElement("pagetitle").value);
+		document.body.classList.add("expanded");
+		document.body.classList.remove("disabled");
+		document.body.classList.add("enabled");
+		config = pageconfig;
+		await showOptions();
+	}
+
+	function showTitle(title) {
+		inputElement("url").value = url;
+		inputElement("pagetitle").value = title;
+	}
+
+	function fillStatus(status: HighlightState) {
+		document.body.classList.remove("loaded");
+		document.body.classList.remove("highlighted");
+		document.body.classList.remove("changed");
+		document.body.classList.remove("unchanged");
+		document.body.classList.remove("selecting");
+		if (status === undefined) {
+			document.body.classList.add("unavailable");
+			return;
+		}
+
+		switch (status.state) {
+			case tabUtils.PageState.LOADED:
+				document.body.classList.add("loaded");
+				break;
+			case tabUtils.PageState.HIGHLIGHTED:
+				document.body.classList.add("highlighted");
+				if (status.changes == 0) {
+					document.body.classList.add("unchanged");
+				} else if (status.changes > 0) {
+					document.body.classList.add("changed");
+					(element("changed").firstChild as CharacterData).data = chrome.i18n.getMessage("pageChanged", [status.current, status.changes]);
+				} else {
+					document.body.classList.add("failed");
+					expand();
+				}
+				tabUtils.showIcon(tabId, status.current, status.changes);
+				pageUtils.setChanges(url, status.changes < 0 ? -1 : 0);
+				break;
+			case tabUtils.PageState.SELECTREGION:
+				document.body.classList.add("selecting");
+				break;
+		}
+	}
+
+	var tabId: number = 0;
+	var url: string = "";
+	var config: Config | undefined;
+
+	
+	function selectElement(id: string)  : HTMLSelectElement {
+		return document.querySelector("#"+id) as HTMLSelectElement;
+	}
+	function inputElement(id: string)  : HTMLInputElement {
+		return document.querySelector("#"+id) as HTMLInputElement;
+	}
+	function element(id: string) : HTMLElement {
+		return document.querySelector("#"+id) as HTMLElement;
+	}
+
+	export async function init() {
+
+		element("setup").addEventListener("click", async function (e) {
+			await tabUtils.openResource("manage.htm");
+			window.close();
+		});
+	
+		element("pagetitle").addEventListener("change", async function (e) {
+			await pageUtils.setTitle(url, inputElement("pagetitle").value);
+			document.body.classList.remove("disabled");
+			element("delete").style.visibility = 'visible';
+		});
+	
+		element("delete").addEventListener("click", async function (e) {
+			await pageUtils.remove(url);
+			await tabUtils.showIcon(tabId);
+			window.close();
+		});
+	
+		element("highlight").addEventListener("click", async function (e) {
+			await pageUtils.getOrCreateEffectiveConfig(url, inputElement("pagetitle").value);
+			
+			document.body.classList.remove("disabled");
+			document.body.classList.remove("expanded");
+			document.body.classList.add("enabled");
+			var status = await tabUtils.highlightChanges(tabId, url);
+			fillStatus(status);
+		});
+	
+		element("sidebar").addEventListener("click", function (e) {
+			if(chrome && (chrome as any).sidebarAction && (chrome as any).sidebarAction.open) 
+				(chrome as any).sidebarAction.open(); 
+			else 
+				tabUtils.openResource("pages.htm");
+			window.close();	
+		});
+	
+		element("expand").addEventListener("click", function (e) {
+			expand();
+		});
+
+		registerListeners();
+
+		var tab = await tabUtils.getActive();
+
+		tabId = tab.id || 0; 
+		url = tab.url || "";
+		if (url.substr(0, 4) != "http") {
+			document.body.classList.add("unavailable");
+			return;
+		}
+		
+		if(url == "https://sitedelta.schierla.de/transfer/") {
+			await tabUtils.executeScripts(tabId, ["/common/scripts/transferScript.js"]);
+			window.close();
+			return;
+		}
+	
+		var title = await pageUtils.getTitle(url);
+		if (title === null) {
+			showTitle(tab.title);
+			document.body.classList.add("disabled");
+		} else {
+			showTitle(title);
+			var status = await tabUtils.getStatus(tabId);
+			fillStatus(status);
+			document.body.classList.add("enabled");
 		}
 	}
 }
 
-
-async function selectExclude() {
-	await tabUtils.selectExclude(tabId, url);
-	await fillStatus({ state: STATE.SELECTREGION });
-	await new Promise(resolve => setTimeout(resolve, 5000));
-}
-
-async function selectInclude() {
-	await tabUtils.selectInclude(tabId, url);
-	await fillStatus({ state: STATE.SELECTREGION });
-	await new Promise(resolve => setTimeout(resolve, 5000));
-}
-
-async function showOutline(region, color) {
-	if (region) 
-		await tabUtils.showOutline(tabId, region, color);
-	else 
-		await tabUtils.removeOutline(tabId);
-}
-
-function addBodyIfEmpty(list) {
-	if (list.length == 0) list.push("/html/body[1]");
-	if (list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
-	return list;
-}
-
-function editXpath(xpath) {
-	return prompt(chrome.i18n.getMessage("configRegionXpath"), xpath);
-}
-
-var options = [
-	{ type: "checkbox", key: "checkDeleted", elem: "checkdeleted" },
-	{ type: "checkbox", key: "scanImages", elem: "checkimages" },
-	{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },
-	{ type: "checkbox", key: "ignoreNumbers", elem: "ignorenumbers" },
-	{ type: "checkbox", key: "makeVisible", elem: "makevisible" },
-	{ type: "checkbox", key: "stripStyles", elem: "stripstyles" },
-	{ type: "checkbox", key: "isolateRegions", elem: "isolateregions" },
-	{ type: "list", key: "includes", elem: "include", addelem: "includeadd", delelem: "includedel", select: xpath => showOutline(xpath, config.includeRegion), add: selectInclude, pre: addBodyIfEmpty, post: showOptions },
-	{ type: "list", key: "excludes", elem: "exclude", addelem: "excludeadd", delelem: "excludedel", select: xpath => showOutline(xpath, config.excludeRegion), add: selectExclude, post: showOptions }
-];
-
-registerListeners();
-
-
-document.querySelector("#setup").addEventListener("click", async function (e) {
-	await tabUtils.openResource("manage.htm");
-	window.close();
-});
-
-document.querySelector("#pagetitle").addEventListener("change", async function (e) {
-	await pageUtils.setTitle(url, document.querySelector("#pagetitle").value);
-	document.body.classList.remove("disabled");
-	document.querySelector("#delete").style.visibility = 'visible';
-});
-
-document.querySelector("#delete").addEventListener("click", async function (e) {
-	await pageUtils.remove(url);
-	await tabUtils.showIcon(tabId);
-	window.close();
-});
-
-document.querySelector("#highlight").addEventListener("click", async function (e) {
-	await pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value);
-	
-	document.body.classList.remove("disabled");
-	document.body.classList.remove("expanded");
-	document.body.classList.add("enabled");
-	var status = await tabUtils.highlightChanges(tabId, url);
-	await fillStatus(status);
-});
-
-document.querySelector("#sidebar").addEventListener("click", function (e) {
-	if(chrome && chrome.sidebarAction && chrome.sidebarAction.open) 
-		chrome.sidebarAction.open(); 
-	else 
-		tabUtils.openResource("pages.htm");
-	window.close();	
-});
-
-async function expand() {
-	var pageconfig = await pageUtils.getOrCreateEffectiveConfig(url, document.querySelector("#pagetitle").value);
-	document.body.classList.add("expanded");
-	document.body.classList.remove("disabled");
-	document.body.classList.add("enabled");
-	config = pageconfig;
-	await showOptions();
-}
-
-document.querySelector("#expand").addEventListener("click", function (e) {
-	expand();
-});
-
-var STATE = {
-	LOADED: 1,
-	HIGHLIGHTED: 2,
-	SELECTREGION: 3
-};
-
-function showTitle(title) {
-	document.querySelector("#url").value = url;
-	document.querySelector("#pagetitle").value = title;
-}
-
-function fillStatus(status) {
-	document.body.classList.remove("loaded");
-	document.body.classList.remove("highlighted");
-	document.body.classList.remove("changed");
-	document.body.classList.remove("unchanged");
-	document.body.classList.remove("selecting");
-	if (status === undefined) {
-		document.body.classList.add("unavailable");
-		return;
-	}
-
-	switch (status.state) {
-		case STATE.LOADED:
-			document.body.classList.add("loaded");
-			break;
-		case STATE.HIGHLIGHTED:
-			document.body.classList.add("highlighted");
-			if (status.changes == 0) {
-				document.body.classList.add("unchanged");
-			} else if (status.changes > 0) {
-				document.body.classList.add("changed");
-				document.querySelector("#changed").firstChild.data = chrome.i18n.getMessage("pageChanged", [status.current, status.changes]);
-			} else {
-				document.body.classList.add("failed");
-				expand();
-			}
-			tabUtils.showIcon(tabId, status.current, status.changes);
-			pageUtils.setChanges(url, status.changes < 0 ? -1 : 0);
-			break;
-		case STATE.SELECTREGION:
-			document.body.classList.add("selecting");
-			break;
-	}
-}
-
-var tabId = null;
-var url = null;
-var config = null;
-
-tabUtils.getActive().then(async function (tab) {
-	tabId = tab.id; url = tab.url;
-	if (url.substr(0, 4) != "http") {
-		document.body.classList.add("unavailable");
-		return;
-	}
-	
-	if(url == "https://sitedelta.schierla.de/transfer/") {
-		await tabUtils._executeScripts(tabId, ["/common/scripts/transferScript.js"]);
-		window.close();
-		return;
-	}
-
-	var title = await pageUtils.getTitle(url);
-	if (title === null) {
-		showTitle(tab.title);
-		document.body.classList.add("disabled");
-	} else {
-		showTitle(title);
-		tabUtils.getStatus(tabId, fillStatus);
-		document.body.classList.add("enabled");
-	}
-});
+highlightPopup.init();

@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "outDir": "build/typescript",
-        "sourceMap": true,
         "strictNullChecks": true,
         "module": "none",
         "target": "es2017",

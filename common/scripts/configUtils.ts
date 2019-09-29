@@ -1,30 +1,63 @@
-var configUtils = {
-	getDefaultConfig: async function () {
-		var config = await ioUtils.getConfig();
-		if (configUtils._upgrade(config)) {
+interface Config {
+	configVersion: number;
+	addBackground: string;
+	addBorder: string;
+	includeRegion: string;
+	excludeRegion: string;
+	showRegions: boolean;
+	removeBackground: string;
+	removeBorder: string;
+	moveBackground: string;
+	moveBorder: string;
+	checkDeleted: boolean;
+	scanImages: boolean;
+	ignoreCase: boolean;
+	ignoreNumbers: boolean;
+	includes: string[];
+	excludes: string[];
+	scanOnLoad: boolean;
+	highlightOnLoad: boolean;
+	enableContextMenu: boolean;
+	autoDelayPercent: number;
+	autoDelayMin: number;
+	autoDelayMax: number;
+	watchDelay: number;
+	stripStyles: boolean;
+	notifyFailed: boolean;
+	notifyChanged: boolean;
+	isolateRegions: boolean;
+	makeVisible: boolean;
+}
+
+namespace configUtils {
+	export async function getDefaultConfig(): Promise<Config> {
+		var partialConfig = await ioUtils.getConfig() as Partial<Config>;
+		var [upgraded, config] = _upgrade(partialConfig);
+		if(upgraded) {
 			ioUtils.setConfig(config);
 		}
 		return config;
-	},
-	setDefaultConfigProperties: async function (update) {
+	}
+
+	export async function setDefaultConfigProperties(update: Partial<Config>) {
 		var config = await configUtils.getDefaultConfig();
 		for (var key in update) config[key] = update[key];
 		await ioUtils.setConfig(config);
-	},
+	}
 
-	getPresetConfig: async function (uri) {
+	export async function getPresetConfig(uri: string): Promise<Partial<Config>> {
 		return {};
-	},
+	}
 
-	getEffectiveConfig: async function (override) {
+	export async function getEffectiveConfig(override: Partial<Config>): Promise<Config> {
 		var config = await configUtils.getDefaultConfig();
 		var ret = {};
 		for (var key in config) ret[key] = config[key];
 		for (var key in override) ret[key] = override[key];
-		return ret;
-	},
+		return ret as Config;
+	}
 
-	_upgrade: function (config) {
+	function _upgrade(config: Partial<Config>): [boolean, Config] {
 		var upgraded = false;
 		if (!("configVersion" in config)) {
 			config.configVersion = 0, upgraded = true;
@@ -74,14 +107,9 @@ var configUtils = {
 			config.configVersion = 6; upgraded = true;
 		}
 		if(config.configVersion == 6) {
-			config.makeVisisble = false;
+			config.makeVisible = false;
 			config.configVersion = 7; upgraded = true;
 		}
-		return upgraded;
-	},
-
-	_initial: function () {
-		return {
-		};
+		return [upgraded, config as Config];
 	}
 };

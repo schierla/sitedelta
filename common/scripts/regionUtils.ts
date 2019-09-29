@@ -1,54 +1,57 @@
 
-var regionUtils = {
+namespace regionUtils {
 
-	showOutline: function (doc, xpath, color) {
-		if (regionUtils._outlined.length > 0)
-			regionUtils.removeOutline();
+	export function showOutline(doc: Document, xpath: string, color: string) : void {
+		if (_outlined.length > 0)
+			removeOutline(doc);
 
 		if(xpath.startsWith("/") || xpath.startsWith("id(")) {
-			var elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
-			for(var element = elements.iterateNext(); element != null; element = elements.iterateNext()) {
-				regionUtils._outlined.push({ "e": element, "o": element.style.outline });
+			let elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+			for(var node = elements.iterateNext(); node != null; node = elements.iterateNext()) {
+				if(!(node instanceof HTMLElement)) continue;
+				_outlined.push({ "e": node, "o": node.style.outline });
 			}
 		} else {
-			var elements = doc.querySelectorAll(xpath);
+			let elements = doc.querySelectorAll(xpath);
 			for(var j=0; j<elements.length; j++) {
-				regionUtils._outlined.push({ "e": elements.item(j), "o": elements.item(j).style.outline });
+				var element = elements[j];
+				if(!(element instanceof HTMLElement)) continue;
+				_outlined.push({ "e": element, "o": element.style.outline });
 			} 
 		}
-		for (var i = 0; i < regionUtils._outlined.length; i++) {
-			regionUtils._outlined[i].e.style.outline = color + " dotted 2px";
+		for (var i = 0; i < _outlined.length; i++) {
+			_outlined[i].e.style.outline = color + " dotted 2px";
 		}
 
-	},
+	}
 
-	removeOutline: function () {
-		while (regionUtils._outlined.length > 0) {
-			var outlined = regionUtils._outlined.shift();
-			outlined.e.style.outline = outlined.o;
+	export function removeOutline(doc: Document): void {
+		while (_outlined.length > 0) {
+			var outlined = _outlined.shift();
+			if(outlined) outlined.e.style.outline = outlined.o;
 		}
-	},
+	}
 
-	selectRegion: function (doc) {
+	export function selectRegion(doc: Document): Promise<string> {
 		return new Promise(resolve => {
-			regionUtils._doc = doc;
-			regionUtils._needText = false;
-			regionUtils._destelement = null;
-			regionUtils._resolve = resolve;
-			doc.addEventListener("mouseover", regionUtils._mouseover, true);
-			doc.addEventListener("mousedown", regionUtils._mousedown, true);
-			doc.addEventListener("mouseup", regionUtils._mouseup, true);
-			doc.addEventListener("mouseout", regionUtils._mouseout, true);
+			_doc = doc;
+			_needText = false;
+			_destelement = null;
+			_resolve = (result: string) => resolve(result);
+			doc.addEventListener("mouseover", _mouseover, true);
+			doc.addEventListener("mousedown", _mousedown, true);
+			doc.addEventListener("mouseup", _mouseup, true);
+			doc.addEventListener("mouseout", _mouseout, true);
 		});
-	},
+	}
 
-	selectRegionOverlay: function(overlay, idoc) {
+	export function selectRegionOverlay(overlay: HTMLElement, idoc: Document): Promise<string> {
 		return new Promise(resolve => {
-			regionUtils._doc = idoc;
-			regionUtils._needText = false;
-			regionUtils._destelement = null;
-			regionUtils._resolve = resolve;
-			regionUtils._overlay = overlay;
+			_doc = idoc;
+			_needText = false;
+			_destelement = null;
+			_resolve = (result: string) => resolve(result);
+			_overlay = overlay;
 	
 			while(overlay.firstChild) overlay.removeChild(overlay.firstChild);
 			var overlaycontent = document.createElement("div");
@@ -60,177 +63,205 @@ var regionUtils = {
 			overlay.appendChild(overlaycontent);
 	
 			overlay.style.display = 'block';
-			overlay.scrollTop = idoc.defaultView.scrollY; 
-			overlay.scrollLeft = idoc.defaultView.scrollX;
-	
-			overlay.addEventListener("mousemove", regionUtils._overlaymousemove);
-			overlay.addEventListener("mousedown", regionUtils._overlaymousedown);
-			overlay.addEventListener("mouseup", regionUtils._overlaymouseup);
-			overlay.addEventListener("scroll", regionUtils._overlayscroll);
-			window.addEventListener("resize", regionUtils._overlayresize);
-		})
-	},
-
-	abortSelect: function () {
-		if (regionUtils._destelement !== null)
-			regionUtils._destelement.style.outline = "none";
-		if (regionUtils._doc === null) return;
-
-		if(regionUtils._overlay !== null) {
-			overlay.style.display = 'none';
-
-			regionUtils._overlay.removeEventListener("mousemove", regionUtils._overlaymousemove);
-			regionUtils._overlay.removeEventListener("mousedown", regionUtils._overlaymousedown);
-			regionUtils._overlay.removeEventListener("mouseup", regionUtils._overlaymouseup);
-			regionUtils._overlay.removeEventListener("scroll", regionUtils._overlayscroll);
-			window.removeEventListener("resize", regionUtils._overlayresize);
-			regionUtils._overlay = null;
-		} else {
-			regionUtils._doc.removeEventListener("mouseover", regionUtils._mouseover, true);
-			regionUtils._doc.removeEventListener("mousedown", regionUtils._mousedown, true);
-			regionUtils._doc.removeEventListener("mouseup", regionUtils._mouseup, true);
-			regionUtils._doc.removeEventListener("mouseout", regionUtils._mouseout, true);
-		}
-
-		regionUtils._needText = false;
-		regionUtils._destelement = null;
-		regionUtils._resolve = null;
-		regionUtils._doc = null;
-	},
-
-	_mouseover: function (e) {
-		if (regionUtils.needText && !e.target.firstChild.data &&
-			(!e.target.id || e.target.id.substr(0, 16) == "sitedelta-change"))
-			return;
-		e.target.style.outline = "red dotted 2px";
-		e.preventDefault();
-		e.stopPropagation();
-		return false;
-	},
-
-	_mouseout: function (e) {
-		if (e.target && e.target != regionUtils._destelement)
-			e.target.style.outline = "none";
-		e.preventDefault();
-		e.stopPropagation();
-		return false;
-	},
-
-	_mousedown: function (e) {
-		regionUtils._needText = true;
-		regionUtils._destelement = e.target;
-		e.target.style.outline = "green solid 2px;";
-		e.preventDefault();
-		e.stopPropagation();
-		return false;
-	},
-
-	_mouseup: function (e) {
-		e.preventDefault();
-		e.stopPropagation();
-		regionUtils._mouseout(e);
-
-		if (e.button == 0 && !e.ctrlKey) {
-			regionUtils._needText = false;
-			if (e.target != regionUtils._destelement && ((e.target.firstChild && e.target.firstChild.data) || e.target.id)) {
-				var to = regionUtils._buildXPath(regionUtils._destelement, false).split("/");
-				var from = regionUtils._buildXPath(e.target, false).split("/");
-				var common = "";
-				for (var i = 0; i < Math.min(to.length, from.length); i++) {
-					common += "/" + to[i];
-					if (to[i] != from[i]) break;
-				}
-				common = common.substr(1);
-				if (e.target.id) {
-					var xpath = "//*[@id=\"" + e.target.id + "\"]";
-					xpath = 'id("' + e.target.id + '")';
-				} else {
-					var data = new String(e.target.firstChild.data);
-					var func = "text()";
-					if (data.replace(/[ \n\t\r]+/g, " ").replace(/^ /, "").replace(/ $/, "") != data) {
-						data = data.replace(/[ \n\t\r]+/g, " ").replace(/^ /, "").replace(/ $/, "");
-						func = "normalize-space(" + func + ")";
-					}
-					if (data.replace(/"/, "'") != data) {
-						data = data.replace(/"/, "'");
-						func = "translate(" + func + ",'\"',\"'\")";
-					}
-
-					var xpath = "//" + e.target.nodeName.toLowerCase() + '[' + func + '="' + data + '"]';
-				}
-				for (var j = i; j < from.length; j++)
-					xpath += "/..";
-				for (i = i; i < to.length; i++)
-					xpath += "/" + to[i];
-			} else {
-				var xpath = regionUtils._buildXPath(regionUtils._destelement, true);
+			if(idoc.defaultView) {
+				overlay.scrollTop = idoc.defaultView.scrollY; 
+				overlay.scrollLeft = idoc.defaultView.scrollX;
 			}
-		} else {
-			var xpath = null;
-		}
-		regionUtils._resolve(xpath);
-		regionUtils.abortSelect();
-		return false;
-	},
-
-	_overlaymousemove: function(e) {
-		var elem = regionUtils._doc.elementFromPoint(e.clientX - regionUtils._overlay.offsetLeft, e.clientY - regionUtils._overlay.offsetTop);
-		if(elem == regionUtils._doc.firstChild) elem = null;
-		if(regionUtils._overlayelem !== null && regionUtils._overlayelem != elem) {
-			regionUtils._mouseout({target: regionUtils._overlayelem, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
-			regionUtils._overlayelem = null;
-		}
-		if(regionUtils._overlayelem != elem) {
-			regionUtils._overlayelem = elem;
-			regionUtils._mouseover({target: regionUtils._overlayelem, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
-		}
-	},
-
-	_overlaymousedown: function(e) {
-		if(regionUtils._overlayelem !== null) {
-			regionUtils._mousedown({target: regionUtils._overlayelem, button: e.button, ctrlKey: e.ctrlKey, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
-		}
-	}, 
 	
-	_overlaymouseup: function(e) {
-		if(regionUtils._overlayelem !== null) {
-			regionUtils._mouseup({target: regionUtils._overlayelem, button: e.button, ctrlKey: e.ctrlKey, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation()});
+			overlay.addEventListener("mousemove", _overlaymousemove);
+			overlay.addEventListener("mousedown", _overlaymousedown);
+			overlay.addEventListener("mouseup", _overlaymouseup);
+			overlay.addEventListener("scroll", _overlayscroll);
+			window.addEventListener("resize", _overlayresize);
+		})
+	}
+
+	export function abortSelect(): void {
+		if (_destelement !== null)
+			_destelement.style.outline = "none";
+		if (_doc === null) return;
+
+		if(_overlay !== null) {
+			_overlay.style.display = 'none';
+
+			_overlay.removeEventListener("mousemove", _overlaymousemove);
+			_overlay.removeEventListener("mousedown", _overlaymousedown);
+			_overlay.removeEventListener("mouseup", _overlaymouseup);
+			_overlay.removeEventListener("scroll", _overlayscroll);
+			window.removeEventListener("resize", _overlayresize);
+			_overlay = null;
+		} else {
+			_doc.removeEventListener("mouseover", _mouseover, true);
+			_doc.removeEventListener("mousedown", _mousedown, true);
+			_doc.removeEventListener("mouseup", _mouseup, true);
+			_doc.removeEventListener("mouseout", _mouseout, true);
 		}
-	},
 
-	_overlayscroll: function(e) {
-		regionUtils._doc.defaultView.scrollTo(regionUtils._overlay.scrollLeft, regionUtils._overlay.scrollTop);
-	},
+		_needText = false;
+		_destelement = null;
+		_resolve = null;
+		_doc = null;
+	}
 
-	_overlayresize: function(e) {
-		regionUtils._overlay.firstChild.style.width = regionUtils._doc.body.scrollWidth + "px";
-		regionUtils._overlay.firstChild.style.height = regionUtils._doc.body.scrollHeight + "px";
-	},
+	function _handleOver(target: HTMLElement) {
+		_showOutline(target);
+	}
 
-	_buildXPath: function (t, allowId) {
+	function _handleOut(target: HTMLElement) {
+		_hideOutline(target);
+	}
+
+	function _handleDown(target: HTMLElement) {
+		_needText = true;
+		_destelement = target;
+		target.style.outline = "green solid 2px;";
+	}
+
+	function _handleUp(target: HTMLElement) {
+		var xpath: string | null = null;
+		_needText = false;
+		if (target != _destelement && ((target.firstChild instanceof CharacterData) || target.id)) {
+			var to = _buildXPath(_destelement as HTMLElement, false).split("/");
+			var from = _buildXPath(target, false).split("/");
+			var common = "";
+			for (var i = 0; i < Math.min(to.length, from.length); i++) {
+				common += "/" + to[i];
+				if (to[i] != from[i]) break;
+			}
+			common = common.substr(1);
+			if (target.id) {
+				xpath = "//*[@id=\"" + target.id + "\"]";
+				xpath = 'id("' + target.id + '")';
+			} else {
+				var data = new String((target.firstChild as CharacterData).data);
+				var func = "text()";
+				if (data.replace(/[ \n\t\r]+/g, " ").replace(/^ /, "").replace(/ $/, "") != data) {
+					data = data.replace(/[ \n\t\r]+/g, " ").replace(/^ /, "").replace(/ $/, "");
+					func = "normalize-space(" + func + ")";
+				}
+				if (data.replace(/"/, "'") != data) {
+					data = data.replace(/"/, "'");
+					func = "translate(" + func + ",'\"',\"'\")";
+				}
+
+				xpath = "//" + target.nodeName.toLowerCase() + '[' + func + '="' + data + '"]';
+			}
+			for (var j = i; j < from.length; j++)
+				xpath += "/..";
+			for (i = i; i < to.length; i++)
+				xpath += "/" + to[i];
+		} else {
+			xpath = _buildXPath(_destelement as HTMLElement, true);
+		}
+		if(_resolve) _resolve(xpath);
+		abortSelect();
+	}
+
+	function _mouseover(e: MouseEvent): boolean {
+		if(e.target instanceof HTMLElement) _handleOver(e.target);
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	}
+
+	function _mouseout(e: MouseEvent) : boolean {
+		if(e.target instanceof HTMLElement) _handleOut(e.target);
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	}
+
+	function _showOutline(target: Element): void {
+		if(!(target instanceof HTMLElement)) return;
+		if (_needText && (!target.firstChild || !("data" in target.firstChild)) &&
+			(!target.id || target.id.substr(0, 16) == "sitedelta-change"))
+			return;
+		target.style.outline = "red dotted 2px";
+	}
+
+	function _hideOutline(target: Element): void {
+		if(!(target instanceof HTMLElement)) return;
+		if (target && target != _destelement)
+			target.style.outline = "none";
+	}
+
+	function _mousedown(e: MouseEvent) : boolean {
+		if(e.target instanceof HTMLElement) _handleDown(e.target);
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	}
+
+	function _mouseup(e: MouseEvent) : boolean {
+		if(e.target instanceof HTMLElement) {
+			_handleOut(e.target);
+			if (e.button == 0 && !e.ctrlKey) _handleUp(e.target);
+		}
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	}
+
+	function _overlaymousemove(e: MouseEvent) : void {
+		if(!_doc || !_overlay) return;
+		var elem: Element | null = _doc.elementFromPoint(e.clientX - _overlay.offsetLeft, e.clientY - _overlay.offsetTop);
+		if(elem instanceof HTMLElement) {
+			if(elem == _doc.firstChild) elem = null;
+			if(_overlayelem !== null && _overlayelem != elem) {
+				_handleOut(_overlayelem);
+				_overlayelem = null;
+			}
+			if(_overlayelem != elem) {
+				_overlayelem = elem;
+				if(_overlayelem) _handleOver(_overlayelem);
+			}
+		}
+	}
+
+	function _overlaymousedown(e: MouseEvent): void {
+		if(_overlayelem !== null) _handleDown(_overlayelem);
+	}
+	
+	function _overlaymouseup(e: MouseEvent): void {
+		if(_overlayelem !== null) _handleUp(_overlayelem);
+	}
+
+	function _overlayscroll(e: MouseEvent): void {
+		if(!_doc || !_doc.defaultView || !_overlay) return;
+		_doc.defaultView.scrollTo(_overlay.scrollLeft, _overlay.scrollTop);
+	}
+
+	function _overlayresize(e: Event): void {
+		if(!_doc || !_overlay) return;
+		var child = _overlay.firstChild as HTMLElement;
+		child.style.width = _doc.body.scrollWidth + "px";
+		child.style.height = _doc.body.scrollHeight + "px";
+	}
+
+	function _buildXPath(t: HTMLElement, allowId: boolean): string {
 		var path = "";
 		if (allowId && t.id != "" && t.id.indexOf('sitedelta') == -1) return 'id("' + t.id + '")';
-		while (t.nodeName != "HTML") {
+		while (t.nodeName != "HTML" && t.parentNode) {
 			var c = t.parentNode.firstChild;
 			var num = 1;
-			while (c != t) {
+			while (c && c != t) {
 				if (c.nodeName == t.nodeName)
 					num++;
 				c = c.nextSibling;
 			}
 			path = "/" + t.nodeName.toLowerCase() + "[" + num + "]" + path;
-			t = t.parentNode;
+			t = t.parentNode as HTMLElement;
 			if (allowId && t.id != "" && t.id.indexOf('sitedelta') == -1) return 'id("' + t.id + '")' + path;
 		}
 		path = "/" + t.nodeName.toLowerCase() + path;
 		return path;
-	},
+	}
 
-	_outlined: [],
-	_needText: false,
-	_destelement: null,
-	_resolve: null,
-	_doc: null, 
-	_overlay: null,
-	_overlayelem: null
+	var _outlined: {e: HTMLElement, o: string}[] = [];
+	var _needText: boolean = false;
+	var _destelement: HTMLElement | null = null;
+	var _resolve: ((region: string | null) => any) | null = null;
+	var _doc: Document | null = null;
+	var _overlay: HTMLElement | null = null;
+	var _overlayelem: HTMLElement | null = null;
 };

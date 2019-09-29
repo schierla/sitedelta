@@ -1,29 +1,42 @@
-var ioUtils = {
-	clean: function (url) {
+type Index = Record<string, Status>;
+
+interface Status {
+	changes?: number;
+	nextScan?: number;
+	title?: string;
+}
+
+namespace ioUtils {
+	export function clean(url: string): string {
 		return url.replace(/http:\/\/[^\/]+@/i, "http://").replace(/https:\/\/[^\/]+@/i, "https://");
-	},
-	getConfig: async function () {
-		var config = await ioUtils._get("config");
-		if(config) return config; else return {};
-	},
-	setConfig: async function (config) {
-		await ioUtils._set("config", config);
-	},
-	listIndex: async function () {
-		var index = await ioUtils._get("index");
-		if(index) return index; else return {};
-	},
-	observeIndex: async function (observer) {
-		chrome.storage.onChanged.addListener((changes, scope) => {
+	}
+
+	export async function getConfig(): Promise<Partial<Config>> {
+		var config = await _get("config");
+		if(config) return config as Partial<Config>; else return {};
+	}
+
+	export async function setConfig(config: Partial<Config>): Promise<void> {
+		await _set("config", config);
+	}
+
+	export async function listIndex(): Promise<Index> {
+		var index = await _get("index");
+		if(index) return index as Index; else return {};
+	}
+
+	export async function observeIndex(observer: (index: Index) => void) {
+		chrome.storage.onChanged.addListener((changes: any, scope: string) => {
 			if (scope == "local" && "index" in changes) {
-				observer(changes["index"].newValue);
+				observer(changes["index"].newValue as Index);
 			}
 		});
-		observer(await ioUtils.listIndex());
-	},
-	findInIndex: async function (selector) {
-		var index = await ioUtils._get("index");
-		var ret = [];
+		observer(await listIndex());
+	}
+
+	export async function findInIndex<T>(selector: (url: string, status: Status) => T | null): Promise<T[]> {
+		var index = await listIndex();
+		var ret: T[] = [];
 		if (index) {
 			for (var url in index) {
 				var result = selector(url, index[url]);
@@ -31,40 +44,44 @@ var ioUtils = {
 			}
 		}
 		return ret;
-	},
-	setInIndex: async function (url, status) {
-		var index = await ioUtils._get("index");
-		if (!index) index = {};
-		index[ioUtils.clean(url)] = status;
-		await ioUtils._set("index", index);
-	},
-	get: async function (url, key) {
-		var storagekey = ioUtils.clean(url);
-		var data = await ioUtils._get(storagekey);
+	}
+
+	export async function setInIndex(url: string, status: Status) {
+		var index = await listIndex();
+		index[clean(url)] = status;
+		await _set("index", index);
+	}
+
+	export async function get(url: string, key: string): Promise<any> {
+		var storagekey = clean(url);
+		var data = await _get(storagekey);
 		if (data && key in data) {
 			return data[key];
 		} else {
 			return null; 
 		}
-	},
-	put: async function (url, key, data) {
-		var storagekey = ioUtils.clean(url);
-		var olddata = await ioUtils._get(storagekey);
+	}
+
+	export async function put(url: string, key: string, data: any): Promise<void> {
+		var storagekey = clean(url);
+		var olddata = await _get(storagekey);
 		if (!olddata) {
 			olddata = {};
-			await ioUtils.setInIndex(url, {});
+			await setInIndex(url, {});
 		}
 		olddata[key] = data;
-		await ioUtils._set(storagekey, olddata);
-	},
-	remove: async function (url) {
-		var storagekey = ioUtils.clean(url);
-		await ioUtils._remove(storagekey);
-		var index = await ioUtils._get("index");
+		await _set(storagekey, olddata);
+	}
+
+	export async function remove(url: string): Promise<void> {
+		var storagekey = clean(url);
+		await _remove(storagekey);
+		var index = await _get("index");
 		delete index[url];
-		await ioUtils._set("index", index);
-	}, 
-	_get: async function(key) {
+		await _set("index", index);
+	}
+
+	async function _get(key: string): Promise<any> {
 		return new Promise(resolve => {
 			chrome.storage.local.get(key, data => {
 				if(key in data) 
@@ -73,15 +90,17 @@ var ioUtils = {
 					resolve(null); 
 			});
 		});
-	}, 
-	_set: async function(key, value) {
+	}
+
+	async function _set(key: string, value: any): Promise<void> {
 		var data = {}; 
 		data[key] = value;
 		return new Promise(resolve => {
 			chrome.storage.local.set(data, resolve);
 		});
-	}, 
-	_remove: async function(key) {
+	}
+
+	async function _remove(key: string): Promise<void> {
 		return new Promise(resolve => {
 			chrome.storage.local.remove(key, resolve);
 		});

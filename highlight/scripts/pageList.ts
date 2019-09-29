@@ -1,61 +1,61 @@
 
-var pageList = {
+namespace highlightPageList {
 
-	deletePage: async function (key, data) {
+	async function deletePage(key: string, data: any) {
 		await ioUtils.remove(key);
-	},
+	}
 	
-	openPage: async function (key, data) {
+	async function openPage(key: string, data: any) {
 		chrome.tabs.create({ url: key }); 
 		await new Promise(resolve => setTimeout(resolve, 300));
-	},
+	}
 
-	openPageInBackground: async function (key, data) {
+	async function openPageInBackground(key: string, data: any) {
 		chrome.tabs.create({ url: key, active: false }); 
 		await new Promise(resolve => setTimeout(resolve, 300));
-	},
+	}
 
-	scanPage: async function (key, data, tabId) {
-		var url = await tabUtils.loadInTab(tabId, key);
-		var changes = await tabUtils.checkChanges(tabId, url);
+	async function scanPage(key: string, tabId: number) {
+		await tabUtils.loadInTab(tabId, key);
+		var changes = await tabUtils.checkChanges(tabId, key);
 		
 		if (changes == 0) { // unchanged
 			return;
 		} else if (changes > 0) {
 			await tabUtils.showIcon(tabId, "*", 1);
-			await pageUtils.setChanges(url, 1);
+			await pageUtils.setChanges(key, 1);
 		}
-	},
+	}
 
-	selectAllIfNone: function() {
-		var options = document.querySelector("#pages").options;
+	function selectAllIfNone(): void {
+		var options = (document.querySelector("#pages") as HTMLSelectElement).options;
 		for(var i = 0; i < options.length; i++)
 			if(options[i].selected) return;
 		for(var i = 0; i < options.length; i++)
 			options[i].selected = true;
-	},
+	}
 
-	selectChangedIfNone: function () {
-		var options = document.querySelector("#pages").options;
+	function selectChangedIfNone(): void {
+		var options = (document.querySelector("#pages") as HTMLSelectElement).options;
 		for (var i = 0; i < options.length; i++)
 			if (options[i].selected) return;
 		for (var i = 0; i < options.length; i++)
 			if(options[i].classList.contains("changed")) 
 				options[i].selected = true;
-	},
+	}
 
-	createItem: function (key, data) {
-		var title = "title" in data ? data.title : key;
+	function createItem(key: string, data: any) {
+		var title = data.title || key;
 		if (!("title" in data)) pageUtils.getTitle(key);
 		var ret = document.createElement("option");
 		ret.setAttribute("value", key);
 		ret.setAttribute("title", key);
 		ret.appendChild(document.createTextNode(title));
 		return ret;
-	},
+	}
 
-	updateItem: function (element, data) {
-		element.firstChild.data = data["title"];
+	function updateItem(element: HTMLOptionElement, data: any): void {
+		(element.firstChild as CharacterData).data = data["title"];
 		element.classList.remove("changed", "unchanged", "failed", "scanning");
 		if (data.changes === undefined) {
 		} else if (data.changes > 0) {
@@ -65,29 +65,29 @@ var pageList = {
 		} else if (data.changes == -1) {
 			element.classList.add("failed");
 		}
-	},
+	}
 
-	load: async function () {
-		var list = uiUtils.sortedList("pages", this.createItem, this.updateItem);
-		list.isBefore = (keya, a, keyb, b) => a.title!==undefined && b.title!==undefined && a.title.toLowerCase() < b.title.toLowerCase();
+	export async function load(): Promise<void> {
+		var list = new uiUtils.SortedList("pages", createItem, updateItem);
+		list.isBefore = (keya: string, a: any, keyb: string, b: any) => a.title!==undefined && b.title!==undefined && a.title.toLowerCase() < b.title.toLowerCase();
 
-		var filter = document.querySelector("#filter");
+		var filter = document.querySelector("#filter") as HTMLInputElement;
 		if(filter) {
-			list.isShown = (key, data) => key.indexOf(filter.value) != -1 || (data.title!==undefined && data.title.indexOf(filter.value) != -1);
+			list.isShown = (key: string, data: any) => key.indexOf(filter.value) != -1 || (data.title!==undefined && data.title.indexOf(filter.value) != -1);
 			filter.addEventListener("input", () => list.refresh());
 		}
 
-		document.querySelector("#delete").addEventListener("click", () => list.foreachSelected(this.deletePage));
-		document.querySelector("#open").addEventListener("click", () => { pageList.selectChangedIfNone(); list.foreachSelected(this.openPage, this.openPageInBackground) });
-		document.querySelector("#scannow").addEventListener("click",
+		(document.querySelector("#delete") as HTMLElement).addEventListener("click", () => list.foreachSelected(deletePage));
+		(document.querySelector("#open") as HTMLElement).addEventListener("click", () => { selectChangedIfNone(); list.foreachSelected(openPage, openPageInBackground) });
+		(document.querySelector("#scannow") as HTMLElement).addEventListener("click",
 			() => chrome.tabs.create({ url: "about:blank" }, async tab => {
-				pageList.selectAllIfNone();
-				await list.foreachSelected((key, data) => this.scanPage(key, data, tab.id));
-				chrome.tabs.remove(tab.id);
+				selectAllIfNone();
+				await list.foreachSelected((key, data) => scanPage(key, tab.id || 0));
+				chrome.tabs.remove(tab.id || 0);
 			}));
-		document.querySelector("#pages").addEventListener("dblclick", () => list.foreachSelected(this.openPage));
+		(document.querySelector("#pages") as HTMLElement).addEventListener("dblclick", () => list.foreachSelected(openPage));
 		ioUtils.observeIndex(index => list.updateAll(index));
 	}
 }
 
-pageList.load();
+highlightPageList.load();

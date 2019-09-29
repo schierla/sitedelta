@@ -4,6 +4,14 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Install dependencies",
+            "type": "shell",
+            "command": "npm install",
+            "group": "build",
+            "problemMatcher": []
+        },
+
+        {
             "label": "Package all",
             "type": "shell",
             "command": "./buildall.sh",
@@ -46,7 +54,7 @@
         {
             "label": "Debug in Firefox",
             "type": "shell",
-            "command": "web-ext run -s build/unpacked",
+            "command": "./node_modules/web-ext/bin/web-ext run -s build/unpacked",
             "group": "build",
             "problemMatcher": []
         },
@@ -54,7 +62,7 @@
         {
             "label": "Check for errors",
             "type": "shell",
-            "command": "web-ext lint -s build/unpacked",
+            "command": "./node_modules/web-ext/bin/web-ext lint -s build/unpacked",
             "group": "build",
             "problemMatcher": []
         }

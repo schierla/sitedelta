@@ -1,0 +1,10 @@
+{
+  "name": "sitedelta",
+  "author": "Andreas Schierl",
+  "private": true,
+  "devDependencies": {
+    "@types/chrome": "0.0.89",
+    "typescript": "^3.6.3",
+    "web-ext": "^3.2.0"
+  }
+}

@@ -7,8 +7,8 @@ namespace uiUtils {
 			var placeholder = elems[i].getAttribute("placeholder");
 			if (placeholder) elems[i].setAttribute("placeholder", _translate(placeholder));
 			var firstChild = elems[i].firstChild;
-			if (firstChild instanceof CharacterData)
-				firstChild.data = _translate(firstChild.data);
+			if ("data" in (firstChild as CharacterData))
+				(firstChild as CharacterData).data = _translate((firstChild as CharacterData).data);
 		}
 	}
 
@@ -38,8 +38,7 @@ namespace uiUtils {
 			this.createElement = createElement;
 			this.updateElement = updateElement;
 			var container = document.querySelector("#" + id);
-			if(!(container instanceof HTMLSelectElement)) throw "Could not find container " + id;
-			this.container = container;
+			this.container = container as HTMLSelectElement;
 			this.container.addEventListener("change", () => this.select());
 		}
 

@@ -8,15 +8,13 @@ namespace regionUtils {
 		if(xpath.startsWith("/") || xpath.startsWith("id(")) {
 			let elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
 			for(var node = elements.iterateNext(); node != null; node = elements.iterateNext()) {
-				if(!(node instanceof HTMLElement)) continue;
-				_outlined.push({ "e": node, "o": node.style.outline });
+				_outlined.push({ "e": node as HTMLElement, "o": (node as HTMLElement).style.outline });
 			}
 		} else {
 			let elements = doc.querySelectorAll(xpath);
 			for(var j=0; j<elements.length; j++) {
 				var element = elements[j];
-				if(!(element instanceof HTMLElement)) continue;
-				_outlined.push({ "e": element, "o": element.style.outline });
+				_outlined.push({ "e": element as HTMLElement, "o": (element as HTMLElement).style.outline });
 			} 
 		}
 		for (var i = 0; i < _outlined.length; i++) {
@@ -120,7 +118,7 @@ namespace regionUtils {
 	function _handleUp(target: HTMLElement) {
 		var xpath: string | null = null;
 		_needText = false;
-		if (target != _destelement && ((target.firstChild instanceof CharacterData) || target.id)) {
+		if (target != _destelement && ((target.firstChild && "data" in (target.firstChild as CharacterData)) || target.id)) {
 			var to = _buildXPath(_destelement as HTMLElement, false).split("/");
 			var from = _buildXPath(target, false).split("/");
 			var common = "";
@@ -158,45 +156,41 @@ namespace regionUtils {
 	}
 
 	function _mouseover(e: MouseEvent): boolean {
-		if(e.target instanceof HTMLElement) _handleOver(e.target);
+		_handleOver(e.target as HTMLElement);
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
 	}
 
 	function _mouseout(e: MouseEvent) : boolean {
-		if(e.target instanceof HTMLElement) _handleOut(e.target);
+		_handleOut(e.target as HTMLElement);
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
 	}
 
 	function _showOutline(target: Element): void {
-		if(!(target instanceof HTMLElement)) return;
 		if (_needText && (!target.firstChild || !("data" in target.firstChild)) &&
 			(!target.id || target.id.substr(0, 16) == "sitedelta-change"))
 			return;
-		target.style.outline = "red dotted 2px";
+		(target as HTMLElement).style.outline = "red dotted 2px";
 	}
 
 	function _hideOutline(target: Element): void {
-		if(!(target instanceof HTMLElement)) return;
 		if (target && target != _destelement)
-			target.style.outline = "none";
+			(target as HTMLElement).style.outline = "none";
 	}
 
 	function _mousedown(e: MouseEvent) : boolean {
-		if(e.target instanceof HTMLElement) _handleDown(e.target);
+		_handleDown(e.target as HTMLElement);
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
 	}
 
 	function _mouseup(e: MouseEvent) : boolean {
-		if(e.target instanceof HTMLElement) {
-			_handleOut(e.target);
-			if (e.button == 0 && !e.ctrlKey) _handleUp(e.target);
-		}
+		_handleOut(e.target as HTMLElement);
+		if (e.button == 0 && !e.ctrlKey) _handleUp(e.target as HTMLElement);
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
@@ -205,14 +199,14 @@ namespace regionUtils {
 	function _overlaymousemove(e: MouseEvent) : void {
 		if(!_doc || !_overlay) return;
 		var elem: Element | null = _doc.elementFromPoint(e.clientX - _overlay.offsetLeft, e.clientY - _overlay.offsetTop);
-		if(elem instanceof HTMLElement) {
+		if(elem) {
 			if(elem == _doc.firstChild) elem = null;
 			if(_overlayelem !== null && _overlayelem != elem) {
 				_handleOut(_overlayelem);
 				_overlayelem = null;
 			}
 			if(_overlayelem != elem) {
-				_overlayelem = elem;
+				_overlayelem = elem as HTMLElement;
 				if(_overlayelem) _handleOver(_overlayelem);
 			}
 		}

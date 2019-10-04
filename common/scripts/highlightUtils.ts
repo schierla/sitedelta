@@ -45,8 +45,8 @@ namespace highlightUtils {
 			 _processDeleted(diff);
 		}
 		if (config.showRegions) {
-			for(var exclude of excludes) if(exclude instanceof HTMLElement) exclude.style.outline = config.excludeRegion + " dotted 2px";
-			for(var include of regions) if(include instanceof HTMLElement) include.style.outline = config.includeRegion + " dotted 2px";
+			for(var exclude of excludes) (exclude as HTMLElement).style.outline = config.excludeRegion + " dotted 2px";
+			for(var include of regions) (include as HTMLElement).style.outline = config.includeRegion + " dotted 2px";
 		}
 
 		var wpos = 0, npos = 0, opos = 0;
@@ -406,8 +406,7 @@ namespace highlightUtils {
 		var excludes = textUtils.findElements(doc, config.excludes);
 		var includes = textUtils.findElements(doc, config.includes);
 		for(var exclude of excludes) 
-			if(exclude instanceof HTMLElement) 
-				exclude.style.display = "none";
+			(exclude as HTMLElement).style.display = "none";
 		
 		var parents: Node[] = [];
 		for(var include of includes) 
@@ -422,8 +421,8 @@ namespace highlightUtils {
 		for(var e: Node | null = elem.firstChild; e != null; e = e.nextSibling) {
 			if(includes.indexOf(e) != -1) 
 				continue; 
-			else if(parents.indexOf(e) == -1 && e instanceof HTMLElement) 
-				e.style.display = "none";
+			else if(parents.indexOf(e) == -1) 
+				(e as HTMLElement).style.display = "none";
 			else if(e.firstChild) 
 				_isolateRegionsRecursively(e, includes, parents);
 		}
@@ -444,14 +443,14 @@ namespace highlightUtils {
 	}
 
 	function _makeElementVisible(elem: Node): void {
-		if(!(elem instanceof HTMLElement)) return;
-		if(elem.offsetHeight === 0 && elem.textContent !== "") {
-			if(elem.nodeName && (elem.nodeName.toLowerCase()=="script" || elem.nodeName.toLowerCase()=="style")) return;
-			elem.style.display="block";
-			elem.style.height="auto";
-			elem.style.opacity="1";
+		var e = elem as HTMLElement;
+		if(e.offsetHeight === 0 && elem.textContent !== "") {
+			if(e.nodeName && (e.nodeName.toLowerCase()=="script" || e.nodeName.toLowerCase()=="style")) return;
+			e.style.display="block";
+			e.style.height="auto";
+			e.style.opacity="1";
 		}
-		if(elem.style) elem.style.opacity="1";
+		if(e.style) e.style.opacity="1";
 	}
 
 	function _makeParentsVisible(elem: Node): void {
@@ -477,8 +476,7 @@ namespace highlightUtils {
 			var rel = (elem as Element).getAttribute("rel");
 			if(rel && rel.toLowerCase() == "stylesheet") elem.parentNode.removeChild(elem);
 		} else {
-			if (elem instanceof HTMLElement) 
-				elem.removeAttribute("style");
+			(elem as Element).removeAttribute("style");
 			var child = elem.firstChild;
 			while (child) {
 				var next = child.nextSibling;

@@ -39,8 +39,7 @@ namespace textUtils {
 			if(xpath.startsWith("/") || xpath.startsWith("id(")) {
 				let elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
 				for (var element = elements.iterateNext(); element != null; element = elements.iterateNext()) 
-					if(element instanceof Element) 
-						ret.push(element);
+					ret.push(element as Element);
 			} else {
 				let elements = doc.querySelectorAll(xpath);
 				for(var j=0; j<elements.length; j++) 

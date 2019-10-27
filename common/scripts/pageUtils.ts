@@ -9,6 +9,10 @@ namespace pageUtils {
 		return await ioUtils.findInIndex((url, status) => status.changes === undefined || status.changes <= 0 ? null : url);
 	}
 
+	export async function listFailed(): Promise<string[]> {
+		return await ioUtils.findInIndex((url, status) => status.changes === undefined || status.changes >= 0 ? null : url);
+	}
+
 	export async function getStatus(url: string): Promise<Status | null> {
 		var result = await ioUtils.findInIndex((furl, fstatus) => (url == furl ? fstatus : null));
 		return result.length > 0 ? result[0] : null;

@@ -51,6 +51,10 @@
 		"message": "Pages modified since last visit:",
 		"description": "Headline for changed pages"
 	},
+	"watchFailedPages": {
+		"message": "Pages that failed to load:",
+		"description": "Headline for failed pages"
+	},	
 	"watchNextScan": {
 		"message": "Next scan: $TIME$",
 		"description": "Label for the next scan time",
@@ -68,6 +72,10 @@
 	"watchNotificationFailed": {
 		"message": "SiteDelta: Failed to load page", 
 		"description": "Notification title when a page cannot be loaded"
+	},
+	"watchNotificationUnchanged": {
+		"message": "SiteDelta: No changes found",
+		"description": "Notification title when no changed page is found"
 	},
 
 	"pageFailed": {
@@ -162,6 +170,10 @@
 		"message": "Open Changed",
 		"description": "Button to open the changed pages"
 	},
+	"pagesOpenFailed": {
+		"message": "Open Failed",
+		"description": "Button to open the failed pages"
+	},	
 	"pagesScanOne": {
 		"message": "Scan Page",
 		"description": "Button to scan the selected page now"

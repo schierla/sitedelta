@@ -7,7 +7,7 @@ namespace uiUtils {
 			var placeholder = elems[i].getAttribute("placeholder");
 			if (placeholder) elems[i].setAttribute("placeholder", _translate(placeholder));
 			var firstChild = elems[i].firstChild;
-			if ("data" in (firstChild as CharacterData))
+			if ((firstChild as CharacterData) && "data" in (firstChild as CharacterData))
 				(firstChild as CharacterData).data = _translate((firstChild as CharacterData).data);
 		}
 	}

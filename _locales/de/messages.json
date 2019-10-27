@@ -51,6 +51,10 @@
 		"message": "Seit dem letzten Besuch geänderte Seiten:",
 		"description": "Headline for changed pages"
 	},
+	"watchFailedPages": {
+		"message": "Seiten die nicht geladen werden konnten:",
+		"description": "Headline for failed pages"
+	},	
 	"watchNextScan": {
 		"message": "Nächste Überprüfung: $TIME$",
 		"description": "Label for the next scan time",
@@ -68,6 +72,10 @@
 	"watchNotificationFailed": {
 		"message": "SiteDelta: Fehler beim Laden", 
 		"description": "Notification title when a page cannot be loaded"
+	},
+	"watchNotificationUnchanged": {
+		"message": "SiteDelta: Keine Änderungen gefunden",
+		"description": "Notification title when no changed page is found"
 	},
 
 	"pageFailed": {
@@ -163,6 +171,10 @@
 		"message": "Geänderte öffnen",
 		"description": "Button to open the changed pages"
 	},
+	"pagesOpenFailed": {
+		"message": "Fehlgeschlagene öffnen",
+		"description": "Button to open the failed pages"
+	},		
 	"pagesScanOne": {
 		"message": "Seite prüfen",
 		"description": "Button to scan the selected page now"

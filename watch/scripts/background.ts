@@ -45,12 +45,26 @@ namespace watchBackground {
 		for(var i=0; i<pages.length; i++) {
 			await scanPage(pages[i]);
 		}
+		var changed = await pageUtils.listChanged(), failed = await pageUtils.listFailed();
+		if(changed.length == 0 && failed.length == 0) {
+			var config = await configUtils.getDefaultConfig();
+			if(config.notifyChanged) {
+				chrome.notifications.create("#", {
+					"type": "basic",
+					"iconUrl": chrome.extension.getURL("common/icons/unchanged.svg"),
+					"title": chrome.i18n.getMessage("watchNotificationUnchanged"),
+					"message": ""
+				});
+			}
+		}
 	}
 
 	var messageListener = function (request: any, sender: any, sendResponse: (response: any) => void) {
 		var hiddenFields = ["configVersion", "includes", "excludes", "scanOnLoad", "highlightOnLoad", "enableContextMenu"];
 		if (request.command == "openChanged") {
 			pageUtils.listChanged().then(openPages);
+		} else if (request.command == "openFailed") {
+			pageUtils.listFailed().then(openPages);
 		} else if(request.command == "scanAll") {
 			pageUtils.list().then(scanPages);
 		} else if (request.command == "transferInfo") {
@@ -92,7 +106,7 @@ namespace watchBackground {
 
 
 	var notificationListener = function (url: string): void {
-		tabUtils.openResource("show.htm?" + url);
+		if(url != "#") tabUtils.openResource("show.htm?" + url);
 	}
 
 	var index = {};
@@ -100,9 +114,10 @@ namespace watchBackground {
 
 	function scheduleWatch(): void {
 		var nextUrl = "";
-		var changed = 0;
+		var changed = 0, failed = 0;
 		for (var url in index) {
 			if ("changes" in index[url] && index[url].changes > 0) changed++;
+			if ("changes" in index[url] && index[url].changes < 0) failed++;
 			if (!("nextScan" in index[url]) || index[url].nextScan == 0) continue;
 			if (nextUrl == "" || index[nextUrl].nextScan > index[url].nextScan) nextUrl = url;
 		}
@@ -118,9 +133,9 @@ namespace watchBackground {
 		}
 
 		if (changed > 0)
-			chrome.browserAction.setBadgeText({ text: "" + changed });
+			chrome.browserAction.setBadgeText({ text: "" + changed + ((failed > 0) ? "*" : "") });
 		else
-			chrome.browserAction.setBadgeText({ text: "" });
+			chrome.browserAction.setBadgeText({ text: "" + ((failed > 0) ? "*" : "") });
 	}
 
 	export function initialize() {

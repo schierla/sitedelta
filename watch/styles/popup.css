@@ -6,9 +6,11 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; user-select: none; }
 .buttons {text-align: right; }
 .browser-style input[type="text"], .browser-style select {width: 100%; }
 #watchUnsupported, #watchEnabled, #watchDisabled {display: none; }
-#changed {height: 6em; }
+#changed, #failed {height: 6em; }
 #changedPages {display: none; }
 .changes #changedPages {display: block; }
+#failedPages {display: none; }
+.failed #failedPages {display: block; }
 .unsupported #watch {display: none; }
 .disabled #watchDisabled, .enabled #watchEnabled, .unsupported #watchUnsupported {display: inline; }
 span.enabled, span.disabled { display: none; }

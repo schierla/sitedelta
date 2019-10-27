@@ -10,6 +10,16 @@ namespace watchPopup {
 		list.appendChild(option);
 	}
 
+	async function addFailedUrl(url: string) {
+		var title = await pageUtils.getTitle(url) || "";
+		var list = document.querySelector("#failed") as HTMLSelectElement;
+		var option = document.createElement("option");
+		option.appendChild(document.createTextNode(title));
+		option.setAttribute("value", url);
+		option.setAttribute("title", url);
+		list.appendChild(option);
+	}
+
 	var url: string;
 	var tabId: number;
 	var title: string;
@@ -46,9 +56,21 @@ namespace watchPopup {
 			window.close();
 		});
 	
+		(document.querySelector("#openFailed") as HTMLElement).addEventListener("click", function (e) {
+			chrome.runtime.sendMessage({ command: "openFailed" });
+			window.close();
+		});
+
 		(document.querySelector("#changed") as HTMLElement).addEventListener("dblclick", function () {
 			if ((document.querySelector("#changed") as HTMLSelectElement).value) {
 				tabUtils.openResource("show.htm?" + (document.querySelector("#changed") as HTMLSelectElement).value);
+				window.close();
+			}
+		});
+
+		(document.querySelector("#failed") as HTMLElement).addEventListener("dblclick", function () {
+			if ((document.querySelector("#failed") as HTMLSelectElement).value) {
+				tabUtils.openResource("show.htm?" + (document.querySelector("#failed") as HTMLSelectElement).value);
 				window.close();
 			}
 		});
@@ -72,6 +94,15 @@ namespace watchPopup {
 			await addChangedUrl(urls[i]);
 			if(urls[i] == url) 
 				document.body.classList.add("changed");
+		}
+
+		var urls = await pageUtils.listFailed();
+		if (urls.length > 0) 
+			document.body.classList.add("failed");
+		for (var i = 0; i < urls.length; i++) {
+			await addFailedUrl(urls[i]);
+			if(urls[i] == url) 
+				document.body.classList.add("failed");
 		}
 
 		var showPrefix = chrome.runtime.getURL("show.htm?");

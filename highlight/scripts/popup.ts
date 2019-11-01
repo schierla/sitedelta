@@ -107,24 +107,24 @@ namespace highlightPopup {
 
 
 	async function selectExclude() {
-		var ret = await tabUtils.selectExclude(tabId, url);
-		fillStatus({ state: tabUtils.PageState.SELECTREGION });
+		var ret = await highlightScriptUtils.selectExclude(tabId, url);
+		fillStatus({ state: highlightScriptUtils.PageState.SELECTREGION });
 		await new Promise(resolve => setTimeout(resolve, 5000));
 		return ret;
 	}
 
 	async function selectInclude() {
-		var ret = await tabUtils.selectInclude(tabId, url);
-		fillStatus({ state: tabUtils.PageState.SELECTREGION });
+		var ret = await highlightScriptUtils.selectInclude(tabId, url);
+		fillStatus({ state: highlightScriptUtils.PageState.SELECTREGION });
 		await new Promise(resolve => setTimeout(resolve, 5000));
 		return ret;
 	}
 
 	async function showOutline(region: string | null, color: string) {
 		if (region) 
-			await tabUtils.showOutline(tabId, region, color);
+			await highlightScriptUtils.showOutline(tabId, region, color);
 		else 
-			await tabUtils.removeOutline(tabId);
+			await highlightScriptUtils.removeOutline(tabId);
 	}
 
 	async function addBodyIfEmpty(list: string[]): Promise<string[]> {
@@ -198,10 +198,10 @@ namespace highlightPopup {
 		}
 
 		switch (status.state) {
-			case tabUtils.PageState.LOADED:
+			case highlightScriptUtils.PageState.LOADED:
 				document.body.classList.add("loaded");
 				break;
-			case tabUtils.PageState.HIGHLIGHTED:
+			case highlightScriptUtils.PageState.HIGHLIGHTED:
 				document.body.classList.add("highlighted");
 				if (status.changes == 0) {
 					document.body.classList.add("unchanged");
@@ -215,7 +215,7 @@ namespace highlightPopup {
 				tabUtils.showIcon(tabId, status.current, status.changes);
 				pageUtils.setChanges(url, status.changes < 0 ? -1 : 0);
 				break;
-			case tabUtils.PageState.SELECTREGION:
+			case highlightScriptUtils.PageState.SELECTREGION:
 				document.body.classList.add("selecting");
 				break;
 		}
@@ -238,9 +238,20 @@ namespace highlightPopup {
 
 	export async function init() {
 
-		element("setup").addEventListener("click", async function (e) {
-			await tabUtils.openResource("manage.htm");
-			window.close();
+		var advancedPermission = { permissions: [], origins: ["<all_urls>"] };
+		if (chrome.permissions) {
+			chrome.permissions.contains(advancedPermission, (success) => {
+				if(success) document.body.classList.add("advancedEnabled");
+			});
+		}
+
+		// element("setup").addEventListener("click", async function (e) {
+		// 	await tabUtils.openResource("manage.htm");
+		// 	window.close();
+		// });
+
+		element("scanAll").addEventListener("click", e => {
+			highlightScriptUtils.scanAll();
 		});
 	
 		element("pagetitle").addEventListener("change", async function (e) {
@@ -261,7 +272,7 @@ namespace highlightPopup {
 			document.body.classList.remove("disabled");
 			document.body.classList.remove("expanded");
 			document.body.classList.add("enabled");
-			var status = await tabUtils.highlightChanges(tabId, url);
+			var status = await highlightScriptUtils.highlightChanges(tabId, url);
 			fillStatus(status);
 		});
 	
@@ -300,7 +311,7 @@ namespace highlightPopup {
 			document.body.classList.add("disabled");
 		} else {
 			showTitle(title);
-			var status = await tabUtils.getStatus(tabId);
+			var status = await highlightScriptUtils.getStatus(tabId);
 			fillStatus(status);
 			document.body.classList.add("enabled");
 		}

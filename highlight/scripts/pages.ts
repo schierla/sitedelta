@@ -1,7 +1,12 @@
 window.addEventListener("contextmenu", e => { e.preventDefault(); return false; });
 
 (document.querySelector("#expand") as HTMLElement).addEventListener("click", e => {
-    if(chrome.webNavigation) document.body.classList.add("advancedEnabled");
+    var advancedPermission = { permissions: [], origins: ["<all_urls>"] };
+    if (chrome.permissions) {
+        chrome.permissions.contains(advancedPermission, (success) => {
+            if(success) document.body.classList.add("advancedEnabled");
+        });
+    }
     document.body.classList.toggle("expand");
 });
 

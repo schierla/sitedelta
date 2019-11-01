@@ -12,6 +12,9 @@ body {padding: 12px 8px 4px 8px; min-width: 20em; user-select: none; }
 #showNext, #showChanges, #enable, .enabled.changed #showChanges, .disabled #delete  { display: none; }
 .disabled #enable, .enabled #showChanges, .changed #showNext { display: inline; }
 
+#scanAll {display: none; }
+.advancedEnabled #scanAll {display: inline; }
+
 .unavailable #unavailable {display: block; }
 .unavailable #textfields {display: none; }
 .unavailable #highlight, .unavailable #delete, .unavailable #expand { display: none; }

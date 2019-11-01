@@ -3,25 +3,23 @@ namespace highlightBackground {
 
 	var openTabRequest: null | {url: string, tabId: number, onLoad: (url: string) => void} = null;
 
-	var webNavigationBeforeListener = function (details: chrome.webNavigation.WebNavigationParentedCallbackDetails): void {
-		if (details.frameId != 0) return;
-		tabUtils.showIcon(details.tabId);
-	};
-
-	var webNavigationCompletedListener = function (details: chrome.webNavigation.WebNavigationFramedCallbackDetails): void {
-		if (details.frameId != 0) return;
-		if (openTabRequest && openTabRequest.tabId == details.tabId && details.url != "about:blank") {
-			openTabRequest.onLoad(details.url);
+	function handlePageLoad(tabId: number, url: string) {
+		if (openTabRequest && openTabRequest.tabId == tabId && url != "about:blank") {
+			openTabRequest.onLoad(url);
 			openTabRequest = null;
 		} else {
-			checkPage(details.tabId, details.url);
+			checkPage(tabId, url);
 		}
+	}
+
+	function handlePageUnload(tabId: number, url: string) {
+		tabUtils.showIcon(tabId);
 	}
 
 	async function checkPage(tabId: number, url: string): Promise<void> {
 		var defaultConfig = await configUtils.getDefaultConfig();
 		if (!defaultConfig.scanOnLoad) return;
-		var changes = await tabUtils.checkChanges(tabId, url);
+		var changes = await highlightScriptUtils.checkChanges(tabId, url);
 		if (changes == 0) {
 			// unchanged
 			tabUtils.showIcon(tabId, 0, 0);
@@ -32,8 +30,8 @@ namespace highlightBackground {
 			await pageUtils.setChanges(url, 1);
 
 			if (!defaultConfig.highlightOnLoad) return;
-			var status = await tabUtils.highlightChanges(tabId, url);
-			if(status.state != tabUtils.PageState.HIGHLIGHTED) return;
+			var status = await highlightScriptUtils.highlightChanges(tabId, url);
+			if(status.state != highlightScriptUtils.PageState.HIGHLIGHTED) return;
 			tabUtils.showIcon(tabId, status.current, status.changes);
 			await pageUtils.setChanges(url, status.changes < 0 ? -1 : 0);
 		}
@@ -65,6 +63,37 @@ namespace highlightBackground {
 		}
 	};
 
+	async function loadInTab(url: string, tabId: number): Promise<void> {
+		return new Promise(resolve => {
+			chrome.tabs.update(tabId, { url: url });
+			openTabRequest = { url: url, tabId: tabId, onLoad: url => resolve() };	
+		});
+	}
+
+	async function scanPage(url: string, tabId: number): Promise<void> {
+		await loadInTab(url, tabId);
+		var changes = await highlightScriptUtils.checkChanges(tabId, url);
+		await pageUtils.setChanges(url, changes);
+	}
+
+	function scanPages(pages: string[]): void {
+		chrome.tabs.create({ url: "about:blank" }, async tab => {
+			for(var i=0; i<pages.length; i++) {
+				await scanPage(pages[i], tab.id || 0);
+			}
+			var changed = await pageUtils.listChanged();
+			if(changed.length > 0) {
+				if(chrome && (chrome as any).sidebarAction && (chrome as any).sidebarAction.open) {
+					(chrome as any).sidebarAction.open(); 
+				} else {
+					chrome.tabs.update(tab.id || 0, { url: chrome.runtime.getURL("pages.htm") });
+					return;
+				}
+			}
+			chrome.tabs.remove(tab.id || 0);
+		});
+	}
+
 	var contextMenuListener = async function (info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) {
 		if (tab.url && tab.id && (info.menuItemId == menuHighlight().id || info.menuItemId == menuHighlightPage().id)) {
 			if (tab.url.substr(0, 4) != "http") {
@@ -72,8 +101,8 @@ namespace highlightBackground {
 				return;
 			}
 			await pageUtils.getOrCreateEffectiveConfig(tab.url, tab.title || "");
-			var status = await tabUtils.highlightChanges(tab.id, tab.url);
-			if(status.state != tabUtils.PageState.HIGHLIGHTED) return;
+			var status = await highlightScriptUtils.highlightChanges(tab.id, tab.url);
+			if(status.state != highlightScriptUtils.PageState.HIGHLIGHTED) return;
 			await tabUtils.showIcon(tab.id, status.current, status.changes);
 			await pageUtils.setChanges(tab.url, status.changes < 0 ? -1 : 0);
 		} else if (info.menuItemId == menuOptions().id) {
@@ -83,15 +112,20 @@ namespace highlightBackground {
 
 	var messageListener = function (request: any, sender: any, sendResponse: (response: any) => void) {
 		var hiddenFields = ["configVersion", "autoDelayPercent", "autoDelayMin", "autoDelayMax", "watchDelay", "includes", "excludes"];
-		if (request.command == "addIncludeRegion") {
-			tabUtils.selectRegion(request.tab).then(xpath => pageUtils.addInclude(request.url, xpath));
+		if(request.command == "notifyLoaded") {
+			handlePageLoad(sender.tab.id, sender.url);
+		} else if(request.command == "notifyUnloaded") {
+			handlePageUnload(sender.tab.id, sender.url);
+		} else if (request.command == "addIncludeRegion") {
+			highlightScriptUtils.selectRegion(request.tab).then(xpath => pageUtils.addInclude(request.url, xpath));
 		} else if (request.command == "addExcludeRegion") {
-			tabUtils.selectRegion(request.tab).then(xpath => pageUtils.addExclude(request.url, xpath));
+			highlightScriptUtils.selectRegion(request.tab).then(xpath => pageUtils.addExclude(request.url, xpath));
 		} else if (request.command == "reinitialize") {
-			initialize();
-		} else if (request.command == "loadInTab") {
-			chrome.tabs.update(request.tabId, { url: request.url });
-			openTabRequest = { url: request.url, tabId: request.tab, onLoad: sendResponse };
+			reinitialize();
+		} else if (request.command == "scanAll") {
+			pageUtils.list().then(scanPages);
+		} else if (request.command == "scan") {
+			scanPage(request.url, request.tabId).then(sendResponse);
 			return true;
 		} else if (request.command == "transferInfo") {
 			sendResponse({ name: "SiteDelta Highlight", id: "sitedelta-highlight", import: ["config", "pages"], export: ["config", "pages"] });
@@ -131,28 +165,31 @@ namespace highlightBackground {
 	};
 
 
+	function cleanupContextMenu() {
+		chrome.contextMenus.onClicked.removeListener(contextMenuListener);
+		chrome.contextMenus.removeAll();
+	}
+
+	function fillContextMenu() {
+		chrome.contextMenus.create(menuHighlightPage());
+		chrome.contextMenus.create(menuHighlight());
+		chrome.contextMenus.create(menuOptions());
+		chrome.contextMenus.onClicked.addListener(contextMenuListener);
+	}
+
 	export async function initialize(): Promise<void> {
-		if (chrome.webNavigation) {
-			chrome.webNavigation.onBeforeNavigate.removeListener(webNavigationBeforeListener);
-			chrome.webNavigation.onCompleted.removeListener(webNavigationCompletedListener);
-			chrome.webNavigation.onBeforeNavigate.addListener(webNavigationBeforeListener);
-			chrome.webNavigation.onCompleted.addListener(webNavigationCompletedListener);
-		}
-
-		if (chrome.contextMenus) {
-			chrome.contextMenus.onClicked.removeListener(contextMenuListener);
-			chrome.contextMenus.removeAll();
-			var config = await configUtils.getDefaultConfig();
-			if (config.enableContextMenu) {
-				chrome.contextMenus.create(menuHighlightPage());
-				chrome.contextMenus.create(menuHighlight());
-				chrome.contextMenus.create(menuOptions());
-				chrome.contextMenus.onClicked.addListener(contextMenuListener);
-			}
-		}
-
-		chrome.runtime.onMessage.removeListener(messageListener);
 		chrome.runtime.onMessage.addListener(messageListener);
+		tabUtils.initContentScriptTargets([]);
+		ioUtils.observeIndex(index => tabUtils.updateContentScriptTarget(Object.keys(index)));
+		await reinitialize();
+	}
+
+	async function reinitialize(): Promise<void> {
+		if (chrome.contextMenus) {
+			cleanupContextMenu();
+			if ((await configUtils.getDefaultConfig()).enableContextMenu) 
+				fillContextMenu();
+		}
 	}
 
 }

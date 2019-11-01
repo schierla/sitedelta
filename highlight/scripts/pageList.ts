@@ -16,15 +16,7 @@ namespace highlightPageList {
 	}
 
 	async function scanPage(key: string, tabId: number) {
-		await tabUtils.loadInTab(tabId, key);
-		var changes = await tabUtils.checkChanges(tabId, key);
-		
-		if (changes == 0) { // unchanged
-			return;
-		} else if (changes > 0) {
-			await tabUtils.showIcon(tabId, "*", 1);
-			await pageUtils.setChanges(key, 1);
-		}
+		await highlightScriptUtils.scan(key, tabId);
 	}
 
 	function selectAllIfNone(): void {
@@ -83,6 +75,7 @@ namespace highlightPageList {
 			() => chrome.tabs.create({ url: "about:blank" }, async tab => {
 				selectAllIfNone();
 				await list.foreachSelected((key, data) => scanPage(key, tab.id || 0));
+				await new Promise(resolve => setTimeout(resolve, 100));
 				chrome.tabs.remove(tab.id || 0);
 			}));
 		(document.querySelector("#pages") as HTMLElement).addEventListener("dblclick", () => list.foreachSelected(openPage));

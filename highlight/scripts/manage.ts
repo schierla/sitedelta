@@ -1,6 +1,6 @@
 namespace highlightManage {
 	var advancedEnabled: boolean = false;
-	var advancedPermission = { permissions: ["webNavigation"], origins: ["<all_urls>"] };
+	var advancedPermission = { permissions: [], origins: ["<all_urls>"] };
 	
 	function checkPermissions(): void {
 		document.body.classList.remove("advancedEnabled");

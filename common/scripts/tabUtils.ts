@@ -57,7 +57,7 @@ namespace tabUtils {
 
 	export function updateContentScriptTarget(urls: string[]): void {
 		if((chrome as any).contentScripts) 
-			for(var url in urls) 
+			for(var url of urls) 
 				if(contentScriptTargets.indexOf(url) == -1)
 					(chrome as any).contentScripts.register({
 						js: [{file: '/common/scripts/contentScript.js' }], 

@@ -237,7 +237,7 @@
 		"description": "Headline for extension behavior settings"
 	},
 	"configScanOnLoad": {
-		"message": "Automatically scan known pages (shown in SiteDelta icon)",
+		"message": "Automatically scan known pages",
 		"description": "Label for checkbox to enable automatically scanning pages on load"
 	},
 	"configHighlightOnLoad": {

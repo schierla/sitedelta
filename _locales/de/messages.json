@@ -237,7 +237,7 @@
 		"description": "Headline for extension behavior settings"
 	},
 	"configScanOnLoad": {
-		"message": "Bekannte Seiten beim Besuch automatisch prüfen (Farbe des SiteDelta-Symbol)",
+		"message": "Bekannte Seiten beim Besuch automatisch prüfen",
 		"description": "Label for checkbox to enable automatically scanning pages on load"
 	},
 	"configHighlightOnLoad": {

@@ -25,6 +25,7 @@ namespace watchManage {
 	}
 
 	var options: (NumberOption | CheckboxOption | ColorOption)[] = [
+		{ type: "checkbox", key: "scanOnLoad", elem: "scanonload" },
 		{ type: "checkbox", key: "checkDeleted", elem: "checkdeleted" },
 		{ type: "checkbox", key: "scanImages", elem: "checkimages" },
 		{ type: "checkbox", key: "ignoreCase", elem: "ignorecase" },

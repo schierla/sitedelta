@@ -1,5 +1,26 @@
 namespace watchBackground {
 
+	async function handlePageLoad(tabId: number, url: string) {
+		var config = await pageUtils.getEffectiveConfig(url);
+		if(config) {
+			if(config.scanOnLoad) {
+				await scanPage(url);
+			}
+			var changes = await pageUtils.getChanges(url);
+			if(changes == 0) {
+				chrome.browserAction.setBadgeBackgroundColor({ color: "#070", tabId: tabId });
+			} else {
+				chrome.browserAction.setBadgeBackgroundColor({ color: "#700", tabId: tabId });
+			}
+			chrome.browserAction.setBadgeText({ text: badgeText || " ", tabId: tabId });
+		}
+	}
+
+	function handlePageUnload(tabId: number, url: string) {
+		chrome.browserAction.setBadgeBackgroundColor({ color: "#555", tabId: tabId });
+		chrome.browserAction.setBadgeText({ text: badgeText, tabId: tabId });
+	}
+
 	async function scanPage(url: string): Promise<void> {
 		var config = await configUtils.getDefaultConfig();
 		console.log("SiteDelta: Scanning " + url);
@@ -65,6 +86,10 @@ namespace watchBackground {
 			pageUtils.listChanged().then(openPages);
 		} else if (request.command == "openFailed") {
 			pageUtils.listFailed().then(openPages);
+		} else if(request.command == "notifyLoaded") {
+			handlePageLoad(sender.tab.id, sender.url);
+		} else if(request.command == "notifyUnloaded") {
+			handlePageUnload(sender.tab.id, sender.url);
 		} else if(request.command == "scanAll") {
 			pageUtils.list().then(scanPages);
 		} else if (request.command == "transferInfo") {
@@ -111,6 +136,7 @@ namespace watchBackground {
 
 	var index = {};
 	var lastScan = 0;
+	var badgeText = "";
 
 	function scheduleWatch(): void {
 		var nextUrl = "";
@@ -133,13 +159,16 @@ namespace watchBackground {
 		}
 
 		if (changed > 0)
-			chrome.browserAction.setBadgeText({ text: "" + changed + ((failed > 0) ? "*" : "") });
+			badgeText = "" + changed + ((failed > 0) ? "*" : "");
 		else
-			chrome.browserAction.setBadgeText({ text: "" + ((failed > 0) ? "*" : "") });
+			badgeText = "" + ((failed > 0) ? "*" : "");
+		chrome.browserAction.setBadgeText({ text: badgeText });
+		chrome.browserAction.setBadgeBackgroundColor( {color: "#555"} );
 	}
 
 	export function initialize() {
-		ioUtils.observeIndex(newIndex => { index = newIndex; scheduleWatch(); });
+		tabUtils.initContentScriptTargets([]);
+		ioUtils.observeIndex(newIndex => { index = newIndex; scheduleWatch(); tabUtils.updateContentScriptTarget(Object.keys(index)) });
 		chrome.alarms.onAlarm.addListener(scheduleWatch);
 
 		chrome.runtime.onMessage.addListener(messageListener);

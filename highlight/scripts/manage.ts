@@ -97,7 +97,7 @@ namespace highlightManage {
 				await Promise.resolve(option.post());
 		});
 	}
-	function hexColor(color): string {
+	function hexColor(color: string): string {
 		if (color.length == 4) 
 			return color[0] + color[1] + color[1] + color[2] + color[2] + color[3] + color[3]; 
 		else

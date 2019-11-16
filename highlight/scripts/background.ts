@@ -2,6 +2,7 @@
 namespace highlightBackground {
 
 	var openTabRequest: null | {url: string, tabId: number, onLoad: (url: string) => void} = null;
+	var contentScriptInitialized = false;
 
 	function handlePageLoad(tabId: number, url: string) {
 		if (openTabRequest && openTabRequest.tabId == tabId && url != "about:blank") {
@@ -179,12 +180,18 @@ namespace highlightBackground {
 
 	export async function initialize(): Promise<void> {
 		chrome.runtime.onMessage.addListener(messageListener);
-		tabUtils.initContentScriptTargets([]);
-		ioUtils.observeIndex(index => tabUtils.updateContentScriptTarget(Object.keys(index)));
 		await reinitialize();
 	}
 
 	async function reinitialize(): Promise<void> {
+		if((await configUtils.getDefaultConfig()).scanOnLoad) {
+			if(!contentScriptInitialized) {
+				tabUtils.initContentScriptTargets([]);
+				ioUtils.observeIndex(index => tabUtils.updateContentScriptTarget(Object.keys(index)));
+				contentScriptInitialized = true;
+			}
+		}
+
 		if (chrome.contextMenus) {
 			cleanupContextMenu();
 			if ((await configUtils.getDefaultConfig()).enableContextMenu) 

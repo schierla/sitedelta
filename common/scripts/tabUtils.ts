@@ -57,7 +57,6 @@ namespace tabUtils {
 
 	export async function updateContentScriptTarget(urls: string[]): Promise<void> {
 		if((chrome as any).contentScripts) {
-		
 			for(var url of urls) {
 				if(contentScriptTargets.indexOf(url) == -1) {
 					var allowed = await new Promise(resolve => chrome.permissions.contains({origins: [url]}, resolve));
@@ -70,6 +69,8 @@ namespace tabUtils {
 					}
 				}
 			}
+		} else {
+			contentScriptTargets = urls;
 		}
 	}
 

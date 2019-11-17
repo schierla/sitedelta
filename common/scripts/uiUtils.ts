@@ -108,12 +108,19 @@ namespace uiUtils {
 
 		async foreachSelected (first: (key: string, data: T) => void, rest?: (key: string, data: T) => void) {
 			var options = this.container.options;
-			for (var i = 0; i < options.length; i++) {
-				if (options[i].selected) {
-					options[i].selected = false;
-					this.select();
-					await Promise.resolve(first(this.shown[i], this.elements[this.shown[i]].data));
-					if(rest !== undefined) first = rest;
+			this.select();
+			var progress = true;
+			while(progress) {
+				progress = false;
+				for (var i = 0; i < options.length; i++) {
+					if (options[i].selected) {
+						options[i].selected = false;
+						var key = this.shown[i];
+						await Promise.resolve(first(key, this.elements[key].data));
+						progress = true;
+						this.select();
+						break;
+					}
 				}
 			}
 		}

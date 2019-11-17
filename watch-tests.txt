@@ -1,0 +1,68 @@
+SiteDelta Watch:
+- Visit http://example.org/
+- Highlight Changes
+- Grant access
+- Reload
+- Add Scan Region for the Headline
+- Highlight Changes
+- Reload
+- Remove Scan Region for Headline
+- Highlight Changes
+- Reload
+- Add Ignore region for Headline
+- Highlight Changes
+- Reload 
+- Remove Ignore Region
+- Highlight Changes
+- Reload
+- Add Ignore region for Headline
+- Disable Check deletions
+- Highlight Changes
+- Stop Monitoring
+- Visit http://sitedelta.schierla.de/playground.php
+- Highlight Changes
+- Grant access
+- Reload
+- Ignore changed numbers
+- Highlight Changes
+- Ignore case
+- Highlight Changes
+- Make hidden contents visible
+- Highlight Changes
+- Enable Remove Page Style
+- Highlight Changes
+- Visit http://sitedelta.schierla.de/features.de.php
+- Highlight Changes
+- Reload
+- Enable Check Image Addresses
+- Highlight Changes
+- Reload
+- Disable Check Image Addresses
+- Highlight Changes
+- Open Sidebar
+- Switch to SiteDelta Configuration
+- Scan All Pages
+- Open Changed
+- Click Open Page
+- Close Page
+- Automatically scan known pages
+- Visit http://sitedelta.schierla.de/playground.php
+- Close Page
+- Select all pages
+- Open Pages
+- Close Pages
+- Set Scan Frequency to 60
+- Scan All Pages
+- Scan All Pages From Sidebar
+- Open Changed from Sidebar
+- Check a single page from Sidebar
+- Mark page as seen from Sidebar
+- Scan All Pages from Browser Action
+- Set Scan Frequency to 600 from Sidebar
+- Go Offline
+- Check all pages from Browser Action
+- Open Failed from Browser Action
+- Go Online
+- Check all pages from Sidebar
+- Open Changed from Browser Action
+- Delete all pages from Sidebar

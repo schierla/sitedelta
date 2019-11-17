@@ -1,0 +1,67 @@
+SiteDelta Highlight
+- Visit http://example.org/
+- Highlight Changes
+- Reload
+- Show Changes
+- Reload
+- Add Scan Region for the Headline
+- Highlight Changes
+- Reload
+- Remove Scan Region for Headline
+- Highlight Changes
+- Reload
+- Add Ignore region for Headline
+- Highlight Changes
+- Reload 
+- Remove Ignore Region
+- Highlight Changes
+- Reload
+- Add Ignore region for Headline
+- Disable Check deletions
+- Highlight Changes
+- Stop Monitoring
+- Visit http://sitedelta.schierla.de/playground.php
+- Highlight Changes
+- Reload
+- Highlight Changes
+- Reload
+- Ignore changed numbers
+- Highlight Changes
+- Reload
+- Ignore case
+- Highlight Changes
+- Reload
+- Make hidden contents visible
+- Highlight Changes
+- Reload
+- Enable Remove Page Style
+- Highlight Changes
+- Visit http://sitedelta.schierla.de/features.de.php
+- Highlight Changes
+- Reload
+- Enable Check Image Addresses
+- Highlight Changes
+- Reload
+- Disable Check Image Addresses
+- Highlight Changes
+- Open Sidebar
+- Switch to SiteDelta Configuration
+- Enable Additional Features
+- Scan All Pages
+- Open Changed
+- Close Page
+- Automatically scan known pages
+- Select all pages
+- Open Pages
+- Close Pages
+- Automatically highlight known pages
+- Double-click first page
+- Double-click second page in sidebar
+- Enable Context Menu
+- Visit http://sitedelta.schierla.de/playground.php
+- Highlight Changes through Context Menu
+- Scan All Pages from Sidebar
+- Open Changed from Sidebar
+- Check a single page from Sidebar
+- Scan All Pages from Browser Action
+- Delete all pages from Sidebar

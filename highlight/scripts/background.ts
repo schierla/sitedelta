@@ -83,12 +83,8 @@ namespace highlightBackground {
 			}
 			var changed = await pageUtils.listChanged();
 			if(changed.length > 0) {
-				if(chrome && (chrome as any).sidebarAction && (chrome as any).sidebarAction.open) {
-					(chrome as any).sidebarAction.open(); 
-				} else {
-					chrome.tabs.update(tab.id || 0, { url: chrome.runtime.getURL("pages.htm") });
-					return;
-				}
+				chrome.tabs.update(tab.id || 0, { url: chrome.runtime.getURL("pages.htm") });
+				return;
 			}
 			chrome.tabs.remove(tab.id || 0);
 		});

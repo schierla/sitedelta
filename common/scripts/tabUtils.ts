@@ -55,15 +55,22 @@ namespace tabUtils {
 		updateContentScriptTarget(urls);
 	}
 
-	export function updateContentScriptTarget(urls: string[]): void {
-		if((chrome as any).contentScripts) 
-			for(var url of urls) 
-				if(contentScriptTargets.indexOf(url) == -1)
-					(chrome as any).contentScripts.register({
-						js: [{file: '/common/scripts/contentScript.js' }], 
-						matches: [ url.replace(/#.*$/, "") ]
-					});
-		contentScriptTargets = urls;
+	export async function updateContentScriptTarget(urls: string[]): Promise<void> {
+		if((chrome as any).contentScripts) {
+		
+			for(var url of urls) {
+				if(contentScriptTargets.indexOf(url) == -1) {
+					var allowed = await new Promise(resolve => chrome.permissions.contains({origins: [url]}, resolve));
+					if(allowed) {
+						(chrome as any).contentScripts.register({
+							js: [{file: '/common/scripts/contentScript.js' }], 
+							matches: [ url.replace(/#.*$/, "") ]
+						});
+						contentScriptTargets.push(url);
+					}
+				}
+			}
+		}
 	}
 
 }

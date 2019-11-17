@@ -1,13 +1,12 @@
 
 namespace highlightBackground {
 
-	var openTabRequest: null | {url: string, tabId: number, onLoad: (url: string) => void} = null;
-	var contentScriptInitialized = false;
+	var openTabRequest: null | {url: string, tabId: number, onLoad?: (url: string) => void} = null;
 
 	function handlePageLoad(tabId: number, url: string) {
-		if (openTabRequest && openTabRequest.tabId == tabId && url != "about:blank") {
-			openTabRequest.onLoad(url);
-			openTabRequest = null;
+		if (openTabRequest && openTabRequest.tabId == tabId && url == openTabRequest.url) {
+			if(openTabRequest.onLoad) openTabRequest.onLoad(url);
+			openTabRequest.onLoad = undefined;
 		} else {
 			checkPage(tabId, url);
 		}
@@ -66,8 +65,8 @@ namespace highlightBackground {
 
 	async function loadInTab(url: string, tabId: number): Promise<void> {
 		return new Promise(resolve => {
-			chrome.tabs.update(tabId, { url: url });
 			openTabRequest = { url: url, tabId: tabId, onLoad: url => resolve() };	
+			chrome.tabs.update(tabId, { url: url });
 		});
 	}
 
@@ -180,18 +179,13 @@ namespace highlightBackground {
 
 	export async function initialize(): Promise<void> {
 		chrome.runtime.onMessage.addListener(messageListener);
+		tabUtils.initContentScriptTargets([]);
+		ioUtils.observeIndex(index => tabUtils.updateContentScriptTarget(Object.keys(index)));
 		await reinitialize();
 	}
 
 	async function reinitialize(): Promise<void> {
-		if((await configUtils.getDefaultConfig()).scanOnLoad) {
-			if(!contentScriptInitialized) {
-				tabUtils.initContentScriptTargets([]);
-				ioUtils.observeIndex(index => tabUtils.updateContentScriptTarget(Object.keys(index)));
-				contentScriptInitialized = true;
-			}
-		}
-
+		tabUtils.updateContentScriptTarget(Object.keys(await ioUtils.listIndex()));
 		if (chrome.contextMenus) {
 			cleanupContextMenu();
 			if ((await configUtils.getDefaultConfig()).enableContextMenu) 

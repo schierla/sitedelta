@@ -476,7 +476,8 @@ namespace highlightUtils {
 			var rel = (elem as Element).getAttribute("rel");
 			if(rel && rel.toLowerCase() == "stylesheet") elem.parentNode.removeChild(elem);
 		} else {
-			(elem as Element).removeAttribute("style");
+			if("removeAttribute" in elem) 
+				(elem as Element).removeAttribute("style");
 			var child = elem.firstChild;
 			while (child) {
 				var next = child.nextSibling;

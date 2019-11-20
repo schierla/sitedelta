@@ -6,6 +6,8 @@ SiteDelta Watch:
 - Add Scan Region for the Headline
 - Highlight Changes
 - Reload
+- Toggle Isolate regions
+- Toggle Isolate regions
 - Remove Scan Region for Headline
 - Highlight Changes
 - Reload

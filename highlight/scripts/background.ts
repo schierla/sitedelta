@@ -19,6 +19,7 @@ namespace highlightBackground {
 	async function checkPage(tabId: number, url: string): Promise<void> {
 		var defaultConfig = await configUtils.getDefaultConfig();
 		if (!defaultConfig.scanOnLoad) return;
+		await new Promise(resolve => setTimeout(resolve, 1000));
 		var changes = await highlightScriptUtils.checkChanges(tabId, url);
 		if (changes == 0) {
 			// unchanged

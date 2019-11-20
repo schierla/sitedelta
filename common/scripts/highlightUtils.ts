@@ -421,7 +421,7 @@ namespace highlightUtils {
 		for(var e: Node | null = elem.firstChild; e != null; e = e.nextSibling) {
 			if(includes.indexOf(e) != -1) 
 				continue; 
-			else if(parents.indexOf(e) == -1) 
+			else if(parents.indexOf(e) == -1 && "style" in (e as HTMLElement)) 
 				(e as HTMLElement).style.display = "none";
 			else if(e.firstChild) 
 				_isolateRegionsRecursively(e, includes, parents);

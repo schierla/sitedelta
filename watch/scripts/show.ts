@@ -30,9 +30,9 @@ namespace watchShow {
 		changes = highlightUtils.highlightChanges(idoc, config, content);
 		if (changes > 0) {
 			document.body.classList.add("changed");
-			await new Promise(resolve => setTimeout(resolve, 200));
+			current = 0; showData();
+			await new Promise(resolve => setTimeout(resolve, 1000));
 			current = highlightUtils.highlightNext(idoc, 0);
-			showData();
 		} else if (changes == 0) {
 			document.body.classList.add("unchanged");
 		} else {
@@ -324,7 +324,9 @@ namespace watchShow {
 		if (result) {
 			await loadPage();
 			await showData();
-			if (known) highlight();
+			if (known) {
+				await highlight();
+			}
 		} else {
 			document.body.classList.add("permissionDenied");
 			element("permissionHost").appendChild(document.createTextNode(new URL(url).origin));

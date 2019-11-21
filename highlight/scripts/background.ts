@@ -73,6 +73,7 @@ namespace highlightBackground {
 
 	async function scanPage(url: string, tabId: number): Promise<void> {
 		await loadInTab(url, tabId);
+		await new Promise(resolve => setTimeout(resolve, 1000));		
 		var changes = await highlightScriptUtils.checkChanges(tabId, url);
 		await pageUtils.setChanges(url, changes);
 	}

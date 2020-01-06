@@ -106,6 +106,18 @@ namespace uiUtils {
 			this.refresh();
 		}
 
+		getSelected(): Record<string, T> {
+			var ret = {};
+			var options = this.container.options;
+			for (var i = 0; i < options.length; i++) {
+				if (options[i].selected) {
+					var key = this.shown[i];
+					ret[key] = this.elements[key].data;
+				}
+			}
+			return ret;
+		}
+
 		async foreachSelected (first: (key: string, data: T) => void, rest?: (key: string, data: T) => void) {
 			var options = this.container.options;
 			this.select();

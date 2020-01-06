@@ -58,7 +58,15 @@
             "group": "build",
             "problemMatcher": []
         },
-        
+
+        {
+            "label": "Debug in Chrome",
+            "type": "shell",
+            "command": "./node_modules/web-ext/bin/web-ext run -t chromium -s build/unpacked",
+            "group": "build",
+            "problemMatcher": []
+        },
+
         {
             "label": "Check for errors",
             "type": "shell",

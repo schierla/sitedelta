@@ -95,8 +95,19 @@ namespace pageList {
 		(document.querySelector("#pages") as HTMLElement).addEventListener("dblclick", () => list.foreachSelected(openPage));
 		(document.querySelector("#pages") as HTMLElement).addEventListener("change", () => previewPage(list));
 		(document.querySelector("#watchdelay") as HTMLElement).addEventListener("click", async () => {
-			var config = await configUtils.getDefaultConfig();
-			var delay = prompt(chrome.i18n.getMessage("configWatchDelay"), config.watchDelay + "") ;
+			var oldValue: string|null = null;
+			var selected = list.getSelected();
+			for(var key in selected) {
+				var config = await pageUtils.getEffectiveConfig(key);
+				if(config != null) {
+					if(oldValue === null) oldValue = config.watchDelay + "";
+					else if(oldValue != config.watchDelay + "") oldValue = "";
+				}
+			}
+			if(oldValue === null) {
+				oldValue = (await configUtils.getDefaultConfig()).watchDelay + "";
+			}
+			var delay = prompt(chrome.i18n.getMessage("configWatchDelay"), oldValue) ;
 			if(delay !== null) 
 				list.foreachSelected(async (key,data) => {
 					await pageUtils.setConfigProperty(key, "watchDelay", parseInt(delay || "0"));

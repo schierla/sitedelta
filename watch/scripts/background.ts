@@ -86,6 +86,8 @@ namespace watchBackground {
 			pageUtils.listChanged().then(openPages);
 		} else if (request.command == "openFailed") {
 			pageUtils.listFailed().then(openPages);
+		} else if (request.command == "scanFailed") {
+			pageUtils.listFailed().then(scanPages);
 		} else if(request.command == "notifyLoaded") {
 			handlePageLoad(sender.tab.id, sender.url);
 		} else if(request.command == "notifyUnloaded") {

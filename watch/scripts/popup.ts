@@ -59,6 +59,11 @@ namespace watchPopup {
 		(document.querySelector("#openFailed") as HTMLElement).addEventListener("click", function (e) {
 			chrome.runtime.sendMessage({ command: "openFailed" });
 			window.close();
+    });
+    
+		(document.querySelector("#scanFailed") as HTMLElement).addEventListener("click", function (e) {
+			chrome.runtime.sendMessage({ command: "scanFailed" });
+			window.close();
 		});
 
 		(document.querySelector("#changed") as HTMLElement).addEventListener("dblclick", function () {

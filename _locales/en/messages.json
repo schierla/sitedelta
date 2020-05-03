@@ -167,11 +167,11 @@
 		"description": "Button to open the selected pages"
 	},
 	"pagesOpenChanged": {
-		"message": "Open Changed",
+		"message": "Open All",
 		"description": "Button to open the changed pages"
 	},
 	"pagesOpenFailed": {
-		"message": "Open Failed",
+		"message": "Open All",
 		"description": "Button to open the failed pages"
 	},	
 	"pagesScanOne": {
@@ -186,6 +186,10 @@
 		"message": "Scan All Pages",
 		"description": "Button to scan all pages now"
 	},
+	"pagesScanFailed": {
+		"message": "Rescan",
+		"description": "Button to scan the failed pages"
+	},	
 	"pagesMarkSeenOne": {
 		"message": "Mark Page As Seen",
 		"description": "Button to mark the selected page as seen"

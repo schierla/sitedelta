@@ -150,20 +150,22 @@ namespace watchBackground {
 			if (nextUrl == "" || index[nextUrl].nextScan > index[url].nextScan) nextUrl = url;
 		}
 
-		if (nextUrl == "") return;
-		var nextScan = index[nextUrl].nextScan;
-		if (nextScan < lastScan + 5000) nextScan = lastScan + 5000;
-		console.log("SiteDelta: Scheduled " + nextUrl + " for " + new Date(nextScan).toLocaleString());
-		if (nextScan <= Date.now()) {
-			scanPage(nextUrl);
-		} else {
-			chrome.alarms.create({ "when": nextScan });
+		if (nextUrl != "") {
+			var nextScan = index[nextUrl].nextScan;
+			if (nextScan < lastScan + 5000) nextScan = lastScan + 5000;
+			console.log("SiteDelta: Scheduled " + nextUrl + " for " + new Date(nextScan).toLocaleString());
+			if (nextScan <= Date.now()) {
+				scanPage(nextUrl);
+			} else {
+				chrome.alarms.create({ "when": nextScan });
+			}
 		}
-
-		if (changed > 0)
+		
+		if (changed > 0) {
 			badgeText = "" + changed + ((failed > 0) ? "*" : "");
-		else
+		} else {
 			badgeText = "" + ((failed > 0) ? "*" : "");
+		}
 		chrome.browserAction.setBadgeText({ text: badgeText });
 		chrome.browserAction.setBadgeBackgroundColor( {color: "#555"} );
 	}

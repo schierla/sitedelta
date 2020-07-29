@@ -131,9 +131,8 @@ namespace watchBackground {
 		}
 	};
 
-
 	var notificationListener = function (url: string): void {
-		if(url != "#") tabUtils.openResource("show.htm?" + url);
+		if(url != "#") tabUtils.openResourceInForeground("show.htm?" + url);
 	}
 
 	var index = {};

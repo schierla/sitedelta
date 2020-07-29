@@ -1,21 +1,21 @@
 namespace tabUtils {
 
+	export async function openResourceInForeground(url: string): Promise<void> {
+		const current = await new Promise<chrome.windows.Window>(resolve => chrome.windows.getCurrent({ windowTypes: ['normal'] }, window => resolve(window)));
+		await new Promise(resolve => chrome.tabs.create({ url: chrome.runtime.getURL(url), windowId: current.id }, () =>  resolve()));
+		await new Promise(resolve => chrome.windows.update(current.id, { focused: true }, () => resolve()));
+	}
+
 	export async function openResource(url: string): Promise<void> {
-		return new Promise(resolve => {
-			chrome.tabs.create({ url: chrome.runtime.getURL(url) }, () => resolve());
-		});
+		return new Promise(resolve => chrome.tabs.create({ url: chrome.runtime.getURL(url) }, () => resolve()));
 	}
 
 	export async function openResourceInBackground(url: string): Promise<void> {
-		return new Promise(resolve => {
-			chrome.tabs.create({ url: chrome.runtime.getURL(url), active: false }, () => resolve());
-		});
+		return new Promise(resolve => chrome.tabs.create({ url: chrome.runtime.getURL(url), active: false }, () => resolve()));
 	}
 
 	export async function getActive(): Promise<chrome.tabs.Tab> {
-		return new Promise(resolve => {
-			chrome.tabs.query({ active: true, currentWindow: true }, tabs => resolve(tabs[0]));
-		});
+		return new Promise(resolve => chrome.tabs.query({ active: true, currentWindow: true }, tabs => resolve(tabs[0])));
 	}
 
 	export async function showIcon(tabId: number, current?: any, changes?: number) {

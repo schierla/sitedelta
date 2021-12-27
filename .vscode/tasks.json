@@ -6,9 +6,9 @@
         {
             "label": "Install dependencies",
             "type": "shell",
-            "command": "npm install",
+            "command": "yarn install",
             "group": "build",
-            "problemMatcher": []
+            "problemMatcher": [],
         },
 
         {
@@ -54,7 +54,7 @@
         {
             "label": "Debug in Firefox",
             "type": "shell",
-            "command": "./node_modules/web-ext/bin/web-ext run -s build/unpacked",
+            "command": "yarn web-ext run -s build/unpacked",
             "group": "build",
             "problemMatcher": []
         },
@@ -62,7 +62,7 @@
         {
             "label": "Debug in Chrome",
             "type": "shell",
-            "command": "./node_modules/web-ext/bin/web-ext run -t chromium -s build/unpacked",
+            "command": "yarn  web-ext run -t chromium -s build/unpacked",
             "group": "build",
             "problemMatcher": []
         },
@@ -70,7 +70,7 @@
         {
             "label": "Check for errors",
             "type": "shell",
-            "command": "./node_modules/web-ext/bin/web-ext lint -s build/unpacked",
+            "command": "yarn web-ext lint -s build/unpacked",
             "group": "build",
             "problemMatcher": []
         }

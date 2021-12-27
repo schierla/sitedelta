@@ -2,8 +2,8 @@ namespace tabUtils {
 
 	export async function openResourceInForeground(url: string): Promise<void> {
 		const current = await new Promise<chrome.windows.Window>(resolve => chrome.windows.getCurrent({ windowTypes: ['normal'] }, window => resolve(window)));
-		await new Promise(resolve => chrome.tabs.create({ url: chrome.runtime.getURL(url), windowId: current.id }, () =>  resolve()));
-		await new Promise(resolve => chrome.windows.update(current.id, { focused: true }, () => resolve()));
+		await new Promise(resolve => chrome.tabs.create({ url: chrome.runtime.getURL(url), windowId: current.id }, resolve));
+		if(current.id !== undefined) await new Promise(resolve => chrome.windows.update(current.id!, { focused: true }, resolve));
 	}
 
 	export async function openResource(url: string): Promise<void> {

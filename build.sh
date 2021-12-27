@@ -13,9 +13,9 @@ if [ "A$1" != "A" ]; then
   rm -rf build/unpacked/scripts
   mkdir build/unpacked/scripts
   if [ "A$3" == "Apack" ]; then
-    node_modules/typescript/bin/tsc
+    yarn tsc
   else 
-    node_modules/typescript/bin/tsc --inlineSourceMap
+    yarn tsc --inlineSourceMap
     
     mkdir build/unpacked/$1
     cp -rp common/scripts/* build/unpacked/common/scripts/
@@ -28,9 +28,9 @@ if [ "A$1" != "A" ]; then
   mv build/unpacked/$2.manifest.json build/unpacked/manifest.json
   rm build/unpacked/*.manifest.json
   if [ "A$3" == "Apack" ]; then
-    node_modules/web-ext/bin/web-ext build -s build/unpacked -a build/$2 --overwrite-dest
+    yarn  web-ext build -s build/unpacked -a build/$2 --overwrite-dest
   elif [ "A$3" == "Arun" ]; then
-    node_modules/web-ext/bin/web-ext run -s build/unpacked
+    yarn web-ext run -s build/unpacked
   fi
   exit
 fi

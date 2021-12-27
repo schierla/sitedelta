@@ -72,7 +72,7 @@ namespace textUtils {
 		var doc = node.ownerDocument, text = "", ret = "";
 		if(!doc) return "";
 		var filter = createFilter(config, excludes);
-		var tw = doc.createTreeWalker(node, NodeFilter.SHOW_ALL, filter, true);
+		var tw = doc.createTreeWalker(node, NodeFilter.SHOW_ALL, filter);
 		if (filter.acceptNode(node)==NodeFilter.FILTER_REJECT) return ret;
 		for (var cur: Node | null = node; cur != null; cur = tw.nextNode()) {
 			if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {

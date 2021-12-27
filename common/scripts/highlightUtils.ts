@@ -58,7 +58,7 @@ namespace highlightUtils {
 			var domactions: {elem: Node, repl: Node[]}[] = [];
 			var last = "", action = "", text = "";
 			var filter = textUtils.createFilter(config, excludes);
-			var tw = doc.createTreeWalker(regions[i], NodeFilter.SHOW_ALL, filter, true);
+			var tw = doc.createTreeWalker(regions[i], NodeFilter.SHOW_ALL, filter);
 			if (filter.acceptNode(regions[i]) == NodeFilter.FILTER_REJECT) continue;
 			for (var cur: Node | null = regions[i]; cur != null; cur = tw.nextNode()) {
 				if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {

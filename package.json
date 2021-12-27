@@ -3,8 +3,9 @@
   "author": "Andreas Schierl",
   "private": true,
   "devDependencies": {
-    "@types/chrome": "0.0.89",
-    "typescript": "^3.9.7",
-    "web-ext": "^5.0.0"
-  }
+    "@types/chrome": "^0.0.173",
+    "typescript": "^4.5.4",
+    "web-ext": "^6.6.0"
+  },
+  "packageManager": "yarn@3.1.1"
 }

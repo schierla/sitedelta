@@ -39,7 +39,7 @@ namespace highlightBackground {
 	};
 
 
-	function menuHighlightPage() {
+	function menuHighlightPage(): chrome.contextMenus.CreateProperties {
 		return {
 			id: "highlightPage",
 			title: chrome.i18n.getMessage("pageScan"),
@@ -48,7 +48,7 @@ namespace highlightBackground {
 		}
 	};
 
-	function menuHighlight() {
+	function menuHighlight(): chrome.contextMenus.CreateProperties {
 		return {
 			id: "highlight",
 			title: chrome.i18n.getMessage("pageScan"),
@@ -56,7 +56,7 @@ namespace highlightBackground {
 		}
 	};
 
-	function menuOptions() {
+	function menuOptions(): chrome.contextMenus.CreateProperties {
 		return {
 			id: "options",
 			title: chrome.i18n.getMessage("pagesConfiguration"),

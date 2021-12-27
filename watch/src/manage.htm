@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">	
+	<link rel="stylesheet" href="styles/browser_style.css" />
+	<link rel="stylesheet" href="styles/manage.css" />
+	<link rel="stylesheet" href="styles/pageList.css" />
+	<title class="i18n">__MSG_watchExtensionName__</title>
+</head>
+
+<body>
+	<div class="browser-style section i18n">__MSG_pagesList__</div>
+	<select id="pages" size="10" multiple></select>
+	<div class="buttons browser-style">
+		<button id="importExport" class="browser-style i18n">__MSG_configTransfer__</button>
+		<button id="scannow" class="browser-style">
+			<span class="pagesOne i18n">__MSG_pagesScanOne__</span>
+			<span class="pagesMultiple i18n">__MSG_pagesScanMultiple__</span>
+			<span class="pagesNone i18n">__MSG_pagesScanAll__</span>
+		</button>
+		<button id="markseen" class="browser-style">
+			<span class="pagesOne i18n">__MSG_pagesMarkSeenOne__</span>
+			<span class="pagesMultiple i18n">__MSG_pagesMarkSeenMultiple__</span>
+			<span class="pagesNone i18n">__MSG_pagesMarkSeenAll__</span>
+		</button>
+		<button id="delete" class="browser-style">
+			<span class="pagesOne i18n">__MSG_pagesDeleteOne__</span>
+			<span class="pagesMultiple i18n">__MSG_pagesDeleteMultiple__</span>
+		</button>
+		<button id="watchdelay" class="browser-style">
+			<span class="pagesOne i18n">__MSG_pagesWatchDelay__</span>
+			<span class="pagesMultiple i18n">__MSG_pagesWatchDelay__</span>
+		</button>
+		<button id="open" class="browser-style default">
+			<span class="pagesOne i18n">__MSG_pagesOpenOne__</span>
+			<span class="pagesMultiple i18n">__MSG_pagesOpenMultiple__</span>
+			<span class="pagesNone i18n">__MSG_pagesOpenChanged__</span>
+		</button>
+	</div>
+
+	<div class="browser-style section i18n">__MSG_configBehavior__</div>
+	<div class="browser-style advanced">
+		<input checked id="scanonload" type="checkbox" class="browser-style">
+		<label for="scanonload" class="i18n">__MSG_configScanOnLoad__</label>
+	</div>
+
+	<div class="browser-style section i18n">__MSG_configAppearance__</div>
+	<div class="browser-style"><input id="makevisible" type="checkbox" class="browser-style"><label for="makevisible" class="i18n">__MSG_configMakeVisible__</label></div>
+	<div class="browser-style"><input id="stripstyles" type="checkbox" class="browser-style"><label for="stripstyles" class="i18n">__MSG_configStripStyles__</label></div>
+	<div class="browser-style"><input id="isolateregions" type="checkbox" class="browser-style"><label for="isolateregions" class="i18n">__MSG_configIsolateRegions__</label></div>
+	<div class="browser-style"><input checked id="showregions" type="checkbox" class="browser-style"><label for="showregions" class="i18n">__MSG_configShowRegions__</label></div>
+	<div class="browser-style">
+		<input id="includeborder" type="color" class="browser-style i18n" title="__MSG_configBorder__">
+		<label id="includepreview" for="includeborder" class="i18n">__MSG_configIncludeColors__</label>
+	</div>
+	<div class="browser-style">
+		<input id="excludeborder" type="color" class="browser-style i18n" title="__MSG_configBorder__">
+		<label id="excludepreview" for="excludeborder" class="i18n">__MSG_configExcludeColors__</label>
+	</div>
+	<div class="browser-style">
+		<input id="addbackground" type="color" class="browser-style i18n" title="__MSG_configBackground__">
+		<input id="addborder" type="color" class="browser-style i18n" title="__MSG_configBorder__">
+		<label id="addpreview" for="addbackground" class="i18n">__MSG_configAddColors__</label>
+	</div>
+
+	<div class="browser-style section i18n">__MSG_configChecks__</div>
+	<div class="browser-style"><input checked id="checkdeleted" type="checkbox" class="browser-style"> <label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label></div>
+	<div class="browser-style"><input checked id="checkimages" type="checkbox" class="browser-style"> <label for="checkimages" class="i18n">__MSG_configCheckImages__</label></div>
+
+	<div class="browser-style section i18n">__MSG_configIgnores__</div>
+	<div class="browser-style"><input checked id="ignorecase" type="checkbox" class="browser-style"> <label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label></div>
+	<div class="browser-style"><input checked id="ignorenumbers" type="checkbox" class="browser-style"> <label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label></div>
+
+	<div class="browser-style section i18n">__MSG_configWatch__</div>
+	<div class="browser-style">
+		<input id="watchDelay" size="4" type="text" class="browser-style">
+		<label for="watchDelay" class="i18n">__MSG_configWatchDelay__</label>
+	</div>		
+	<div class="browser-style"><input checked id="notifychanged" type="checkbox" class="browser-style"> <label for="notifychanged" class="i18n">__MSG_configNotifyChanged__</label></div>
+	<div class="browser-style"><input id="notifyfailed" type="checkbox" class="browser-style"> <label for="notifyfailed" class="i18n">__MSG_configNotifyFailed__</label></div>
+
+	<script type="module" src="scripts/manage.js"></script>
+</body>
+
+</html>

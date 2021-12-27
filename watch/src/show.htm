@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles/browser_style.css" />
+	<link rel="stylesheet" href="styles/show.css" />
+	<title class="i18n">__MSG_watchExtensionName__</title>
+</head>
+
+<body class="collapsed">
+	<div id="status">
+		<div id="buttons" class="browser-style buttons">
+			<button id="expand" class="browser-style expander"></button>
+			<button id="open" class="browser-style i18n">__MSG_pageOpen__</button>
+			<button id="delete" class="browser-style i18n">__MSG_pageDisable__</button>
+			<button id="highlight" class="browser-style default">
+				<span id="enable" class="i18n">__MSG_pageEnable__</span>
+				<span id="showChanges" class="i18n">__MSG_pageShowChanges__</span>
+				<span id="showNext" class="i18n">__MSG_pageNextChange__</span>	
+			</button>
+		</div>
+		<div id="statustext">
+			<span id="disabled" class="i18n">__MSG_watchDisabled__</span>
+			<span id="known" class="i18n">__MSG_watchEnabled__</span>
+			<span id="loadfail" class="i18n">__MSG_watchFailed__</span>
+			<span id="unchanged" class="i18n">__MSG_pageUnchanged__</span>
+			<span id="changed" class="i18n">__MSG_pageChanged__</span>
+			<span id="failed" class="i18n">__MSG_pageFailed__</span>
+			<span id="selecting" class="i18n">__MSG_pageSelectRegion__</span>
+		</div>
+	</div>
+	<div id="settings">
+		<div id="config">
+			<div id="textfields" class="browser-style">
+				<input class="wide" type="text" value="" id="pagetitle" />
+			</div>
+			<div class="browser-style section i18n">__MSG_configChecks__</div>
+			<div class="browser-style">
+				<input checked id="checkdeleted" type="checkbox" class="browser-style">
+				<label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label>
+			</div>
+			<div class="browser-style">
+				<input checked id="checkimages" type="checkbox" class="browser-style">
+				<label for="checkimages" class="i18n">__MSG_configCheckImages__</label>
+			</div>
+
+			<div class="browser-style section i18n">__MSG_configIgnores__</div>
+			<div class="browser-style">
+				<input checked id="ignorecase" type="checkbox" class="browser-style">
+				<label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label>
+			</div>
+			<div class="browser-style">
+				<input checked id="ignorenumbers" type="checkbox" class="browser-style">
+				<label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label>
+			</div>
+
+			<div class="browser-style section i18n">__MSG_configAppearance__</div>
+			<div class="browser-style">
+				<input checked id="makevisible" type="checkbox" class="browser-style">
+				<label for="makevisible" class="i18n">__MSG_configMakeVisible__</label>
+			</div>
+			<div class="browser-style">
+				<input checked id="stripstyles" type="checkbox" class="browser-style">
+				<label for="stripstyles" class="i18n">__MSG_configStripStyles__</label>
+			</div>
+			<div class="browser-style">
+				<input checked id="isolateregions" type="checkbox" class="browser-style">
+				<label for="isolateregions" class="i18n">__MSG_configIsolateRegions__</label>
+			</div>
+
+			<div class="browser-style section i18n">__MSG_configRegionsInclude__</div>
+			<div class="browser-style"><select id="include" class="wide" size="3"></select></div>
+			<div class="browser-style buttons">
+				<button class="browser-style i18n" id="includeadd">__MSG_configRegionsAdd__</button>
+				<button class="browser-style i18n" disabled="disabled" id="includedel">__MSG_configRegionsRemove__</button>
+			</div>
+
+			<div class="browser-style section i18n">__MSG_configRegionsExclude__</div>
+			<div class="browser-style"><select id="exclude" class="wide" size="3"></select></div>
+			<div class="browser-style buttons">
+				<button class="browser-style i18n" id="excludeadd">__MSG_configRegionsAdd__</button>
+				<button class="browser-style i18n" disabled="disabled" id="excludedel">__MSG_configRegionsRemove__</button>
+			</div>
+
+			<div class="browser-style section i18n">__MSG_configWatch__</div>
+			<div class="browser-style">
+				<input id="watchDelay" size="4" type="text" class="browser-style">
+				<label for="watchDelay" class="i18n">__MSG_configWatchDelay__</label>
+			</div>				
+		</div>
+	</div>
+	<div id="content">
+		<div id="progress"></div>
+		<div id="loading"><img src="../common/icons/highlight-64.png"></div>
+		<iframe id="iframe" sandbox="allow-same-origin"></iframe>
+		<div id="permissionDenied">
+			<p id="permissionHost" class="browser-style section"></p>
+			<p id="requirePermission" class="browser-style i18n">__MSG_pageRequirePermission__</p>
+			<button id="grantHost" class="browser-style i18n">__MSG_pageGrantHost__</button>
+			<button id="grantAll" class="browser-style i18n">__MSG_pageGrantAll__</button>
+		</div>
+	</div>
+	<div id="overlay"></div>
+
+	<script type="module" src="scripts/show.js"></script>
+</body>
+
+</html>

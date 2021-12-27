@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles/browser_style.css" />
+	<link rel="stylesheet" href="styles/popup.css" />
+</head>
+
+<body>
+	<div id="status" class="browser-style">
+		<span class="i18n" id="watchUnsupported">__MSG_watchUnsupported__</span>
+		<span class="i18n" id="watchDisabled">__MSG_watchDisabled__</span>
+		<span class="i18n" id="watchEnabled">__MSG_watchEnabled__</span>
+	</div>
+
+	<div class="browser-style buttons">
+		<button class="browser-style default" id="watch">
+			<span class="disabled i18n">__MSG_pageEnable__</span><span class="enabled i18n">__MSG_pageShowChanges__</span>...
+		</button>
+		<button class="browser-style default" id="open">
+			<span class="i18n">__MSG_pageOpen__</span>
+		</button>
+	</div>
+
+	<div class="browser-style buttons">
+		<button class="browser-style i18n" id="sidebar">__MSG_pagesSidebar__</button>
+		<!--<button class="browser-style i18n" id="options">__MSG_pagesConfiguration__</button>-->
+		<button class="browser-style i18n" id="scanAll">__MSG_pagesScanAll__</button>
+	</div>
+
+	<div id="changedPages">
+		<div class="browser-style section i18n">__MSG_watchChangedPages__</div>
+		<div class="browser-style"><select id="changed" size="5"></select></div>
+
+		<div class="browser-style buttons">
+			<button class="browser-style i18n" id="openAll">__MSG_pagesOpenChanged__</button>
+		</div>
+	</div>
+
+	<div id="failedPages">
+		<div class="browser-style section i18n">__MSG_watchFailedPages__</div>
+		<div class="browser-style"><select id="failed" size="5"></select></div>
+
+		<div class="browser-style buttons">
+			<button class="browser-style i18n" id="scanFailed">__MSG_pagesScanFailed__</button>
+			<button class="browser-style i18n" id="openFailed">__MSG_pagesOpenFailed__</button>
+		</div>
+	</div>
+
+	<script type="module" src="scripts/popup.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+    "name": "@sitedelta/watch",
+    "version": "0.30.0",
+    "private": true,
+    "dependencies": {
+        "@sitedelta/common": "workspace:^",
+        "snowpack": "^3.8.8"
+    },
+    "scripts": {
+        "build": "yarn snowpack build --watch",
+        "webext": "web-ext run -s dist",
+        "dev": "run-p build webext"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.15",
+        "npm-run-all": "^4.1.5",
+        "web-ext": "^6.6.0"
+    }
+}

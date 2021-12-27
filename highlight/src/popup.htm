@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="./styles/popup.css" />
+	<link rel="stylesheet" href="./styles/browser_style.css" />
+</head>
+
+<body>
+	<div class="browser-style i18n" type="text" id="title">
+		<span id="disabled" class="i18n">__MSG_highlightDisabled__</span>
+		<span id="enabled" class="i18n">__MSG_highlightEnabled__</span>
+		<span id="unavailable" class="i18n">__MSG_highlightUnsupported__</span>
+		<span id="selecting" class="i18n">__MSG_pageSelectRegion__</span>
+		<span id="unchanged" class="i18n">__MSG_pageUnchanged__</span>
+		<span id="changed" class="i18n">__MSG_pageChanged__</span>
+		<span id="failed" class="i18n">__MSG_pageFailed__</span>
+	</div>
+
+	<div id="textfields" class="browser-style">
+		<input class="browser-style" type="text" value="" id="pagetitle" />
+		<input class="browser-style" type="text" disabled="disabled" id="url" />
+	</div>
+
+	<div id="buttons">
+		<div class="browser-style buttons">
+			<button id="delete" class="browser-style i18n">__MSG_pageDisable__</button>
+			<button id="highlight" class="browser-style default">
+				<span id="enable" class="i18n">__MSG_pageEnable__</span>
+				<span id="showChanges" class="i18n">__MSG_pageShowChanges__</span>
+				<span id="showNext" class="i18n">__MSG_pageNextChange__</span>
+			</button>
+		</div>
+		<div class="browser-style buttons">
+			<button id="expand" class="browser-style expander"></button>
+			<button class="browser-style i18n" id="sidebar">__MSG_pagesSidebar__</button>
+			<!--<button class="browser-style i18n" id="setup">__MSG_pagesConfiguration__</button>-->
+			<button class="browser-style i18n" id="scanAll">__MSG_pagesScanAll__</button>
+		</div>
+	</div>
+
+	<div id="config">
+		<div class="browser-style section i18n">__MSG_configChecks__</div>
+		<div class="browser-style">
+			<input checked id="checkdeleted" type="checkbox" class="browser-style">
+			<label for="checkdeleted" class="i18n">__MSG_configCheckDeleted__</label>
+		</div>
+		<div class="browser-style">
+			<input checked id="checkimages" type="checkbox" class="browser-style">
+			<label for="checkimages" class="i18n">__MSG_configCheckImages__</label>
+		</div>
+
+		<div class="browser-style section i18n">__MSG_configIgnores__</div>
+		<div class="browser-style">
+			<input checked id="ignorecase" type="checkbox" class="browser-style"> 
+			<label for="ignorecase" class="i18n">__MSG_configIgnoreCase__</label>
+		</div>
+		<div class="browser-style">
+			<input checked id="ignorenumbers" type="checkbox" class="browser-style"> 
+			<label for="ignorenumbers" class="i18n">__MSG_configIgnoreNumbers__</label>
+		</div>
+
+		<div class="browser-style section i18n">__MSG_configAppearance__</div>
+		<div class="browser-style">
+			<input checked id="makevisible" type="checkbox" class="browser-style"> 
+			<label for="makevisible" class="i18n">__MSG_configMakeVisible__</label>
+		</div>		
+		<div class="browser-style">
+			<input checked id="stripstyles" type="checkbox" class="browser-style"> 
+			<label for="stripstyles" class="i18n">__MSG_configStripStyles__</label>
+		</div>
+		<div class="browser-style">
+			<input checked id="isolateregions" type="checkbox" class="browser-style"> 
+			<label for="isolateregions" class="i18n">__MSG_configIsolateRegions__</label>
+		</div>
+
+		<div class="browser-style section i18n">__MSG_configRegionsInclude__</div>
+		<div class="browser-style"><select id="include" size="2"></select></div>
+		<div class="browser-style buttons">
+			<button class="browser-style i18n" id="includeadd">__MSG_configRegionsAdd__</button>
+			<button class="browser-style i18n" disabled="disabled" id="includedel">__MSG_configRegionsRemove__</button>
+		</div>
+
+		<div class="browser-style section i18n">__MSG_configRegionsExclude__</div>
+		<div class="browser-style"><select id="exclude" size="2"></select></div>
+		<div class="browser-style buttons">
+			<button class="browser-style i18n" id="excludeadd">__MSG_configRegionsAdd__</button> 
+			<button class="browser-style i18n" disabled="disabled" id="excludedel">__MSG_configRegionsRemove__</button>
+		</div>
+	</div>
+	<script type="module" src="./scripts/popup.js"></script>
+</body>
+
+</html>

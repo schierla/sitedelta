@@ -1,0 +1,17 @@
+{
+    "name": "@sitedelta/highlight",
+    "version": "0.30.0",
+    "private": true,
+    "dependencies": {
+        "@sitedelta/common": "workspace:^",
+        "snowpack": "^3.8.8"
+    },
+    "scripts": {
+        "build": "nodemon -w src -w ../common/src -e \"ts,html,js\" -x \"yarn snowpack build\"",
+        "webext": "web-ext run -s dist",
+        "dev": "run-p build webext"
+    },
+    "devDependencies": {
+        "web-ext": "^6.6.0"
+    }
+}

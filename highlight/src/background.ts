@@ -3,8 +3,8 @@ import * as pageUtils from "@sitedelta/common/src/scripts/pageUtils";
 import * as configUtils from "@sitedelta/common/src/scripts/configUtils";
 import * as ioUtils from "@sitedelta/common/src/scripts/ioUtils";
 import * as transferUtils from "@sitedelta/common/src/scripts/transferUtils";
-import * as highlightScriptUtils from "./highlightScriptUtils";
-import { PageState } from "./highlightState";
+import * as highlightScriptUtils from "./scripts/highlightScriptUtils";
+import { PageState } from "./scripts/highlightState";
 
 var openTabRequest: null | {url: string, tabId: number, onLoad?: (url: string) => void} = null;
 

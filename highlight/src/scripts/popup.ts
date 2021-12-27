@@ -304,7 +304,7 @@ async function init() {
 	}
 	
 	if(url == "https://sitedelta.schierla.de/transfer/") {
-		await tabUtils.executeScripts(tabId, ["/scripts/transferScript.js"]);
+		await tabUtils.executeScripts(tabId, "/scripts/transferScript.js");
 		window.close();
 		return;
 	}

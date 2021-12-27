@@ -13,17 +13,17 @@ async function handlePageLoad(tabId: number, url: string) {
 		}
 		var changes = await pageUtils.getChanges(url);
 		if(changes == 0) {
-			chrome.browserAction.setBadgeBackgroundColor({ color: "#070", tabId: tabId });
+			tabUtils.setBadgeBackgroundColor("#070", tabId);
 		} else {
-			chrome.browserAction.setBadgeBackgroundColor({ color: "#700", tabId: tabId });
+			tabUtils.setBadgeBackgroundColor("#700", tabId);
 		}
-		chrome.browserAction.setBadgeText({ text: badgeText || " ", tabId: tabId });
+		tabUtils.setBadgeText(badgeText || " ", tabId);
 	}
 }
 
 function handlePageUnload(tabId: number, url: string) {
-	chrome.browserAction.setBadgeBackgroundColor({ color: "#555", tabId: tabId });
-	chrome.browserAction.setBadgeText({ text: badgeText, tabId: tabId });
+	tabUtils.setBadgeBackgroundColor("#555", tabId);
+	tabUtils.setBadgeText(badgeText, tabId);
 }
 
 async function scanPage(url: string): Promise<void> {
@@ -38,7 +38,7 @@ async function scanPage(url: string): Promise<void> {
 			var title = await pageUtils.getTitle(url);
 			chrome.notifications.create(url, {
 				"type": "basic",
-				"iconUrl": chrome.extension.getURL("common/icons/changed.svg"),
+				"iconUrl": chrome.extension.getURL("icons/changed.svg"),
 				"title": chrome.i18n.getMessage("watchNotificationChanged"),
 				"message": title || ""
 			});
@@ -49,7 +49,7 @@ async function scanPage(url: string): Promise<void> {
 			var title = await pageUtils.getTitle(url);
 			chrome.notifications.create(url, {
 				"type": "basic",
-				"iconUrl": chrome.extension.getURL("common/icons/inactive.svg"),
+				"iconUrl": chrome.extension.getURL("icons/inactive.svg"),
 				"title": chrome.i18n.getMessage("watchNotificationFailed"),
 				"message": title || ""
 			});
@@ -170,8 +170,8 @@ function scheduleWatch(): void {
 	} else {
 		badgeText = "" + ((failed > 0) ? "*" : "");
 	}
-	chrome.browserAction.setBadgeText({ text: badgeText });
-	chrome.browserAction.setBadgeBackgroundColor( {color: "#555"} );
+	tabUtils.setBadgeText(badgeText);
+	tabUtils.setBadgeBackgroundColor("#555");
 }
 
 tabUtils.initContentScriptTargets([]);

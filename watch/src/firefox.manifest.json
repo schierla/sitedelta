@@ -52,6 +52,6 @@
 	},
 	
 	"background": {
-		"scripts": ["scripts/background.js"]
+		"scripts": ["background.js"]
 	}
 }

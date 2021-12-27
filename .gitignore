@@ -8,4 +8,6 @@
 !.yarn/versions
 node_modules
 highlight/dist
+highlight/src/manifest.json
 watch/dist
+watch/src/manifest.json

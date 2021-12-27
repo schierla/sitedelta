@@ -16,24 +16,35 @@ export async function getActive(): Promise<chrome.tabs.Tab> {
 	return new Promise(resolve => chrome.tabs.query({ active: true, currentWindow: true }, tabs => resolve(tabs[0])));
 }
 
+export function setBadgeText(text: string, tabId?: number) {
+	(chrome.action ?? chrome.browserAction).setBadgeText({ text, tabId });
+}
+
+export function setBadgeBackgroundColor(color: string, tabId?: number) {
+	(chrome.action ?? chrome.browserAction).setBadgeBackgroundColor({ color, tabId });
+}
+
 export async function showIcon(tabId: number, current?: any, changes?: number) {
 	if (changes === undefined) {
-		chrome.browserAction.setBadgeText({ text: "", tabId: tabId });
+		setBadgeText("", tabId);
 	} else if (changes == 0) {
-		chrome.browserAction.setBadgeText({ text: " ", tabId: tabId });
-		chrome.browserAction.setBadgeBackgroundColor({ color: "#0c0", tabId: tabId });
+		setBadgeText(" ", tabId);
+		setBadgeBackgroundColor("#0c0", tabId);
 	} else if (changes > 0) {
-		chrome.browserAction.setBadgeText({ text: "" + current, tabId: tabId });
-		chrome.browserAction.setBadgeBackgroundColor({ color: "#c00", tabId: tabId });
+		setBadgeText("" + current,  tabId );
+		setBadgeBackgroundColor("#c00", tabId);
 	} else {
-		chrome.browserAction.setBadgeText({ text: "X", tabId: tabId });
-		chrome.browserAction.setBadgeBackgroundColor({ color: "#ccc", tabId: tabId });
+		setBadgeText("X", tabId );
+		setBadgeBackgroundColor("#ccc", tabId);
 	}
 }
 
-export async function executeScripts(tabId: number, files: string[]): Promise<void> {
-	for(var i=0; i<files.length; i++) {
-		var results = await new Promise(resolve => chrome.tabs.executeScript(tabId, { file: files[i] }, resolve));
+export async function executeScripts(tabId: number, file: string): Promise<void> {
+	if(chrome.scripting && chrome.scripting.executeScript) {
+		const results = await chrome.scripting.executeScript({files: [file], target: {tabId: tabId}});
+		if(results[0].result === undefined) console.log("Error executing script: " + chrome.runtime.lastError);
+	} else {
+		const results = await new Promise(resolve => chrome.tabs.executeScript(tabId, { file: file }, resolve));
 		if (results === undefined) console.log("Error executing script: " + chrome.runtime.lastError);
 	}
 }
@@ -45,7 +56,7 @@ var contentScriptTargetTabListener = function(tabId: number, changeInfo: any, ta
 	if(!tab.url) return;
 	
 	if(contentScriptTargets.indexOf(tab.url) != -1)
-		executeScripts(tabId, ['/scripts/contentScript.js']);
+		executeScripts(tabId, '/scripts/contentScript.js');
 }
 
 export function initContentScriptTargets(urls: string[]): void {

@@ -7,11 +7,13 @@
         "snowpack": "^3.8.8"
     },
     "scripts": {
-        "build": "nodemon -w src -w ../common/src -e \"ts,html,js\" -x \"yarn snowpack build\"",
-        "webext": "web-ext run -s dist",
-        "dev": "run-p build webext"
+        "watch": "nodemon -w src -w ../common/src -e \"ts,html,js\" -x \"yarn snowpack build\"",
+        "dev:ff": "ncp src/firefox.manifest.json src/manifest.json && snowpack build && web-ext run -s dist",
+        "dev:ch": "ncp src/chrome.manifest.json src/manifest.json && snowpack build && web-ext run -t chromium -s dist"
     },
     "devDependencies": {
+        "ncp": "^2.0.0",
+        "nodemon": "^2.0.15",
         "web-ext": "^6.6.0"
     }
 }

@@ -6,7 +6,7 @@ export default {
   root: "./src/",
   optimize: {
     entrypoints: [
-      "scripts/background.js",
+      "background.js",
       "scripts/contentScript.js",
       "scripts/highlightScript.js",
       "scripts/transferScript.js",
@@ -16,7 +16,7 @@ export default {
       "scripts/popup.js",
     ],
     bundle: true,
-    treeshake: false,
+    treeshake: true,
     target: "es2018",
     sourcemap: false,
   },

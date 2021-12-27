@@ -5,6 +5,21 @@
 export default {
   root: "./src/",
   workspaceRoot: "../",
+  optimize: {
+    entrypoints: [
+      "background.js",
+      "scripts/transferScript.js",
+      "scripts/manage.js",
+      "scripts/options.js",
+      "scripts/pages.js",
+      "scripts/popup.js",
+      "scripts/show.js",
+    ],
+    bundle: true,
+    treeshake: true,
+    target: "es2018",
+    sourcemap: false,
+  },
   mount: {
     src: "/",
     "../_locales": "/_locales",
@@ -13,6 +28,7 @@ export default {
   },
   buildOptions: {
     out: "dist",
+    metaUrlPath: "dependencies"
   },
   plugins: [
   ],

@@ -38,7 +38,7 @@ async function scanPage(url: string): Promise<void> {
 			var title = await pageUtils.getTitle(url);
 			chrome.notifications.create(url, {
 				"type": "basic",
-				"iconUrl": chrome.extension.getURL("icons/changed.svg"),
+				"iconUrl": chrome.runtime.getURL("icons/changed.svg"),
 				"title": chrome.i18n.getMessage("watchNotificationChanged"),
 				"message": title || ""
 			});
@@ -49,7 +49,7 @@ async function scanPage(url: string): Promise<void> {
 			var title = await pageUtils.getTitle(url);
 			chrome.notifications.create(url, {
 				"type": "basic",
-				"iconUrl": chrome.extension.getURL("icons/inactive.svg"),
+				"iconUrl": chrome.runtime.getURL("icons/inactive.svg"),
 				"title": chrome.i18n.getMessage("watchNotificationFailed"),
 				"message": title || ""
 			});
@@ -77,7 +77,7 @@ async function scanPages(pages: string[]): Promise<void> {
 		if(config.notifyChanged) {
 			chrome.notifications.create("#", {
 				"type": "basic",
-				"iconUrl": chrome.extension.getURL("common/icons/unchanged.svg"),
+				"iconUrl": chrome.runtime.getURL("icons/unchanged.svg"),
 				"title": chrome.i18n.getMessage("watchNotificationUnchanged"),
 				"message": ""
 			});

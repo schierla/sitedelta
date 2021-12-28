@@ -407,6 +407,7 @@ __metadata:
   dependencies:
     "@sitedelta/common": "workspace:^"
     ncp: ^2.0.0
+    nodemon: ^2.0.15
     snowpack: ^3.8.8
     web-ext: ^6.6.0
   languageName: unknown

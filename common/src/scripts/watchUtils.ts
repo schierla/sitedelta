@@ -3,9 +3,9 @@ import * as watchUtils from "./watchUtils";
 import * as textUtils from "./textUtils";
 
 // watch operations
-export async function loadPage(url: string, progress?: (loaded: number, total: number) => void): Promise<Document | null> {
+export async function loadPage(url: string, documentParser: (content: string) => Document, progress?: (loaded: number, total: number) => void): Promise<Document | null> {
 	var page = await _downloadPage(url, progress);
-	return await _parsePage(url, page.mime, page.content, progress);
+	return await _parsePage(url, page.mime, page.content, documentParser);
 }
 
 export async function adaptDelay(url: string, changes: number): Promise<void> {
@@ -37,10 +37,10 @@ export async function setChanges(url: string, changes: number): Promise<void> {
 	}
 }
 
-export async function scanPage(url: string): Promise<number> {
+export async function scanPage(url: string, documentParser: (content: string) => Document): Promise<number> {
 	var config = await pageUtils.getEffectiveConfig(url);
 	if (config === null) return -1;
-	var doc = await watchUtils.loadPage(url);
+	var doc = await watchUtils.loadPage(url, documentParser);
 	if (doc === null) {
 		await watchUtils.setChanges(url, -1);
 		return -1; 
@@ -64,10 +64,10 @@ export async function scanPage(url: string): Promise<number> {
 	}
 }
 
-export async function markSeen(url: string): Promise<void> {
+export async function markSeen(url: string, documentParser: (content: string) => Document): Promise<void> {
 	var config = await pageUtils.getEffectiveConfig(url);
 	if (config === null) return;
-	var doc = await watchUtils.loadPage(url);
+	var doc = await watchUtils.loadPage(url, documentParser);
 	if (doc === null) {
 		await watchUtils.setChanges(url, -1);
 		return; 
@@ -80,15 +80,17 @@ export async function markSeen(url: string): Promise<void> {
 
 async function _downloadPage(url: string, progress?: (loaded: number, total: number) => void): Promise<{mime: string, content: Uint8Array | null}> {
 	const response = await fetch(url, {redirect: "error", headers: {"Cache-Control": "max-age=0"}});
-	if(!response.ok) return {mime: `error/${response.status}`, content: null};
-	const reader = response.body.getReader();
-	const total = +response.headers.get('Content-Length');
+	if(!response.ok || !response.body || !response.headers) return {mime: `error/${response.status}`, content: null};
+	const reader = response?.body?.getReader();
+	const total = parseInt(response?.headers?.get('Content-Length') ?? "0");
 	let loaded = 0, chunks: Uint8Array[] = []; 
 	while(true) {
 		const {done, value} = await reader.read();
 		if (done) break;
-		chunks.push(value);
-		loaded += value.length;
+		if(value) {
+			chunks.push(value);
+			loaded += value.length;
+		}
 		if(total != 0) progress?.(loaded, total);
 	}
 	
@@ -102,8 +104,7 @@ async function _downloadPage(url: string, progress?: (loaded: number, total: num
 	return {mime: response.type, content: content};
 }
 
-async function _parsePage(url: string, mime: string, content: Uint8Array | null, progress?: (loaded: number, total: number) => void): Promise<Document | null> {
-	var parser = new DOMParser();
+async function _parsePage(url: string, mime: string, content: Uint8Array | null, documentParser: (content: string) => Document): Promise<Document | null> {
 	if (content === null) {
 		console.log("Error loading " + url + ": " + mime);
 		return null;
@@ -112,14 +113,16 @@ async function _parsePage(url: string, mime: string, content: Uint8Array | null,
 	if (mime.toLowerCase().indexOf("charset=") > 0) {
 		const charset = mime.toLowerCase().substring(mime.toLowerCase().indexOf("charset=") + "charset=".length);
 		const text = new TextDecoder(charset).decode(content);
-		return parser.parseFromString(text, "text/html");
+		return documentParser(text);
 	} else {
 		const tempText = new TextDecoder("utf-8").decode(content);
-		const tempDoc = parser.parseFromString(tempText, "text/html");
-		for (const meta of tempDoc.getElementsByTagName("meta")) {
+		const tempDoc = documentParser(tempText);
+		const metas = tempDoc.getElementsByTagName("meta");
+		for (let i=0; i<metas.length; i++) {
+			const meta = metas.item(i);
 			if(meta.getAttribute("charset")) {
-				const text = new TextDecoder(meta.getAttribute("charset")).decode(content);
-				return parser.parseFromString(text, "text/html");
+				const text = new TextDecoder(meta.getAttribute("charset") ?? "utf-8").decode(content);
+				return documentParser(text);
 			}
 			const httpEquiv = meta.getAttribute("http-equiv");
 			const metaContent = meta.getAttribute("content");
@@ -127,7 +130,7 @@ async function _parsePage(url: string, mime: string, content: Uint8Array | null,
 				if (metaContent.toLowerCase().indexOf("charset=") > 0) {
 					const charset = metaContent.toLowerCase().substring(metaContent.toLowerCase().indexOf("charset=") + "charset=".length);
 					const text = new TextDecoder(charset).decode(content);
-					return parser.parseFromString(text, "text/html");
+					return documentParser(text);
 				}
 			}
 		}

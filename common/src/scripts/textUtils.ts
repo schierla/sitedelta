@@ -37,44 +37,36 @@ export function findElements(doc: Document, xpaths: string[]): Element[] {
 	for (var i = 0; i < xpaths.length; i++) {
 		var xpath = xpaths[i];
 		if(xpath.startsWith("/") || xpath.startsWith("id(")) {
-			let elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+			let elements = doc.evaluate(xpath, doc, null, 0 /* XPathResult.ANY_TYPE */, null);
 			for (var element = elements.iterateNext(); element != null; element = elements.iterateNext()) 
 				ret.push(element as Element);
 		} else {
-			let elements = doc.querySelectorAll(xpath);
-			for(var j=0; j<elements.length; j++) 
-				ret.push(elements.item(j));
+			let elements = Array.from(doc.querySelectorAll(xpath));
+			for(let element of elements) ret.push(element);
 		}
 	}
 	return ret;
 }
 
-export function createFilter(config: Config, excludes: Node[]) {
-	return {
-		acceptNode: function (cur: Node) {
-			for (var i = 0; i < excludes.length; i++)
-				if (excludes[i] == cur)
-					return NodeFilter.FILTER_REJECT;
-			if (cur.nodeName == 'SCRIPT' || cur.nodeName == 'STYLE')
-				return NodeFilter.FILTER_REJECT;
-			if (cur.nodeType == 3) 
-				return NodeFilter.FILTER_ACCEPT;
-			if (config.scanImages && cur.nodeName == 'IMG') {
-				var src = (cur as HTMLElement).getAttribute("src");
-				if(src && src.indexOf("chrome:") != 0) return NodeFilter.FILTER_ACCEPT;
-			}
-			return NodeFilter.FILTER_SKIP;
+export function* walkTree(node: Node, config: Config, excludes: Node[]) {
+	for(var cur = node.firstChild; cur; cur = cur.nextSibling) {
+		if(excludes.indexOf(cur) !== -1) continue;
+		if (cur.nodeName == 'SCRIPT' || cur.nodeName == 'STYLE') continue;
+		if (cur.nodeType == 3) 
+			yield cur;
+		if (config.scanImages && cur.nodeName == 'IMG') {
+			var src = (cur as HTMLElement).getAttribute("src");
+			if(src && src.indexOf("chrome:") != 0) yield cur;
 		}
-	};
+		yield* walkTree(cur, config, excludes);
+	}
 }
 
 function _getTextForNode(node: Node, config: Config, excludes: Node[]): string {
 	var doc = node.ownerDocument, text = "", ret = "";
 	if(!doc) return "";
-	var filter = createFilter(config, excludes);
-	var tw = doc.createTreeWalker(node, NodeFilter.SHOW_ALL, filter);
-	if (filter.acceptNode(node)==NodeFilter.FILTER_REJECT) return ret;
-	for (var cur: Node | null = node; cur != null; cur = tw.nextNode()) {
+	if(excludes.indexOf(node) !== -1) return ret;
+	for(var cur of walkTree(node, config, excludes)) {
 		if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {
 			if (cur.nodeName == 'IMG' && (cur as Element).hasAttribute("src")) 
 				text = "[" + (cur as Element).getAttribute("src") + "]";

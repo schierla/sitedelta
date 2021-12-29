@@ -406,10 +406,17 @@ __metadata:
   resolution: "@sitedelta/watch@workspace:watch"
   dependencies:
     "@sitedelta/common": "workspace:^"
+    "@types/parse5": ^6.0.3
+    "@types/xmlserializer": ^0.6.2
+    "@xmldom/xmldom": ^0.8.0
     ncp: ^2.0.0
     nodemon: ^2.0.15
+    parse5: ^6.0.1
+    query-selector: ^2.0.0
     snowpack: ^3.8.8
     web-ext: ^6.6.0
+    xmlserializer: ^0.6.1
+    xpath: ^0.0.32
   languageName: unknown
   linkType: soft
 
@@ -534,6 +541,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/parse5@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@types/parse5@npm:6.0.3"
+  checksum: ddb59ee4144af5dfcc508a8dcf32f37879d11e12559561e65788756b95b33e6f03ea027d88e1f5408f9b7bfb656bf630ace31a2169edf44151daaf8dd58df1b7
+  languageName: node
+  linkType: hard
+
 "@types/resolve@npm:1.17.1":
   version: 1.17.1
   resolution: "@types/resolve@npm:1.17.1"
@@ -552,12 +566,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/xmlserializer@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "@types/xmlserializer@npm:0.6.2"
+  dependencies:
+    parse5: ^5.1.0
+  checksum: 0625b6179c168d53b1a8c2ff89fb7cad6a7f21ba174eae577418d2d3fefdd73702677d222882d15ad03db02185ccb4f137baf9b68612ee18dff9c392291121b2
+  languageName: node
+  linkType: hard
+
 "@types/yauzl@npm:2.9.2":
   version: 2.9.2
   resolution: "@types/yauzl@npm:2.9.2"
   dependencies:
     "@types/node": "*"
   checksum: dfb49abe82605615712fc694eaa4f7068fe30aa03f38c085e2c2e74408beaad30471d36da9654a811482ece2ea4405575fd99b19c0aa327ed2a9736b554bbf43
+  languageName: node
+  linkType: hard
+
+"@xmldom/xmldom@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "@xmldom/xmldom@npm:0.8.0"
+  checksum: 944cbaa92f6e5fe4db99e9cc03f196487be06f40ed6dfdbfd3b93b1e7bd95793d4157ac729378ef487568c08214b607c7a57b9887a8535281550a4c7e3cabdac
   languageName: node
   linkType: hard
 
@@ -4761,6 +4791,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"parse5@npm:^5.1.0":
+  version: 5.1.1
+  resolution: "parse5@npm:5.1.1"
+  checksum: 613a714af4c1101d1cb9f7cece2558e35b9ae8a0c03518223a4a1e35494624d9a9ad5fad4c13eab66a0e0adccd9aa3d522fc8f5f9cc19789e0579f3fa0bdfc65
+  languageName: node
+  linkType: hard
+
 "parse5@npm:^6.0.1":
   version: 6.0.1
   resolution: "parse5@npm:6.0.1"
@@ -5106,6 +5143,13 @@ __metadata:
   version: 6.5.2
   resolution: "qs@npm:6.5.2"
   checksum: 24af7b9928ba2141233fba2912876ff100403dba1b08b20c3b490da9ea6c636760445ea2211a079e7dfa882a5cf8f738337b3748c8bdd0f93358fa8881d2db8f
+  languageName: node
+  linkType: hard
+
+"query-selector@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "query-selector@npm:2.0.0"
+  checksum: 3da9859c70b93c8d02e301d0606fc6bbee476d8814b9e288b1228872370b6fa84017a872957b4e93caeba5b9d82c0fa66c224461ba2274f3479c0290934c252e
   languageName: node
   linkType: hard
 
@@ -6597,6 +6641,20 @@ __metadata:
   version: 11.0.1
   resolution: "xmlbuilder@npm:11.0.1"
   checksum: 7152695e16f1a9976658215abab27e55d08b1b97bca901d58b048d2b6e106b5af31efccbdecf9b07af37c8377d8e7e821b494af10b3a68b0ff4ae60331b415b0
+  languageName: node
+  linkType: hard
+
+"xmlserializer@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "xmlserializer@npm:0.6.1"
+  checksum: 589c8a66a127647f2c49d9546e354947354e1a808d70c8084dd92858e4735b72cf5d2e9625a6bfa85128acf9b97db9629a5e3ed3ec624fde82dc4f3727f15973
+  languageName: node
+  linkType: hard
+
+"xpath@npm:^0.0.32":
+  version: 0.0.32
+  resolution: "xpath@npm:0.0.32"
+  checksum: 887e9747b960ea45fb47a9464744424512de0a49205e82c2ad6be662d7a2f1a75145662a143304340864c6da68fd8d767cce4065cc198ee07a3d4897e0a3d4bb
   languageName: node
   linkType: hard
 

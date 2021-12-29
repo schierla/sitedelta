@@ -31,12 +31,16 @@ function previewPage(list: uiUtils.SortedList<any>) {
 	}
 }
 
+function documentParser(content: string) : Document {
+	return new DOMParser().parseFromString(content, "text/html");
+}
+
 async function scanPage(key: string, data: any) {
-	await watchUtils.scanPage(key);
+	await watchUtils.scanPage(key, documentParser);
 }
 
 async function markSeen(key: string, data: any) {
-	await watchUtils.markSeen(key);
+	await watchUtils.markSeen(key, documentParser);
 }
 
 function selectAllIfNone(): void {

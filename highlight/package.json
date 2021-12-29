@@ -3,8 +3,7 @@
     "version": "0.30.0",
     "private": true,
     "dependencies": {
-        "@sitedelta/common": "workspace:^",
-        "snowpack": "^3.8.8"
+        "@sitedelta/common": "workspace:^"
     },
     "scripts": {
         "watch": "nodemon -w src -w ../common/src -e \"ts,html,js\" -x \"yarn snowpack build\"",
@@ -14,6 +13,7 @@
     "devDependencies": {
         "ncp": "^2.0.0",
         "nodemon": "^2.0.15",
+        "snowpack": "^3.8.8",
         "web-ext": "^6.6.0"
     }
 }

@@ -77,10 +77,14 @@ function showPage(doc: Document | null): void {
 	idoc.body.addEventListener("click", stopIt, true);
 }
 
+function documentParser(content: string): Document {
+	return new DOMParser().parseFromString(content, "text/html");
+}
+
 async function loadPage(): Promise<void> {
 	document.body.classList.remove("loaded", "loadfail");
 	changes = -1; current = -1; loadedDocument = null;
-	var doc = await watchUtils.loadPage(url, (loaded, total) => {
+	var doc = await watchUtils.loadPage(url, documentParser, (loaded, total) => {
 		_progress.style.width = ((loaded / total) * 100) + "%";
 	});
 	if (doc === null) {

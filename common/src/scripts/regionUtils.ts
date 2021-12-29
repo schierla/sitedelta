@@ -4,21 +4,19 @@ export function showOutline(doc: Document, xpath: string, color: string) : void 
 		removeOutline(doc);
 
 	if(xpath.startsWith("/") || xpath.startsWith("id(")) {
-		let elements = doc.evaluate(xpath, doc, null, XPathResult.ANY_TYPE, null);
+		let elements = doc.evaluate(xpath, doc, null, 0 /* XPathResult.ANY_TYPE */, null);
 		for(var node = elements.iterateNext(); node != null; node = elements.iterateNext()) {
 			_outlined.push({ "e": node as HTMLElement, "o": (node as HTMLElement).style.outline });
 		}
 	} else {
-		let elements = doc.querySelectorAll(xpath);
-		for(var j=0; j<elements.length; j++) {
-			var element = elements[j];
+		let elements = Array.from(doc.querySelectorAll(xpath));
+		for(let element of elements) {
 			_outlined.push({ "e": element as HTMLElement, "o": (element as HTMLElement).style.outline });
 		} 
 	}
 	for (var i = 0; i < _outlined.length; i++) {
 		_outlined[i].e.style.outline = color + " dotted 2px";
 	}
-
 }
 
 export function removeOutline(doc: Document): void {

@@ -58,10 +58,8 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 
 		var domactions: {elem: Node, repl: Node[]}[] = [];
 		var last = "", action = "", text = "";
-		var filter = textUtils.createFilter(config, excludes);
-		var tw = doc.createTreeWalker(regions[i], NodeFilter.SHOW_ALL, filter);
-		if (filter.acceptNode(regions[i]) == NodeFilter.FILTER_REJECT) continue;
-		for (var cur: Node | null = regions[i]; cur != null; cur = tw.nextNode()) {
+		if(excludes.indexOf(regions[i]) !== -1) continue;
+		for (var cur of textUtils.walkTree(regions[i], config, excludes)) {
 			if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {
 				if (cur.nodeName == 'IMG' && (cur as Element).hasAttribute("src")) 
 					text = "[" + (cur as Element).getAttribute("src") + "]";

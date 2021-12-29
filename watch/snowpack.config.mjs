@@ -28,8 +28,7 @@ export default {
   },
   buildOptions: {
     out: "dist",
-    metaUrlPath: "dependencies"
+    metaUrlPath: "dependencies",
   },
-  plugins: [
-  ],
+  plugins: [],
 };

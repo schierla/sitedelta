@@ -22,8 +22,8 @@ const openImportExport = () =>
 
 const Content = () => {
   const config = useDefaultConfig();
-  const [selectedPages, setSelection] = useState<string[]>([]);
   const [index, setIndex] = useState<ioUtils.Index>({});
+  const [selectedPages, setSelection] = useState<string[]>([]);
   useEffect(() => ioUtils.observeIndex(setIndex), [setIndex]);
   if (!config.value) return <></>;
   return (

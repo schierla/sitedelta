@@ -10,8 +10,17 @@ export const PageList: FunctionComponent<{
   selectedPages: string[];
   setSelection: (newPages: string[]) => void;
   onDblClick: (newPages: string[]) => void;
+  onContextMenu?: (e: MouseEvent) => void;
   index: ioUtils.Index;
-}> = ({ selectedPages, setSelection, onDblClick, index }) => {
+  filter?: string;
+}> = ({
+  selectedPages,
+  index,
+  filter,
+  setSelection,
+  onContextMenu,
+  onDblClick,
+}) => {
   return (
     <select
       size="10"
@@ -24,8 +33,12 @@ export const PageList: FunctionComponent<{
           )
         )
       }
+      onContextMenu={onContextMenu ? onContextMenu : (e: Event) => {}}
     >
       {Object.keys(index)
+        .filter(
+          (key) => filter === "" || index[key].title.indexOf(filter) !== -1
+        )
         .sort((ka, kb) =>
           index[ka].title !== undefined &&
           index[kb].title !== undefined &&
@@ -58,6 +71,7 @@ export const PageList: FunctionComponent<{
               title={title}
               className={className}
               selected={selectedPages.indexOf(key) !== -1}
+              onContextMenu={() => (selectedPages.indexOf(key) === -1) && setSelection([key])}
             >
               {"title" in data ? data.title : key}
             </option>

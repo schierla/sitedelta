@@ -287,6 +287,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:^2.11.0":
+  version: 2.11.0
+  resolution: "@popperjs/core@npm:2.11.0"
+  checksum: 84d6f197d3ddfd8a5b05c7276c3692d8404c96128a946ab0a800b25567d8fc231928319c1f97a67e0817e76ce2a1b735589ef0f38f8e8835692408660a2395a1
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-commonjs@npm:^16.0.0":
   version: 16.0.0
   resolution: "@rollup/plugin-commonjs@npm:16.0.0"
@@ -405,6 +412,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sitedelta/watch@workspace:watch"
   dependencies:
+    "@popperjs/core": ^2.11.0
     "@sitedelta/common": "workspace:^"
     "@types/parse5": ^6.0.3
     "@types/xmlserializer": ^0.6.2

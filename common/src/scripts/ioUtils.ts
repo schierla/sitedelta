@@ -1,6 +1,6 @@
 import { Config } from "./config";
 
-type Index = Record<string, Status>;
+export type Index = Record<string, Status>;
 
 export interface Status {
 	changes?: number;
@@ -26,13 +26,15 @@ export async function listIndex(): Promise<Index> {
 	if(index) return index as Index; else return {};
 }
 
-export async function observeIndex(observer: (index: Index) => void) {
-	chrome.storage.onChanged.addListener((changes: any, scope: string) => {
+export function observeIndex(observer: (index: Index) => void) {
+	const listener = (changes: any, scope: string) => {
 		if (scope == "local" && "index" in changes) {
 			observer(changes["index"].newValue as Index);
 		}
-	});
-	observer(await listIndex());
+	}
+	chrome.storage.onChanged.addListener(listener);
+	listIndex().then(observer);
+	return () => chrome.storage.onChanged.removeListener(listener);
 }
 
 export async function findInIndex<T>(selector: (url: string, status: Status) => T | null): Promise<T[]> {

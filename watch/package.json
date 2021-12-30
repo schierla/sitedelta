@@ -6,12 +6,13 @@
         "@sitedelta/common": "workspace:^",
         "@xmldom/xmldom": "^0.8.0",
         "parse5": "^6.0.1",
+        "preact": "^10.6.4",
         "query-selector": "^2.0.0",
         "xmlserializer": "^0.6.1",
         "xpath": "^0.0.32"
     },
     "scripts": {
-        "watch": "nodemon -w src -w ../common/src -e \"ts,html,js\" -x \"yarn snowpack build\"",
+        "watch": "nodemon -w src -w ../common/src -e \"ts,tsx,html,js\" -x \"yarn snowpack build\"",
         "dev:ff": "ncp src/firefox.manifest.json src/manifest.json && snowpack build && web-ext run -s dist",
         "dev:ch": "ncp src/chrome.manifest.json src/manifest.json && snowpack build && web-ext run -t chromium -s dist"
     },

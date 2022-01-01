@@ -16,6 +16,7 @@ import {
   deletePages,
   setWatchDelay,
 } from "./pageListHelper";
+import "../styles/manage.css";
 
 const openImportExport = () =>
   chrome.tabs.create({ url: "https://sitedelta.schierla.de/transfer/" });

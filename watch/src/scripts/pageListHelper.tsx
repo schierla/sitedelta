@@ -5,6 +5,7 @@ import * as configUtils from "@sitedelta/common/src/scripts/configUtils";
 import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
 import { FunctionComponent, h } from "preact";
 import { StateUpdater } from "preact/hooks";
+import "../styles/pageList.css";
 
 export const PageList: FunctionComponent<{
   selectedPages: string[];

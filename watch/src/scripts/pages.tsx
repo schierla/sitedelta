@@ -12,6 +12,7 @@ import {
   setWatchDelay,
 } from "./pageListHelper";
 import { createPopper, VirtualElement } from "@popperjs/core";
+import "../styles/pages.css";
 
 window.addEventListener("contextmenu", (e) => {
   e.preventDefault();

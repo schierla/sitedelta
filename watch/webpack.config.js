@@ -59,6 +59,10 @@ module.exports = (env) => {
             },
           ],
         },
+        {
+          test: /\.svg$/i,
+          type: "asset/inline",
+        },
       ],
     },
 

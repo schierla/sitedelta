@@ -6,14 +6,18 @@
         "@sitedelta/common": "workspace:^"
     },
     "scripts": {
-        "watch": "nodemon -w src -w ../common/src -e \"ts,html,js\" -x \"yarn snowpack build\"",
-        "dev:ff": "ncp src/firefox.manifest.json src/manifest.json && snowpack build && web-ext run -s dist",
-        "dev:ch": "ncp src/chrome.manifest.json src/manifest.json && snowpack build && web-ext run -t chromium -s dist"
+        "dev:ff": "webpack -w --env target=firefox",
+        "dev:ch": "webpack -w --env target=chrome",
+        "package:ff": "webpack --env target=firefox --env package=true",
+        "package:ch": "webpack --env target=chrome --env package=true"
     },
     "devDependencies": {
-        "ncp": "^2.0.0",
-        "nodemon": "^2.0.15",
-        "snowpack": "^3.8.8",
-        "web-ext": "^6.6.0"
+        "copy-webpack-plugin": "^9.1.0",
+        "css-loader": "^6.5.1",
+        "esbuild-loader": "^2.18.0",
+        "style-loader": "^3.3.1",
+        "web-ext-plugin": "^1.5.0",
+        "webpack": "^5.65.0",
+        "webpack-cli": "^4.9.1"
     }
 }

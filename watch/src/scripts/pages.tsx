@@ -1,7 +1,7 @@
 import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
 import * as ioUtils from "@sitedelta/common/src/scripts/ioUtils";
 import { render, h, Fragment, FunctionComponent } from "preact";
-import { Button, t } from "./ui";
+import { t } from "./ui";
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
   deletePages,
@@ -39,10 +39,10 @@ const Content = () => {
   useEffect(() => ioUtils.observeIndex(setIndex), [setIndex]);
   const [filter, setFilter] = useState<string>("");
   const [menuAnchor, setMenuAnchor] = useState<Element | VirtualElement>();
-  const expandButtonRef = useRef<HTMLButtonElement>();
-  const menuRef = useRef<HTMLDivElement>();
+  const expandButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (menuAnchor) {
+    if (menuAnchor && menuRef.current) {
       const popper = createPopper(menuAnchor, menuRef.current, {
         placement: "bottom-end",
       });
@@ -51,21 +51,23 @@ const Content = () => {
       window.addEventListener("click", listener);
       return () => {
         window.removeEventListener("click", listener);
-        menuRef.current.style.display = "none";
+        if (menuRef.current) menuRef.current.style.display = "none";
         popper.destroy();
       };
     } else {
-      menuRef.current.style.display = "none";
+      if (menuRef.current) menuRef.current.style.display = "none";
     }
   }, [menuAnchor, menuRef]);
 
   return (
-    <>
+    <Fragment>
       <div id="sidebar">
         <div id="title">
           <input
             value={filter}
-            onInput={(e) => setFilter(e.target.value)}
+            onInput={(e) =>
+              setFilter("" + (e.target as HTMLInputElement).value)
+            }
             placeholder={t("pagesFilter")}
             autofocus
           />
@@ -73,7 +75,8 @@ const Content = () => {
             ref={expandButtonRef}
             class="browser-style expander"
             onClick={() =>
-              menuAnchor === undefined && setMenuAnchor(expandButtonRef.current)
+              menuAnchor === undefined &&
+              setMenuAnchor(expandButtonRef.current ?? undefined)
             }
           ></button>
         </div>
@@ -94,7 +97,7 @@ const Content = () => {
         <div ref={menuRef} class="buttons browser-style">
           <Menu>
             {selectedPages.length == 0 && (
-              <>
+              <Fragment>
                 <MenuItem
                   onClick={() => scanPages(Object.keys(index), setSelection)}
                   label={t("pagesScanAll")}
@@ -107,17 +110,17 @@ const Content = () => {
                   onClick={() =>
                     openPages(
                       Object.keys(index).filter(
-                        (key) => index[key].changes > 0
+                        (key) => (index[key].changes ?? 0) > 0
                       ),
                       setSelection
                     )
                   }
                   label={t("pagesOpenChanged")}
                 />
-              </>
+              </Fragment>
             )}
             {selectedPages.length == 1 && (
-              <>
+              <Fragment>
                 <MenuItem
                   onClick={() => scanPages(selectedPages, setSelection)}
                   label={t("pagesScanOne")}
@@ -138,10 +141,10 @@ const Content = () => {
                   onClick={() => openPages(selectedPages, setSelection)}
                   label={t("pagesOpenOne")}
                 />
-              </>
+              </Fragment>
             )}
             {selectedPages.length > 1 && (
-              <>
+              <Fragment>
                 <MenuItem
                   onClick={() => scanPages(selectedPages, setSelection)}
                   label={t("pagesScanMultiple")}
@@ -162,7 +165,7 @@ const Content = () => {
                   onClick={() => openPages(selectedPages, setSelection)}
                   label={t("pagesOpenMultiple")}
                 />
-              </>
+              </Fragment>
             )}
             <MenuItem
               onClick={() => tabUtils.openResource("manage.htm")}
@@ -180,7 +183,7 @@ const Content = () => {
             : "about:blank"
         }
       ></iframe>
-    </>
+    </Fragment>
   );
 };
 

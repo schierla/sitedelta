@@ -23,7 +23,7 @@ export const PageList: FunctionComponent<{
 }) => {
   return (
     <select
-      size="10"
+      size={10}
       multiple
       onDblClick={() => onDblClick(selectedPages)}
       onChange={(e: Event) =>
@@ -37,27 +37,32 @@ export const PageList: FunctionComponent<{
     >
       {Object.keys(index)
         .filter(
-          (key) => filter === "" || index[key].title.indexOf(filter) !== -1
+          (key) =>
+            filter === "" || index[key].title?.indexOf(filter ?? "") !== -1
         )
         .sort((ka, kb) =>
           index[ka].title !== undefined &&
           index[kb].title !== undefined &&
-          index[ka].title.toLowerCase() < index[kb].title.toLowerCase()
+          (index[ka].title?.toLowerCase() ?? "") <
+            (index[kb].title?.toLowerCase() ?? "")
             ? 1
             : -1
         )
         .map((key) => {
           const data = index[key];
           var title =
-            key + (data.nextScan != 0)
+            key +
+            (data.nextScan != 0
               ? "\n" +
                 chrome.i18n.getMessage(
                   "watchNextScan",
-                  new Date(data.nextScan).toLocaleString()
+                  new Date(data.nextScan ?? 0).toLocaleString()
                 )
-              : "";
+              : "");
           const className =
-            data.changes > 0
+            data.changes === undefined
+              ? ""
+              : data.changes > 0
               ? "changed"
               : data.changes == 0
               ? "unchanged"
@@ -71,7 +76,9 @@ export const PageList: FunctionComponent<{
               title={title}
               className={className}
               selected={selectedPages.indexOf(key) !== -1}
-              onContextMenu={() => (selectedPages.indexOf(key) === -1) && setSelection([key])}
+              onContextMenu={() =>
+                selectedPages.indexOf(key) === -1 && setSelection([key])
+              }
             >
               {"title" in data ? data.title : key}
             </option>

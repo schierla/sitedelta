@@ -120,12 +120,12 @@ async function _parsePage(url: string, mime: string, content: Uint8Array | null,
 		const metas = tempDoc.getElementsByTagName("meta");
 		for (let i=0; i<metas.length; i++) {
 			const meta = metas.item(i);
-			if(meta.getAttribute("charset")) {
+			if(meta?.getAttribute("charset")) {
 				const text = new TextDecoder(meta.getAttribute("charset") ?? "utf-8").decode(content);
 				return documentParser(text);
 			}
-			const httpEquiv = meta.getAttribute("http-equiv");
-			const metaContent = meta.getAttribute("content");
+			const httpEquiv = meta?.getAttribute("http-equiv");
+			const metaContent = meta?.getAttribute("content");
 			if (httpEquiv && httpEquiv.toLowerCase() == "content-type" && metaContent) {
 				if (metaContent.toLowerCase().indexOf("charset=") > 0) {
 					const charset = metaContent.toLowerCase().substring(metaContent.toLowerCase().indexOf("charset=") + "charset=".length);

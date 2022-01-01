@@ -1,8 +1,8 @@
 import { Config } from "@sitedelta/common/src/scripts/config";
 import * as configUtils from "@sitedelta/common/src/scripts/configUtils";
-import { FunctionComponent, h, Fragment } from "preact";
+import { FunctionComponent, Fragment, h } from "preact";
 import { useState, useEffect, useCallback } from "preact/hooks";
-import { t } from "./ui";
+import { t } from "./ui"; 
 
 function hexColor(color: string | undefined): string {
   if (color === undefined) return "white";
@@ -14,7 +14,7 @@ function hexColor(color: string | undefined): string {
 }
 
 type ConfigAccess = {
-  value: Config;
+  value: Config | undefined;
   update: (update: Partial<Config>) => void;
 };
 
@@ -41,9 +41,9 @@ export const ConfigCheckbox: FunctionComponent<{
       <input
         type="checkbox"
         className="browser-style"
-        checked={config.value[configKey] === true}
+        checked={config.value?.[configKey] === true}
         onInput={() => {
-          config.update({ [configKey]: !config.value[configKey] });
+          config.update({ [configKey]: !config.value?.[configKey] });
         }}
       />{" "}
       {label}
@@ -59,10 +59,10 @@ export const ConfigNumber: FunctionComponent<{
   <label>
     <input
       type="number"
-      size="6"
+      size={6}
       className="browser-style"
-      value={config.value[configKey]}
-      onInput={(e: InputEvent) => {
+      value={config.value?.[configKey]}
+      onInput={(e: Event) => {
         config.update({
           [configKey]: parseFloat((e.target as HTMLInputElement).value),
         });
@@ -78,13 +78,13 @@ export const ConfigColors: FunctionComponent<{
   border: string;
   label: string;
 }> = ({ config, background, border, label }) => (
-  <>
+  <Fragment>
     <label>
       {background !== undefined && (
         <input
           type="color"
-          value={hexColor(config.value[background])}
-          onInput={(e: InputEvent) =>
+          value={hexColor(config.value?.[background])}
+          onInput={(e: Event) =>
             config.update({
               [background]: (e.target as HTMLInputElement).value,
             })
@@ -94,21 +94,21 @@ export const ConfigColors: FunctionComponent<{
       )}
       <input
         type="color"
-        value={hexColor(config.value[border])}
-        onInput={(e: InputEvent) =>
+        value={hexColor(config.value?.[border])}
+        onInput={(e: Event) =>
           config.update({ [border]: (e.target as HTMLInputElement).value })
         }
         title={t("configBorder")}
       />
       <span
         style={{
-          background: background && config.value[background],
-          border: `dotted ${config.value[border]} 2px`,
+          background: background && config.value?.[background],
+          border: `dotted ${config.value?.[border]} 2px`,
           padding: "2px 4px",
         }}
       >
         {label}
       </span>
     </label>
-  </>
+  </Fragment>
 );

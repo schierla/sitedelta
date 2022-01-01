@@ -1,3 +1,5 @@
+declare var USE_SCRIPTING_EXECUTE_SCRIPT: boolean;
+
 export async function openResourceInForeground(url: string): Promise<void> {
 	const current = await new Promise<chrome.windows.Window>(resolve => chrome.windows.getCurrent({ windowTypes: ['normal'] }, window => resolve(window)));
 	await new Promise(resolve => chrome.tabs.create({ url: chrome.runtime.getURL(url), windowId: current.id }, resolve));
@@ -40,7 +42,7 @@ export async function showIcon(tabId: number, current?: any, changes?: number) {
 }
 
 export async function executeScripts(tabId: number, file: string): Promise<void> {
-	if(chrome.scripting && chrome.scripting.executeScript) {
+	if(USE_SCRIPTING_EXECUTE_SCRIPT) {
 		const results = await chrome.scripting.executeScript({files: [file], target: {tabId: tabId}});
 		if(results[0].result === undefined) console.log("Error executing script: " + chrome.runtime.lastError);
 	} else {

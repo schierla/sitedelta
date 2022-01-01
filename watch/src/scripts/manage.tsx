@@ -25,9 +25,9 @@ const Content = () => {
   const [index, setIndex] = useState<ioUtils.Index>({});
   const [selectedPages, setSelection] = useState<string[]>([]);
   useEffect(() => ioUtils.observeIndex(setIndex), [setIndex]);
-  if (!config.value) return <></>;
+  if (!config.value) return <Fragment></Fragment>;
   return (
-    <>
+    <Fragment>
       <div class="browser-style section">{t("pagesList")}</div>
       <PageList
         selectedPages={selectedPages}
@@ -38,7 +38,7 @@ const Content = () => {
       <div class="buttons browser-style">
         <Button onClick={openImportExport}>{t("configTransfer")}</Button>{" "}
         {selectedPages.length == 0 && (
-          <>
+          <Fragment>
             <Button onClick={() => scanPages(Object.keys(index), setSelection)}>
               {t("pagesScanAll")}
             </Button>{" "}
@@ -49,17 +49,17 @@ const Content = () => {
               isDefault
               onClick={() =>
                 openPages(
-                  Object.keys(index).filter((key) => index[key].changes > 0),
+                  Object.keys(index).filter((key) => (index[key].changes ?? 0) > 0),
                   setSelection
                 )
               }
             >
               {t("pagesOpenChanged")}
             </Button>
-          </>
+          </Fragment>
         )}
         {selectedPages.length == 1 && (
-          <>
+          <Fragment>
             <Button onClick={() => scanPages(selectedPages, setSelection)}>
               {t("pagesScanOne")}
             </Button>{" "}
@@ -78,10 +78,10 @@ const Content = () => {
             >
               {t("pagesOpenOne")}
             </Button>
-          </>
+          </Fragment>
         )}
         {selectedPages.length > 1 && (
-          <>
+          <Fragment>
             <Button onClick={() => scanPages(selectedPages, setSelection)}>
               {t("pagesScanMultiple")}
             </Button>{" "}
@@ -100,7 +100,7 @@ const Content = () => {
             >
               {t("pagesOpenMultiple")}
             </Button>
-          </>
+          </Fragment>
         )}
       </div>
 
@@ -219,7 +219,7 @@ const Content = () => {
           label={t("configNotifyFailed")}
         />
       </div>
-    </>
+    </Fragment>
   );
 };
 

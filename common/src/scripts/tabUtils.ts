@@ -41,7 +41,7 @@ export async function showIcon(tabId: number, current?: any, changes?: number) {
 	}
 }
 
-export async function executeScripts(tabId: number, file: string): Promise<void> {
+export async function executeScript(tabId: number, file: string): Promise<void> {
 	if(USE_SCRIPTING_EXECUTE_SCRIPT) {
 		const results = await chrome.scripting.executeScript({files: [file], target: {tabId: tabId}});
 		if(results[0].result === undefined) console.log("Error executing script: " + chrome.runtime.lastError);
@@ -58,7 +58,7 @@ var contentScriptTargetTabListener = function(tabId: number, changeInfo: any, ta
 	if(!tab.url) return;
 	
 	if(contentScriptTargets.indexOf(tab.url) != -1)
-		executeScripts(tabId, '/scripts/contentScript.js');
+		executeScript(tabId, '/scripts/contentScript.js');
 }
 
 export function initContentScriptTargets(urls: string[]): void {

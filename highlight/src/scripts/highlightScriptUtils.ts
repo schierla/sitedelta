@@ -121,7 +121,7 @@ async function _callContentScript(tabId: number, command: {command: string, url?
 		resolve(ret);
 	}));
 	if (status === undefined) {
-		await tabUtils.executeScripts(tabId, "/scripts/highlightScript.js");
+		await tabUtils.executeScript(tabId, "/scripts/highlightScript.js");
 		var status = await new Promise(resolve => chrome.tabs.sendMessage(tabId, command, resolve));
 		if (status === undefined) {
 			console.log("Error calling content script '" + command.command + "': " +

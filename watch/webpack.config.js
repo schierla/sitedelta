@@ -19,7 +19,7 @@ module.exports = (env) => {
       "scripts/pages": "./src/scripts/pages.tsx",
       "scripts/manage": "./src/scripts/manage.tsx",
       "scripts/options": "./src/scripts/options.tsx",
-      "scripts/popup": "./src/scripts/popup.ts",
+      "scripts/popup": "./src/scripts/popup.tsx",
       "scripts/show": "./src/scripts/show.ts",
       "scripts/transferScript": "./src/scripts/transferScript.ts",
     },

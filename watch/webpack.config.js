@@ -20,8 +20,8 @@ module.exports = (env) => {
       "scripts/manage": "./src/scripts/manage.tsx",
       "scripts/options": "./src/scripts/options.tsx",
       "scripts/popup": "./src/scripts/popup.tsx",
-      "scripts/show": "./src/scripts/show.ts",
-      "scripts/transferScript": "./src/scripts/transferScript.ts",
+      "scripts/show": "./src/scripts/show.tsx",
+      "scripts/transferScript": "./src/scripts/transferScript.ts"
     },
     output: {
       libraryTarget: "commonjs",
@@ -67,6 +67,7 @@ module.exports = (env) => {
     },
 
     optimization: {
+      minimize: false,
       minimizer: [new ESBuildMinifyPlugin()],
     },
 

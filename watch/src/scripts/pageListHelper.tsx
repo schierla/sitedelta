@@ -4,8 +4,10 @@ import * as watchUtils from "@sitedelta/common/src/scripts/watchUtils";
 import * as configUtils from "@sitedelta/common/src/scripts/configUtils";
 import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
 import { FunctionComponent, h } from "preact";
+import unchanged from "@sitedelta/common/src/icons/unchanged.svg";
+import changed from "@sitedelta/common/src/icons/changed.svg";
+import failed from "@sitedelta/common/src/icons/inactive.svg";
 import { StateUpdater } from "preact/hooks";
-import "../styles/pageList.css";
 
 export const PageList: FunctionComponent<{
   selectedPages: string[];
@@ -60,22 +62,28 @@ export const PageList: FunctionComponent<{
                   new Date(data.nextScan ?? 0).toLocaleString()
                 )
               : "");
-          const className =
+          const image =
             data.changes === undefined
               ? ""
               : data.changes > 0
-              ? "changed"
+              ? `url(${changed})`
               : data.changes == 0
-              ? "unchanged"
+              ? `url(${unchanged})`
               : data.changes == -1
-              ? "failed"
+              ? `url(${failed})`
               : "";
           return (
             <option
               key={key}
               value={key}
               title={title}
-              className={className}
+              style={{
+                paddingLeft: "1.3em",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "0.2em center",
+                backgroundSize: "auto 0.8em",
+                backgroundImage: image,
+              }}
               selected={selectedPages.indexOf(key) !== -1}
               onContextMenu={() =>
                 selectedPages.indexOf(key) === -1 && setSelection([key])

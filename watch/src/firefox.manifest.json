@@ -33,7 +33,6 @@
 	],
 
 	"browser_action": {
-		"browser_style": true,		
 		"default_icon": {"64": "icons/watch.svg"},
 		"theme_icons": [ {"dark": "icons/watch.svg", "light": "icons/watch-w.svg", "size": 64} ],
 		"default_title": "__MSG_watchExtensionName__",
@@ -42,13 +41,11 @@
 	
 	"sidebar_action": {
 		"default_icon": "icons/watch.svg",
-		"default_panel": "pages.htm",
-		"browser_style": true
+		"default_panel": "pages.htm"
 	},
 	
 	"options_ui": {
-		"page": "options.htm",
-		"browser_style": true
+		"page": "options.htm"
 	},
 	
 	"background": {

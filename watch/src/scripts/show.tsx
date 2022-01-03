@@ -3,140 +3,18 @@ import * as textUtils from "@sitedelta/common/src/scripts/textUtils";
 import * as pageUtils from "@sitedelta/common/src/scripts/pageUtils";
 import * as highlightUtils from "@sitedelta/common/src/scripts/highlightUtils";
 import * as watchUtils from "@sitedelta/common/src/scripts/watchUtils";
+import { Config } from "@sitedelta/common/src/scripts/config";
 import { Fragment, render, h } from "preact";
-import { Button, t } from "./ui";
-import {
-  ConfigCheckbox,
-  ConfigNumber,
-  ConfigRegionList,
-  usePageConfig,
-} from "./configHelper";
 import { useEffect, useRef, useState } from "preact/hooks";
-
-const Expand = () => (
-  <svg width="1em" height="1em" viewBox="0 0 16 14">
-    <path d="M8,12L3,7,4,6l4,4,4-4,1,1Z" fill="#6A6A6A" />
-  </svg>
-);
-
-// async function highlight(): Promise<void> {
-//   if (document.body.classList.contains("selecting")) {
-//     regionUtils.abortSelect();
-//   }
-//   if (document.body.classList.contains("loadfail")) return;
-//   document.body.classList.remove(
-//     "selecting",
-//     "unchanged",
-//     "changed",
-//     "expanded"
-//   );
-//   document.body.classList.add("known");
-//   var config = await pageUtils.getOrCreateEffectiveConfig(url, title);
-//   var content = await pageUtils.getContent(url);
-//   oldContent = content;
-
-//   if (!_iframe.contentWindow) return;
-//   var idoc = _iframe.contentWindow.document;
-
-//   var newcontent = textUtils.getText(idoc, config) || "";
-//   pageUtils.setContent(url, newcontent);
-
-//   changes = highlightUtils.highlightChanges(idoc, config, content);
-//   if (changes > 0) {
-//     document.body.classList.add("changed");
-//     current = 0;
-//     await new Promise((resolve) => setTimeout(resolve, 1000));
-//     current = highlightUtils.highlightNext(idoc, 0);
-//   } else if (changes == 0) {
-//     document.body.classList.add("unchanged");
-//   } else {
-//     document.body.classList.add("failed");
-//   }
-//   await watchUtils.setChanges(url, changes >= 0 ? 0 : -1);
-// }
-
-// async function showData(): Promise<void> {
-//   document.title = title;
-//   (element("changed").firstChild as CharacterData).data =
-//     chrome.i18n.getMessage("pageChanged", [current, changes]);
-//   var config = await pageUtils.getEffectiveConfig(url);
-//   if (!config) return;
-//   if (config.makeVisible) {
-//     setTimeout(function () {
-//       if (_iframe.contentWindow)
-//         highlightUtils.makeVisible(
-//           _iframe.contentWindow.document,
-//           config as Config
-//         );
-//     }, 200);
-//   }
-// }
-
-// async function editRegion(xpath) {
-//   await showOutline(null);
-//   return prompt(chrome.i18n.getMessage("configRegionXpath"), xpath);
-// }
-
-// async function selectRegion(): Promise<string | null> {
-//   if (!_iframe.contentWindow) return null;
-//   var idoc = _iframe.contentWindow.document;
-//   if (
-//     document.body.classList.contains("selecting") ||
-//     document.body.classList.contains("loadfail")
-//   ) {
-//     regionUtils.abortSelect();
-//     document.body.classList.remove("selecting");
-//     var region = prompt(chrome.i18n.getMessage("configRegionXpath"), "");
-//     return region;
-//   } else {
-//     document.body.classList.add("selecting");
-//     var region: string | null = await regionUtils.selectRegionOverlay(
-//       element("overlay"),
-//       idoc
-//     );
-//     document.body.classList.remove("selecting");
-//     return region;
-//   }
-// }
-
-// async function showOutline(
-//   outline: string | null,
-//   property?: keyof Config
-// ): Promise<void> {
-//   if (!_iframe.contentWindow) return;
-//   var idoc = _iframe.contentWindow.document;
-//   if (outline) {
-//     var color = await pageUtils.getEffectiveConfigProperty(
-//       url,
-//       property || "includeRegion"
-//     );
-//     regionUtils.showOutline(idoc, outline, color as string);
-//   } else {
-//     regionUtils.removeOutline(idoc);
-//   }
-// }
-
-function addBodyIfEmpty(list: string[]) {
-  if (list.length == 0) list.push("/html/body[1]");
-  if (list.length > 1 && list[0] == "/html/body[1]") list.splice(0, 1);
-  return list;
-}
-
-// async function expand() {
-//   if (oldContent !== null) pageUtils.setContent(url, oldContent);
-//   var config = await pageUtils.getOrCreateEffectiveConfig(url, title);
-//   document.body.classList.remove("unchanged", "changed", "failed");
-//   document.body.classList.add("expanded", "known");
-//   (changes = -1), (current = -1);
-//   showPage(loadedDocument);
-//   if (!_iframe.contentWindow) return;
-//   if (config.stripStyles)
-//     highlightUtils.stripStyles(_iframe.contentWindow.document);
-//   if (config.isolateRegions)
-//     highlightUtils.isolateRegions(_iframe.contentWindow.document, config);
-// }
-
-/// new
+import { Button } from "./components/Button";
+import { t } from "./hooks/UseTranslation";
+import { ExpandIcon } from "./icons/ExpandIcon";
+import { ConfigAccess, usePageConfig } from "./hooks/UseConfig";
+import { useDocument } from "./hooks/UseDocument";
+import { PermissionScreen } from "./show/PermissionScreen";
+import { LoadingScreen } from "./show/LoadingScreen";
+import { PageConfigPanel } from "./show/PageConfigPanel";
+import "./show.css";
 
 type Status =
   | "unknown"
@@ -147,11 +25,14 @@ type Status =
   | "failed"
   | "changed"
   | "unchanged"
-  | "disabled";
+  | "disabled"
+  | "selecting";
 
-function documentParser(content: string): Document {
+export function documentParser(content: string): Document {
   return new DOMParser().parseFromString(content, "text/html");
 }
+
+export type LoadStatus = "loading" | "loaded" | "failed";
 
 const Content = () => {
   let url = window.location.search.substring(1) + window.location.hash;
@@ -160,14 +41,15 @@ const Content = () => {
   const [title, setTitle] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [status, setStatus] = useState<Status>("unknown");
-  const [progress, setProgress] = useState("100%");
   const [highlight, setHighlight] = useState(false);
   const [changes, setChanges] = useState(-1);
   const [current, setCurrent] = useState(-1);
-  const [doc, setDoc] = useState<Document>();
   const [idoc, setIdoc] = useState<Document>();
   const [oldContent, setOldContent] = useState<string>();
+  const [selectedIncludeRegion, setSelectedIncludeRegion] = useState<string>();
+  const [selectedExcludeRegion, setSelectedExcludeRegion] = useState<string>();
   const iframe = useRef<HTMLIFrameElement>(null);
+  const overlay = useRef<HTMLDivElement>(null);
   const config = usePageConfig(url);
   const known = title !== null;
 
@@ -190,45 +72,32 @@ const Content = () => {
     e.stopPropagation();
   };
 
+  const selectRegion = async () => {
+    if (overlay.current && idoc) {
+      if (status === "selecting") {
+        setStatus("loaded");
+        regionUtils.abortSelect();
+        const region = prompt(chrome.i18n.getMessage("configRegionXpath"), "");
+        return region == null ? undefined : region;
+      } else {
+        setStatus("selecting");
+        const region = await regionUtils.selectRegionOverlay(
+          overlay.current,
+          idoc
+        );
+        setStatus("loaded");
+        return region == null ? undefined : region;
+      }
+    }
+    return undefined;
+  };
+
   useEffect(() => {
     chrome.permissions.contains({ origins: [url] }, setPermission);
     pageUtils.getTitle(url).then(setTitle);
   }, [url]);
 
-  useEffect(() => {
-    (async () => {
-      if (hasPermission) {
-        setDoc(undefined);
-        setProgress("0%");
-        setStatus("loading");
-        var doc = await watchUtils.loadPage(
-          url,
-          documentParser,
-          (loaded, total) => {
-            setProgress((loaded / total) * 100 + "%");
-          }
-        );
-        setProgress("100%");
-        if (doc === null) {
-          setStatus("loadfailed");
-          return;
-        }
-        var base = doc.createElement("base");
-        base.setAttribute("href", url);
-        var existingbase = doc.querySelector("base[href]") as HTMLBaseElement;
-        if (existingbase && existingbase.parentNode) {
-          existingbase.parentNode.removeChild(existingbase);
-          base.setAttribute(
-            "href",
-            new URL(existingbase.getAttribute("href") || "", url).href
-          );
-        }
-        doc.head.insertBefore(base, doc.head.firstChild);
-        setDoc(doc);
-        setStatus("loaded");
-      }
-    })();
-  }, [url, hasPermission]);
+  const doc = useDocument(hasPermission ? url : undefined, setStatus);
 
   useEffect(() => {
     if (doc !== undefined && highlight && title === null) {
@@ -249,11 +118,13 @@ const Content = () => {
       setIdoc(idoc);
 
       if (config.value) {
-        if (config.value.stripStyles) highlightUtils.stripStyles(idoc);
-        if (config.value.isolateRegions)
-          highlightUtils.isolateRegions(idoc, config.value);
-        if (config.value.makeVisible)
-          highlightUtils.makeVisible(idoc, config.value);
+        applyVisibilityOptions(config.value, idoc);
+        showOutline(
+          config.value,
+          idoc,
+          selectedIncludeRegion,
+          selectedExcludeRegion
+        );
       }
 
       if (highlight) {
@@ -261,37 +132,54 @@ const Content = () => {
           url,
           title ?? ""
         );
-        var content = await pageUtils.getContent(url);
-        setOldContent(content);
+        var oldContent = await pageUtils.getContent(url);
+        setOldContent(oldContent);
         var newcontent = textUtils.getText(idoc, newConfig) || "";
         pageUtils.setContent(url, newcontent);
 
-        const changes = highlightUtils.highlightChanges(
-          idoc,
-          newConfig,
-          content
-        );
-        setChanges(changes);
-        if (changes > 0) {
-          setStatus("changed");
-          setCurrent(current);
-          await new Promise((resolve) => setTimeout(resolve, 300));
-          setCurrent(highlightUtils.highlightNext(idoc, 0));
-        } else if (changes == 0) {
-          setStatus("unchanged");
+        if (oldContent === null) {
+          await watchUtils.setChanges(url, 0);
+          setChanges(-1);
+          setCurrent(-1);
         } else {
-          setStatus("failed");
+          const changes = highlightUtils.highlightChanges(
+            idoc,
+            newConfig,
+            oldContent
+          );
+          setChanges(changes);
+          if (changes > 0) {
+            setStatus("changed");
+            setCurrent(current);
+            await new Promise((resolve) => setTimeout(resolve, 300));
+            setCurrent(highlightUtils.highlightNext(idoc, 0));
+          } else if (changes == 0) {
+            setStatus("unchanged");
+          } else {
+            setStatus("failed");
+          }
+          await watchUtils.setChanges(url, changes >= 0 ? 0 : -1);
         }
-        await watchUtils.setChanges(url, changes >= 0 ? 0 : -1);
       } else {
         setChanges(-1);
         setCurrent(-1);
         setStatus("loaded");
       }
     })();
-  }, [doc, iframe.current, config.value, highlight]);
+  }, [
+    doc,
+    iframe.current,
+    config.value,
+    highlight,
+    selectedIncludeRegion,
+    selectedExcludeRegion,
+  ]);
 
-  useEffect(() => {}, [idoc, highlight]);
+  cleanupIncludeRegions(config);
+
+  useEffect(() => {
+    if (doc && !expanded && known) setHighlight(true);
+  }, [known, doc, expanded]);
 
   document.title = title ?? t("watchExtensionName");
 
@@ -304,251 +192,190 @@ const Content = () => {
       ? t("pageUnchanged")
       : status === "changed" && current > -1
       ? chrome.i18n.getMessage("pageChanged", [current, changes])
+      : status === "selecting"
+      ? t("pageSelectRegion")
       : t("watchEnabled")
     : t("watchDisabled");
 
+  const nextChangeButton = (
+    <Button
+      isDefault
+      onClick={() => {
+        if (idoc) setCurrent(highlightUtils.highlightNext(idoc, current));
+      }}
+    >
+      {t("pageNextChange")}
+    </Button>
+  );
+
+  const showChangesButton = (
+    <Button
+      isDefault
+      onClick={() => {
+        setExpanded(false);
+        setHighlight(true);
+      }}
+    >
+      {t("pageShowChanges")}
+    </Button>
+  );
+
+  const highlightChangesButton = (
+    <Button
+      isDefault
+      onClick={() => {
+        setExpanded(false);
+        setHighlight(true);
+      }}
+    >
+      {t("pageEnable")}
+    </Button>
+  );
+
+  const disableButton = (
+    <Button
+      onClick={() => {
+        pageUtils.remove(url).then(() => {
+          setTitle(null);
+          setHighlight(false);
+          setExpanded(false);
+        });
+      }}
+    >
+      {t("pageDisable")}
+    </Button>
+  );
+
+  const openButton = (
+    <Button
+      onClick={() => {
+        window.location.href = url;
+      }}
+    >
+      {t("pageOpen")}
+    </Button>
+  );
+
+  const expandButton = (
+    <Button
+      onClick={() => {
+        if (oldContent !== undefined) pageUtils.setContent(url, oldContent);
+        setHighlight(false);
+        setExpanded(true);
+      }}
+    >
+      <ExpandIcon />
+    </Button>
+  );
+
+  const previewPanel = (
+    <Fragment>
+      <iframe
+        frameBorder={0}
+        width="100%"
+        height="100%"
+        className="maximized"
+        style={{
+          display:
+            status === "loaded" ||
+            status === "changed" ||
+            status === "unchanged" ||
+            status === "selecting"
+              ? "block"
+              : "none",
+        }}
+        ref={iframe}
+        sandbox="allow-same-origin"
+      ></iframe>
+      <div
+        ref={overlay}
+        className="maxmimized"
+        style={{
+          display: status === "selecting" ? "block" : "none",
+          overflow: "auto",
+        }}
+      />
+    </Fragment>
+  );
+
   return (
     <Fragment>
-      <div id="status">
-        <div id="buttons" class="browser-style buttons">
-          {!expanded && (
-            <Button
-              onClick={() => {
-                if (oldContent !== undefined)
-                  pageUtils.setContent(url, oldContent);
-                setHighlight(false);
-                setExpanded(true);
-              }}
-            >
-              <Expand />
-            </Button>
-          )}
-          <Button
-            onClick={() => {
-              window.location.href = url;
-            }}
-          >
-            {t("pageOpen")}
-          </Button>
-          {known && (
-            <Button
-              onClick={() => {
-                pageUtils.remove(url).then(() => {
-                  setTitle(null);
-                  setHighlight(false);
-                  setExpanded(false);
-                });
-              }}
-            >
-              {t("pageDisable")}
-            </Button>
-          )}
-          {known ? (
-            changes > 0 ? (
-              <Button
-                isDefault
-                onClick={() => {
-                  if (idoc)
-                    setCurrent(highlightUtils.highlightNext(idoc, current));
-                }}
-              >
-                {t("pageNextChange")}
-              </Button>
-            ) : (
-              <Button
-                isDefault
-                onClick={() => {
-                  setExpanded(false);
-                  setHighlight(true);
-                }}
-              >
-                {t("pageShowChanges")}
-              </Button>
-            )
-          ) : (
-            <Button
-              isDefault
-              onClick={() => {
-                setExpanded(false);
-                setHighlight(true);
-              }}
-            >
-              {t("pageEnable")}
-            </Button>
-          )}
+      <div id="topbar">
+        <div id="actions">
+          {openButton}
+          {known && disableButton}
+          {hasPermission &&
+            (known
+              ? changes > 0
+                ? nextChangeButton
+                : showChangesButton
+              : highlightChangesButton)}
+          {!expanded && hasPermission && expandButton}
         </div>
-        <div id="statustext">
-          {statusMessage}
-          {/* t("pageSelectRegion") */}
-        </div>
+        <div id="status">{statusMessage}</div>
       </div>
-      {expanded && (
-        <div id="config">
-          <div id="textfields" class="browser-style">
-            <input
-              class="wide"
-              type="text"
-              value={title ?? ""}
-              onInput={(e: Event) => {
-                setTitle((e.target as HTMLInputElement).value);
-              }}
-              onChange={(e: Event) => {
-                pageUtils.setTitle(url, (e.target as HTMLInputElement).value);
-              }}
-            />
-          </div>
-          <div class="browser-style section i18n">{t("configChecks")}</div>
-          <div class="browser-style">
-            <ConfigCheckbox
+      <div id="main">
+        {expanded && (
+          <div id="config">
+            <PageConfigPanel
+              url={url}
               config={config}
-              configKey="checkDeleted"
-              label={t("configCheckDeleted")}
+              selectRegion={selectRegion}
+              selectedExcludeRegion={selectedExcludeRegion}
+              setSelectedExcludeRegion={setSelectedExcludeRegion}
+              selectedIncludeRegion={selectedIncludeRegion}
+              setSelectedIncludeRegion={setSelectedIncludeRegion}
+              title={title}
+              setTitle={setTitle}
             />
-          </div>
-          <div class="browser-style">
-            <ConfigCheckbox
-              config={config}
-              configKey="scanImages"
-              label={t("configCheckImages")}
-            />
-          </div>
-
-          <div class="browser-style section i18n">{t("configIgnores")}</div>
-          <div class="browser-style">
-            <ConfigCheckbox
-              config={config}
-              configKey="ignoreCase"
-              label={t("configIgnoreCase")}
-            />
-          </div>
-          <div class="browser-style">
-            <ConfigCheckbox
-              config={config}
-              configKey="ignoreNumbers"
-              label={t("configIgnoreNumbers")}
-            />
-          </div>
-
-          <div class="browser-style section i18n">{t("configAppearance")}</div>
-          <div class="browser-style">
-            <ConfigCheckbox
-              config={config}
-              configKey="makeVisible"
-              label={t("configMakeVisible")}
-            />
-          </div>
-          <div class="browser-style">
-            <ConfigCheckbox
-              config={config}
-              configKey="stripStyles"
-              label={t("configStripStyles")}
-            />
-          </div>
-          <div class="browser-style">
-            <ConfigCheckbox
-              config={config}
-              configKey="isolateRegions"
-              label={t("configIsolateRegions")}
-            />
-          </div>
-
-          <div class="browser-style section i18n">
-            {t("configRegionsInclude")}
-          </div>
-          <div class="browser-style">
-            <ConfigRegionList config={config} configKey="includes" />
-          </div>
-          <div class="browser-style buttons">
-            <button class="browser-style i18n" id="includeadd">
-              {t("configRegionsAdd")}
-            </button>
-            <button class="browser-style i18n" disabled id="includedel">
-              {t("configRegionsRemove")}
-            </button>
-          </div>
-
-          <div class="browser-style section i18n">
-            {t("configRegionsExclude")}
-          </div>
-          <div class="browser-style">
-            <ConfigRegionList config={config} configKey="excludes" />
-          </div>
-          <div class="browser-style buttons">
-            <button class="browser-style i18n" id="excludeadd">
-              {t("configRegionsAdd")}
-            </button>
-            <button class="browser-style i18n" disabled id="excludedel">
-              {t("configRegionsRemove")}
-            </button>
-          </div>
-
-          <div class="browser-style section i18n">{t("configWatch")}</div>
-          <div class="browser-style">
-            <ConfigNumber
-              config={config}
-              configKey="watchDelay"
-              label={t("configWatchDelay")}
-            />
-          </div>
-        </div>
-      )}
-      <div id="content">
-        {status === "loading" && (
-          <Fragment>
-            <div
-              id="progress"
-              style={{
-                width: progress,
-                background: "red",
-                height: "2px",
-              }}
-            ></div>
-            <img src="icons/highlight-64.png" />
-          </Fragment>
-        )}
-        <iframe
-          ref={iframe}
-          style={{
-            display:
-              status === "loaded" ||
-              status === "changed" ||
-              status === "unchanged"
-                ? "block"
-                : "none",
-          }}
-          sandbox="allow-same-origin"
-        ></iframe>
-        {hasPermission === false && (
-          <div id="permissionDenied">
-            <p id="permissionHost" class="browser-style section">
-              {new URL(url).origin}
-            </p>
-            <p id="requirePermission" class="browser-style i18n">
-              {t("pageRequirePermission")}
-            </p>
-            <Button
-              onClick={() =>
-                chrome.permissions.request({ origins: [url] }, setPermission)
-              }
-            >
-              {t("pageGrantHost")}
-            </Button>
-            <Button
-              onClick={() =>
-                chrome.permissions.request(
-                  { origins: ["<all_urls>"] },
-                  setPermission
-                )
-              }
-            >
-              {t("pageGrantAll")}
-            </Button>
           </div>
         )}
+        <div id="content">
+          {hasPermission === false && (
+            <PermissionScreen url={url} onGranted={setPermission} />
+          )}
+          {status === "loading" && <LoadingScreen />}
+          {previewPanel}
+        </div>
       </div>
-      <div id="overlay"></div>
     </Fragment>
   );
 };
 
 render(h(Content, {}), document.body);
+
+function showOutline(
+  config: Config,
+  idoc: Document,
+  selectedIncludeRegion: string | undefined,
+  selectedExcludeRegion: string | undefined
+) {
+  if (selectedIncludeRegion !== undefined) {
+    regionUtils.showOutline(idoc, selectedIncludeRegion, config.includeRegion);
+  } else if (selectedExcludeRegion !== undefined) {
+    regionUtils.showOutline(idoc, selectedExcludeRegion, config.excludeRegion);
+  } else {
+    regionUtils.removeOutline(idoc);
+  }
+}
+
+function applyVisibilityOptions(config: Config, idoc: Document) {
+  if (config.stripStyles) highlightUtils.stripStyles(idoc);
+  if (config.isolateRegions) highlightUtils.isolateRegions(idoc, config);
+  if (config.makeVisible) highlightUtils.makeVisible(idoc, config);
+}
+
+function cleanupIncludeRegions(config: ConfigAccess) {
+  useEffect(() => {
+    if (!config.value) return;
+    if (config.value.includes.length === 0)
+      config.update({ includes: ["/html/body[1]"] });
+    else if (
+      config.value.includes.length > 1 &&
+      config.value.includes.indexOf("/html/body[1]") !== -1
+    )
+      config.update({
+        includes: config.value.includes.filter((r) => r !== "/html/body[1]"),
+      });
+  }, [config.value, config.update]);
+}

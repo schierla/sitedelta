@@ -5,10 +5,9 @@ import * as textUtils from "./textUtils";
 // watch operations
 export async function loadPage(
   url: string,
-  documentParser: (content: string) => Document,
-  progress?: (loaded: number, total: number) => void
+  documentParser: (content: string) => Document
 ): Promise<Document | null> {
-  var page = await _downloadPage(url, progress);
+  var page = await _downloadPage(url);
   return await _parsePage(url, page.mime, page.content, documentParser);
 }
 
@@ -94,8 +93,7 @@ export async function markSeen(
 }
 
 async function _downloadPage(
-  url: string,
-  progress?: (loaded: number, total: number) => void
+  url: string
 ): Promise<{ mime: string; content: Uint8Array | null }> {
   try {
     const response = await fetch(url, {
@@ -104,27 +102,8 @@ async function _downloadPage(
     });
     if (!response.ok || !response.body || !response.headers)
       return { mime: `error/${response.status}`, content: null };
-    const reader = response?.body?.getReader();
-    const total = parseInt(response?.headers?.get("Content-Length") ?? "0");
-    let loaded = 0,
-      chunks: Uint8Array[] = [];
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      if (value) {
-        chunks.push(value);
-        loaded += value.length;
-      }
-      if (total != 0) progress?.(loaded, total);
-    }
 
-    let content = new Uint8Array(loaded);
-    let position = 0;
-    for (let chunk of chunks) {
-      content.set(chunk, position);
-      position += chunk.length;
-    }
-
+    const content = new Uint8Array(await response.arrayBuffer());
     return { mime: response.type, content: content };
   } catch (e) {
     return { mime: `error/0`, content: null };

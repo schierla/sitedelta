@@ -24,7 +24,6 @@ module.exports = (env) => {
       "scripts/transferScript": "./src/scripts/transferScript.ts"
     },
     output: {
-      libraryTarget: "commonjs",
       path: path.resolve(__dirname, "dist", env.target),
       filename: "[name].js",
     },

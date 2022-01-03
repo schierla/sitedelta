@@ -7,7 +7,9 @@ import * as pageUtils from "@sitedelta/common/src/scripts/pageUtils";
 import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
 import { Fragment, h, render } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import { Button, t } from "./ui";
+import { Button } from "./components/Button";
+import { t } from "./hooks/UseTranslation";
+import "./popup.css";
 
 const showSidebar = function () {
   if (
@@ -43,10 +45,12 @@ const scanAll = function () {
 
 const openChanged = function () {
   chrome.runtime.sendMessage({ command: "openChanged" });
+  window.close();
 };
 
 const openFailed = function () {
   chrome.runtime.sendMessage({ command: "openFailed" });
+  window.close();
 };
 
 const scanFailed = function () {
@@ -81,9 +85,11 @@ const Content = () => {
     (async () => {
       setIndex(await listIndex());
       var tab = await tabUtils.getActive();
+      setTabId(tab.id ?? 0);
+      setTitle(tab.title ?? "");
 
-      if (tab.url == "https://sitedelta.schierla.de/transfer/") {
-        await tabUtils.executeScript(tabId, "/scripts/transferScript.js");
+      if (tab.id && tab.url == "https://sitedelta.schierla.de/transfer/") {
+        await tabUtils.executeScript(tab.id, "/scripts/transferScript.js");
         window.close();
       } else if (tab.url?.startsWith(showPrefix)) {
         setUrl(tab.url.substring(showPrefix.length));
@@ -92,9 +98,6 @@ const Content = () => {
         setUrl(tab.url ?? "");
         setIsShow(false);
       }
-
-      setTabId(tab.id ?? 0);
-      setTitle(tab.title ?? "");
     })();
   }, []);
 

@@ -1,38 +1,19 @@
 import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
 import * as ioUtils from "@sitedelta/common/src/scripts/ioUtils";
-import { render, h, Fragment, FunctionComponent } from "preact";
-import { t } from "./ui";
+import { render, h, Fragment } from "preact";
+import { t } from "./hooks/UseTranslation";
 import { useEffect, useRef, useState } from "preact/hooks";
-import {
-  deletePages,
-  markSeen,
-  openPages,
-  PageList,
-  scanPages,
-  setWatchDelay,
-} from "./pageListHelper";
-import { createPopper, VirtualElement } from "@popperjs/core";
-import "../styles/pages.css";
+import { PageList } from "./components/PageList";
+import { getActions, openPages } from "./components/PageListActions";
+import { VirtualElement } from "@popperjs/core";
+import { PopupMenu, MenuItem, MenuSeparator } from "./components/PopupMenu";
+import { ExpandIcon } from "./icons/ExpandIcon";
+import "./pages.css";
 
 window.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   return false;
 });
-
-const Menu: FunctionComponent = ({ children }) => (
-  <ul className="menu">{children}</ul>
-);
-const MenuItem = ({
-  onClick,
-  label,
-}: {
-  onClick: () => void;
-  label: string;
-}) => (
-  <li tabIndex={0} onClick={onClick}>
-    {label}
-  </li>
-);
 
 const Content = () => {
   const [index, setIndex] = useState<ioUtils.Index>({});
@@ -41,149 +22,78 @@ const Content = () => {
   const [filter, setFilter] = useState<string>("");
   const [menuAnchor, setMenuAnchor] = useState<Element | VirtualElement>();
   const expandButtonRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (menuAnchor && menuRef.current) {
-      const popper = createPopper(menuAnchor, menuRef.current, {
-        placement: "bottom-end",
-      });
-      menuRef.current.style.display = "block";
-      const listener = () => setMenuAnchor(undefined);
-      window.addEventListener("click", listener);
-      return () => {
-        window.removeEventListener("click", listener);
-        if (menuRef.current) menuRef.current.style.display = "none";
-        popper.destroy();
-      };
-    } else {
-      if (menuRef.current) menuRef.current.style.display = "none";
-    }
-  }, [menuAnchor, menuRef]);
+
+  const filterInput = (
+    <input
+      value={filter}
+      onInput={(e) => setFilter("" + (e.target as HTMLInputElement).value)}
+      placeholder={t("pagesFilter")}
+      autoFocus
+    />
+  );
+
+  const actionsButton = (
+    <button
+      ref={expandButtonRef}
+      onClick={() =>
+        menuAnchor === undefined &&
+        setMenuAnchor(expandButtonRef.current ?? undefined)
+      }
+    >
+      <ExpandIcon />
+    </button>
+  );
+
+  const actionsMenu = (
+    <PopupMenu anchor={menuAnchor} onClose={() => setMenuAnchor(undefined)}>
+      {getActions(index, selectedPages, setSelection).map(([label, action]) => (
+        <MenuItem key={label} label={label} onClick={action} />
+      ))}
+      <MenuSeparator />
+      <MenuItem
+        onClick={() => tabUtils.openResource("manage.htm")}
+        label={t("pagesConfiguration")}
+      />
+    </PopupMenu>
+  );
+
+  const pageList = (
+    <PageList
+      index={index}
+      filter={filter}
+      selectedPages={selectedPages}
+      setSelection={setSelection}
+      onDblClick={() => openPages(selectedPages, setSelection)}
+      onContextMenu={(e: MouseEvent) =>
+        setMenuAnchor({
+          getBoundingClientRect: () => new DOMRect(e.clientX, e.clientY, 0, 0),
+        })
+      }
+    />
+  );
+
+  const previewFrame = window.matchMedia("(min-width: 45em)").matches && (
+    <iframe
+      id="preview"
+      src={
+        selectedPages.length === 1
+          ? chrome.runtime.getURL("show.htm?" + selectedPages[0])
+          : "about:blank"
+      }
+    ></iframe>
+  );
 
   return (
     <Fragment>
       <div id="sidebar">
         <div id="title">
-          <input
-            value={filter}
-            onInput={(e) =>
-              setFilter("" + (e.target as HTMLInputElement).value)
-            }
-            placeholder={t("pagesFilter")}
-            autofocus
-          />
-          <button
-            ref={expandButtonRef}
-            class="browser-style expander"
-            onClick={() =>
-              menuAnchor === undefined &&
-              setMenuAnchor(expandButtonRef.current ?? undefined)
-            }
-          ></button>
+          {filterInput}
+          {actionsButton}
         </div>
-        <PageList
-          index={index}
-          filter={filter}
-          selectedPages={selectedPages}
-          setSelection={setSelection}
-          onDblClick={() => openPages(selectedPages, setSelection)}
-          onContextMenu={(e: MouseEvent) =>
-            setMenuAnchor({
-              getBoundingClientRect: () =>
-                new DOMRect(e.clientX, e.clientY, 0, 0),
-            })
-          }
-        />
-
-        <div ref={menuRef} class="buttons browser-style">
-          <Menu>
-            {selectedPages.length == 0 && (
-              <Fragment>
-                <MenuItem
-                  onClick={() => scanPages(Object.keys(index), setSelection)}
-                  label={t("pagesScanAll")}
-                />
-                <MenuItem
-                  onClick={() => markSeen(Object.keys(index), setSelection)}
-                  label={t("pagesMarkSeenAll")}
-                />
-                <MenuItem
-                  onClick={() =>
-                    openPages(
-                      Object.keys(index).filter(
-                        (key) => (index[key].changes ?? 0) > 0
-                      ),
-                      setSelection
-                    )
-                  }
-                  label={t("pagesOpenChanged")}
-                />
-              </Fragment>
-            )}
-            {selectedPages.length == 1 && (
-              <Fragment>
-                <MenuItem
-                  onClick={() => scanPages(selectedPages, setSelection)}
-                  label={t("pagesScanOne")}
-                />
-                <MenuItem
-                  onClick={() => markSeen(selectedPages, setSelection)}
-                  label={t("pagesMarkSeenOne")}
-                />
-                <MenuItem
-                  onClick={() => deletePages(selectedPages)}
-                  label={t("pagesDeleteOne")}
-                />
-                <MenuItem
-                  onClick={() => setWatchDelay(selectedPages)}
-                  label={t("pagesWatchDelay")}
-                />
-                <MenuItem
-                  onClick={() => openPages(selectedPages, setSelection)}
-                  label={t("pagesOpenOne")}
-                />
-              </Fragment>
-            )}
-            {selectedPages.length > 1 && (
-              <Fragment>
-                <MenuItem
-                  onClick={() => scanPages(selectedPages, setSelection)}
-                  label={t("pagesScanMultiple")}
-                />
-                <MenuItem
-                  onClick={() => markSeen(selectedPages, setSelection)}
-                  label={t("pagesMarkSeenMultiple")}
-                />
-                <MenuItem
-                  onClick={() => deletePages(selectedPages)}
-                  label={t("pagesDeleteMultiple")}
-                />
-                <MenuItem
-                  onClick={() => setWatchDelay(selectedPages)}
-                  label={t("pagesWatchDelay")}
-                />
-                <MenuItem
-                  onClick={() => openPages(selectedPages, setSelection)}
-                  label={t("pagesOpenMultiple")}
-                />
-              </Fragment>
-            )}
-            <MenuItem
-              onClick={() => tabUtils.openResource("manage.htm")}
-              label={t("pagesConfiguration")}
-            />
-          </Menu>
-        </div>
+        {pageList}
+        {actionsMenu}
       </div>
-
-      <iframe
-        id="preview"
-        src={
-          selectedPages.length === 1
-            ? chrome.runtime.getURL("show.htm?" + selectedPages[0])
-            : "about:blank"
-        }
-      ></iframe>
+      {previewFrame}
     </Fragment>
   );
 };

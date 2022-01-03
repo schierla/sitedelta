@@ -1,0 +1,16 @@
+#permissionRequired {
+  text-align: center;
+  padding: 3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#permissionRequired #url {
+  font-weight: 600;
+  margin: 1em;
+}
+#permissionRequired button {
+  display: block;
+  margin: 1em auto;
+  width: 20em;
+}

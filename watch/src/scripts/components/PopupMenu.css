@@ -1,0 +1,25 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  margin: 2px;
+  padding: 0;
+  border: solid #b1b1b1 1px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+.menu li {
+  padding: 4px 8px;
+  background: #fbfbfb;
+  display: block;
+  border: none 0px;
+  cursor: pointer;
+}
+.menu li:hover,
+.menu li:focus {
+  background: #ebebeb;
+}
+.menu li.separator {
+  border-bottom: solid #b1b1b1 1px;
+  margin: 1px 0;
+  padding: 0;
+}

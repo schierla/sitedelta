@@ -1,0 +1,10 @@
+.configcolors {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.configcolors input[type="color"] {
+  width: 3em;
+  margin-right: 0.5em;
+}

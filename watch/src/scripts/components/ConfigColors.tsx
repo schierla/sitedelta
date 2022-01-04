@@ -1,6 +1,7 @@
 import { FunctionComponent, Fragment, h } from "preact";
 import { t } from "../hooks/UseTranslation";
 import { ConfigAccess } from "../hooks/UseConfig";
+import "./ConfigColors.css";
 
 function hexColor(color: string | undefined): string {
   if (color === undefined) return "white";
@@ -17,7 +18,7 @@ export const ConfigColors: FunctionComponent<{
   border: string;
   label: string;
 }> = ({ config, background, border, label }) => (
-  <label style={{ display: "block", padding: "2px 0" }}>
+  <label class="configcolors">
     {background !== undefined && (
       <input
         type="color"

@@ -306,9 +306,11 @@ const Content = () => {
           {known && disableButton}
           {hasPermission &&
             (known
-              ? changes > 0
+              ? expanded
+                ? showChangesButton
+                : changes > 0
                 ? nextChangeButton
-                : showChangesButton
+                : false
               : highlightChangesButton)}
           {!expanded && hasPermission && expandButton}
         </div>

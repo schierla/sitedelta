@@ -8,6 +8,7 @@ import { getActions, openPages } from "./components/PageListActions";
 import { VirtualElement } from "@popperjs/core";
 import { PopupMenu, MenuItem, MenuSeparator } from "./components/PopupMenu";
 import { ExpandIcon } from "./icons/ExpandIcon";
+import { Button } from "./components/Button";
 import "./pages.css";
 
 window.addEventListener("contextmenu", (e) => {
@@ -33,15 +34,15 @@ const Content = () => {
   );
 
   const actionsButton = (
-    <button
-      ref={expandButtonRef}
+    <Button
+      buttonRef={expandButtonRef}
       onClick={() =>
         menuAnchor === undefined &&
         setMenuAnchor(expandButtonRef.current ?? undefined)
       }
     >
       <ExpandIcon />
-    </button>
+    </Button>
   );
 
   const actionsMenu = (

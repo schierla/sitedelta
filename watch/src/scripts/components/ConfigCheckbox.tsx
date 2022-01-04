@@ -7,7 +7,7 @@ export const ConfigCheckbox: FunctionComponent<{
   label: string;
 }> = ({ config, configKey, label }) => {
   return (
-    <label style={{ display: "block", padding: "2px 0" }}>
+    <label>
       <input
         type="checkbox"
         className="browser-style"

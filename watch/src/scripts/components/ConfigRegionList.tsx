@@ -14,7 +14,6 @@ export const ConfigRegionList: FunctionComponent<{
   return (
     <Fragment>
       <select
-        style={{ width: "100%" }}
         size={3}
         onChange={(e: Event) =>
           setSelectedRegion((e.target as HTMLSelectElement).value)

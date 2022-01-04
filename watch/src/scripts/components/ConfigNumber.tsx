@@ -6,7 +6,7 @@ export const ConfigNumber: FunctionComponent<{
   configKey: string;
   label: string;
 }> = ({ config, configKey, label }) => (
-  <label style={{ display: "block", padding: "2px 0" }}>
+  <label>
     <input
       type="number"
       size={6}

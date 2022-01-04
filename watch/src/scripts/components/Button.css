@@ -1,0 +1,16 @@
+.button {
+    border-color: transparent;
+    border-radius: 4px;
+    padding: 4px 8px; 
+    background: rgba(207, 207, 216, 0.33);
+}
+.button:hover {
+    background: rgba(207, 207, 216, 0.66);
+}
+.button.default {
+    background: #06f;
+    color: #fff;
+}
+.button.default:hover {
+    background: #03a;
+}

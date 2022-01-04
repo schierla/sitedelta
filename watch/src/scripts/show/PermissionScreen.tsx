@@ -8,19 +8,24 @@ export const PermissionScreen: FunctionComponent<{
   onGranted: (granted: boolean) => void;
 }> = ({ url, onGranted }) => (
   <div className="maximized" id="permissionRequired">
-    <div id="url">{new URL(url).origin}</div>
-    <div>{t("pageRequirePermission")}</div>
-    <Button
-      onClick={() => chrome.permissions.request({ origins: [url] }, onGranted)}
-    >
-      {t("pageGrantHost")}
-    </Button>
-    <Button
-      onClick={() =>
-        chrome.permissions.request({ origins: ["<all_urls>"] }, onGranted)
-      }
-    >
-      {t("pageGrantAll")}
-    </Button>
+    <div class="card">
+      <h1>{new URL(url).origin}</h1>
+      <div>{t("pageRequirePermission")}</div>
+      <Button
+        isDefault
+        onClick={() =>
+          chrome.permissions.request({ origins: [url] }, onGranted)
+        }
+      >
+        {t("pageGrantHost")}
+      </Button>
+      <Button
+        onClick={() =>
+          chrome.permissions.request({ origins: ["<all_urls>"] }, onGranted)
+        }
+      >
+        {t("pageGrantAll")}
+      </Button>
+    </div>
   </div>
 );

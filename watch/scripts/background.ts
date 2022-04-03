@@ -150,11 +150,12 @@ namespace watchBackground {
 		}
 
 		if (nextUrl != "") {
+			var minDelay = 5000;
 			var nextScan = index[nextUrl].nextScan;
-			if (nextScan < lastScan + 5000) nextScan = lastScan + 5000;
+			if (nextScan < lastScan + minDelay) nextScan = lastScan + minDelay;
 			console.log("SiteDelta: Scheduled " + nextUrl + " for " + new Date(nextScan).toLocaleString());
-			if (nextScan <= Date.now()) {
-				scanPage(nextUrl);
+			if (nextScan <= Date.now() + minDelay) {
+				setTimeout(() => scanPage(nextUrl), minDelay);
 			} else {
 				chrome.alarms.create({ "when": nextScan });
 			}

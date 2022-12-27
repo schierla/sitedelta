@@ -7,12 +7,12 @@
   "name": "sitedelta",
   "author": "Andreas Schierl",
   "private": true,
-  "packageManager": "yarn@3.1.1",
   "scripts": {
     "lint": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.174",
-    "typescript": "^4.5.4"
-  }
+    "@types/chrome": "^0.0.206",
+    "typescript": "^4.9.4"
+  },
+  "packageManager": "yarn@3.3.1"
 }

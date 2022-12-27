@@ -1,28 +1,33 @@
-const { resolve } = require("path");
-const WebExtPlugin = require("web-ext-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const { ESBuildMinifyPlugin } = require("esbuild-loader");
-const { DefinePlugin } = require("webpack");
-const path = require("path");
+import { resolve } from "path";
+import WebExtPlugin from "web-ext-plugin";
+import CopyPlugin from "copy-webpack-plugin";
+import { ESBuildMinifyPlugin } from "esbuild-loader";
+import webpack from "webpack";
+import path from "path";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = (env) => {
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export default (env) => {
   if (env.target != "chrome" && env.target != "firefox")
     throw new Error("Please set target to 'chrome' or 'firefox'");
 
   return {
     mode: "production",
     entry: {
-      background: "./src/background.ts",
-      "scripts/pages": "./src/scripts/pages.ts",
-      "scripts/manage": "./src/scripts/manage.ts",
-      "scripts/options": "./src/scripts/options.ts",
-      "scripts/popup": "./src/scripts/popup.ts",
+      background:
+        env.target == "chrome"
+          ? "./src/backgroundWorker.ts"
+          : "./src/backgroundScript.ts",
+      "scripts/pages": "./src/scripts/pages.tsx",
+      "scripts/manage": "./src/scripts/manage.tsx",
+      "scripts/options": "./src/scripts/options.tsx",
+      "scripts/popup": "./src/scripts/popup.tsx",
+      "scripts/show": "./src/scripts/show.tsx",
       "scripts/transferScript": "./src/scripts/transferScript.ts",
-      "scripts/contentScript": "./src/scripts/contentScript.ts",
-      "scripts/highlightScript": "./src/scripts/highlightScript.ts",
     },
     output: {
-      libraryTarget: "commonjs",
       path: path.resolve(__dirname, "dist", env.target),
       filename: "[name].js",
     },
@@ -65,12 +70,13 @@ module.exports = (env) => {
     },
 
     optimization: {
+      minimize: false,
       minimizer: [new ESBuildMinifyPlugin()],
     },
 
     plugins: [
-      new DefinePlugin({
-        USE_SCRIPTING_EXECUTE_SCRIPT: env.target === "chrome",
+      new webpack.DefinePlugin({
+        USE_SCRIPTING_EXECUTE_SCRIPT: false,
       }),
       new CopyPlugin({
         patterns: [
@@ -86,7 +92,7 @@ module.exports = (env) => {
         sourceDir: resolve(__dirname, "dist", env.target),
         target: env.target === "chrome" ? "chromium" : "firefox-desktop",
         buildPackage: env.package === "true",
-        artifactsDir: `../build/${env.target}`
+        artifactsDir: `../build/${env.target}`,
       }),
     ],
 

@@ -3,11 +3,11 @@
     "version": "0.30.0",
     "private": true,
     "dependencies": {
-        "@popperjs/core": "^2.11.0",
-        "@sitedelta/common": "workspace:^",
-        "@xmldom/xmldom": "^0.8.0",
-        "parse5": "^6.0.1",
-        "preact": "^10.6.4",
+        "@popperjs/core": "^2.11.6",
+        "@sitedelta/common": "0.30.0",
+        "@xmldom/xmldom": "^0.8.6",
+        "parse5": "^7.1.2",
+        "preact": "^10.11.3",
         "query-selector": "^2.0.0",
         "xmlserializer": "^0.6.1",
         "xpath": "^0.0.32"
@@ -20,13 +20,13 @@
     },
     "devDependencies": {
         "@types/parse5": "^6.0.3",
-        "@types/xmlserializer": "^0.6.2",
-        "copy-webpack-plugin": "^9.1.0",
-        "css-loader": "^6.5.1",
-        "esbuild-loader": "^2.18.0",
+        "@types/xmlserializer": "^0.6.3",
+        "copy-webpack-plugin": "^11.0.0",
+        "css-loader": "^6.7.3",
+        "esbuild-loader": "^2.20.0",
         "style-loader": "^3.3.1",
-        "web-ext-plugin": "^1.5.0",
-        "webpack": "^5.65.0",
-        "webpack-cli": "^4.9.1"
+        "web-ext-plugin": "^2.7.0",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.1"
     }
 }

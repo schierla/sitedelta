@@ -11,7 +11,6 @@ import { PageList } from "./components/PageList";
 import { openPages, getActions } from "./components/PageListActions";
 import { SidebarPages } from "./components/SidebarPages";
 import { SidebarPage } from "./components/SidebarPage";
-import "./manage.css";
 
 const openImportExport = () =>
   chrome.tabs.create({ url: "https://sitedelta.schierla.de/transfer/" });
@@ -24,7 +23,7 @@ const Content = () => {
   if (!config.value) return <Fragment></Fragment>;
 
   return (
-    <Fragment>
+    <div class="font-sans bg-gray-50 h-screen flex flex-row">
       <SidebarPages>
         <SidebarPage label={t("pagesList")}>
           <PageList
@@ -33,7 +32,7 @@ const Content = () => {
             onDblClick={(pages) => openPages(pages, setSelection)}
             index={index}
           />
-          <div class="buttons">
+          <div class="flex flex-row gap-2 items-stretch">
             {getActions(index, selectedPages, setSelection).map(
               ([label, action]) => (
                 <Button onClick={action}>{label}</Button>
@@ -134,7 +133,7 @@ const Content = () => {
           />
         </SidebarPage>
       </SidebarPages>
-    </Fragment>
+    </div>
   );
 };
 

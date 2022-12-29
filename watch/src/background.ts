@@ -112,7 +112,8 @@ export const runBackgroundScript = (
     } else if (request.command == "notifyUnloaded") {
       handlePageUnload(sender.tab.id, sender.url);
     } else if (request.command == "scanAll") {
-      pageUtils.list().then(scanPages);
+      pageUtils.list().then(scanPages).then(() => sendResponse(true));
+      return true;
     } else if (request.command == "transferInfo") {
       sendResponse({
         name: "SiteDelta Watch",

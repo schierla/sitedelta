@@ -85,20 +85,19 @@ export const getActions: (
   selectedPages: string[],
   setSelection: StateUpdater<string[]>
 ) => [string, () => void][] = (index, selectedPages, setSelection) => {
-  if (selectedPages.length === 0)
+  if (selectedPages.length === 0) {
+    const changed = Object.keys(index).filter(
+      (key) => (index[key].changes ?? 0) > 0
+    );
+    const changedActions: [string, () => void][] = [
+      [t("pagesMarkSeenAll"), () => markSeen(Object.keys(index), setSelection)],
+      [t("pagesOpenChanged"), () => openPages(changed, setSelection)],
+    ];
     return [
       [t("pagesScanAll"), () => scanPages(Object.keys(index), setSelection)],
-      [t("pagesMarkSeenAll"), () => markSeen(Object.keys(index), setSelection)],
-      [
-        t("pagesOpenChanged"),
-        () =>
-          openPages(
-            Object.keys(index).filter((key) => (index[key].changes ?? 0) > 0),
-            setSelection
-          ),
-      ],
+      ...(changed.length > 0 ? changedActions : []),
     ];
-  else if (selectedPages.length === 1) {
+  } else if (selectedPages.length === 1) {
     return [
       [t("pagesScanOne"), () => scanPages(selectedPages, setSelection)],
       [t("pagesMarkSeenOne"), () => markSeen(selectedPages, setSelection)],

@@ -5,18 +5,18 @@ import {
 } from "@sitedelta/common/src/scripts/ioUtils";
 import * as pageUtils from "@sitedelta/common/src/scripts/pageUtils";
 import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
-import { Fragment, h, render } from "preact";
+import { Fragment, h, render, VNode } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import { Button } from "./components/Button";
 import { t } from "./hooks/UseTranslation";
-import "./popup.css";
+import { ChangedIcon } from "./icons/ChangedIcon";
+import { FailedIcon } from "./icons/FailedIcon";
+import { HighlightIcon } from "./icons/HighlightIcon";
+import { UnchangedIcon } from "./icons/UnchangedIcon";
+import { SpinnerIcon } from "./icons/SpinnerIcon";
 
 const showSidebar = function () {
-  if (
-    chrome &&
-    (chrome as any).sidebarAction &&
-    (chrome as any).sidebarAction.open
-  )
+  if ((chrome as any)?.sidebarAction?.open)
     (chrome as any).sidebarAction.open();
   else tabUtils.openResource("pages.htm");
   window.close();
@@ -37,10 +37,12 @@ const showOriginal = function (tabId: number, url: string) {
 
 const open = (url: string) => {
   tabUtils.openResource("show.htm?" + url);
+  window.close();
 };
 
-const scanAll = function () {
-  chrome.runtime.sendMessage({ command: "scanAll" });
+const scanAll = function (setBusy: (busy: boolean) => void) {
+  setBusy(true);
+  chrome.runtime.sendMessage({ command: "scanAll" }, () => setBusy(false));
 };
 
 const openChanged = function () {
@@ -53,21 +55,27 @@ const openFailed = function () {
   window.close();
 };
 
-const scanFailed = function () {
-  chrome.runtime.sendMessage({ command: "scanFailed" });
+const scanFailed = function (setBusy: (busy: boolean) => void) {
+  setBusy(true);
+  chrome.runtime.sendMessage({ command: "scanFailed" }, () => setBusy(false));
 };
 
-function PageList(index: Index, urls: string[]) {
+function PageList(index: Index, icon: VNode, urls: string[]) {
   return (
-    <select size={5}>
+    <select
+      size={urls.length > 5 ? 5 : urls.length}
+      multiple
+      class="p-0 w-full block text-sm border-gray-300"
+    >
       {urls.map((url) => (
         <option
-          onDblClick={() => open(showPrefix + url)}
+          class="flex flex-row gap-1 items-baseline"
+          onDblClick={() => open(url)}
           key={url}
           value={url}
           title={url}
         >
-          {index?.[url].title}
+          {icon} {index?.[url].title}
         </option>
       ))}
     </select>
@@ -80,6 +88,7 @@ const Content = () => {
   const [tabId, setTabId] = useState(-1);
   const [index, setIndex] = useState<Index>({});
   const [isShow, setIsShow] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -114,18 +123,29 @@ const Content = () => {
   const supported = url.startsWith("http");
   const enabled = url in (index ?? {});
 
-  return (
-    <Fragment>
-      <div class="browser-style">
-        {supported
-          ? enabled
-            ? t("watchEnabled")
-            : t("watchDisabled")
-          : t("watchUnsupported")}
-      </div>
+  const icon = !supported ? (
+    <FailedIcon />
+  ) : !enabled ? (
+    <HighlightIcon />
+  ) : changed.indexOf(url) == -1 ? (
+    <UnchangedIcon />
+  ) : (
+    <ChangedIcon />
+  );
+  const headline = !supported
+    ? t("watchUnsupported")
+    : enabled
+    ? t("watchEnabled")
+    : t("watchDisabled");
 
+  return (
+    <div class="py-2 min-w-[260px]">
+      <div class="mx-4 mb-4 flex flex-row gap-2 items-baseline">
+        <span class="text-3xl">{icon}</span>
+        <span class="text-lg mt-2">{headline}</span>
+      </div>
       {supported && (
-        <div class="browser-style buttons">
+        <div class="mx-4 my-2 flex flex-row-reverse">
           {isShow ? (
             <Button isDefault onClick={() => showOriginal(tabId, url)}>
               {t("pageOpen")}
@@ -137,35 +157,48 @@ const Content = () => {
           )}
         </div>
       )}
+      <div class="my-2 border-t border-slate-400/20" />
 
-      <div class="browser-style buttons">
+      <div class="mx-4 my-2 flex flex-row gap-2">
         <Button onClick={showSidebar}>{t("pagesSidebar")}</Button>
-        <Button onClick={scanAll}>{t("pagesScanAll")}</Button>
+        <Button
+          disabled={busy}
+          onClick={() => {
+            scanAll(setBusy);
+          }}
+        >
+          {t("pagesScanAll")}
+        </Button>
+        {busy && <SpinnerIcon />}
       </div>
 
       {changed.length > 0 && (
-        <div>
-          <div class="browser-style section">{t("watchChangedPages")}</div>
-          <div class="browser-style">{PageList(index, changed)}</div>
-
-          <div class="browser-style buttons">
+        <Fragment>
+          <div class="my-2 border-t border-slate-400/20" />
+          <div class="mx-4 my-2">{t("watchChangedPages")}</div>
+          <div class="mx-4 my-2">
+            {PageList(index, <ChangedIcon />, changed)}
+          </div>
+          <div class="mx-4 my-2">
             <Button onClick={openChanged}>{t("pagesOpenChanged")}</Button>
           </div>
-        </div>
+        </Fragment>
       )}
 
       {failed.length > 0 && (
-        <div>
-          <div class="browser-style section">{t("watchFailedPages")}</div>
-          <div class="browser-style">{PageList(index, failed)}</div>
-
-          <div class="browser-style buttons">
-            <Button onClick={scanFailed}>{t("pagesScanFailed")}</Button>
+        <Fragment>
+          <div class="my-2 border-t border-slate-400/20" />
+          <div class="mx-4 my-2">{t("watchFailedPages")}</div>
+          <div class="mx-4 my-2">{PageList(index, <FailedIcon />, failed)}</div>
+          <div class="mx-4 my-2 flex flex-row gap-2">
+            <Button disabled={busy} onClick={() => scanFailed(setBusy)}>
+              {t("pagesScanFailed")}
+            </Button>
             <Button onClick={openFailed}>{t("pagesOpenFailed")}</Button>
           </div>
-        </div>
+        </Fragment>
       )}
-    </Fragment>
+    </div>
   );
 };
 

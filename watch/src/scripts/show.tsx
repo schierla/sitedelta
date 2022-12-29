@@ -14,7 +14,6 @@ import { useDocument } from "./hooks/UseDocument";
 import { PermissionScreen } from "./show/PermissionScreen";
 import { LoadingScreen } from "./show/LoadingScreen";
 import { PageConfigPanel } from "./show/PageConfigPanel";
-import "./show.css";
 
 type Status =
   | "unknown"
@@ -46,8 +45,8 @@ const Content = () => {
   const [current, setCurrent] = useState(-1);
   const [idoc, setIdoc] = useState<Document>();
   const [oldContent, setOldContent] = useState<string>();
-  const [selectedIncludeRegion, setSelectedIncludeRegion] = useState<string>();
-  const [selectedExcludeRegion, setSelectedExcludeRegion] = useState<string>();
+  const [selectedIncludeRegions, setSelectedIncludeRegions] = useState<string[]>();
+  const [selectedExcludeRegions, setSelectedExcludeRegions] = useState<string[]>();
   const iframe = useRef<HTMLIFrameElement>(null);
   const overlay = useRef<HTMLDivElement>(null);
   const config = usePageConfig(url);
@@ -122,8 +121,8 @@ const Content = () => {
         showOutline(
           config.value,
           idoc,
-          selectedIncludeRegion,
-          selectedExcludeRegion
+          selectedIncludeRegions,
+          selectedExcludeRegions
         );
       }
 
@@ -171,8 +170,8 @@ const Content = () => {
     iframe.current,
     config.value,
     highlight,
-    selectedIncludeRegion,
-    selectedExcludeRegion,
+    selectedIncludeRegions,
+    selectedExcludeRegions,
   ]);
 
   cleanupIncludeRegions(config);
@@ -191,7 +190,7 @@ const Content = () => {
       : status === "unchanged"
       ? t("pageUnchanged")
       : status === "changed" && current > -1
-      ? chrome.i18n.getMessage("pageChanged", [current, changes])
+      ? chrome.i18n.getMessage("pageChanged", [`${current}`, `${changes}`])
       : status === "selecting"
       ? t("pageSelectRegion")
       : t("watchEnabled")
@@ -274,7 +273,7 @@ const Content = () => {
         frameBorder={0}
         width="100%"
         height="100%"
-        className="maximized"
+        class="absolute inset-0"
         style={{
           display:
             status === "loaded" ||
@@ -289,7 +288,7 @@ const Content = () => {
       ></iframe>
       <div
         ref={overlay}
-        className="maxmimized"
+        class="absolute inset-0"
         style={{
           display: status === "selecting" ? "block" : "none",
           overflow: "auto",
@@ -299,9 +298,8 @@ const Content = () => {
   );
 
   return (
-    <Fragment>
-      <div id="topbar">
-        <div id="actions">
+    <div class="h-screen flex flex-col">
+      <div class="flex flex-col sm:flex-row-reverse items-center border-b-2 border-indigo-600 gap-2 p-2">        <div class="flex flex-row gap-2">
           {openButton}
           {known && disableButton}
           {hasPermission &&
@@ -314,25 +312,25 @@ const Content = () => {
               : highlightChangesButton)}
           {!expanded && hasPermission && expandButton}
         </div>
-        <div id="status">{statusMessage}</div>
+        <div class="flex-1 text-center">{statusMessage}</div>
       </div>
-      <div id="main">
+      <div class="flex-1 flex flex-row-reverse">
         {expanded && (
-          <div id="config">
+          <div class="basis-80 border-l-2 border-indigo-600 p-2 flex flex-col items-stretch">
             <PageConfigPanel
               url={url}
               config={config}
               selectRegion={selectRegion}
-              selectedExcludeRegion={selectedExcludeRegion}
-              setSelectedExcludeRegion={setSelectedExcludeRegion}
-              selectedIncludeRegion={selectedIncludeRegion}
-              setSelectedIncludeRegion={setSelectedIncludeRegion}
+              selectedExcludeRegions={selectedExcludeRegions}
+              setSelectedExcludeRegions={setSelectedExcludeRegions}
+              selectedIncludeRegions={selectedIncludeRegions}
+              setSelectedIncludeRegions={setSelectedIncludeRegions}
               title={title}
               setTitle={setTitle}
             />
           </div>
         )}
-        <div id="content">
+        <div class="flex-1 relative">
           {hasPermission === false && (
             <PermissionScreen url={url} onGranted={setPermission} />
           )}
@@ -340,7 +338,7 @@ const Content = () => {
           {previewPanel}
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 
@@ -349,8 +347,8 @@ render(h(Content, {}), document.body);
 function showOutline(
   config: Config,
   idoc: Document,
-  selectedIncludeRegion: string | undefined,
-  selectedExcludeRegion: string | undefined
+  selectedIncludeRegion: string | string[] | undefined,
+  selectedExcludeRegion: string | string[] | undefined
 ) {
   if (selectedIncludeRegion !== undefined) {
     regionUtils.showOutline(idoc, selectedIncludeRegion, config.includeRegion);

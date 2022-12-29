@@ -7,10 +7,10 @@ export const ConfigCheckbox: FunctionComponent<{
   label: string;
 }> = ({ config, configKey, label }) => {
   return (
-    <label>
+    <label class="select-none">
       <input
         type="checkbox"
-        className="browser-style"
+        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-1"
         checked={config.value?.[configKey] === true}
         onInput={() => {
           config.update({ [configKey]: !config.value?.[configKey] });

@@ -13,24 +13,25 @@ export const PageConfigPanel: FunctionComponent<{
   title: string | null;
   setTitle: (title: string) => void;
   selectRegion: () => Promise<string | undefined>;
-  selectedIncludeRegion: string | undefined;
-  setSelectedIncludeRegion: (region: string | undefined) => void;
-  selectedExcludeRegion: string | undefined;
-  setSelectedExcludeRegion: (region: string | undefined) => void;
+  selectedIncludeRegions: string[] | undefined;
+  setSelectedIncludeRegions: (regions: string[] | undefined) => void;
+  selectedExcludeRegions: string[] | undefined;
+  setSelectedExcludeRegions: (regions: string[] | undefined) => void;
 }> = ({
   config,
   url,
   title,
   setTitle,
   selectRegion,
-  selectedIncludeRegion,
-  setSelectedIncludeRegion,
-  selectedExcludeRegion,
-  setSelectedExcludeRegion,
+  selectedIncludeRegions,
+  setSelectedIncludeRegions,
+  selectedExcludeRegions,
+  setSelectedExcludeRegions,
 }) => (
   <Fragment>
     <input
       type="text"
+      class="px-1 py-0 border-gray-300"
       value={title ?? ""}
       onInput={(e: Event) => {
         setTitle((e.target as HTMLInputElement).value);
@@ -87,10 +88,10 @@ export const PageConfigPanel: FunctionComponent<{
       <ConfigRegionList
         config={config}
         configKey="includes"
-        selectedRegion={selectedIncludeRegion}
-        setSelectedRegion={(r) => {
-          setSelectedIncludeRegion(r);
-          setSelectedExcludeRegion(undefined);
+        selectedRegions={selectedIncludeRegions}
+        setSelectedRegions={(r) => {
+          setSelectedIncludeRegions(r);
+          setSelectedExcludeRegions(undefined);
         }}
         addRegion={selectRegion}
       />
@@ -100,10 +101,10 @@ export const PageConfigPanel: FunctionComponent<{
       <ConfigRegionList
         config={config}
         configKey="excludes"
-        selectedRegion={selectedExcludeRegion}
-        setSelectedRegion={(r) => {
-          setSelectedIncludeRegion(undefined);
-          setSelectedExcludeRegion(r);
+        selectedRegions={selectedExcludeRegions}
+        setSelectedRegions={(r) => {
+          setSelectedIncludeRegions(undefined);
+          setSelectedExcludeRegions(r);
         }}
         addRegion={selectRegion}
       />

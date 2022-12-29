@@ -1,5 +1,4 @@
 import { Fragment, FunctionComponent, h } from "preact";
-import "./SidebarPage.css";
 
 export const SidebarPage: FunctionComponent<{ label: string }> = ({
   label,
@@ -7,8 +6,8 @@ export const SidebarPage: FunctionComponent<{ label: string }> = ({
 }) => {
   return (
     <Fragment>
-      <h1 className="sidebarpage">{label}</h1>
-      {children}
+      <h1 class="mb-4 text-xl">{label}</h1>
+      <div class="flex flex-col gap-4">{children}</div>
     </Fragment>
   );
 };

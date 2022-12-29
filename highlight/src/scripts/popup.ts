@@ -212,7 +212,7 @@ function fillStatus(status: HighlightState) {
 				document.body.classList.add("unchanged");
 			} else if (status.changes > 0) {
 				document.body.classList.add("changed");
-				(element("changed").firstChild as CharacterData).data = chrome.i18n.getMessage("pageChanged", [status.current, status.changes]);
+				(element("changed").firstChild as CharacterData).data = chrome.i18n.getMessage("pageChanged", [`${status.current}`, `${status.changes}`]);
 			} else {
 				document.body.classList.add("failed");
 				expand();

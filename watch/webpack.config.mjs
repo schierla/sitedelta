@@ -1,5 +1,6 @@
 import { resolve } from "path";
 import WebExtPlugin from "web-ext-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CopyPlugin from "copy-webpack-plugin";
 import { ESBuildMinifyPlugin } from "esbuild-loader";
 import webpack from "webpack";
@@ -52,14 +53,9 @@ export default (env) => {
           test: /\.css$/i,
           use: [
             "style-loader",
+            MiniCssExtractPlugin.loader,
             "css-loader",
-            {
-              loader: "esbuild-loader",
-              options: {
-                loader: "css",
-                minify: true,
-              },
-            },
+            'postcss-loader'
           ],
         },
         {
@@ -70,29 +66,32 @@ export default (env) => {
     },
 
     optimization: {
-      minimize: false,
+      minimize: env.package === "true",
       minimizer: [new ESBuildMinifyPlugin()],
     },
 
     plugins: [
       new webpack.DefinePlugin({
-        USE_SCRIPTING_EXECUTE_SCRIPT: false,
+        USE_SCRIPTING_EXECUTE_SCRIPT: env.target === "chrome",
       }),
       new CopyPlugin({
         patterns: [
           { from: "../common/src/icons/*", to: "icons/[name][ext]" },
-          { from: "../common/src/styles/*", to: "styles/[name][ext]" },
           { from: "../_locales/**/*", to: "_locales/[path][name][ext]" },
-          { from: "src/styles/*", to: "styles/[name][ext]" },
           { from: "src/*.htm", to: "[name][ext]" },
           { from: `src/${env.target}.manifest.json`, to: "manifest.json" },
         ],
       }),
-      new WebExtPlugin({
+      new MiniCssExtractPlugin({
+        filename: "tailwind.bundle.css", 
+        chunkFilename: "[id].css"
+      }),
+      new WebExtPlugin({ 
         sourceDir: resolve(__dirname, "dist", env.target),
         target: env.target === "chrome" ? "chromium" : "firefox-desktop",
         buildPackage: env.package === "true",
         artifactsDir: `../build/${env.target}`,
+        runLint: env.target !== "chrome"
       }),
     ],
 

@@ -6,26 +6,28 @@ import { ConfigAccess } from "../hooks/UseConfig";
 export const ConfigRegionList: FunctionComponent<{
   config: ConfigAccess;
   configKey: string;
-  selectedRegion: string | undefined;
-  setSelectedRegion: (region: string | undefined) => void;
+  selectedRegions: string[] | undefined;
+  setSelectedRegions: (regions: string[] | undefined) => void;
   addRegion: () => Promise<string | undefined>;
-}> = ({ config, configKey, selectedRegion, setSelectedRegion, addRegion }) => {
+}> = ({ config, configKey, selectedRegions, setSelectedRegions, addRegion }) => {
   const regions: string[] = config.value?.[configKey] ?? [];
   return (
     <Fragment>
       <select
         size={3}
+        multiple
+        class="p-0 border-gray-300"
         onChange={(e: Event) =>
-          setSelectedRegion((e.target as HTMLSelectElement).value)
+          setSelectedRegions(Array.from((e.target as HTMLSelectElement).selectedOptions).map(o => o.value))
         }
       >
         {regions.map((region) => (
-          <option value={region} selected={region === selectedRegion}>
+          <option value={region} selected={selectedRegions && selectedRegions?.indexOf(region) !== -1}>
             {region}
           </option>
         ))}
       </select>
-
+      <div class="flex flex-row gap-2 mt-1">
       <Button
         onClick={async () => {
           const region = await addRegion();
@@ -37,23 +39,24 @@ export const ConfigRegionList: FunctionComponent<{
             config.update({
               [configKey]: [...regions, region],
             });
-          setSelectedRegion(region);
+          setSelectedRegions(region ? [region] : undefined);
         }}
       >
         {t("configRegionsAdd")}
       </Button>
-      {selectedRegion !== undefined && regions.indexOf(selectedRegion) !== -1 && (
+      {selectedRegions !== undefined && selectedRegions?.length > 0 && (
         <Button
           onClick={() => {
             config.update({
-              [configKey]: regions.filter((r) => r !== selectedRegion),
+              [configKey]: regions.filter((r) => selectedRegions.indexOf(r) === -1),
             });
-            setSelectedRegion(undefined);
+            setSelectedRegions(undefined);
           }}
         >
           {t("configRegionsRemove")}
         </Button>
       )}
+      </div>
     </Fragment>
   );
 };

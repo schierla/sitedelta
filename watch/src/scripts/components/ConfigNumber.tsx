@@ -10,7 +10,7 @@ export const ConfigNumber: FunctionComponent<{
     <input
       type="number"
       size={6}
-      className="browser-style"
+      class="py-0 px-1"
       value={config.value?.[configKey]}
       onInput={(e: Event) => {
         config.update({

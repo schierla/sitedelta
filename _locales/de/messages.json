@@ -48,11 +48,11 @@
 		"description": "Text that downloading the current page failed"
 	},
 	"watchChangedPages": {
-		"message": "Seit dem letzten Besuch geänderte Seiten:",
+		"message": "Seit dem letzten Besuch geänderte Seiten",
 		"description": "Headline for changed pages"
 	},
 	"watchFailedPages": {
-		"message": "Seiten die nicht geladen werden konnten:",
+		"message": "Seiten die nicht geladen werden konnten",
 		"description": "Headline for failed pages"
 	},	
 	"watchNextScan": {
@@ -144,7 +144,7 @@
 	},
 
 	"pagesList": {
-		"message": "Überwachte Seiten:",
+		"message": "Überwachte Seiten",
 		"description": "Headline for the list of monitored pages"
 	},
 	"pagesFilter": {
@@ -168,11 +168,11 @@
 		"description": "Button to open the selected pages"
 	},
 	"pagesOpenChanged": {
-		"message": "Alle öffnen",
+		"message": "Alle geänderten öffnen",
 		"description": "Button to open the changed pages"
 	},
 	"pagesOpenFailed": {
-		"message": "Alle öffnen",
+		"message": "Alle fehlgeschlagenen öffnen",
 		"description": "Button to open the failed pages"
 	},		
 	"pagesScanOne": {
@@ -217,11 +217,11 @@
 	},
 
 	"configRegionsInclude": {
-		"message": "Überwachte Bereiche:", 
+		"message": "Überwachte Bereiche", 
 		"description": "Headline for included regions"
 	},
 	"configRegionsExclude": {
-		"message": "Ignorierte Bereiche:", 
+		"message": "Ignorierte Bereiche", 
 		"description": "Headline for excluded regions"
 	},
 	"configRegionsRemove": {
@@ -237,7 +237,7 @@
 		"description": "Text for manual xpath or css selector entry"
 	},
 	"configBehavior": {
-		"message": "Verhalten:",
+		"message": "Verhalten",
 		"description": "Headline for extension behavior settings"
 	},
 	"configScanOnLoad": {
@@ -254,7 +254,7 @@
 	},
 
 	"configChecks": {
-		"message": "Überprüfungsinhalte:",
+		"message": "Überprüfungsinhalte",
 		"description": "Headline for configured page checks"
 	},
 	"configCheckDeleted": {
@@ -267,7 +267,7 @@
 	},
 
 	"configIgnores": {
-		"message": "Ignorierte Inhalte:", 
+		"message": "Ignorierte Inhalte", 
 		"description": "Headline for configured ignores"
 	},
 	"configIgnoreCase": {
@@ -280,7 +280,7 @@
 	},
 
 	"configAppearance": {
-		"message": "Erscheinungsbild:",
+		"message": "Erscheinungsbild",
 		"description": "Headline for configured appearance"
 	},
 	"configBackground": {
@@ -329,7 +329,7 @@
 	},
 
 	"configWatch": {
-		"message": "Überwachungseinstellungen:",
+		"message": "Überwachungseinstellungen",
 		"description": "Label for text fields concerning watch / delay settings"
 	},
 	"configWatchDelay": {

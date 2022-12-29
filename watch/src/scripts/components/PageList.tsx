@@ -53,7 +53,7 @@ export const PageList: FunctionComponent<{
 
   return (
     <select
-      style={{ display: "block", width: "100%" }}
+      class="w-full block flex-1 p-0 border-gray-300"
       size={10}
       multiple
       onDblClick={() => onDblClick(selectedPages)}

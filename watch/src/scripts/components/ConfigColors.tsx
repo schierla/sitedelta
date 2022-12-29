@@ -1,7 +1,6 @@
 import { FunctionComponent, Fragment, h } from "preact";
 import { t } from "../hooks/UseTranslation";
 import { ConfigAccess } from "../hooks/UseConfig";
-import "./ConfigColors.css";
 
 function hexColor(color: string | undefined): string {
   if (color === undefined) return "white";
@@ -18,10 +17,11 @@ export const ConfigColors: FunctionComponent<{
   border: string;
   label: string;
 }> = ({ config, background, border, label }) => (
-  <label class="configcolors">
+  <label>
     {background !== undefined && (
       <input
         type="color"
+        class="mr-1 w-4 h-4"
         value={hexColor(config.value?.[background])}
         onInput={(e: Event) =>
           config.update({
@@ -33,6 +33,7 @@ export const ConfigColors: FunctionComponent<{
     )}
     <input
       type="color"
+      class="mr-1 w-4 h-4"
       value={hexColor(config.value?.[border])}
       onInput={(e: Event) =>
         config.update({ [border]: (e.target as HTMLInputElement).value })
@@ -40,10 +41,10 @@ export const ConfigColors: FunctionComponent<{
       title={t("configBorder")}
     />
     <span
+      class="border-dotted border-2 p-1"
       style={{
-        background: background && config.value?.[background],
-        border: `dotted ${config.value?.[border]} 2px`,
-        padding: "2px 4px",
+        backgroundColor: background && config.value?.[background],
+        borderColor: config.value?.[border]
       }}
     >
       {label}

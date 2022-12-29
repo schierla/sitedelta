@@ -1,29 +1,32 @@
-export function showOutline(doc: Document, xpath: string, color: string): void {
+export function showOutline(doc: Document, xpaths: string | string[], color: string): void {
   if (_outlined.length > 0) removeOutline(doc);
 
-  if (xpath.startsWith("/") || xpath.startsWith("id(")) {
-    let elements = doc.evaluate(xpath, doc, null, 0, null);
-    for (
-      var node = elements.iterateNext();
-      node != null;
-      node = elements.iterateNext()
-    ) {
-      _outlined.push({
-        e: node as HTMLElement,
-        o: (node as HTMLElement).style.outline,
-      });
+  if(typeof xpaths === "string") xpaths = [xpaths];
+  for(const xpath of xpaths) {
+    if (xpath.startsWith("/") || xpath.startsWith("id(")) {
+      let elements = doc.evaluate(xpath, doc, null, 0, null);
+      for (
+        var node = elements.iterateNext();
+        node != null;
+        node = elements.iterateNext()
+      ) {
+        _outlined.push({
+          e: node as HTMLElement,
+          o: (node as HTMLElement).style.outline,
+        });
+      }
+    } else {
+      let elements = Array.from(doc.querySelectorAll(xpath));
+      for (let element of elements) {
+        _outlined.push({
+          e: element as HTMLElement,
+          o: (element as HTMLElement).style.outline,
+        });
+      }
     }
-  } else {
-    let elements = Array.from(doc.querySelectorAll(xpath));
-    for (let element of elements) {
-      _outlined.push({
-        e: element as HTMLElement,
-        o: (element as HTMLElement).style.outline,
-      });
+    for (var i = 0; i < _outlined.length; i++) {
+      _outlined[i].e.style.outline = color + " dotted 2px";
     }
-  }
-  for (var i = 0; i < _outlined.length; i++) {
-    _outlined[i].e.style.outline = color + " dotted 2px";
   }
 }
 

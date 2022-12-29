@@ -7,9 +7,9 @@ import { PageList } from "./components/PageList";
 import { getActions, openPages } from "./components/PageListActions";
 import { VirtualElement } from "@popperjs/core";
 import { PopupMenu, MenuItem, MenuSeparator } from "./components/PopupMenu";
+import { SearchIcon } from "./icons/SearchIcon";
 import { ExpandIcon } from "./icons/ExpandIcon";
 import { Button } from "./components/Button";
-import "./pages.css";
 
 window.addEventListener("contextmenu", (e) => {
   e.preventDefault();
@@ -25,12 +25,18 @@ const Content = () => {
   const expandButtonRef = useRef<HTMLButtonElement>(null);
 
   const filterInput = (
-    <input
-      value={filter}
-      onInput={(e) => setFilter("" + (e.target as HTMLInputElement).value)}
-      placeholder={t("pagesFilter")}
-      autoFocus
-    />
+    <div class="relative rounded-sm shadow-sm flex-1">
+      <div class="pointer-events-none absolute inset-y-0 left-0 pl-1 flex items-center">
+        <SearchIcon />
+      </div>
+      <input
+        class="block w-full h-full rounded-md border-gray-300 pl-7 focus:border-indigo-500 focus:ring-indigo-500"
+        value={filter}
+        onInput={(e) => setFilter("" + (e.target as HTMLInputElement).value)}
+        placeholder={t("pagesFilter")}
+        autoFocus
+      />
+    </div>
   );
 
   const actionsButton = (
@@ -73,9 +79,9 @@ const Content = () => {
     />
   );
 
-  const previewFrame = window.matchMedia("(min-width: 45em)").matches && (
+  const previewFrame = window.matchMedia("(min-width: 640px)").matches && (
     <iframe
-      id="preview"
+      class="flex-1 hidden sm:block"
       src={
         selectedPages.length === 1
           ? chrome.runtime.getURL("show.htm?" + selectedPages[0])
@@ -85,9 +91,9 @@ const Content = () => {
   );
 
   return (
-    <Fragment>
-      <div id="sidebar">
-        <div id="title">
+    <div class="flex flex-row h-screen font-sans">
+      <div class="flex flex-col gap-1 p-1 border-r border-r-gray-300 border-r-1 flex-1 sm:flex-initial sm:basis-64 lg:basis-96">
+        <div class="flex flex-row flex-0 gap-1">
           {filterInput}
           {actionsButton}
         </div>
@@ -95,7 +101,7 @@ const Content = () => {
         {actionsMenu}
       </div>
       {previewFrame}
-    </Fragment>
+    </div>
   );
 };
 

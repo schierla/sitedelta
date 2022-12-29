@@ -1,7 +1,7 @@
 import { h } from "preact";
 
 export const UnchangedIcon = () => (
-  <svg viewBox="0 0 64 64" width="1em" height="0.9em">
+  <svg class="inline" viewBox="0 0 64 64" width="1em" height="0.9em">
     <path
       d="M32 1.625 1.479 62.748H62.52l-2.167-4.34zm0 13.432 20.818 41.691H11.182Z"
       fill="#0f0"

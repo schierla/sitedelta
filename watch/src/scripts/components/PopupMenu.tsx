@@ -1,7 +1,6 @@
 import { FunctionComponent, h } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { createPopper, VirtualElement } from "@popperjs/core";
-import "./PopupMenu.css";
 
 export const PopupMenu: FunctionComponent<{
   anchor: Element | VirtualElement | undefined;
@@ -27,7 +26,7 @@ export const PopupMenu: FunctionComponent<{
 
   return (
     <div ref={menuRef}>
-      <ul className="menu">{children}</ul>
+      <ul class="rounded-lg bg-white text-slate-700 shadow-xl shadow-black/5 ring-1 ring-slate-700/10 p-1">{children}</ul>
     </div>
   );
 };
@@ -39,9 +38,9 @@ export const MenuItem = ({
   onClick: () => void;
   label: string;
 }) => (
-  <li tabIndex={0} onClick={onClick}>
-    {label}
+  <li class="flex items-stretch flex-col">
+    <button onClick={onClick} class="block text-left rounded-md p-1.5 hover:bg-indigo-600 hover:text-white">{label}</button>
   </li>
 );
 
-export const MenuSeparator = () => <li className="separator"></li>;
+export const MenuSeparator = () => <li class="border-t border-slate-400/20 my-1"></li>;

@@ -48,11 +48,11 @@
 		"description": "Text that downloading the current page failed"
 	},
 	"watchChangedPages": {
-		"message": "Pages modified since last visit:",
+		"message": "Pages modified since last visit",
 		"description": "Headline for changed pages"
 	},
 	"watchFailedPages": {
-		"message": "Pages that failed to load:",
+		"message": "Pages that failed to load",
 		"description": "Headline for failed pages"
 	},	
 	"watchNextScan": {
@@ -143,7 +143,7 @@
 	
 
 	"pagesList": {
-		"message": "Monitored pages:",
+		"message": "Monitored pages",
 		"description": "Headline for the list of monitored pages"
 	},
 	"pagesFilter": {
@@ -167,11 +167,11 @@
 		"description": "Button to open the selected pages"
 	},
 	"pagesOpenChanged": {
-		"message": "Open All",
+		"message": "Open All Changed",
 		"description": "Button to open the changed pages"
 	},
 	"pagesOpenFailed": {
-		"message": "Open All",
+		"message": "Open All Failed",
 		"description": "Button to open the failed pages"
 	},	
 	"pagesScanOne": {
@@ -217,11 +217,11 @@
 	
 
 	"configRegionsInclude": {
-		"message": "Included regions:", 
+		"message": "Included regions", 
 		"description": "Headline for included regions"
 	},
 	"configRegionsExclude": {
-		"message": "Excluded regions:", 
+		"message": "Excluded regions", 
 		"description": "Headline for excluded regions"
 	},
 	"configRegionsRemove": {
@@ -237,7 +237,7 @@
 		"description": "Text for manual xpath or css selector entry"
 	},
 	"configBehavior": {
-		"message": "Overall behavior:",
+		"message": "Overall behavior",
 		"description": "Headline for extension behavior settings"
 	},
 	"configScanOnLoad": {
@@ -254,7 +254,7 @@
 	},
 
 	"configChecks": {
-		"message": "Aspects to check:",
+		"message": "Aspects to check",
 		"description": "Headline for configured page checks"
 	},
 	"configCheckDeleted": {
@@ -267,7 +267,7 @@
 	},
 
 	"configIgnores": {
-		"message": "Aspects to ignore:", 
+		"message": "Aspects to ignore", 
 		"description": "Headline for configured ignores"
 	},
 	"configIgnoreCase": {
@@ -280,7 +280,7 @@
 	},
 
 	"configAppearance": {
-		"message": "Appearance:",
+		"message": "Appearance",
 		"description": "Headline for configured appearance"
 	},
 	"configBackground": {
@@ -329,7 +329,7 @@
 	},
 
 	"configWatch": {
-		"message": "Watch settings:",
+		"message": "Watch settings",
 		"description": "Label for text fields concerning watch / delay settings"
 	},
 	"configWatchDelay": {

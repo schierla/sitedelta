@@ -1,19 +1,40 @@
-import * as regionUtils from "@sitedelta/common/src/scripts/regionUtils";
-import * as textUtils from "@sitedelta/common/src/scripts/textUtils";
-import * as pageUtils from "@sitedelta/common/src/scripts/pageUtils";
-import * as highlightUtils from "@sitedelta/common/src/scripts/highlightUtils";
-import * as watchUtils from "@sitedelta/common/src/scripts/watchUtils";
+import { h } from "./hooks/h";
+import { Action, app, Dispatchable, Effecter, Subscription } from "hyperapp";
 import { Config } from "@sitedelta/common/src/scripts/config";
-import { Fragment, render, h } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
 import { Button } from "./components/Button";
-import { t } from "./hooks/UseTranslation";
+import { t } from "./hooks/t";
 import { ExpandIcon } from "./icons/ExpandIcon";
-import { ConfigAccess, usePageConfig } from "./hooks/UseConfig";
-import { useDocument } from "./hooks/UseDocument";
 import { PermissionScreen } from "./show/PermissionScreen";
 import { LoadingScreen } from "./show/LoadingScreen";
 import { PageConfigPanel } from "./show/PageConfigPanel";
+import {
+  getContent as pageGetContent,
+  getEffectiveConfig as pageGetEffectiveConfig,
+  getOrCreateEffectiveConfig as pageGetOrCreateEffectiveConfig,
+  getTitle as pageGetTitle,
+  remove as pageRemove,
+  setConfigProperty as pageSetConfigProperty,
+  setContent as pageSetContent,
+  setTitle as pageSetTitle,
+} from "@sitedelta/common/src/scripts/pageUtils";
+import { getText } from "@sitedelta/common/src/scripts/textUtils";
+import {
+  loadPage as watchLoadPage,
+  setChanges as watchSetChanges,
+} from "@sitedelta/common/src/scripts/watchUtils";
+import {
+  highlightChanges,
+  highlightNext,
+  isolateRegions as highlightIsolateRegions,
+  makeVisible as highlightMakeVisible,
+  stripStyles as highlightStripStyles,
+} from "@sitedelta/common/src/scripts/highlightUtils";
+import {
+  abortSelect as regionAbortSelect,
+  removeOutline as regionRemoveOutline,
+  showOutline as regionShowOutline,
+  selectRegionOverlay,
+} from "@sitedelta/common/src/scripts/regionUtils";
 
 type Status =
   | "unknown"
@@ -27,31 +48,224 @@ type Status =
   | "disabled"
   | "selecting";
 
+export type LoadStatus = "loading" | "loaded" | "failed";
+
 export function documentParser(content: string): Document {
   return new DOMParser().parseFromString(content, "text/html");
 }
 
-export type LoadStatus = "loading" | "loaded" | "failed";
+type State = {
+  expanded: boolean;
+  status: Status;
+  highlight: boolean;
+  changes: number;
+  current: number;
+  title: string | null;
+  url?: string;
+  oldContent?: string;
+  selectedIncludeRegions?: string[];
+  selectedExcludeRegions?: string[];
+  hasPermission?: boolean;
+  config?: Config;
+  doc?: Document;
+  idoc?: Document;
+};
 
-const Content = () => {
-  let url = window.location.search.substring(1) + window.location.hash;
-  if (url == "") url = "about:blank";
-  const [hasPermission, setPermission] = useState<boolean>();
-  const [title, setTitle] = useState<string | null>(null);
-  const [expanded, setExpanded] = useState(false);
-  const [status, setStatus] = useState<Status>("unknown");
-  const [highlight, setHighlight] = useState(false);
-  const [changes, setChanges] = useState(-1);
-  const [current, setCurrent] = useState(-1);
-  const [idoc, setIdoc] = useState<Document>();
-  const [oldContent, setOldContent] = useState<string>();
-  const [selectedIncludeRegions, setSelectedIncludeRegions] = useState<string[]>();
-  const [selectedExcludeRegions, setSelectedExcludeRegions] = useState<string[]>();
-  const iframe = useRef<HTMLIFrameElement>(null);
-  const overlay = useRef<HTMLDivElement>(null);
-  const config = usePageConfig(url);
-  const known = title !== null;
+function UpdateConfig(
+  state: State,
+  update: Partial<Config>
+): Dispatchable<State> {
+  const newState: State = {
+    ...state,
+    config: state.config ? { ...state.config, ...update } : undefined,
+    selectedIncludeRegions: update.includes
+      ? undefined
+      : state.selectedIncludeRegions,
+    selectedExcludeRegions: update.excludes
+      ? undefined
+      : state.selectedExcludeRegions,
+  };
+  return [
+    newState,
+    [applyConfigUpdate, { url: state.url, update }],
+    state.url && [updatePreview, newState],
+  ];
+}
 
+const SetHasPermission: Action<State, boolean> = (state, hasPermission) => [
+  {
+    ...state,
+    hasPermission,
+  },
+  state.url && hasPermission && [fetchUrl, state.url],
+];
+
+const SetTitle: Action<State, string> = (state, title) => ({ ...state, title });
+
+const UpdateTitle: Action<State, string> = (state, title) => [
+  { ...state, title },
+  [saveTitle, { url: state.url, title: title }],
+];
+
+const SetUrl: Action<State, string> = (state, url) => [
+  { ...state, url },
+  url !== state.url && [updateUrlDetails, url],
+  url !== state.url && state.hasPermission && [fetchUrl, url],
+];
+
+const SelectExcludeRegions: Action<State, string[] | undefined> = (
+  state,
+  selectedExcludeRegions
+) => {
+  const newState = {
+    ...state,
+    selectedExcludeRegions,
+    selectedIncludeRegions: undefined,
+  };
+  return [newState, state.url && [updatePreview, newState]];
+};
+
+const SelectIncludeRegions: Action<State, string[] | undefined> = (
+  state,
+  selectedIncludeRegions
+) => {
+  const newState: State = {
+    ...state,
+    selectedIncludeRegions,
+    selectedExcludeRegions: undefined,
+  };
+  return [newState, state.url && [updatePreview, newState]];
+};
+
+const SetConfig: Action<State, Config | undefined> = (state, config) => ({
+  ...state,
+  config,
+});
+
+const SetStatus: Action<State, Status> = (state, status) => ({
+  ...state,
+  status,
+});
+
+const SetCurrent: Action<State, number> = (state, current) => ({
+  ...state,
+  current,
+});
+
+const SetChanges: Action<State, number> = (state, changes) => ({
+  ...state,
+  changes,
+});
+
+const SetDoc: Action<State, Document | undefined> = (state, doc) => {
+  const newState = {
+    ...state,
+    doc,
+    highlight:
+      doc && !state.expanded && state.title !== null ? true : state.highlight,
+  };
+  return [
+    newState,
+    state.url && [updatePreview, newState],
+    doc &&
+      state.highlight &&
+      state.title === null && [
+        updateTitle,
+        { url: state.url, title: doc.title },
+      ],
+  ];
+};
+
+const SetIdoc: Action<State, Document | undefined> = (state, idoc) => ({
+  ...state,
+  idoc,
+});
+
+const SetOldContent: Action<State, string> = (state, oldContent) => ({
+  ...state,
+  oldContent,
+});
+
+const HighlightNext: Action<State> = (state) => [
+  state,
+  [triggerHighlightNext, { idoc: state.idoc, current: state.current }],
+];
+
+const ShowChanges: Action<State> = (state) => {
+  const title = state.doc?.title ?? "";
+  const newState = {
+    ...state,
+    expanded: false,
+    highlight: true,
+    title: state.title === null ? title : state.title,
+  };
+  return [
+    newState,
+    state.url && [updatePreview, newState],
+    state.title === null &&
+      state.url &&
+      newState.title && [updateTitle, { url: state.url, title }],
+  ];
+};
+const Disable: Action<State> = (state) => [
+  { ...state, title: null, highlight: false, expanded: false },
+  [deletePage, state.url],
+];
+
+const Expand: Action<State> = (state) => [
+  { ...state, highlight: false, expanded: true },
+  state.oldContent && [
+    saveContent,
+    { url: state.url, content: state.oldContent },
+  ],
+  state.url && [updatePreview, { ...state, highlight: false, expanded: true }],
+];
+
+const OpenPage: Action<State> = (state) => [state, [openPage, state.url]];
+
+const PickRegion: Action<State, (region?: string) => Dispatchable<State>> = (
+  state,
+  callback
+) => [
+  state,
+  [pickRegion, { status: state.status, idoc: state.idoc, callback }],
+];
+
+const updateTitle: Effecter<State, { url: string; title: string }> = (
+  dispatch,
+  { url, title }
+) => {
+  pageSetTitle(url, title);
+  dispatch([SetTitle, title]);
+};
+
+const updatePreview: Effecter<
+  State,
+  {
+    doc?: Document;
+    expanded: boolean;
+    highlight: boolean;
+    config?: Config;
+    title?: string;
+    url: string;
+    selectedIncludeRegions: string[];
+    selectedExcludeRegions: string[];
+  }
+> = async (
+  dispatch,
+  {
+    doc,
+    expanded,
+    highlight,
+    url,
+    title,
+    config,
+    selectedIncludeRegions,
+    selectedExcludeRegions,
+  }
+) => {
+  const dispatchLater = (event: Dispatchable<State>) =>
+    requestAnimationFrame(() => dispatch(event));
   const stopIt = (e: MouseEvent) => {
     if (expanded) {
       e.preventDefault();
@@ -71,116 +285,205 @@ const Content = () => {
     e.stopPropagation();
   };
 
-  const selectRegion = async () => {
-    if (overlay.current && idoc) {
-      if (status === "selecting") {
-        setStatus("loaded");
-        regionUtils.abortSelect();
-        const region = prompt(chrome.i18n.getMessage("configRegionXpath"), "");
-        return region == null ? undefined : region;
+  if (doc === undefined) return;
+  const _iframe = document.getElementById("iframe") as HTMLIFrameElement;
+  if (!_iframe || !_iframe.contentWindow) return;
+  var idoc = _iframe.contentWindow.document;
+  while (idoc.firstChild) idoc.removeChild(idoc.firstChild);
+  idoc.appendChild(idoc.importNode(doc.documentElement, true));
+  idoc.body.addEventListener("click", stopIt, true);
+  dispatchLater([SetIdoc, idoc]);
+
+  if (config) {
+    applyVisibilityOptions(config, idoc);
+    showOutline(config, idoc, selectedIncludeRegions, selectedExcludeRegions);
+  }
+
+  if (highlight) {
+    var newConfig = await pageGetOrCreateEffectiveConfig(url, title ?? "");
+    dispatchLater([SetConfig, newConfig]);
+    var oldContent = await pageGetContent(url);
+    dispatchLater([SetOldContent, oldContent]);
+    var newcontent = getText(idoc, newConfig) || "";
+    pageSetContent(url, newcontent);
+
+    if (oldContent === null) {
+      await watchSetChanges(url, 0);
+      dispatchLater([SetChanges, -1]);
+      dispatchLater([SetCurrent, -1]);
+    } else {
+      const changes = highlightChanges(idoc, newConfig, oldContent);
+      dispatchLater([SetChanges, changes]);
+      if (changes > 0) {
+        dispatchLater([SetStatus, "changed"]);
+        dispatchLater([SetCurrent, 0]);
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        dispatchLater([HighlightNext, 0]);
+      } else if (changes == 0) {
+        dispatchLater([SetStatus, "unchanged"]);
       } else {
-        setStatus("selecting");
-        const region = await regionUtils.selectRegionOverlay(
-          overlay.current,
-          idoc
-        );
-        setStatus("loaded");
-        return region == null ? undefined : region;
+        dispatchLater([SetStatus, "failed"]);
       }
+      await watchSetChanges(url, changes >= 0 ? 0 : -1);
     }
-    return undefined;
-  };
+  } else {
+    dispatchLater([SetChanges, -1]);
+    dispatchLater([SetCurrent, -1]);
+    dispatchLater([SetStatus, "loaded"]);
+  }
+};
 
-  useEffect(() => {
-    chrome.permissions.contains({ origins: [url] }, setPermission);
-    pageUtils.getTitle(url).then(setTitle);
-  }, [url]);
-
-  const doc = useDocument(hasPermission ? url : undefined, setStatus);
-
-  useEffect(() => {
-    if (doc !== undefined && highlight && title === null) {
-      pageUtils.setTitle(url, doc.title);
-      setTitle(doc.title);
+const fetchUrl: Effecter<State, string> = async (dispatch, url) => {
+  const dispatchLater = (event: Dispatchable<State>) =>
+    requestAnimationFrame(() => dispatch(event));
+  if (url) {
+    dispatchLater([SetDoc, undefined]);
+    dispatchLater([SetStatus, "loading"]);
+    var doc = await watchLoadPage(url, documentParser);
+    if (doc === null) {
+      dispatchLater([SetStatus, "failed"]);
+      return;
     }
-  }, [doc, title, highlight]);
+    var base = doc.createElement("base");
+    base.setAttribute("href", url);
+    var existingbase = doc.querySelector("base[href]") as HTMLBaseElement;
+    if (existingbase && existingbase.parentNode) {
+      existingbase.parentNode.removeChild(existingbase);
+      base.setAttribute(
+        "href",
+        new URL(existingbase.getAttribute("href") || "", url).href
+      );
+    }
+    doc.head.insertBefore(base, doc.head.firstChild);
+    dispatchLater([SetDoc, doc]);
+    dispatchLater([SetStatus, "loaded"]);
+  }
+};
 
-  useEffect(() => {
-    (async () => {
-      if (doc === undefined) return;
-      const _iframe = iframe.current;
-      if (!_iframe || !_iframe.contentWindow) return;
-      var idoc = _iframe.contentWindow.document;
-      while (idoc.firstChild) idoc.removeChild(idoc.firstChild);
-      idoc.appendChild(idoc.importNode(doc.documentElement, true));
-      idoc.body.addEventListener("click", stopIt, true);
-      setIdoc(idoc);
+const updateUrlDetails: Effecter<State, string> = (dispatch, url) => {
+  const dispatchLater = (event: Dispatchable<State>) =>
+    requestAnimationFrame(() => dispatch(event));
+  chrome.permissions.contains({ origins: [url] }, (hasPermission) =>
+    dispatchLater([SetHasPermission, hasPermission])
+  );
+  pageGetTitle(url).then((title) => dispatchLater([SetTitle, title]));
+  pageGetEffectiveConfig(url).then((config) =>
+    dispatchLater([SetConfig, config ?? undefined])
+  );
+};
 
-      if (config.value) {
-        applyVisibilityOptions(config.value, idoc);
-        showOutline(
-          config.value,
-          idoc,
-          selectedIncludeRegions,
-          selectedExcludeRegions
-        );
-      }
+const pickRegion: Effecter<
+  State,
+  {
+    status: Status;
+    idoc: Document;
+    callback: (region?: string) => Dispatchable<State>;
+  }
+> = async (dispatch, { status, idoc, callback }) => {
+  const dispatchLater = (event: Dispatchable<State>) =>
+    requestAnimationFrame(() => dispatch(event));
+  const overlay = document.getElementById("overlay");
+  if (overlay && idoc) {
+    if (status === "selecting") {
+      dispatchLater([SetStatus, "loaded"]);
+      regionAbortSelect();
+      const region = prompt(chrome.i18n.getMessage("configRegionXpath"), "");
+      dispatchLater(callback(region == null ? undefined : region));
+    } else {
+      dispatchLater([SetStatus, "selecting"]);
+      const region = await selectRegionOverlay(overlay, idoc);
+      dispatchLater([SetStatus, "loaded"]);
+      dispatchLater(callback(region == null ? undefined : region));
+    }
+  }
+  dispatchLater(callback(undefined));
+};
 
-      if (highlight) {
-        var newConfig = await pageUtils.getOrCreateEffectiveConfig(
-          url,
-          title ?? ""
-        );
-        var oldContent = await pageUtils.getContent(url);
-        setOldContent(oldContent);
-        var newcontent = textUtils.getText(idoc, newConfig) || "";
-        pageUtils.setContent(url, newcontent);
+const saveContent: Effecter<State, { url: string; content: string }> = (
+  _,
+  { url, content }
+) => {
+  pageSetContent(url, content);
+};
 
-        if (oldContent === null) {
-          await watchUtils.setChanges(url, 0);
-          setChanges(-1);
-          setCurrent(-1);
-        } else {
-          const changes = highlightUtils.highlightChanges(
-            idoc,
-            newConfig,
-            oldContent
-          );
-          setChanges(changes);
-          if (changes > 0) {
-            setStatus("changed");
-            setCurrent(current);
-            await new Promise((resolve) => setTimeout(resolve, 300));
-            setCurrent(highlightUtils.highlightNext(idoc, 0));
-          } else if (changes == 0) {
-            setStatus("unchanged");
-          } else {
-            setStatus("failed");
-          }
-          await watchUtils.setChanges(url, changes >= 0 ? 0 : -1);
-        }
-      } else {
-        setChanges(-1);
-        setCurrent(-1);
-        setStatus("loaded");
-      }
-    })();
-  }, [
-    doc,
-    iframe.current,
-    config.value,
-    highlight,
-    selectedIncludeRegions,
-    selectedExcludeRegions,
-  ]);
+const saveTitle: Effecter<State, { url: string; title: string }> = (
+  _,
+  { url, title }
+) => {
+  pageSetTitle(url, title);
+};
 
-  cleanupIncludeRegions(config);
+const openPage: Effecter<State, string> = (_, url) => {
+  window.location.href = url;
+};
 
-  useEffect(() => {
-    if (doc && !expanded && known) setHighlight(true);
-  }, [known, doc, expanded]);
+const deletePage: Effecter<State, string> = (_, url) => {
+  pageRemove(url);
+};
 
-  document.title = title ?? t("watchExtensionName");
+const triggerHighlightNext: Effecter<
+  State,
+  { idoc: Document; current: number }
+> = (dispatch, { idoc, current }) => {
+  if (idoc) {
+    const next = highlightNext(idoc, current);
+    dispatch([SetCurrent, next]);
+  }
+};
+
+const applyConfigUpdate: Effecter<
+  State,
+  { update: Partial<Config>; url: string }
+> = async (dispatch, { update, url }) => {
+  const dispatchLater = (event: Dispatchable<State>) =>
+    requestAnimationFrame(() => dispatch(event));
+  for (let key in update) {
+    let value = update[key];
+    if (key === "includes") value = cleanupIncludeRegions(value);
+    await pageSetConfigProperty(url, key as keyof Config, value);
+  }
+  const newConfig = (await pageGetEffectiveConfig(url)) ?? undefined;
+  dispatchLater([SetConfig, newConfig]);
+};
+
+const urlDetailSubscription: Subscription<State> = [
+  (dispatch, _) => {
+    const dispatchUrl = () => {
+      let url = window.location.search.substring(1) + window.location.hash;
+      if (url == "") url = "about:blank";
+      requestAnimationFrame(() => dispatch([SetUrl, url]));
+    };
+    dispatchUrl();
+    window.addEventListener("hashchange", dispatchUrl);
+    return () => {
+      window.removeEventListener("hashchange", dispatchUrl);
+    };
+  },
+  {},
+];
+
+const cleanupIncludeRegions = (includes: string[]) => {
+  if (includes.length === 0) return ["/html/body[1]"];
+  else if (includes.length > 1 && includes.indexOf("/html/body[1]") !== -1)
+    return includes.filter((r) => r !== "/html/body[1]");
+  else return includes;
+};
+
+const Content = ({
+  expanded,
+  status,
+  changes,
+  current,
+  url,
+  selectedIncludeRegions,
+  selectedExcludeRegions,
+  hasPermission,
+  title,
+  config,
+}: State) => {
+  const known = title !== null;
+
+  document.title = title ?? url ?? t("watchExtensionName");
 
   const statusMessage = known
     ? status === "loadfailed"
@@ -197,109 +500,66 @@ const Content = () => {
     : t("watchDisabled");
 
   const nextChangeButton = (
-    <Button
-      isDefault
-      onClick={() => {
-        if (idoc) setCurrent(highlightUtils.highlightNext(idoc, current));
-      }}
-    >
+    <Button isDefault onClick={HighlightNext}>
       {t("pageNextChange")}
     </Button>
   );
 
   const showChangesButton = (
-    <Button
-      isDefault
-      onClick={() => {
-        setExpanded(false);
-        setHighlight(true);
-      }}
-    >
+    <Button isDefault onClick={ShowChanges}>
       {t("pageShowChanges")}
     </Button>
   );
 
   const highlightChangesButton = (
-    <Button
-      isDefault
-      onClick={() => {
-        setExpanded(false);
-        setHighlight(true);
-      }}
-    >
+    <Button isDefault onClick={ShowChanges}>
       {t("pageEnable")}
     </Button>
   );
 
-  const disableButton = (
-    <Button
-      onClick={() => {
-        pageUtils.remove(url).then(() => {
-          setTitle(null);
-          setHighlight(false);
-          setExpanded(false);
-        });
-      }}
-    >
-      {t("pageDisable")}
-    </Button>
-  );
+  const disableButton = <Button onClick={Disable}>{t("pageDisable")}</Button>;
 
-  const openButton = (
-    <Button
-      onClick={() => {
-        window.location.href = url;
-      }}
-    >
-      {t("pageOpen")}
-    </Button>
-  );
+  const openButton = <Button onClick={OpenPage}>{t("pageOpen")}</Button>;
 
   const expandButton = (
-    <Button
-      onClick={() => {
-        if (oldContent !== undefined) pageUtils.setContent(url, oldContent);
-        setHighlight(false);
-        setExpanded(true);
-      }}
-    >
+    <Button onClick={Expand}>
       <ExpandIcon />
     </Button>
   );
 
-  const previewPanel = (
-    <Fragment>
-      <iframe
-        frameBorder={0}
-        width="100%"
-        height="100%"
-        class="absolute inset-0"
-        style={{
-          display:
-            status === "loaded" ||
-            status === "changed" ||
-            status === "unchanged" ||
-            status === "selecting"
-              ? "block"
-              : "none",
-        }}
-        ref={iframe}
-        sandbox="allow-same-origin"
-      ></iframe>
-      <div
-        ref={overlay}
-        class="absolute inset-0"
-        style={{
-          display: status === "selecting" ? "block" : "none",
-          overflow: "auto",
-        }}
-      />
-    </Fragment>
-  );
+  const previewPanel = [
+    <iframe
+      id="iframe"
+      frameBorder={0}
+      width="100%"
+      height="100%"
+      class="absolute inset-0"
+      style={{
+        display:
+          status === "loaded" ||
+          status === "changed" ||
+          status === "unchanged" ||
+          status === "selecting"
+            ? "block"
+            : "none",
+      }}
+      sandbox="allow-same-origin"
+    />,
+    <div
+      id="overlay"
+      class="absolute inset-0"
+      style={{
+        display: status === "selecting" ? "block" : "none",
+        overflow: "auto",
+      }}
+    />,
+  ];
 
   return (
-    <div class="h-screen flex flex-col">
-      <div class="flex flex-col sm:flex-row-reverse items-center border-b-2 border-indigo-600 gap-2 p-2">        <div class="flex flex-row gap-2">
+    <body class="h-screen flex flex-col dark:bg-slate-900 dark:text-slate-200">
+      <div class="flex flex-col sm:flex-row-reverse items-center border-b-2 border-indigo-600 gap-2 p-2">
+        {" "}
+        <div class="flex flex-row gap-2">
           {openButton}
           {known && disableButton}
           {hasPermission &&
@@ -320,29 +580,43 @@ const Content = () => {
             <PageConfigPanel
               url={url}
               config={config}
-              selectRegion={selectRegion}
+              PickRegion={PickRegion}
               selectedExcludeRegions={selectedExcludeRegions}
-              setSelectedExcludeRegions={setSelectedExcludeRegions}
+              SelectExcludeRegions={SelectExcludeRegions}
               selectedIncludeRegions={selectedIncludeRegions}
-              setSelectedIncludeRegions={setSelectedIncludeRegions}
+              SelectIncludeRegions={SelectIncludeRegions}
               title={title}
-              setTitle={setTitle}
+              SetTitle={SetTitle}
+              UpdateTitle={UpdateTitle}
+              UpdateConfig={UpdateConfig}
             />
           </div>
         )}
         <div class="flex-1 relative">
-          {hasPermission === false && (
-            <PermissionScreen url={url} onGranted={setPermission} />
+          {url && hasPermission === false && (
+            <PermissionScreen url={url} OnGranted={SetHasPermission} />
           )}
           {status === "loading" && <LoadingScreen />}
           {previewPanel}
         </div>
       </div>
-    </div>
+    </body>
   );
 };
 
-render(h(Content, {}), document.body);
+app<State>({
+  init: {
+    changes: -1,
+    current: -1,
+    expanded: false,
+    highlight: false,
+    status: "unknown",
+    title: null,
+  },
+  view: (state) => h(<Content {...state} />),
+  node: document.body,
+  subscriptions: () => [urlDetailSubscription],
+});
 
 function showOutline(
   config: Config,
@@ -351,31 +625,16 @@ function showOutline(
   selectedExcludeRegion: string | string[] | undefined
 ) {
   if (selectedIncludeRegion !== undefined) {
-    regionUtils.showOutline(idoc, selectedIncludeRegion, config.includeRegion);
+    regionShowOutline(idoc, selectedIncludeRegion, config.includeRegion);
   } else if (selectedExcludeRegion !== undefined) {
-    regionUtils.showOutline(idoc, selectedExcludeRegion, config.excludeRegion);
+    regionShowOutline(idoc, selectedExcludeRegion, config.excludeRegion);
   } else {
-    regionUtils.removeOutline(idoc);
+    regionRemoveOutline(idoc);
   }
 }
 
 function applyVisibilityOptions(config: Config, idoc: Document) {
-  if (config.stripStyles) highlightUtils.stripStyles(idoc);
-  if (config.isolateRegions) highlightUtils.isolateRegions(idoc, config);
-  if (config.makeVisible) highlightUtils.makeVisible(idoc, config);
-}
-
-function cleanupIncludeRegions(config: ConfigAccess) {
-  useEffect(() => {
-    if (!config.value) return;
-    if (config.value.includes.length === 0)
-      config.update({ includes: ["/html/body[1]"] });
-    else if (
-      config.value.includes.length > 1 &&
-      config.value.includes.indexOf("/html/body[1]") !== -1
-    )
-      config.update({
-        includes: config.value.includes.filter((r) => r !== "/html/body[1]"),
-      });
-  }, [config.value, config.update]);
+  if (config.stripStyles) highlightStripStyles(idoc);
+  if (config.isolateRegions) highlightIsolateRegions(idoc, config);
+  if (config.makeVisible) highlightMakeVisible(idoc, config);
 }

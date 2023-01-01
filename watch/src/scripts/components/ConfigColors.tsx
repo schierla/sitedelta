@@ -1,6 +1,7 @@
-import { FunctionComponent, Fragment, h } from "preact";
-import { t } from "../hooks/UseTranslation";
-import { ConfigAccess } from "../hooks/UseConfig";
+import { h } from "../hooks/h";
+import { Action } from "hyperapp";
+import { t } from "../hooks/t";
+import { Config } from "@sitedelta/common/src/scripts/config";
 
 function hexColor(color: string | undefined): string {
   if (color === undefined) return "white";
@@ -11,43 +12,52 @@ function hexColor(color: string | undefined): string {
   else return color;
 }
 
-export const ConfigColors: FunctionComponent<{
-  config: ConfigAccess;
+export function ConfigColors<S>({
+  config,
+  background,
+  border,
+  label,
+  UpdateConfig,
+}: {
+  config: Config;
   background?: string;
   border: string;
   label: string;
-}> = ({ config, background, border, label }) => (
-  <label>
-    {background !== undefined && (
+  UpdateConfig: Action<S, Partial<Config>>;
+}) {
+  return h(
+    <label>
+      {background !== undefined && (
+        <input
+          type="color"
+          class="mr-1 w-4 h-4"
+          value={hexColor(config[background])}
+          oninput={(_, e: Event) => [
+            UpdateConfig,
+            { [background]: (e.target as HTMLInputElement).value },
+          ]}
+          title={t("configBackground")}
+        />
+      )}
       <input
         type="color"
         class="mr-1 w-4 h-4"
-        value={hexColor(config.value?.[background])}
-        onInput={(e: Event) =>
-          config.update({
-            [background]: (e.target as HTMLInputElement).value,
-          })
-        }
-        title={t("configBackground")}
+        value={hexColor(config[border])}
+        oninput={(_, e) => [
+          UpdateConfig,
+          { [border]: (e.target as HTMLInputElement).value },
+        ]}
+        title={t("configBorder")}
       />
-    )}
-    <input
-      type="color"
-      class="mr-1 w-4 h-4"
-      value={hexColor(config.value?.[border])}
-      onInput={(e: Event) =>
-        config.update({ [border]: (e.target as HTMLInputElement).value })
-      }
-      title={t("configBorder")}
-    />
-    <span
-      class="border-dotted border-2 p-1"
-      style={{
-        backgroundColor: background && config.value?.[background],
-        borderColor: config.value?.[border]
-      }}
-    >
-      {label}
-    </span>
-  </label>
-);
+      <span
+        class="border-dotted border-2 p-1"
+        style={{
+          backgroundColor: background && config[background],
+          borderColor: config[border],
+        }}
+      >
+        {label}
+      </span>
+    </label>
+  );
+}

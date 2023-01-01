@@ -5,8 +5,8 @@ import CopyPlugin from "copy-webpack-plugin";
 import { ESBuildMinifyPlugin } from "esbuild-loader";
 import webpack from "webpack";
 import path from "path";
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -26,7 +26,7 @@ export default (env) => {
       "scripts/options": "./src/scripts/options.tsx",
       "scripts/popup": "./src/scripts/popup.tsx",
       "scripts/show": "./src/scripts/show.tsx",
-      "scripts/transferScript": "./src/scripts/transferScript.ts",
+      "scripts/transferScript": "./src/scripts/transferScript.ts"
     },
     output: {
       path: path.resolve(__dirname, "dist", env.target),
@@ -42,20 +42,23 @@ export default (env) => {
       rules: [
         {
           test: /\.tsx?$/,
-          loader: "esbuild-loader",
+          loader: "babel-loader",
           options: {
-            loader: "tsx",
-            target: "es2015",
-            jsxFactory: "h",
+            presets: ["@babel/typescript"],
+            plugins: [
+              [
+                "@babel/plugin-transform-react-jsx",
+                { runtime: "classic", pragma: "h" },
+              ],
+            ],
           },
         },
         {
           test: /\.css$/i,
           use: [
-            "style-loader",
             MiniCssExtractPlugin.loader,
             "css-loader",
-            'postcss-loader'
+            "postcss-loader",
           ],
         },
         {
@@ -83,15 +86,14 @@ export default (env) => {
         ],
       }),
       new MiniCssExtractPlugin({
-        filename: "tailwind.bundle.css", 
-        chunkFilename: "[id].css"
+        filename: "tailwind.bundle.css"
       }),
-      new WebExtPlugin({ 
+      new WebExtPlugin({
         sourceDir: resolve(__dirname, "dist", env.target),
         target: env.target === "chrome" ? "chromium" : "firefox-desktop",
         buildPackage: env.package === "true",
         artifactsDir: `../build/${env.target}`,
-        runLint: env.target !== "chrome"
+        runLint: env.target !== "chrome",
       }),
     ],
 

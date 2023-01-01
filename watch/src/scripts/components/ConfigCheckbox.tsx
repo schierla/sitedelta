@@ -1,22 +1,27 @@
-import { ConfigAccess } from "../hooks/UseConfig";
-import { FunctionComponent, h } from "preact";
+import { h } from "../hooks/h";
+import { Action } from "hyperapp";
+import { Config } from "@sitedelta/common/src/scripts/config";
 
-export const ConfigCheckbox: FunctionComponent<{
-  config: ConfigAccess;
+export function ConfigCheckbox<S>({
+  config,
+  configKey,
+  label,
+  UpdateConfig,
+}: {
+  config: Config;
   configKey: string;
   label: string;
-}> = ({ config, configKey, label }) => {
-  return (
+  UpdateConfig: Action<S, Partial<Config>>;
+}) {
+  return h(
     <label class="select-none">
       <input
         type="checkbox"
-        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-1"
-        checked={config.value?.[configKey] === true}
-        onInput={() => {
-          config.update({ [configKey]: !config.value?.[configKey] });
-        }}
+        class="h-4 w-4 rounded border-gray-300 text-indigo-600 accent-indigo-600 focus:ring-indigo-500 mr-1"
+        checked={config[configKey] === true}
+        oninput={[UpdateConfig, { [configKey]: !config[configKey] }]}
       />{" "}
       {label}
     </label>
   );
-};
+}

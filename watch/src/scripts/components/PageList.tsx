@@ -1,36 +1,43 @@
-import * as ioUtils from "@sitedelta/common/src/scripts/ioUtils";
-import { FunctionComponent, h } from "preact";
-import { ChangedIcon } from "../icons/ChangedIcon";
-import { FailedIcon } from "../icons/FailedIcon";
-import { UnchangedIcon } from "../icons/UnchangedIcon";
+import { h } from "../hooks/h";
+import { Dispatchable } from "hyperapp";
+import { Index, Status } from "@sitedelta/common/src/scripts/ioUtils";
 
-export const PageList: FunctionComponent<{
-  selectedPages: string[];
-  setSelection: (newPages: string[]) => void;
-  onDblClick: (newPages: string[]) => void;
-  onContextMenu?: (e: MouseEvent) => void;
-  index: ioUtils.Index;
-  filter?: string;
-}> = ({
+export type PageSortOrder = "title" | "url" | "status" | "nextScan";
+
+export const PageList = ({
+  sortOrder = "title",
   selectedPages,
+  SetSelection,
+  OnDblClick,
+  OnContextMenu,
   index,
   filter,
-  setSelection,
-  onContextMenu,
-  onDblClick,
+}: {
+  sortOrder?: PageSortOrder;
+  selectedPages: string[];
+  SetSelection: Dispatchable<any, string[]>;
+  OnDblClick: Dispatchable<any>;
+  OnContextMenu?: Dispatchable<any, MouseEvent>;
+  index: Index;
+  filter?: string;
 }) => {
   const filterTitle = (key: string) =>
     filter === "" || index[key].title?.indexOf(filter ?? "") !== -1;
 
-  const compareTitle = (ka: string, kb: string): 1 | -1 =>
-    index[ka].title !== undefined &&
-    index[kb].title !== undefined &&
-    (index[ka].title?.toLowerCase() ?? "") <
+  const compare: Record<PageSortOrder, (ka: string, kb: string) => 1 | -1> = {
+    nextScan: (ka, kb) =>
+      (index[ka].nextScan ?? 0) < (index[kb].nextScan ?? 0) ? -1 : 1,
+    url: (ka, kb) => (ka < kb ? -1 : 1),
+    status: (ka, kb) =>
+      (index[ka].changes ?? -1) < (index[kb].changes ?? -1) ? 1 : -1,
+    title: (ka, kb) =>
+      (index[ka].title?.toLowerCase() ?? "") <
       (index[kb].title?.toLowerCase() ?? "")
-      ? 1
-      : -1;
+        ? -1
+        : 1,
+  };
 
-  const formatTooltip = (key: string, data: ioUtils.Status) =>
+  const formatTooltip = (key: string, data: Status) =>
     key +
     (data.nextScan != 0
       ? "\n" +
@@ -40,35 +47,32 @@ export const PageList: FunctionComponent<{
         )
       : "");
 
-  const statusIcon = (changes: number | undefined) =>
-    changes === undefined ? (
-      <FailedIcon />
-    ) : changes > 0 ? (
-      <ChangedIcon />
-    ) : changes == 0 ? (
-      <UnchangedIcon />
-    ) : (
-      <FailedIcon />
-    );
+  const statusClass = (changes: number | undefined) =>
+    changes === undefined
+      ? "bg-failed"
+      : changes > 0
+      ? "bg-changed"
+      : changes == 0
+      ? "bg-unchanged"
+      : "bg-failed";
 
-  return (
+  return h(
     <select
-      class="w-full block flex-1 p-0 border-gray-300"
+      class="w-full block flex-1 p-0 border-gray-300  dark:bg-slate-800 dark:text-slate-200 dark:border-gray-600"
       size={10}
       multiple
-      onDblClick={() => onDblClick(selectedPages)}
-      onChange={(e: Event) =>
-        setSelection(
-          Array.from((e.target as HTMLSelectElement).selectedOptions).map(
-            (o) => o.value
-          )
-        )
-      }
-      onContextMenu={onContextMenu}
+      ondblclick={OnDblClick}
+      onchange={(_, e: Event) => [
+        SetSelection,
+        Array.from((e.target as HTMLSelectElement).selectedOptions).map(
+          (o) => o.value
+        ),
+      ]}
+      oncontextmenu={OnContextMenu}
     >
       {Object.keys(index)
         .filter(filterTitle)
-        .sort(compareTitle)
+        .sort(compare[sortOrder])
         .map((key) => {
           const data = index[key];
           return (
@@ -76,12 +80,17 @@ export const PageList: FunctionComponent<{
               key={key}
               value={key}
               title={formatTooltip(key, data)}
+              class={
+                statusClass(data.changes) + " bg-no-repeat bg-left pl-6 mx-1"
+              }
               selected={selectedPages.indexOf(key) !== -1}
-              onContextMenu={() =>
-                selectedPages.indexOf(key) === -1 && setSelection([key])
+              oncontextmenu={() =>
+                selectedPages.indexOf(key) === -1
+                  ? [SetSelection, [key]]
+                  : [SetSelection, selectedPages]
               }
             >
-              {statusIcon(data.changes)} {"title" in data ? data.title : key}
+              {"title" in data ? data.title : key}
             </option>
           );
         })}

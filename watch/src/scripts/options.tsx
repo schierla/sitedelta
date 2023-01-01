@@ -1,13 +1,16 @@
-import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
-
-import { render, h } from "preact";
+import { h } from "./hooks/h";
+import { t } from "./hooks/t";
+import { app } from "hyperapp";
 import { Button } from "./components/Button";
-import { t } from "./hooks/UseTranslation";
+import { openResource } from "@sitedelta/common/src/scripts/tabUtils";
+import "../tailwind.css";
 
 const Content = () => (
-  <Button isDefault onClick={() => tabUtils.openResource("manage.htm")}>
-    {t("pagesConfiguration")}
-  </Button>
+  <body>
+    <Button isDefault={true} onClick={() => openResource("manage.htm")}>
+      {t("pagesConfiguration")}
+    </Button>
+  </body>
 );
 
-render(h(Content, {}), document.body);
+app({ init: undefined, view: (state) => h(<Content />), node: document.body });

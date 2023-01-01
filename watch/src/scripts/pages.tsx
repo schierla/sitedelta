@@ -1,38 +1,114 @@
-import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
-import * as ioUtils from "@sitedelta/common/src/scripts/ioUtils";
-import { render, h, Fragment } from "preact";
-import { t } from "./hooks/UseTranslation";
-import { useEffect, useRef, useState } from "preact/hooks";
-import { PageList } from "./components/PageList";
+import { h } from "./hooks/h";
+import { t } from "./hooks/t";
+import { Action, app, Dispatch, Dispatchable, Subscription } from "hyperapp";
+import { PageList, PageSortOrder } from "./components/PageList";
 import { getActions, openPages } from "./components/PageListActions";
-import { VirtualElement } from "@popperjs/core";
-import { PopupMenu, MenuItem, MenuSeparator } from "./components/PopupMenu";
+import {
+  PopupMenu,
+  MenuItem,
+  MenuSeparator,
+  showPopupMenu,
+  hidePopupMenu,
+} from "./components/PopupMenu";
 import { SearchIcon } from "./icons/SearchIcon";
 import { ExpandIcon } from "./icons/ExpandIcon";
 import { Button } from "./components/Button";
+import { Index, observeIndex } from "@sitedelta/common/src/scripts/ioUtils";
+import { openResource } from "@sitedelta/common/src/scripts/tabUtils";
 
 window.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   return false;
 });
 
-const Content = () => {
-  const [index, setIndex] = useState<ioUtils.Index>({});
-  const [selectedPages, setSelection] = useState<string[]>([]);
-  useEffect(() => ioUtils.observeIndex(setIndex), [setIndex]);
-  const [filter, setFilter] = useState<string>("");
-  const [menuAnchor, setMenuAnchor] = useState<Element | VirtualElement>();
-  const expandButtonRef = useRef<HTMLButtonElement>(null);
+type State = {
+  index: Index;
+  selectedPages: string[];
+  filter: string;
+  sortOrder: PageSortOrder;
+  isContextMenu: boolean;
+};
 
+const SetSelection: Action<State, string[]> = (state, selectedPages) => [
+  { ...state, selectedPages },
+];
+
+const SetIndex: Action<State, Index> = (state, index) => [{ ...state, index }];
+
+const SetFilter: Action<State, string> = (state, filter) => [
+  { ...state, filter },
+];
+
+const OpenPages: Action<State, string[]> = (state, pages) => [
+  state,
+  [openPages, { pages, SetSelection }],
+];
+
+const SetSortOrder: Action<State, PageSortOrder> = (state, sortOrder) => [
+  { ...state, sortOrder },
+];
+
+function virtualElement(pos: { x: number; y: number }) {
+  return { getBoundingClientRect: () => new DOMRect(pos.x, pos.y, 0, 0) };
+}
+
+const ShowMenuAtElement: Action<State, HTMLElement> = (state, element) => [
+  { ...state, isContextMenu: false },
+  [showPopupMenu, element],
+];
+
+const ShowMenuAtPosition: Action<State, { x: number; y: number }> = (
+  state,
+  pos
+) => [{ ...state, isContextMenu: true }, [showPopupMenu, virtualElement(pos)]];
+
+const OpenConfigurationFromContextMenu: Action<State> = (state) => [
+  state,
+  [openPage, "manage.htm"],
+  hidePopupMenu,
+];
+
+const DispatchActionFromContextMenu: Action<State, Dispatchable<State>> = (
+  state,
+  action
+) => [state, [dispatchAction, action], hidePopupMenu];
+
+function openPage(_: Dispatch<State>, name: string) {
+  openResource(name);
+}
+
+function dispatchAction<S>(dispatch: Dispatch<S>, action: Dispatchable<S>) {
+  dispatch(action);
+}
+
+const indexSubscription: Subscription<State, any> = [
+  (dispatch, _) => {
+    return observeIndex((index) =>
+      requestAnimationFrame(() => dispatch([SetIndex, index]))
+    );
+  },
+  {},
+];
+
+const Content = ({
+  index,
+  selectedPages,
+  filter,
+  sortOrder,
+  isContextMenu,
+}: State) => {
   const filterInput = (
     <div class="relative rounded-sm shadow-sm flex-1">
       <div class="pointer-events-none absolute inset-y-0 left-0 pl-1 flex items-center">
         <SearchIcon />
       </div>
       <input
-        class="block w-full h-full rounded-md border-gray-300 pl-7 focus:border-indigo-500 focus:ring-indigo-500"
+        class="block w-full h-full rounded-md border-gray-300 dark:bg-slate-800 dark:border-gray-600 pl-7 focus:border-indigo-500 focus:ring-indigo-500"
         value={filter}
-        onInput={(e) => setFilter("" + (e.target as HTMLInputElement).value)}
+        oninput={(_, event: Event) => [
+          SetFilter,
+          "" + (event.target as HTMLInputElement).value,
+        ]}
         placeholder={t("pagesFilter")}
         autoFocus
       />
@@ -40,25 +116,52 @@ const Content = () => {
   );
 
   const actionsButton = (
-    <Button
-      buttonRef={expandButtonRef}
-      onClick={() =>
-        menuAnchor === undefined &&
-        setMenuAnchor(expandButtonRef.current ?? undefined)
-      }
-    >
-      <ExpandIcon />
-    </Button>
+    <div id="popupButton">
+      <Button
+        onClick={[ShowMenuAtElement, document.getElementById("popupButton")]}
+      >
+        <ExpandIcon />
+      </Button>
+    </div>
   );
 
+  const actions = getActions(index, selectedPages, SetSelection);
   const actionsMenu = (
-    <PopupMenu anchor={menuAnchor} onClose={() => setMenuAnchor(undefined)}>
-      {getActions(index, selectedPages, setSelection).map(([label, action]) => (
-        <MenuItem key={label} label={label} onClick={action} />
+    <PopupMenu>
+      {isContextMenu || [
+        <li class="flex items-stretch flex-col px-2 py-1">{t("pagesSort")}</li>,
+        <MenuItem
+          checked={sortOrder === "title"}
+          onClick={(_) => [SetSortOrder, "title"]}
+          label={t("pagesSortTitle")}
+        />,
+        <MenuItem
+          checked={sortOrder === "url"}
+          onClick={(_) => [SetSortOrder, "url"]}
+          label={t("pagesSortUrl")}
+        />,
+        <MenuItem
+          checked={sortOrder === "status"}
+          onClick={(_) => [SetSortOrder, "status"]}
+          label={t("pagesSortStatus")}
+        />,
+        <MenuItem
+          checked={sortOrder === "nextScan"}
+          onClick={(_) => [SetSortOrder, "nextScan"]}
+          label={t("pagesSortNextScan")}
+        />,
+        <MenuSeparator />,
+      ]}
+
+      {actions.map(([label, action]) => (
+        <MenuItem
+          label={label}
+          onClick={() => [DispatchActionFromContextMenu, action]}
+        />
       ))}
-      <MenuSeparator />
+      {actions.length > 0 && <MenuSeparator />}
       <MenuItem
-        onClick={() => tabUtils.openResource("manage.htm")}
+        onClick={OpenConfigurationFromContextMenu}
         label={t("pagesConfiguration")}
       />
     </PopupMenu>
@@ -68,14 +171,14 @@ const Content = () => {
     <PageList
       index={index}
       filter={filter}
+      sortOrder={sortOrder}
       selectedPages={selectedPages}
-      setSelection={setSelection}
-      onDblClick={() => openPages(selectedPages, setSelection)}
-      onContextMenu={(e: MouseEvent) =>
-        setMenuAnchor({
-          getBoundingClientRect: () => new DOMRect(e.clientX, e.clientY, 0, 0),
-        })
-      }
+      SetSelection={SetSelection}
+      OnDblClick={[OpenPages, selectedPages]}
+      OnContextMenu={(_, e: MouseEvent) => [
+        ShowMenuAtPosition,
+        { x: e.clientX, y: e.clientY },
+      ]}
     />
   );
 
@@ -91,8 +194,8 @@ const Content = () => {
   );
 
   return (
-    <div class="flex flex-row h-screen font-sans">
-      <div class="flex flex-col gap-1 p-1 border-r border-r-gray-300 border-r-1 flex-1 sm:flex-initial sm:basis-64 lg:basis-96">
+    <body class="flex flex-row h-screen font-sans dark:bg-slate-900">
+      <div class="flex flex-col gap-1 p-1 border-r border-r-gray-300 dark:border-r-gray-600 border-r-1 flex-1 sm:flex-initial sm:basis-64 lg:basis-96">
         <div class="flex flex-row flex-0 gap-1">
           {filterInput}
           {actionsButton}
@@ -101,9 +204,20 @@ const Content = () => {
         {actionsMenu}
       </div>
       {previewFrame}
-    </div>
+    </body>
   );
 };
 
-render(h(Content, {}), document.body);
+app<State>({
+  init: {
+    index: {},
+    selectedPages: [],
+    filter: "",
+    sortOrder: "title",
+    isContextMenu: false,
+  },
+  view: (state) => h(<Content {...state} />),
+  subscriptions: () => [indexSubscription],
+  node: document.body,
+});
 document.title = t("watchExtensionName");

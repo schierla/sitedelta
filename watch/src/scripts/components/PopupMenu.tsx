@@ -1,46 +1,75 @@
-import { FunctionComponent, h } from "preact";
-import { useEffect, useRef } from "preact/hooks";
-import { createPopper, VirtualElement } from "@popperjs/core";
+import { h } from "../hooks/h";
+import { Dispatch, Dispatchable, MaybeVNode, VNode } from "hyperapp";
+import { createPopper, Instance, VirtualElement } from "@popperjs/core";
 
-export const PopupMenu: FunctionComponent<{
-  anchor: Element | VirtualElement | undefined;
-  onClose: () => void;
-}> = ({ children, anchor, onClose }) => {
-  const menuRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (anchor && menuRef.current) {
-      const popper = createPopper(anchor, menuRef.current, {
-        placement: "bottom-end",
-      });
-      menuRef.current.style.display = "block";
-      window.addEventListener("click", onClose);
-      return () => {
-        window.removeEventListener("click", onClose);
-        if (menuRef.current) menuRef.current.style.display = "none";
-        popper.destroy();
-      };
-    } else {
-      if (menuRef.current) menuRef.current.style.display = "none";
-    }
-  }, [anchor, menuRef]);
+let popper: Instance | undefined = undefined;
 
+export function showPopupMenu(
+  _: Dispatch<any>,
+  anchor: VirtualElement | Element | undefined
+) {
+  hidePopupMenu();
+  const node = document.getElementById("popupMenu");
+  if (node && anchor) {
+    node.style.display = "block";
+    popper = createPopper(anchor, node, {
+      placement: "bottom-end",
+    });
+    requestAnimationFrame(() =>
+      window.addEventListener("click", hidePopupMenu)
+    );
+  } else {
+    hidePopupMenu();
+  }
+}
+export function hidePopupMenu() {
+  if (popper) {
+    popper.destroy();
+    popper = undefined;
+  }
+  window.removeEventListener("click", hidePopupMenu);
+  const node = document.getElementById("popupMenu");
+  if (node) {
+    node.style.display = "none";
+  }
+  popper = undefined;
+}
+
+export function PopupMenu<S>(_: {}, ...children: MaybeVNode<S>[]): VNode<S> {
   return (
-    <div ref={menuRef}>
-      <ul class="rounded-lg bg-white text-slate-700 shadow-xl shadow-black/5 ring-1 ring-slate-700/10 p-1">{children}</ul>
-    </div>
+    <ul
+      id="popupMenu"
+      class="absolute hidden rounded-lg bg-white text-slate-700 shadow-xl shadow-black/5 ring-1 ring-slate-700/10 p-1 dark:bg-slate-900 dark:text-slate-200 dark:ring-slate-200/10"
+    >
+      {children}
+    </ul>
   );
-};
+}
 
-export const MenuItem = ({
+export function MenuItem<S>({
   onClick,
   label,
+  checked,
 }: {
-  onClick: () => void;
+  onClick: Dispatchable<S>;
   label: string;
-}) => (
-  <li class="flex items-stretch flex-col">
-    <button onClick={onClick} class="block text-left rounded-md p-1.5 hover:bg-indigo-600 hover:text-white">{label}</button>
-  </li>
-);
+  checked?: boolean;
+}): VNode<S> {
+  return h(
+    <li class="flex items-stretch flex-col">
+      <button
+        onclick={onClick}
+        class="block text-left rounded-md px-2 py-1 hover:bg-indigo-600 hover:text-white"
+      >
+        {checked !== undefined && (
+          <span class="w-4 inline-block">{checked && "✓"} </span>
+        )}
+        {label}
+      </button>
+    </li>
+  );
+}
 
-export const MenuSeparator = () => <li class="border-t border-slate-400/20 my-1"></li>;
+export function MenuSeparator<S>(): VNode<S> {
+  return <li class="border-t border-slate-400/20 my-1"></li>;
+}

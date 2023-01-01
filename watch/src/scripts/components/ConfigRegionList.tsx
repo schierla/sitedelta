@@ -1,62 +1,97 @@
-import { FunctionComponent, Fragment, h } from "preact";
+import { h } from "../hooks/h";
+import { Action, Dispatchable } from "hyperapp";
 import { Button } from "./Button";
-import { t } from "../hooks/UseTranslation";
-import { ConfigAccess } from "../hooks/UseConfig";
+import { t } from "../hooks/t";
+import { Config } from "@sitedelta/common/src/scripts/config";
 
-export const ConfigRegionList: FunctionComponent<{
-  config: ConfigAccess;
+function regionAddHandler<S>(
+  regions: string[],
+  configKey: string,
+  UpdateConfig: Action<S, Partial<Config>>
+) {
+  return (region?: string) => {
+    if (region !== undefined && region !== "" && regions.indexOf(region) === -1)
+      return [UpdateConfig, addRegionUpdate(configKey, regions, region)];
+    else return (state: S) => state;
+  };
+}
+
+function addRegionUpdate(configKey: string, existing: string[], toAdd: string) {
+  return {
+    [configKey]: [...existing, toAdd],
+  };
+}
+
+function deleteRegionUpdate(
+  configKey: string,
+  existing: string[],
+  toDelete: string[]
+) {
+  return {
+    [configKey]: existing.filter((r) => toDelete.indexOf(r) === -1),
+  };
+}
+
+export function ConfigRegionList<S>({
+  config,
+  configKey,
+  selectedRegions,
+  SelectRegions,
+  PickRegion,
+  UpdateConfig,
+}: {
+  config: Config;
   configKey: string;
   selectedRegions: string[] | undefined;
-  setSelectedRegions: (regions: string[] | undefined) => void;
-  addRegion: () => Promise<string | undefined>;
-}> = ({ config, configKey, selectedRegions, setSelectedRegions, addRegion }) => {
-  const regions: string[] = config.value?.[configKey] ?? [];
-  return (
-    <Fragment>
+  SelectRegions: Action<S, string[] | undefined>;
+  PickRegion: Action<S, (region?: string) => Dispatchable<S>>;
+  UpdateConfig: Action<S, Partial<Config>>;
+}) {
+  const regions: string[] = config[configKey] ?? [];
+  return [
+    h(
       <select
         size={3}
         multiple
-        class="p-0 border-gray-300"
-        onChange={(e: Event) =>
-          setSelectedRegions(Array.from((e.target as HTMLSelectElement).selectedOptions).map(o => o.value))
-        }
+        class="p-0 border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
+        onchange={(_, e: Event) => [
+          SelectRegions,
+          Array.from((e.target as HTMLSelectElement).selectedOptions).map(
+            (o) => o.value
+          ),
+        ]}
       >
         {regions.map((region) => (
-          <option value={region} selected={selectedRegions && selectedRegions?.indexOf(region) !== -1}>
+          <option
+            value={region}
+            selected={
+              selectedRegions && selectedRegions?.indexOf(region) !== -1
+            }
+          >
             {region}
           </option>
         ))}
       </select>
-      <div class="flex flex-row gap-2 mt-1">
+    ),
+    <div class="flex flex-row gap-2 mt-1">
       <Button
-        onClick={async () => {
-          const region = await addRegion();
-          if (
-            region !== undefined &&
-            region !== "" &&
-            regions.indexOf(region) === -1
-          )
-            config.update({
-              [configKey]: [...regions, region],
-            });
-          setSelectedRegions(region ? [region] : undefined);
-        }}
+        onClick={[
+          PickRegion,
+          regionAddHandler(regions, configKey, UpdateConfig),
+        ]}
       >
         {t("configRegionsAdd")}
       </Button>
       {selectedRegions !== undefined && selectedRegions?.length > 0 && (
         <Button
-          onClick={() => {
-            config.update({
-              [configKey]: regions.filter((r) => selectedRegions.indexOf(r) === -1),
-            });
-            setSelectedRegions(undefined);
-          }}
+          onClick={[
+            UpdateConfig,
+            deleteRegionUpdate(configKey, regions, selectedRegions),
+          ]}
         >
           {t("configRegionsRemove")}
         </Button>
       )}
-      </div>
-    </Fragment>
-  );
-};
+    </div>,
+  ];
+}

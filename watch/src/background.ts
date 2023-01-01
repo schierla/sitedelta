@@ -73,19 +73,6 @@ export const runBackgroundScript = (
     for (var i = 0; i < pages.length; i++) {
       await scanPage(pages[i]);
     }
-    var changed = await pageUtils.listChanged(),
-      failed = await pageUtils.listFailed();
-    if (changed.length == 0 && failed.length == 0) {
-      var config = await configUtils.getDefaultConfig();
-      if (config.notifyChanged) {
-        chrome.notifications.create("#", {
-          type: "basic",
-          iconUrl: chrome.runtime.getURL("icons/unchanged.svg"),
-          title: chrome.i18n.getMessage("watchNotificationUnchanged"),
-          message: "",
-        });
-      }
-    }
   }
 
   var messageListener = function (
@@ -112,7 +99,10 @@ export const runBackgroundScript = (
     } else if (request.command == "notifyUnloaded") {
       handlePageUnload(sender.tab.id, sender.url);
     } else if (request.command == "scanAll") {
-      pageUtils.list().then(scanPages).then(() => sendResponse(true));
+      pageUtils
+        .list()
+        .then(scanPages)
+        .then(() => sendResponse(true));
       return true;
     } else if (request.command == "transferInfo") {
       sendResponse({

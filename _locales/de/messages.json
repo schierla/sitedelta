@@ -73,10 +73,6 @@
 		"message": "SiteDelta: Fehler beim Laden", 
 		"description": "Notification title when a page cannot be loaded"
 	},
-	"watchNotificationUnchanged": {
-		"message": "SiteDelta: Keine Änderungen gefunden",
-		"description": "Notification title when no changed page is found"
-	},
 
 	"pageFailed": {
 		"message": "Fehler beim Abrufen der Seiteninhalte. Bitte überwachte Bereiche prüfen.",
@@ -214,6 +210,26 @@
 	"pagesSidebar": {
 		"message": "Sidebar",
 		"description": "Button to open the sidebar"
+	},
+	"pagesSort": {
+		"message": "Sortierung:",
+		"description": "Header text for the page sorting options"
+	},
+	"pagesSortUrl": {
+		"message": "nach Adresse", 
+		"description": "Button to sort pages by URL"
+	},
+	"pagesSortTitle": {
+		"message": "nach Titel", 
+		"description": "Button to sort pages by title"
+	},
+	"pagesSortStatus": {
+		"message": "nach Status", 
+		"description": "Button to sort pages by status"
+	},	
+	"pagesSortNextScan": {
+		"message": "nach Scanreihenfolge", 
+		"description": "Button to sort pages by next scan time"
 	},
 
 	"configRegionsInclude": {

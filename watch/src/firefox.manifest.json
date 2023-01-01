@@ -14,7 +14,7 @@
 		"128": "icons/watch-128.png"
 	},
 	
-	"applications": {
+	"browser_specific_settings": {
 		"gecko": {
 			"id": "sitedelta-watch@schierla.de"
 		}

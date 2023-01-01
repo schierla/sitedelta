@@ -73,10 +73,6 @@
 		"message": "SiteDelta: Failed to load page", 
 		"description": "Notification title when a page cannot be loaded"
 	},
-	"watchNotificationUnchanged": {
-		"message": "SiteDelta: No changes found",
-		"description": "Notification title when no changed page is found"
-	},
 
 	"pageFailed": {
 		"message": "Error getting page contents. Check the included regions.",
@@ -214,7 +210,26 @@
 		"message": "Sidebar",
 		"description": "Button to open the sidebar"
 	},
-	
+	"pagesSort": {
+		"message": "Sort:",
+		"description": "Header text for the page sorting options"
+	},
+	"pagesSortUrl": {
+		"message": "by address", 
+		"description": "Button to sort pages by URL"
+	},
+	"pagesSortTitle": {
+		"message": "by title", 
+		"description": "Button to sort pages by title"
+	},
+	"pagesSortStatus": {
+		"message": "by status", 
+		"description": "Button to sort pages by status"
+	},	
+	"pagesSortNextScan": {
+		"message": "by scan order", 
+		"description": "Button to sort pages by next scan time"
+	},
 
 	"configRegionsInclude": {
 		"message": "Included regions", 

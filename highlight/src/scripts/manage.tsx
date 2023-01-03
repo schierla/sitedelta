@@ -10,7 +10,7 @@ import {
 import { SidebarPages } from "./components/SidebarPages";
 import { SidebarPage } from "./components/SidebarPage";
 import { PageList } from "./components/PageList";
-import { getActions, openPages } from "./components/pageListActions";
+import { getActions, openPages } from "./components/PageListActions";
 import { Button } from "./components/Button";
 import { ConfigCheckbox } from "./components/ConfigCheckbox";
 import { ConfigColors } from "./components/ConfigColors";

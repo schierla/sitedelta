@@ -7,7 +7,7 @@ import { SearchIcon } from "./icons/SearchIcon";
 import { Button } from "./components/Button";
 import { PageList, PageSortOrder } from "./components/PageList";
 import { Index, observeIndex } from "@sitedelta/common/src/scripts/ioUtils";
-import { getActions, openPages } from "./components/pageListActions";
+import { getActions, openPages } from "./components/PageListActions";
 import {
   MenuItem,
   MenuSeparator,

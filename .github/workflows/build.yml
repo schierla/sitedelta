@@ -1,0 +1,39 @@
+name: Build and package extension
+
+on:
+  push:
+    branches: ["manifest-v3"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Setup node.js
+      uses: actions/setup-node@v3
+      with: 
+        node-version: 16.x
+    - name: Checkout project
+      uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        yarn install
+    - name: Build for Chrome
+      run: |
+        yarn workspace @sitedelta/highlight package:ch
+        yarn workspace @sitedelta/watch package:ch
+    - name: Build for Firefox
+      run: |
+        yarn workspace @sitedelta/highlight package:ff
+        yarn workspace @sitedelta/watch package:ff
+    - name: Upload Chrome artifacts
+      uses: actions/upload-artifact@v3
+      with: 
+        name: Chrome
+        path: |
+          build/chrome/*.zip
+    - name: Upload Firefox artifacts
+      uses: actions/upload-artifact@v3
+      with: 
+        name: Firefox
+        path: |
+          build/firefox/*.zip

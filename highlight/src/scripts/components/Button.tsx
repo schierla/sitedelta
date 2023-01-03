@@ -19,7 +19,7 @@ export const Button = (
     <button
       disabled={disabled}
       class={
-        "border text-sm font-medium rounded-md shadow-sm disabled:text-slate-500 disabled:bg-slate-50 disabled:hover:bg-slate-50 " +
+        "border text-sm font-normal rounded-md shadow-sm disabled:text-slate-500 disabled:bg-slate-50 disabled:hover:bg-slate-50 " +
         (large ? "px-4 py-2 " : "px-2 py-1 ") +
         (isDefault
           ? "border-transparent bg-indigo-600 text-white shadow-sm hover:bg-indigo-700"

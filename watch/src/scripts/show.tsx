@@ -556,7 +556,7 @@ const Content = ({
   ];
 
   return (
-    <body class="h-screen flex flex-col dark:bg-slate-900 dark:text-slate-200">
+    <body class="font-sans text-sm h-screen flex flex-col dark:bg-slate-900 dark:text-slate-200">
       <div class="flex flex-col sm:flex-row-reverse items-center border-b-2 border-indigo-600 gap-2 p-2">
         {" "}
         <div class="flex flex-row gap-2">

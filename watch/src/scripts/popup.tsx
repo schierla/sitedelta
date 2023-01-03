@@ -151,7 +151,7 @@ const Content = ({ title, url, tabId, index, isShow, isBusy }: State) => {
     : t("watchDisabled");
 
   return (
-    <body class="py-2 min-w-[260px] dark:bg-slate-900 dark:text-slate-200">
+    <body class="font-sans text-sm py-2 min-w-[360px] dark:bg-slate-900 dark:text-slate-200">
       <div class="mx-4 mb-4 flex flex-row gap-2 items-baseline">
         <span class="text-3xl">{icon}</span>
         <span class="text-lg mt-2">{headline}</span>

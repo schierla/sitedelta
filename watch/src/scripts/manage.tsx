@@ -118,7 +118,7 @@ const Content = ({
   if (!config) return <body></body>;
 
   return (
-    <body class="font-sans bg-slate-50 dark:bg-slate-900 dark:text-slate-200 h-screen flex flex-row">
+    <body class="font-sans text-sm bg-slate-50 dark:bg-slate-900 dark:text-slate-200 h-screen flex flex-row">
       <SidebarPages selectedTab={selectedTab} SelectTab={Navigate}>
         <SidebarPage key="pages" label={t("pagesList")}>
           <PageList

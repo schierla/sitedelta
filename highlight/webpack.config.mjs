@@ -1,11 +1,12 @@
 import { resolve } from "path";
 import WebExtPlugin from "web-ext-plugin";
 import CopyPlugin from "copy-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { ESBuildMinifyPlugin } from "esbuild-loader";
 import webpack from "webpack";
 import path from "path";
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export default (env) => {
@@ -16,16 +17,15 @@ export default (env) => {
     mode: "production",
     entry: {
       background: "./src/background.ts",
-      "scripts/pages": "./src/scripts/pages.ts",
-      "scripts/manage": "./src/scripts/manage.ts",
-      "scripts/options": "./src/scripts/options.ts",
-      "scripts/popup": "./src/scripts/popup.ts",
+      "scripts/pages": "./src/scripts/pages.tsx",
+      "scripts/manage": "./src/scripts/manage.tsx",
+      "scripts/options": "./src/scripts/options.tsx",
+      "scripts/popup": "./src/scripts/popup.tsx",
       "scripts/transferScript": "./src/scripts/transferScript.ts",
       "scripts/contentScript": "./src/scripts/contentScript.ts",
       "scripts/highlightScript": "./src/scripts/highlightScript.ts",
     },
     output: {
-      libraryTarget: "commonjs",
       path: path.resolve(__dirname, "dist", env.target),
       filename: "[name].js",
     },
@@ -39,26 +39,20 @@ export default (env) => {
       rules: [
         {
           test: /\.tsx?$/,
-          loader: "esbuild-loader",
+          loader: "babel-loader",
           options: {
-            loader: "tsx",
-            target: "es2015",
-            jsxFactory: "h",
+            presets: ["@babel/typescript"],
+            plugins: [
+              [
+                "@babel/plugin-transform-react-jsx",
+                { runtime: "classic", pragma: "h" },
+              ],
+            ],
           },
         },
         {
           test: /\.css$/i,
-          use: [
-            "style-loader",
-            "css-loader",
-            {
-              loader: "esbuild-loader",
-              options: {
-                loader: "css",
-                minify: true,
-              },
-            },
-          ],
+          use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
         },
         {
           test: /\.svg$/i,
@@ -68,6 +62,7 @@ export default (env) => {
     },
 
     optimization: {
+      minimize: env.package === "true",
       minimizer: [new ESBuildMinifyPlugin()],
     },
 
@@ -78,18 +73,22 @@ export default (env) => {
       new CopyPlugin({
         patterns: [
           { from: "../common/src/icons/*", to: "icons/[name][ext]" },
-          { from: "../common/src/styles/*", to: "styles/[name][ext]" },
+          // { from: "../common/src/styles/*", to: "styles/[name][ext]" },
           { from: "../_locales/**/*", to: "_locales/[path][name][ext]" },
-          { from: "src/styles/*", to: "styles/[name][ext]" },
+          // { from: "src/styles/*", to: "styles/[name][ext]" },
           { from: "src/*.htm", to: "[name][ext]" },
           { from: `src/${env.target}.manifest.json`, to: "manifest.json" },
         ],
+      }),
+      new MiniCssExtractPlugin({
+        filename: "tailwind.bundle.css",
       }),
       new WebExtPlugin({
         sourceDir: resolve(__dirname, "dist", env.target),
         target: env.target === "chrome" ? "chromium" : "firefox-desktop",
         buildPackage: env.package === "true",
-        artifactsDir: `../build/${env.target}`
+        artifactsDir: `../build/${env.target}`,
+        runLint: env.target !== "chrome",
       }),
     ],
 

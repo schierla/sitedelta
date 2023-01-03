@@ -1,3 +1,6 @@
-import { runContentScript } from "@sitedelta/common/src/scripts/contentScript";
+const runContentScript = () => {
+    chrome.runtime.sendMessage({command: "notifyLoaded"});
+    window.addEventListener("unload", () => chrome.runtime.sendMessage({command: "notifyUnloaded"}));
+}
 
 runContentScript();

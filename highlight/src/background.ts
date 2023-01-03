@@ -97,8 +97,8 @@ function scanPages(pages: string[]): void {
 	});
 }
 
-var contextMenuListener = async function (info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) {
-	if (tab.url && tab.id && (info.menuItemId == menuHighlight().id || info.menuItemId == menuHighlightPage().id)) {
+var contextMenuListener = async function (info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab | undefined) {
+	if (tab && tab.url && tab.id && (info.menuItemId == menuHighlight().id || info.menuItemId == menuHighlightPage().id)) {
 		if (tab.url.substr(0, 4) != "http") {
 			tabUtils.showIcon(tab.id, 0, -1);
 			return;

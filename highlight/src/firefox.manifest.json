@@ -12,7 +12,7 @@
 		"64": "icons/highlight-64.png",
 		"128": "icons/highlight-128.png"
 	},
-	"applications": {
+	"browser_specific_settings": {
 		"gecko": {
 			"id": "sitedelta-highlight@schierla.de"
 		}

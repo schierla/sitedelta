@@ -1,41 +1,46 @@
 import { h } from "./hooks/h";
 import { t } from "./hooks/t";
-import { Action, app, Effecter, Subscription } from "hyperapp";
-import { Button } from "./components/Button";
-import { ConfigCheckbox } from "./components/ConfigCheckbox";
-import { ConfigColors } from "./components/ConfigColors";
-import { ConfigNumber } from "./components/ConfigNumber";
-import { PageList } from "./components/PageList";
-import { openPages, getActions } from "./components/PageListActions";
-import { SidebarPages } from "./components/SidebarPages";
-import { SidebarPage } from "./components/SidebarPage";
-import { Index, observeIndex } from "@sitedelta/common/src/scripts/ioUtils";
 import { Config } from "@sitedelta/common/src/scripts/config";
+import { Action, app, Effecter, Subscription } from "hyperapp";
+import { Index, observeIndex } from "@sitedelta/common/src/scripts/ioUtils";
 import {
   getDefaultConfig,
   setDefaultConfigProperties,
 } from "@sitedelta/common/src/scripts/configUtils";
+import { SidebarPages } from "./components/SidebarPages";
+import { SidebarPage } from "./components/SidebarPage";
+import { PageList } from "./components/PageList";
+import { getActions, openPages } from "./components/pageListActions";
+import { Button } from "./components/Button";
+import { ConfigCheckbox } from "./components/ConfigCheckbox";
+import { ConfigColors } from "./components/ConfigColors";
 
 type State = {
+  advancedPermission: boolean;
   index: Index;
-  selectedPages: string[];
-  config: Config | undefined;
+  config?: Config;
   selectedTab: string;
+  selectedPages: string[];
 };
 
-const SetConfig: Action<State, Config> = (state, config) => ({
-  ...state,
-  config,
-});
+const ADVANCDED_PERMISSION = { permissions: [], origins: ["<all_urls>"] };
+
+const SetConfig: Action<State, Config> = (state, config) => [
+  {
+    ...state,
+    config,
+  },
+  checkAdvancedPermission,
+];
 
 const SetIndex: Action<State, Index> = (state, index) => ({ ...state, index });
 
-const SetSelection: Action<State, string[]> = (state, selectedPages) => [
-  { ...state, selectedPages },
-];
-
 const SetSelectedTab: Action<State, string> = (state, selectedTab) => [
   { ...state, selectedTab },
+];
+
+const SetSelection: Action<State, string[]> = (state, selectedPages) => [
+  { ...state, selectedPages },
 ];
 
 const Navigate: Action<State, string> = (state, selectedTab) => [
@@ -45,34 +50,73 @@ const Navigate: Action<State, string> = (state, selectedTab) => [
   },
 ];
 
+const CheckPermission: Action<State> = (state) => [
+  state,
+  checkAdvancedPermission,
+];
+
+const RequestAdvancedPermission: Action<State> = (state) => [
+  state,
+  requestAdvancedPermission,
+];
+
+const SetAdvancedPermission: Action<State, boolean> = (
+  state,
+  advancedPermission
+) => ({ ...state, advancedPermission });
+
+const OpenImportExport: Action<State> = (state) => [state, openImportExport];
+
 const OpenPages: Action<State, string[]> = (state, pages) => [
   state,
   [openPages, { pages, SetSelection }],
 ];
 
-const UpdateConfig: Action<State, Partial<Config>> = (state, update) => [
-  {
+const UpdateConfig: Action<State, Partial<Config>> = (state, update) => {
+  if (update.scanOnLoad === false) update.highlightOnLoad = false;
+  if (update.scanOnLoad && !state.advancedPermission) update.scanOnLoad = false;
+  if (update.highlightOnLoad && !state.config?.scanOnLoad)
+    update.highlightOnLoad = false;
+  const newConfig = {
     ...state,
     config: state.config ? { ...state.config, ...update } : undefined,
-  },
-  [applyConfigUpdate, update],
-];
+  };
+  return [newConfig, [applyConfigUpdate, update]];
+};
 
 const applyConfigUpdate: Effecter<State, Partial<Config>> = (
   dispatch,
   update
 ) => {
   setDefaultConfigProperties(update).then(() =>
-    getDefaultConfig().then((config) =>
-      requestAnimationFrame(() => dispatch([SetConfig, config]))
-    )
+    getDefaultConfig().then((config) => {
+      requestAnimationFrame(() => dispatch([SetConfig, config]));
+      chrome.runtime.sendMessage({ command: "reinitialize" });
+    })
   );
 };
 
-const OpenImportExport: Action<State> = (state) => [state, openImportExport];
-
 const openImportExport: Effecter<State> = () => {
   chrome.tabs.create({ url: "https://sitedelta.schierla.de/transfer/" });
+};
+
+const checkAdvancedPermission: Effecter<State> = (dispatch) => {
+  if (chrome.permissions) {
+    chrome.permissions.contains(ADVANCDED_PERMISSION, (success) => {
+      requestAnimationFrame(() => dispatch([SetAdvancedPermission, success]));
+    });
+  }
+};
+
+const requestAdvancedPermission: Effecter<State> = (dispatch) => {
+  try {
+    chrome.permissions.request(ADVANCDED_PERMISSION, () => {
+      requestAnimationFrame(() => dispatch(CheckPermission));
+      chrome.runtime.sendMessage({ command: "reinitialize" });
+    });
+  } catch (e) {
+    requestAnimationFrame(() => dispatch(CheckPermission));
+  }
 };
 
 const indexSubscription: Subscription<State, any> = [
@@ -110,17 +154,28 @@ const urlSubscription: Subscription<State> = [
 ];
 
 const Content = ({
-  index,
-  selectedTab: selectedTab,
-  selectedPages,
   config,
+  advancedPermission,
+  selectedTab,
+  selectedPages,
+  index,
 }: State) => {
   if (!config) return <body></body>;
+  const Unlock = advancedPermission ? undefined : RequestAdvancedPermission;
 
+  const UnlockBanner = (
+    <div class="rounded-md bg-slate-200 dark:bg-slate-800 px-4 pb-2">
+      <div class="my-2">{t("configAdvancedDisabled")} </div>
+      <Button onClick={RequestAdvancedPermission}>
+        {t("configEnableAdvanced")}
+      </Button>
+    </div>
+  );
   return (
     <body class="font-sans bg-slate-50 dark:bg-slate-900 dark:text-slate-200 h-screen flex flex-row">
       <SidebarPages selectedTab={selectedTab} SelectTab={Navigate}>
         <SidebarPage key="pages" label={t("pagesList")}>
+          {Unlock && UnlockBanner}
           <PageList
             selectedPages={selectedPages}
             SetSelection={SetSelection}
@@ -128,7 +183,7 @@ const Content = ({
             index={index}
           />
           <div class="flex flex-row gap-2 items-stretch">
-            {getActions(index, selectedPages, SetSelection).map(
+            {getActions(index, selectedPages, Unlock ?? true, SetSelection).map(
               ([label, action]) => (
                 <Button onClick={action}>{label}</Button>
               )
@@ -138,10 +193,25 @@ const Content = ({
         </SidebarPage>
 
         <SidebarPage key="behavior" label={t("configBehavior")}>
+          {Unlock && UnlockBanner}
           <ConfigCheckbox
             config={config}
             configKey="scanOnLoad"
             label={t("configScanOnLoad")}
+            UpdateConfig={UpdateConfig}
+            Unlock={Unlock}
+          />
+          <ConfigCheckbox
+            config={config}
+            configKey="highlightOnLoad"
+            label={t("configHighlightOnLoad")}
+            UpdateConfig={UpdateConfig}
+            Unlock={Unlock}
+          />
+          <ConfigCheckbox
+            config={config}
+            configKey="enableContextMenu"
+            label={t("configEnableContextMenu")}
             UpdateConfig={UpdateConfig}
           />
         </SidebarPage>
@@ -201,7 +271,7 @@ const Content = ({
           />
           <ConfigCheckbox
             config={config}
-            configKey="scanImages"
+            configKey="checkImages"
             label={t("configCheckImages")}
             UpdateConfig={UpdateConfig}
           />
@@ -221,35 +291,19 @@ const Content = ({
             UpdateConfig={UpdateConfig}
           />
         </SidebarPage>
-
-        <SidebarPage key="watch" label={t("configWatch")}>
-          <ConfigNumber
-            config={config}
-            configKey="watchDelay"
-            label={t("configWatchDelay")}
-            UpdateConfig={UpdateConfig}
-          />
-          <ConfigCheckbox
-            config={config}
-            configKey="notifyChanged"
-            label={t("configNotifyChanged")}
-            UpdateConfig={UpdateConfig}
-          />
-          <ConfigCheckbox
-            config={config}
-            configKey="notifyFailed"
-            label={t("configNotifyFailed")}
-            UpdateConfig={UpdateConfig}
-          />
-        </SidebarPage>
       </SidebarPages>
     </body>
   );
 };
 
-document.title = t("watchExtensionName");
+document.title = t("highlightExtensionName");
 app<State>({
-  init: { config: undefined, index: {}, selectedPages: [], selectedTab: "" },
+  init: {
+    advancedPermission: false,
+    index: {},
+    selectedTab: "pages",
+    selectedPages: [],
+  },
   view: (state) => h(<Content {...state} />),
   node: document.body,
   subscriptions: () => [

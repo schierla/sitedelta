@@ -30,7 +30,7 @@ export async function showIcon(tabId: number, current?: any, changes?: number) {
 	if (changes === undefined) {
 		setBadgeText("", tabId);
 	} else if (changes == 0) {
-		setBadgeText(" ", tabId);
+		setBadgeText("\xa0", tabId);
 		setBadgeBackgroundColor("#0c0", tabId);
 	} else if (changes > 0) {
 		setBadgeText("" + current,  tabId );

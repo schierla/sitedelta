@@ -10,7 +10,7 @@ enum PageState {
 	SELECTREGION = 3,
 };
 
-var contentscript;
+var contentscript: any;
 if (contentscript === undefined) {
 	contentscript = {
 		messageHandler: function (request: Record<string, any>, sender: any, sendResponse: (response: any) => void) {

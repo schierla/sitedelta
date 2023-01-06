@@ -62,7 +62,7 @@ export async function getEffectiveConfigProperty<K extends keyof Config>(url: st
 	if(config == null) return null; else return config[property];
 }
 
-export async function getOrCreateEffectiveConfig(url: string, title: string): Promise<Config> {
+export async function getOrCreateEffectiveConfig(url: string, title?: string): Promise<Config> {
 	var config = await getEffectiveConfig(url);
 	if (config === null) {
 		await create(url, title);
@@ -72,8 +72,8 @@ export async function getOrCreateEffectiveConfig(url: string, title: string): Pr
 	}
 }
 
-export async function create(url: string, title: string): Promise<void> {
-	var pagetitle = title.replace(/[\n\r]/g, ' ');
+export async function create(url: string, title?: string): Promise<void> {
+	var pagetitle = (title ?? "").replace(/[\n\r]/g, ' ');
 	var config = await configUtils.getPresetConfig(url);
 	await setStatus(url, { "title": title });
 	await setTitle(url, pagetitle);

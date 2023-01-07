@@ -1,41 +1,41 @@
 {
-	"manifest_version": 3,
-	"name": "__MSG_highlightExtensionName__",
-	"version": "0.30.0",
-	"default_locale": "en",
-	"description": "__MSG_highlightExtensionDescription__",
-	"icons": {
-		"16": "icons/highlight-16.png",
-		"24": "icons/highlight-24.png",
-		"32": "icons/highlight-32.png",
-		"48": "icons/highlight-48.png",
-		"64": "icons/highlight-64.png"
-	},
-	"permissions": [
-		"activeTab",
-		"storage",
-		"unlimitedStorage",
-		"contextMenus",
-		"scripting"
-	],
-	"host_permissions": [
-		"<all_urls>"
-	],
-	"action": {
-		"default_icon": {
-			"16": "icons/highlight-16.png",
-			"24": "icons/highlight-24.png",
-			"32": "icons/highlight-32.png",
-			"48": "icons/highlight-48.png",
-			"64": "icons/highlight-64.png"
-		},
-		"default_title": "__MSG_highlightExtensionName__",
-		"default_popup": "popup.htm"
-	},
-	"options_ui": {
-		"page": "options.htm"
-	},
-	"background": {
-		"service_worker": "background.js"
-	}
+  "manifest_version": 3,
+  "name": "__MSG_highlightExtensionName__",
+  "version": "0.30.0",
+  "default_locale": "en",
+  "description": "__MSG_highlightExtensionDescription__",
+  "icons": {
+    "16": "icons/highlight-16.png",
+    "24": "icons/highlight-24.png",
+    "32": "icons/highlight-32.png",
+    "48": "icons/highlight-48.png",
+    "64": "icons/highlight-64.png"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "unlimitedStorage",
+    "contextMenus",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_icon": {
+      "16": "icons/highlight-16.png",
+      "24": "icons/highlight-24.png",
+      "32": "icons/highlight-32.png",
+      "48": "icons/highlight-48.png",
+      "64": "icons/highlight-64.png"
+    },
+    "default_title": "__MSG_highlightExtensionName__",
+    "default_popup": "popup.htm"
+  },
+  "options_ui": {
+    "page": "options.htm"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
 }

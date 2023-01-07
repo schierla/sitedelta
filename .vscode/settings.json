@@ -3,5 +3,6 @@
     "**/.yarn": true,
     "**/.pnp.*": true
   },
-  "typescript.tsserver.experimental.enableProjectDiagnostics": false
+  "typescript.preferences.importModuleSpecifier": "project-relative",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

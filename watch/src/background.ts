@@ -1,9 +1,9 @@
-import * as pageUtils from "@sitedelta/common/src/scripts/pageUtils";
-import * as configUtils from "@sitedelta/common/src/scripts/configUtils";
-import * as watchUtils from "@sitedelta/common/src/scripts/watchUtils";
-import * as tabUtils from "@sitedelta/common/src/scripts/tabUtils";
-import * as transferUtils from "@sitedelta/common/src/scripts/transferUtils";
-import * as ioUtils from "@sitedelta/common/src/scripts/ioUtils";
+import * as pageUtils from "@sitedelta/common/src/model/pageUtils";
+import * as configUtils from "@sitedelta/common/src/model/configUtils";
+import * as watchUtils from "@sitedelta/common/src/model/watchUtils";
+import * as tabUtils from "@sitedelta/common/src/model/tabUtils";
+import * as transferUtils from "@sitedelta/common/src/model/transferUtils";
+import * as ioUtils from "@sitedelta/common/src/model/ioUtils";
 
 export const runBackgroundScript = (
   documentParser: (content: string) => Document
@@ -20,7 +20,7 @@ export const runBackgroundScript = (
       } else {
         tabUtils.setBadgeBackgroundColor("#700", tabId);
       }
-      tabUtils.setBadgeText(badgeText || " ", tabId);
+      tabUtils.setBadgeText(badgeText || "\xa0", tabId);
     }
   }
 
@@ -80,14 +80,6 @@ export const runBackgroundScript = (
     sender: any,
     sendResponse: (response: any) => void
   ) {
-    var hiddenFields = [
-      "configVersion",
-      "includes",
-      "excludes",
-      "scanOnLoad",
-      "highlightOnLoad",
-      "enableContextMenu",
-    ];
     if (request.command == "openChanged") {
       pageUtils.listChanged().then(openPages);
     } else if (request.command == "openFailed") {
@@ -116,7 +108,7 @@ export const runBackgroundScript = (
         try {
           var config = JSON.parse(request.data);
           var result = transferUtils
-            .importConfig(config, hiddenFields)
+            .importConfig(config, configUtils.watchHiddenFields)
             .then((result) =>
               sendResponse(
                 "Configuration import completed: \n" +
@@ -151,7 +143,7 @@ export const runBackgroundScript = (
     } else if (request.command == "transferExport") {
       if (request.scope == "config") {
         transferUtils
-          .exportConfig(hiddenFields)
+          .exportConfig(configUtils.watchHiddenFields)
           .then((config) => sendResponse(JSON.stringify(config, null, "  ")));
       } else if (request.scope == "pages") {
         transferUtils

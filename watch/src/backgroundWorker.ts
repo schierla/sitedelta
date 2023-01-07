@@ -43,16 +43,17 @@ const documentParser = (content: string): Document => {
       extendedExpression,
       contextNode,
       extendedResolver,
-      type,
-      result
+      type ?? 0,
+      result ?? null
     );
   };
   document.querySelectorAll = (selector: string) =>
     querySelectorAll(selector, document.documentElement);
   document.compareDocumentPosition = (other: Node) =>
     other.ownerDocument === document ? 20 : 1;
-  document.lastChild.compareDocumentPosition = (other: Node) =>
-    other.ownerDocument === document ? 20 : 1;
+  if (document.lastChild)
+    document.lastChild.compareDocumentPosition = (other: Node) =>
+      other.ownerDocument === document ? 20 : 1;
   return document;
 };
 

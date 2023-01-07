@@ -5,8 +5,8 @@
     "module": "none",
     "target": "es2017",
     "allowJs": true,
-    "jsx": "react",
-    "jsxFactory": "h",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@sitedelta/common/src/view",
     "moduleResolution": "node",
     "paths": {
       "@sitedelta/common/*": ["./common/*"]
@@ -14,9 +14,9 @@
     "types": ["chrome"]
   },
   "include": [
-    "svg.d.ts",
-    "common/src/scripts/*",
-    "watch/src/scripts/*",
-    "highlight/src/scripts/*"
+    "common/src/*",
+    "common/src/*",
+    "watch/src/*",
+    "highlight/src/*"
   ]
 }

@@ -21,12 +21,13 @@ export default (env) => {
         env.target == "chrome"
           ? "./src/backgroundWorker.ts"
           : "./src/backgroundScript.ts",
-      "scripts/pages": "./src/scripts/pages.tsx",
-      "scripts/manage": "./src/scripts/manage.tsx",
-      "scripts/options": "./src/scripts/options.tsx",
-      "scripts/popup": "./src/scripts/popup.tsx",
-      "scripts/show": "./src/scripts/show.tsx",
-      "scripts/transferScript": "./src/scripts/transferScript.ts"
+      pages: "./src/view/pages.tsx",
+      manage: "./src/view/manage.tsx",
+      options: "./src/view/options.tsx",
+      popup: "./src/view/popup.tsx",
+      show: "./src/view/show.tsx",
+      transferScript: "./src/view/transferScript.ts",
+      contentScript: "./src/view/contentScript.ts",
     },
     output: {
       path: path.resolve(__dirname, "dist", env.target),
@@ -42,24 +43,15 @@ export default (env) => {
       rules: [
         {
           test: /\.tsx?$/,
-          loader: "babel-loader",
+          loader: "esbuild-loader",
           options: {
-            presets: ["@babel/typescript"],
-            plugins: [
-              [
-                "@babel/plugin-transform-react-jsx",
-                { runtime: "classic", pragma: "h" },
-              ],
-            ],
+            loader: "tsx",
+            target: "es2015",
           },
         },
         {
           test: /\.css$/i,
-          use: [
-            MiniCssExtractPlugin.loader,
-            "css-loader",
-            "postcss-loader",
-          ],
+          use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
         },
         {
           test: /\.svg$/i,
@@ -86,7 +78,7 @@ export default (env) => {
         ],
       }),
       new MiniCssExtractPlugin({
-        filename: "tailwind.bundle.css"
+        filename: "tailwind.bundle.css",
       }),
       new WebExtPlugin({
         sourceDir: resolve(__dirname, "dist", env.target),

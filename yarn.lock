@@ -631,6 +631,9 @@ __metadata:
 "@sitedelta/common@0.30.0, @sitedelta/common@workspace:common":
   version: 0.0.0-use.local
   resolution: "@sitedelta/common@workspace:common"
+  dependencies:
+    "@popperjs/core": ^2.11.6
+    hyperapp: ^2.0.22
   languageName: unknown
   linkType: soft
 
@@ -641,7 +644,6 @@ __metadata:
     "@babel/core": ^7.20.7
     "@babel/plugin-transform-react-jsx": ^7.20.7
     "@babel/preset-typescript": ^7.18.6
-    "@popperjs/core": ^2.11.6
     "@sitedelta/common": 0.30.0
     "@tailwindcss/forms": ^0.5.3
     autoprefixer: ^10.4.13
@@ -650,7 +652,6 @@ __metadata:
     css-loader: ^6.7.3
     cssnano: ^5.1.14
     esbuild-loader: ^2.20.0
-    hyperapp: ^2.0.22
     mini-css-extract-plugin: ^2.7.2
     postcss: ^8.4.20
     postcss-loader: ^7.0.2
@@ -669,11 +670,8 @@ __metadata:
     "@babel/core": ^7.20.7
     "@babel/plugin-transform-react-jsx": ^7.20.7
     "@babel/preset-typescript": ^7.18.6
-    "@popperjs/core": ^2.11.6
     "@sitedelta/common": 0.30.0
     "@tailwindcss/forms": ^0.5.3
-    "@types/parse5": ^6.0.3
-    "@types/xmlserializer": ^0.6.3
     "@xmldom/xmldom": ^0.8.6
     autoprefixer: ^10.4.13
     babel-loader: ^9.1.0
@@ -681,7 +679,6 @@ __metadata:
     css-loader: ^6.7.3
     cssnano: ^5.1.14
     esbuild-loader: ^2.20.0
-    hyperapp: ^2.0.22
     mini-css-extract-plugin: ^2.7.2
     parse5: ^7.1.2
     postcss: ^8.4.20
@@ -823,22 +820,6 @@ __metadata:
   version: 4.0.0
   resolution: "@types/parse-json@npm:4.0.0"
   checksum: fd6bce2b674b6efc3db4c7c3d336bd70c90838e8439de639b909ce22f3720d21344f52427f1d9e57b265fcb7f6c018699b99e5e0c208a1a4823014269a6bf35b
-  languageName: node
-  linkType: hard
-
-"@types/parse5@npm:^6.0.3":
-  version: 6.0.3
-  resolution: "@types/parse5@npm:6.0.3"
-  checksum: ddb59ee4144af5dfcc508a8dcf32f37879d11e12559561e65788756b95b33e6f03ea027d88e1f5408f9b7bfb656bf630ace31a2169edf44151daaf8dd58df1b7
-  languageName: node
-  linkType: hard
-
-"@types/xmlserializer@npm:^0.6.3":
-  version: 0.6.3
-  resolution: "@types/xmlserializer@npm:0.6.3"
-  dependencies:
-    "@types/parse5": ^6.0.3
-  checksum: 67b71a41303b2a7a5d8bf38c664b74de63b3a5e657711139ff352eba4f4ead51f0a83159face01bcb0e1c46b2ce1c49bad4d998c43b3f6d3e00d6362fa57b349
   languageName: node
   linkType: hard
 

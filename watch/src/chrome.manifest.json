@@ -1,46 +1,41 @@
 {
-	"manifest_version": 3,
-	"name": "__MSG_watchExtensionName__",
-	"version": "0.30.0",
-	 
-	"default_locale": "en",
-	"description": "__MSG_watchExtensionDescription__",
-	"icons": {
-		"16": "icons/watch-16.png",
-		"24": "icons/watch-24.png",
-		"32": "icons/watch-32.png",
-		"48": "icons/watch-48.png",
-		"64": "icons/watch-64.png"
-	},
-	
-	"permissions": [
-		"notifications",
-		"activeTab", 
-		"storage",
-		"unlimitedStorage",
-		"alarms"
-	],
-	"host_permissions": [
-		"<all_urls>"
-	],
-	
-	"action": {
-		"default_icon": {
-			"16": "icons/watch-16.png",
-			"24": "icons/watch-24.png",
-			"32": "icons/watch-32.png",
-			"48": "icons/watch-48.png",
-			"64": "icons/watch-64.png"
-		},
-		"default_title": "__MSG_watchExtensionName__",
-		"default_popup": "popup.htm"
-	},
-	
-	"options_ui": {
-		"page": "options.htm"
-	},
-
-	"background": {
-		"service_worker": "background.js"
-	}
+  "manifest_version": 3,
+  "name": "__MSG_watchExtensionName__",
+  "version": "0.30.0",
+  "default_locale": "en",
+  "description": "__MSG_watchExtensionDescription__",
+  "icons": {
+    "16": "icons/watch-16.png",
+    "24": "icons/watch-24.png",
+    "32": "icons/watch-32.png",
+    "48": "icons/watch-48.png",
+    "64": "icons/watch-64.png"
+  },
+  "permissions": [
+    "notifications",
+    "activeTab",
+    "storage",
+    "unlimitedStorage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_icon": {
+      "16": "icons/watch-16.png",
+      "24": "icons/watch-24.png",
+      "32": "icons/watch-32.png",
+      "48": "icons/watch-48.png",
+      "64": "icons/watch-64.png"
+    },
+    "default_title": "__MSG_watchExtensionName__",
+    "default_popup": "popup.htm"
+  },
+  "options_ui": {
+    "page": "options.htm"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
 }

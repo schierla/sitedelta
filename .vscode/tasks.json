@@ -1,78 +1,72 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Install dependencies",
-            "type": "shell",
-            "command": "yarn install",
-            "group": "build",
-            "problemMatcher": [],
-        },
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install dependencies",
+      "type": "shell",
+      "command": "yarn install",
+      "group": "build",
+      "problemMatcher": []
+    },
 
-        {
-            "label": "Package all",
-            "type": "shell",
-            "command": "./buildall.sh",
-            "group": "build",
-            "problemMatcher": []
-        },
+    {
+      "label": "Debug SiteDelta Watch (Chrome)",
+      "type": "shell",
+      "command": "yarn workspace @sitedelta/watch dev:ch",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Debug SiteDelta Watch (Firefox)",
+      "type": "shell",
+      "command": "yarn workspace @sitedelta/watch dev:ff",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Debug SiteDelta Highlight (Chrome)",
+      "type": "shell",
+      "command": "yarn workspace @sitedelta/highlight dev:ch",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Debug SiteDelta Highlight (Firefox)",
+      "type": "shell",
+      "command": "yarn workspace @sitedelta/highlight dev:ff",
+      "group": "build",
+      "problemMatcher": []
+    },
 
-        {
-            "label": "SiteDelta Watch for Chrome",
-            "type": "shell",
-            "command": "./build.sh watch chrome",
-            "group": "build",
-            "problemMatcher": []
-        },
-
-        {
-            "label": "SiteDelta Highlight for Chrome",
-            "type": "shell",
-            "command": "./build.sh highlight chrome",
-            "group": "build",
-            "problemMatcher": []
-        },
-
-        {
-            "label": "SiteDelta Highlight for Firefox",
-            "type": "shell",
-            "command": "./build.sh highlight firefox",
-            "group": "build",
-            "problemMatcher": []
-        }, 
-
-        {
-            "label": "SiteDelta Watch for Firefox",
-            "type": "shell",
-            "command": "./build.sh watch firefox",
-            "group": "build",
-            "problemMatcher": []
-        },
-
-        {
-            "label": "Debug in Firefox",
-            "type": "shell",
-            "command": "yarn web-ext run -s build/unpacked",
-            "group": "build",
-            "problemMatcher": []
-        },
-
-        {
-            "label": "Debug in Chrome",
-            "type": "shell",
-            "command": "yarn  web-ext run -t chromium -s build/unpacked",
-            "group": "build",
-            "problemMatcher": []
-        },
-
-        {
-            "label": "Check for errors",
-            "type": "shell",
-            "command": "yarn web-ext lint -s build/unpacked",
-            "group": "build",
-            "problemMatcher": []
-        }
-    ]
+    {
+      "label": "Build SiteDelta Watch (Chrome)",
+      "type": "shell",
+      "command": "yarn workspace @sitedelta/watch package:ch",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build SiteDelta Watch (Firefox)",
+      "type": "shell",
+      "command": "yarn workspace @sitedelta/watch package:ff",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build SiteDelta Highlight (Chrome)",
+      "type": "shell",
+      "command": "yarn workspace @sitedelta/highlight package:ch",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build SiteDelta Highlight (Firefox)",
+      "type": "shell",
+      "command": "yarn workspace @sitedelta/highlight package:ff",
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
 }

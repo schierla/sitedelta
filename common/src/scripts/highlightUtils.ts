@@ -20,6 +20,8 @@ export function highlightNext(doc: Document, nr: number): number {
 	return nr;
 }
 
+type ReplaceWithText = { buildNode: (text: string) => Node, text: string };
+
 export function highlightChanges(doc: Document, config: Config, oldContent: string): number {
 	if (config.stripStyles) stripStyles(doc);
 	if (config.isolateRegions) isolateRegions(doc, config);
@@ -68,8 +70,8 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 				text = text.replace(/\s+/g, ' ').replace(/^ +/, '').replace(/ +$/, '').replace(/[\u0000-\u001f]/g, "");
 				if(text == "") continue;
 				var words = split(text + " "), wpos = 0;
-				var lastk: Text | null = null, lastd: HTMLElement | null = null, lasti: HTMLElement | null = null;
-				var replace: Node[] = [], replaceRequired = false;
+				var lastk: ReplaceWithText | null = null, lastd: ReplaceWithText | null = null, lasti: ReplaceWithText | null = null;
+				var replace: ReplaceWithText[] = [], replaceRequired = false;
 
 				while (true) {
 					if (config.checkDeleted) {
@@ -106,45 +108,58 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 
 					if(action == "K") {
 						if(lastk == null || last != "K") {
-							lastk = doc.createTextNode("");
+							lastk = {
+								buildNode: (text: string) => {
+									const node = doc.createTextNode(text);
+									return node;
+								}, 
+								text: ""
+							};
 							replace.push(lastk);
 						}
-						if(words.length == 2 && wpos == 0)
-							replace.push(cur.cloneNode(true)); 
-						else 
-							lastk.data += words[wpos];
+						lastk.text += words[wpos];
 						assignNumber = true;
 					} else if(action == "D") {
 						if(lastd == null || last != "D") {
 							var nr = assignNumber ? changes++ : changes - 1;
-							lastd = doc.createElement("IMG");
-							if(assignNumber) lastd.id = "sitedelta-change" + nr;
-							lastd.className = "sitedelta-change" + nr;
-							lastd.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAK3RFWHRDcmVhdGlvbiBUaW1lAE1vIDI4IE1haSAyMDA3IDE5OjI5OjA2ICswMTAwKyfyCQAAAAd0SU1FB9cFHBElAZPQyFYAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAEZ0FNQQAAsY8L/GEFAAAA2ElEQVR42pXRMQsBYRzH8edYDDKgSFlI2aTcYmPwBm6x3OIFyNswGW0Wg2QxyeAFoCQlKZTEoJTJYOL7uOfquhBXn7vu//zu+T/PPUL8ez2ESKKM2JeMBq/9ssQcG5hy0BUOoI7G6yNuA1WsYYWgq/sQY2Tt4gktTNFDWC2hhB3aiDhbFlQXuaQLrip4xwwGEvDJvObcGI8UmsigizjSwupww9YOe1HFGUfojonkWBR5VJzL2qOv9tKB590vtosGFjAxQsia5/PB6JhgjQOKv5y4XwaR+5Z7AvWEaQDm0aTzAAAAAElFTkSuQmCC");
-							lastd.setAttribute("border", "0");
-							lastd.setAttribute("title", "");
+							lastd = {
+								buildNode: (text: string) => {
+									const node = doc.createElement("IMG");
+									if(assignNumber) node.id = "sitedelta-change" + nr;
+									node.className = "sitedelta-change" + nr;
+									node.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAK3RFWHRDcmVhdGlvbiBUaW1lAE1vIDI4IE1haSAyMDA3IDE5OjI5OjA2ICswMTAwKyfyCQAAAAd0SU1FB9cFHBElAZPQyFYAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAEZ0FNQQAAsY8L/GEFAAAA2ElEQVR42pXRMQsBYRzH8edYDDKgSFlI2aTcYmPwBm6x3OIFyNswGW0Wg2QxyeAFoCQlKZTEoJTJYOL7uOfquhBXn7vu//zu+T/PPUL8ez2ESKKM2JeMBq/9ssQcG5hy0BUOoI7G6yNuA1WsYYWgq/sQY2Tt4gktTNFDWC2hhB3aiDhbFlQXuaQLrip4xwwGEvDJvObcGI8UmsigizjSwupww9YOe1HFGUfojonkWBR5VJzL2qOv9tKB590vtosGFjAxQsia5/PB6JhgjQOKv5y4XwaR+5Z7AvWEaQDm0aTzAAAAAElFTkSuQmCC");
+									node.setAttribute("border", "0");
+									node.setAttribute("title", "");
+									node.setAttribute("title", text); 
+									return node;
+								}, 
+								text: ""
+							};
 							replace.push(lastd);
 						}
-						lastd.setAttribute("title", lastd.getAttribute("title") + old2[opos]);
+						lastd.text += old2[opos];
 						replaceRequired = true;
 						assignNumber = false;
 					} else if(action == "I") {
 						if(lasti == null || last != "I") {
 							var nr = assignNumber ? changes++ : changes - 1;
-							lasti = doc.createElement("SITEDELTA_INS");
-							if(assignNumber) lasti.id = "sitedelta-change" + nr;
-							lasti.className = "sitedelta-change" + nr;
-							lasti.style.display = "inline"; 
-							lasti.style.outline = config.addBorder + " dotted 1px";
-							lasti.style.background = config.addBackground; 
-							lasti.style.color = "#000";
-							lasti.appendChild(doc.createTextNode(""));
+							lasti = {
+								buildNode: (text: string) => {
+									const node = doc.createElement("SITEDELTA_INS");
+									if(assignNumber) node.id = "sitedelta-change" + nr;
+									node.className = "sitedelta-change" + nr;
+									node.style.display = "inline"; 
+									node.style.outline = config.addBorder + " dotted 1px";
+									node.style.background = config.addBackground; 
+									node.style.color = "#000";
+									node.appendChild(doc.createTextNode(text));
+									return node;
+								}, 
+								text: ""
+							};
 							replace.push(lasti);
 						}
-						if(words.length == 2 && wpos == 0) 
-							lasti.appendChild(cur.cloneNode(true));
-						else
-							(lasti.firstChild as Text).data += words[wpos];
+						lasti.text += words[wpos];
 
 						replaceRequired = true;
 						assignNumber = false;
@@ -168,7 +183,7 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 				if (replaceRequired) {
 					domactions.push({
 						elem: cur,
-						repl: replace
+						repl: replace.map(r => r.buildNode(r.text))
 					});
 				}
 			}

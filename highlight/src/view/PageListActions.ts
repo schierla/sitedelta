@@ -1,7 +1,7 @@
 import { Index, remove as ioRemove } from "@sitedelta/common/src/model/ioUtils";
 import { t } from "@sitedelta/common/src/view/helpers";
 import { Action, Dispatch, Dispatchable } from "hyperapp";
-import * as highlightScriptUtils from "./highlightScriptUtils";
+import { scan } from "./highlightScriptUtils";
 
 type PageEffectProps<S> = {
   pages: string[];
@@ -49,7 +49,7 @@ export function scanPages<S>(
     const tabId = tab.id ?? 0;
     let remainingPages = [...pages];
     for (const page of pages) {
-      await highlightScriptUtils.scan(page, tabId);
+      await scan(page, tabId);
       remainingPages = remainingPages.filter((p) => p != page);
       dispatchLater([SetSelection, remainingPages]);
       await new Promise((resolve) => setTimeout(resolve, 100));

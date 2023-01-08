@@ -1,7 +1,19 @@
 import { Config } from "@sitedelta/common/src/model/config";
-import * as pageUtils from "@sitedelta/common/src/model/pageUtils";
-import * as tabUtils from "@sitedelta/common/src/model/tabUtils";
-import { executeScript, getActive } from "@sitedelta/common/src/model/tabUtils";
+import {
+  getEffectiveConfig as pageGetEffectiveConfig,
+  getOrCreateEffectiveConfig as pageGetOrCreateEffectiveConfig,
+  getTitle as pageGetTitle,
+  remove as pageRemove,
+  setChanges as pageSetChanges,
+  setConfigProperty as pageSetConfigProperty,
+  setTitle as pageSetTitle,
+} from "@sitedelta/common/src/model/pageUtils";
+import {
+  executeScript,
+  getActive,
+  openResource as tabOpenResource,
+  showIcon as tabShowIcon,
+} from "@sitedelta/common/src/model/tabUtils";
 import { Button } from "@sitedelta/common/src/view/Button";
 import { ChangedIcon } from "@sitedelta/common/src/view/ChangedIcon";
 import { ConfigCheckbox } from "@sitedelta/common/src/view/ConfigCheckbox";
@@ -13,7 +25,15 @@ import { HighlightIcon } from "@sitedelta/common/src/view/HighlightIcon";
 import { InactiveIcon } from "@sitedelta/common/src/view/InactiveIcon";
 import { UnchangedIcon } from "@sitedelta/common/src/view/UnchangedIcon";
 import { Action, app, Dispatchable, Effecter, Subscription } from "hyperapp";
-import * as highlightScriptUtils from "./highlightScriptUtils";
+import {
+  getStatus as utilGetStatus,
+  highlightChanges as utilHighlightChanges,
+  removeOutline as utilRemoveOutline,
+  scanAll as utilScanAll,
+  selectExclude as utilSelectExclude,
+  selectInclude as utilSelectInclude,
+  showOutline as utilShowOutline,
+} from "./highlightScriptUtils";
 import { HighlightState, PageState } from "./highlightState";
 
 const ADVANCED_PERMISSION = { permissions: [], origins: ["<all_urls>"] };
@@ -173,7 +193,7 @@ const updateTitle: Effecter<State, { url: string; title: string }> = async (
   _,
   { title, url }
 ) => {
-  await pageUtils.setTitle(url, title);
+  await pageSetTitle(url, title);
 };
 
 const pickRegion: Effecter<
@@ -189,8 +209,8 @@ const pickRegion: Effecter<
   const dispatchLater = (event: Dispatchable<State>) =>
     requestAnimationFrame(() => dispatch(event));
   dispatchLater(callback(undefined));
-  if (isInclude) await highlightScriptUtils.selectInclude(tabId, url);
-  else await highlightScriptUtils.selectExclude(tabId, url);
+  if (isInclude) await utilSelectInclude(tabId, url);
+  else await utilSelectExclude(tabId, url);
   dispatchLater([SetStatus, { state: PageState.SELECTREGION }]);
 };
 
@@ -203,12 +223,12 @@ const applyConfigUpdate: Effecter<
   for (let key in update) {
     let value = update[key];
     if (key === "includes") value = cleanupIncludeRegions(value);
-    await pageUtils.setConfigProperty(url, key as keyof Config, value);
+    await pageSetConfigProperty(url, key as keyof Config, value);
   }
-  const newConfig = (await pageUtils.getEffectiveConfig(url)) ?? undefined;
+  const newConfig = (await pageGetEffectiveConfig(url)) ?? undefined;
   dispatchLater([SetConfig, newConfig]);
-  if("includes" in update) dispatchLater([SelectIncludeRegions, []]);
-  if("excludes" in update) dispatchLater([SelectExcludeRegions, []]);
+  if ("includes" in update) dispatchLater([SelectIncludeRegions, []]);
+  if ("excludes" in update) dispatchLater([SelectExcludeRegions, []]);
 };
 
 const cleanupIncludeRegions = (includes: string[]) => {
@@ -223,8 +243,8 @@ const handleHighlightState: Effecter<
   { status: HighlightState; url: string; tabId: number }
 > = (dispatch, { status, url, tabId }) => {
   if (status.state === PageState.HIGHLIGHTED) {
-    tabUtils.showIcon(tabId, status.current, status.changes);
-    pageUtils.setChanges(url, status.changes < 0 ? -1 : 0);
+    tabShowIcon(tabId, status.current, status.changes);
+    pageSetChanges(url, status.changes < 0 ? -1 : 0);
     if (status.changes < 0) dispatch(Expand);
   }
 };
@@ -235,16 +255,15 @@ const expand: Effecter<
 > = async (dispatch, { url, title, tabId }) => {
   const dispatchLater = (event: Dispatchable<State>) =>
     requestAnimationFrame(() => dispatch(event));
-  const config = await pageUtils.getOrCreateEffectiveConfig(url, title);
+  const config = await pageGetOrCreateEffectiveConfig(url, title);
   dispatchLater([SetConfig, config]);
-  var status = await highlightScriptUtils.getStatus(tabId);
+  var status = await utilGetStatus(tabId);
   dispatchLater([SetStatus, status]);
 };
 
 const scanAll: Effecter<State> = (_) => {
-  highlightScriptUtils.scanAll();
+  utilScanAll();
 };
-
 const showSidebar: Effecter<State> = (_) => {
   if (
     chrome &&
@@ -252,7 +271,7 @@ const showSidebar: Effecter<State> = (_) => {
     (chrome as any).sidebarAction.open
   )
     (chrome as any).sidebarAction.open();
-  else tabUtils.openResource("pages.htm");
+  else tabOpenResource("pages.htm");
   window.close();
 };
 
@@ -260,8 +279,8 @@ const highlight: Effecter<
   State,
   { url: string; title: string; tabId: number }
 > = async (dispatch, { url, title, tabId }) => {
-  await pageUtils.getOrCreateEffectiveConfig(url, title);
-  var status = await highlightScriptUtils.highlightChanges(tabId, url);
+  await pageGetOrCreateEffectiveConfig(url, title);
+  var status = await utilHighlightChanges(tabId, url);
   requestAnimationFrame(() => dispatch([SetStatus, status]));
 };
 
@@ -269,8 +288,8 @@ const deletePage: Effecter<State, { url: string; tabId: number }> = async (
   _,
   { url, tabId }
 ) => {
-  await pageUtils.remove(url);
-  await tabUtils.showIcon(tabId);
+  await pageRemove(url);
+  await tabShowIcon(tabId);
   window.close();
 };
 
@@ -278,8 +297,8 @@ const showOutline: Effecter<
   State,
   { region: string[] | undefined; tabId: number; color: string }
 > = async (_, { region, tabId, color }) => {
-  if (region) await highlightScriptUtils.showOutline(tabId, region, color);
-  else await highlightScriptUtils.removeOutline(tabId);
+  if (region) await utilShowOutline(tabId, region, color);
+  else await utilRemoveOutline(tabId);
 };
 
 const tabSubscription: Subscription<State, any> = [
@@ -308,7 +327,7 @@ const tabSubscription: Subscription<State, any> = [
         return;
       }
 
-      var title = await pageUtils.getTitle(url);
+      var title = await pageGetTitle(url);
       if (title === null) {
         dispatchLater([
           SetTabInfo,
@@ -316,7 +335,7 @@ const tabSubscription: Subscription<State, any> = [
         ]);
       } else {
         dispatchLater([SetTabInfo, { url, tabId, enabled: true, title }]);
-        var status = await highlightScriptUtils.getStatus(tabId);
+        var status = await utilGetStatus(tabId);
         dispatchLater([SetStatus, status]);
       }
     });

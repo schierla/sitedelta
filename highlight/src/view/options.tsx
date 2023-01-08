@@ -2,7 +2,7 @@ import { Index, observeIndex } from "@sitedelta/common/src/model/ioUtils";
 import { openResource } from "@sitedelta/common/src/model/tabUtils";
 import { Button } from "@sitedelta/common/src/view/Button";
 import { t } from "@sitedelta/common/src/view/helpers";
-import { app, Action, Dispatch, Subscription } from "hyperapp";
+import { Action, app, Dispatch, Subscription } from "hyperapp";
 import "../tailwind.css";
 import { PageList } from "./PageList";
 

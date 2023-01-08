@@ -1,6 +1,14 @@
-import * as highlightUtils from "@sitedelta/common/src/model/highlightUtils";
-import * as regionUtils from "@sitedelta/common/src/model/regionUtils";
-import * as textUtils from "@sitedelta/common/src/model/textUtils";
+import {
+  highlightChanges,
+  highlightNext
+} from "@sitedelta/common/src/model/highlightUtils";
+import {
+  abortSelect as regionAbortSelect,
+  removeOutline as regionRemoveOutline,
+  selectRegion,
+  showOutline as regionShowOutline
+} from "@sitedelta/common/src/model/regionUtils";
+import { getText } from "@sitedelta/common/src/model/textUtils";
 import { HighlightState } from "./highlightState";
 
 enum PageState {
@@ -30,13 +38,13 @@ if (contentscript === undefined) {
         sendResponse(ret);
       } else if (request.command == "getContent") {
         if (contentscript.state == PageState.LOADED) {
-          contentscript.content = textUtils.getText(document, request.config);
+          contentscript.content = getText(document, request.config);
         }
         sendResponse(contentscript.content);
       } else if (request.command == "highlightChanges") {
         if (contentscript.state == PageState.HIGHLIGHTED) {
           if (contentscript.numChanges > 0)
-            contentscript.currentChange = highlightUtils.highlightNext(
+            contentscript.currentChange = highlightNext(
               document,
               contentscript.currentChange
             );
@@ -46,7 +54,7 @@ if (contentscript === undefined) {
             current: contentscript.currentChange,
           });
         } else {
-          var changes = highlightUtils.highlightChanges(
+          var changes = highlightChanges(
             document,
             request.config,
             request.content
@@ -54,10 +62,7 @@ if (contentscript === undefined) {
           contentscript.state = PageState.HIGHLIGHTED;
           contentscript.numChanges = changes;
           if (contentscript.numChanges > 0)
-            contentscript.currentChange = highlightUtils.highlightNext(
-              document,
-              0
-            );
+            contentscript.currentChange = highlightNext(document, 0);
           else contentscript.currentChange = 0;
           sendResponse({
             state: PageState.HIGHLIGHTED,
@@ -67,7 +72,7 @@ if (contentscript === undefined) {
         }
       } else if (request.command == "selectRegion") {
         if (contentscript.state == PageState.SELECTREGION) {
-          regionUtils.abortSelect();
+          regionAbortSelect();
           contentscript.state = PageState.LOADED;
           contentscript.regionResult(null);
           contentscript.regionResult = null;
@@ -75,7 +80,7 @@ if (contentscript === undefined) {
         } else {
           contentscript.state = PageState.SELECTREGION;
           contentscript.regionResult = sendResponse;
-          regionUtils.selectRegion(document).then(function (xpath) {
+          selectRegion(document).then(function (xpath) {
             contentscript.state = PageState.LOADED;
             contentscript.regionResult = null;
             sendResponse(xpath);
@@ -83,10 +88,10 @@ if (contentscript === undefined) {
           return true;
         }
       } else if (request.command == "showOutline") {
-        regionUtils.showOutline(document, request.xpath, request.color);
+        regionShowOutline(document, request.xpath, request.color);
         sendResponse(null);
       } else if (request.command == "removeOutline") {
-        regionUtils.removeOutline(document);
+        regionRemoveOutline(document);
         sendResponse(null);
       }
     },

@@ -1,7 +1,11 @@
 import { Config } from "@sitedelta/common/src/model/config";
-import * as pageUtils from "@sitedelta/common/src/model/pageUtils";
-import * as tabUtils from "@sitedelta/common/src/model/tabUtils";
-import * as textUtils from "@sitedelta/common/src/model/textUtils";
+import {
+  getContent as pageGetContent,
+  getEffectiveConfig as pageGetEffectiveConfig,
+  setContent as pageSetContent,
+} from "@sitedelta/common/src/model/pageUtils";
+import { executeScript as tabExecuteScript } from "@sitedelta/common/src/model/tabUtils";
+import { isEqual as textIsEqual } from "@sitedelta/common/src/model/textUtils";
 import { HighlightState, PageState } from "./highlightState";
 
 // tab operations
@@ -14,7 +18,7 @@ export async function getContent(
   tabId: number,
   url: string
 ): Promise<string | null> {
-  var config = await pageUtils.getEffectiveConfig(url);
+  var config = await pageGetEffectiveConfig(url);
   if (config === null) return null;
   return await _csGetContent(tabId, config);
 }
@@ -23,13 +27,13 @@ export async function checkChanges(
   tabId: number,
   url: string
 ): Promise<number> {
-  var config = await pageUtils.getEffectiveConfig(url);
+  var config = await pageGetEffectiveConfig(url);
   if (config === null) return -1;
-  var oldcontent = await pageUtils.getContent(url);
+  var oldcontent = await pageGetContent(url);
   if (oldcontent === null) return -1;
   var content = await _csGetContent(tabId, config);
   if (content === undefined) return -1;
-  if (textUtils.isEqual(oldcontent, content, config)) {
+  if (textIsEqual(oldcontent, content, config)) {
     // unchanged
     return 0;
   } else {
@@ -41,13 +45,13 @@ export async function highlightChanges(
   tabId: number,
   url: string
 ): Promise<HighlightState> {
-  var config = await pageUtils.getEffectiveConfig(url);
+  var config = await pageGetEffectiveConfig(url);
   if (!config) return { state: PageState.ERROR };
   var content = await _csGetContent(tabId, config);
   if (content === undefined) return { state: PageState.ERROR };
-  var oldcontent = await pageUtils.getContent(url);
+  var oldcontent = await pageGetContent(url);
   if (oldcontent === null) oldcontent = "";
-  await pageUtils.setContent(url, content);
+  await pageSetContent(url, content);
   var status = await _csHighlightChanges(tabId, config, oldcontent);
   return status;
 }
@@ -174,7 +178,7 @@ async function _callContentScript(
     })
   );
   if (status === undefined) {
-    await tabUtils.executeScript(tabId, "/highlightScript.js");
+    await tabExecuteScript(tabId, "/highlightScript.js");
     var status = await new Promise((resolve) =>
       chrome.tabs.sendMessage(tabId, command, resolve)
     );

@@ -278,7 +278,7 @@ const Content = ({
           />
           <ConfigCheckbox
             config={config}
-            configKey="checkImages"
+            configKey="scanImages"
             label={t("configCheckImages")}
             UpdateConfig={UpdateConfig}
           />

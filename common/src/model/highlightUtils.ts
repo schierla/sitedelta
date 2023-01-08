@@ -117,7 +117,12 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 							};
 							replace.push(lastk);
 						}
-						lastk.text += words[wpos];
+						if(words.length == 2 && wpos == 0) { // images
+							const node = cur.cloneNode(true);
+							replace.push({buildNode: () => node, text: ""}); 
+						} else {
+							lastk.text += words[wpos];
+						}
 						assignNumber = true;
 					} else if(action == "D") {
 						if(lastd == null || last != "D") {
@@ -161,7 +166,12 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 							};
 							replace.push(lasti);
 						}
-						lasti.text += words[wpos];
+						if(words.length == 2 && wpos == 0) { // images
+							const node = cur.cloneNode(true);
+							replace.push({buildNode: () => node, text: ""}); 
+						} else {
+							lasti.text += words[wpos];
+						}
 
 						replaceRequired = true;
 						assignNumber = false;

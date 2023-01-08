@@ -207,6 +207,8 @@ const applyConfigUpdate: Effecter<
   }
   const newConfig = (await pageUtils.getEffectiveConfig(url)) ?? undefined;
   dispatchLater([SetConfig, newConfig]);
+  if("includes" in update) dispatchLater([SelectIncludeRegions, []]);
+  if("excludes" in update) dispatchLater([SelectExcludeRegions, []]);
 };
 
 const cleanupIncludeRegions = (includes: string[]) => {
@@ -439,7 +441,7 @@ const Content = ({
             />
             <ConfigCheckbox
               config={config}
-              configKey="checkImages"
+              configKey="scanImages"
               label={t("configCheckImages")}
               UpdateConfig={UpdateConfig}
             />

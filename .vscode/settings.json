@@ -1,0 +1,8 @@
+{
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "typescript.preferences.importModuleSpecifier": "project-relative",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
+}

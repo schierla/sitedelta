@@ -1,14 +1,22 @@
 {
-    "compilerOptions": {
-        "outDir": "build/typescript",
-        "strictNullChecks": true,
-        "module": "none",
-        "target": "es2017",
-        "allowJs": true
+  "compilerOptions": {
+    "outDir": "build/typescript",
+    "strictNullChecks": true,
+    "module": "none",
+    "target": "es2017",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@sitedelta/common/src/view",
+    "moduleResolution": "node",
+    "paths": {
+      "@sitedelta/common/*": ["./common/*"]
     },
-    "include": [
-        "./common/scripts/",
-        "./highlight/scripts/",
-        "./watch/scripts/"
-    ]
+    "types": ["chrome"]
+  },
+  "include": [
+    "common/src/*",
+    "common/src/*",
+    "watch/src/*",
+    "highlight/src/*"
+  ]
 }

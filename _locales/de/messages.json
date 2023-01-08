@@ -1,366 +1,434 @@
 {
-	"highlightExtensionName": {
-		"message": "SiteDelta Highlight",
-		"description": "Name of the highlight extension"
-	},
-	"highlightExtensionDescription": {
-		"message": "Hebt Änderungen an Webseiten seit dem letzten Besuch hervor",
-		"description": "Description of the highlight extension"
-	},
-
-	"highlightDisabled": {
-		"message": "SiteDelta Highlight ist auf dieser Seite nicht aktiv.",
-		"description": "Text that monitoring of the current page is disabled"
-	},
-	"highlightEnabled": {
-		"message": "SiteDelta Highlight ist auf dieser Seite aktiv.",
-		"description": "Text that monitoring of the current page is enabled"
-	},
-	"highlightUnsupported": {
-		"message": "SiteDelta Highlight ist auf dieser Seite nicht verfügbar.",
-		"description": "Title of the page action popup when not available for the current page"
-	},
-
-
-	"watchExtensionName": {
-		"message": "SiteDelta Watch",
-		"description": "Name of the watch extension"
-	},
-	"watchExtensionDescription": {
-		"message": "Überwacht Webseiten regelmäßig auf Änderungen",
-		"description": "Description of the watch extension"
-	},
-
-	"watchUnsupported": {
-		"message": "SiteDelta Watch ist auf dieser Seite nicht verfügbar.",
-		"description": "Text that the current page is unsupported"
-	},
-	"watchDisabled": {
-		"message": "SiteDelta Watch ist auf dieser Seite nicht aktiv.",
-		"description": "Text that watching of the current page is disabled"
-	},
-	"watchEnabled": {
-		"message": "SiteDelta Watch ist auf dieser Seite aktiv.",
-		"description": "Text that watching of the current page is enabled"
-	},
-	"watchFailed": {
-		"message": "SiteDelta Watch konnte die Seite nicht laden.",
-		"description": "Text that downloading the current page failed"
-	},
-	"watchChangedPages": {
-		"message": "Seit dem letzten Besuch geänderte Seiten:",
-		"description": "Headline for changed pages"
-	},
-	"watchFailedPages": {
-		"message": "Seiten die nicht geladen werden konnten:",
-		"description": "Headline for failed pages"
-	},	
-	"watchNextScan": {
-		"message": "Nächste Überprüfung: $TIME$",
-		"description": "Label for the next scan time",
-		"placeholders": {
-			"time": {
-				"content": "$1",
-				"example": "2017-11-11 11:11"
-			}
-		}
-	},
-	"watchNotificationChanged": {
-		"message": "SiteDelta: Änderung erkannt",
-		"description": "Notification title when a change is detected"
-	},
-	"watchNotificationFailed": {
-		"message": "SiteDelta: Fehler beim Laden", 
-		"description": "Notification title when a page cannot be loaded"
-	},
-	"watchNotificationUnchanged": {
-		"message": "SiteDelta: Keine Änderungen gefunden",
-		"description": "Notification title when no changed page is found"
-	},
-
-	"pageFailed": {
-		"message": "Fehler beim Abrufen der Seiteninhalte. Bitte überwachte Bereiche prüfen.",
-		"description": "Title of the page action popup when no contents are found"
-	},
-	"pageUnchanged": {
-		"message": "Keine Änderungen gefunden.",
-		"description": "Title of the page action popup when no changes are found"
-	},
-	"pageChanged": {
-		"message": "Zeige Änderung $CURRENT$ von $COUNT$.",
-		"description": "Title of the page action popup when changes are found",
-		"placeholders": {
-			"current": {
-				"content": "$1",
-				"example": "1"
-			},
-			"count": {
-				"content": "$2",
-				"example": "5"
-			}
-		}
-	},
-	"pageSelectRegion": {
-		"message": "Klicken, um einen Bereich auszuwählen.",
-		"description": "Title of the page action popup while selecting a region"
-	},
-
-	"pageEnable": {
-		"message": "Überwachen",
-		"description": "Button to enable monitoring the current page"
-	},
-	"pageDisable": {
-		"message": "Überwachung beenden",
-		"description": "Button to disable monitoring of the current page"
-	},
-	"pageShowChanges": {
-		"message": "Änderungen zeigen",
-		"description": "Button to show changes on the current page"
-	},
-	"pageNextChange": {
-		"message": "Nächste Änderung",
-		"description": "Button to show the next change on the current page"
-	},
-	"pageOpen": {
-		"message": "Seite öffnen",
-		"description": "Button to open the selected page"
-	},
-	"pageScan": {
-		"message": "Seite prüfen",
-		"description": "Button to scan the current page"
-	},
-	"pageRequirePermission": {
-		"message": "SiteDelta benötigt Ihre Erlaubnis, um auf diese Seite zugreifen zu dürfen.", 
-		"description": "Text that SiteDelta requires permission to access this page"
-	},
-	"pageGrantHost": {
-		"message": "Zugriff auf diese Seite gewähren...",
-		"description": "Button to grant access to a given URL"
-
-	},
-	"pageGrantAll": {
-		"message": "Zugriff auf alle Seiten gewähren...",
-		"description": "Button to grant access to all addresses"
-	},
-
-	"pagesList": {
-		"message": "Überwachte Seiten:",
-		"description": "Headline for the list of monitored pages"
-	},
-	"pagesFilter": {
-		"message": "Überwachte Seiten durchsuchen",
-		"description": "Placeholder text for page filter input"
-	},
-	"pagesDeleteOne": {
-		"message": "Seite löschen",
-		"description": "Button to delete the selected page"
-	},	
-	"pagesDeleteMultiple": {
-		"message": "Seiten löschen",
-		"description": "Button to delete the selected pages"
-	},
-	"pagesOpenOne": {
-		"message": "Seite öffnen",
-		"description": "Button to open the selected page"
-	},
-	"pagesOpenMultiple": {
-		"message": "Seiten öffnen",
-		"description": "Button to open the selected pages"
-	},
-	"pagesOpenChanged": {
-		"message": "Alle öffnen",
-		"description": "Button to open the changed pages"
-	},
-	"pagesOpenFailed": {
-		"message": "Alle öffnen",
-		"description": "Button to open the failed pages"
-	},		
-	"pagesScanOne": {
-		"message": "Seite prüfen",
-		"description": "Button to scan the selected page now"
-	},
-	"pagesScanMultiple": {
-		"message": "Seiten prüfen",
-		"description": "Button to scan the selected pages now"
-	},
-	"pagesScanAll": {
-		"message": "Alle Seiten prüfen",
-		"description": "Button to scan all pages now"
-	},
-	"pagesScanFailed": {
-		"message": "Neu prüfen",
-		"description": "Button to scan the failed pages"
-	},
-	"pagesMarkSeenOne": {
-		"message": "Seite als gesehen markieren",
-		"description": "Button to mark the selected page as seen"
-	},
-	"pagesMarkSeenMultiple": {
-		"message": "Seiten als gesehen markieren",
-		"description": "Button to mark the selected pages as seen"
-	},
-	"pagesMarkSeenAll": {
-		"message": "Alle als gesehen markieren",
-		"description": "Button to mark all pages as seen"
-	},
-	"pagesWatchDelay": {
-		"message": "Überprüfungshäufigkeit...", 
-		"description": "Button to set scan frequency"
-	},	
-	"pagesConfiguration": {
-		"message": "SiteDelta-Konfiguration",
-		"description": "Button to open options dialog"
-	},
-	"pagesSidebar": {
-		"message": "Sidebar",
-		"description": "Button to open the sidebar"
-	},
-
-	"configRegionsInclude": {
-		"message": "Überwachte Bereiche:", 
-		"description": "Headline for included regions"
-	},
-	"configRegionsExclude": {
-		"message": "Ignorierte Bereiche:", 
-		"description": "Headline for excluded regions"
-	},
-	"configRegionsRemove": {
-		"message": "entfernen",
-		"description": "Button to remove a region"
-	},
-	"configRegionsAdd": {
-		"message": "hinzufügen",
-		"description": "Button to add a new region"
-	},
-	"configRegionXpath": {
-		"message": "XPath-Ausdruck oder CSS-Selektor zur Definition der Region",
-		"description": "Text for manual xpath or css selector entry"
-	},
-	"configBehavior": {
-		"message": "Verhalten:",
-		"description": "Headline for extension behavior settings"
-	},
-	"configScanOnLoad": {
-		"message": "Bekannte Seiten beim Besuch automatisch prüfen",
-		"description": "Label for checkbox to enable automatically scanning pages on load"
-	},
-	"configHighlightOnLoad": {
-		"message": "Änderungen auf bekannten Seiten automatisch hervorheben",
-		"description": "Label for checkbox to enable automatically highlighting pages"
-	},
-	"configEnableContextMenu": {
-		"message": "Kontextmenü auf Seiten und Symbol aktivieren",
-		"description": "Label for checkbox to enable SiteDelta context menus"
-	},
-
-	"configChecks": {
-		"message": "Überprüfungsinhalte:",
-		"description": "Headline for configured page checks"
-	},
-	"configCheckDeleted": {
-		"message": "Auf entfernten Text prüfen",
-		"description": "Label for checkbox to enable the check for deletions"
-	},
-	"configCheckImages": {
-		"message": "Bilderadressen prüfen",
-		"description": "Label for checkbox to enable the check for image changes"
-	},
-
-	"configIgnores": {
-		"message": "Ignorierte Inhalte:", 
-		"description": "Headline for configured ignores"
-	},
-	"configIgnoreCase": {
-		"message": "Groß/Kleinschreibung ignorieren",
-		"description": "Label for checkbox to ignore case when checking"
-	},
-	"configIgnoreNumbers": {
-		"message": "Geänderte Zahlen ignorieren",
-		"description": "Label for checkbox to ignore numbers when checking"
-	},
-
-	"configAppearance": {
-		"message": "Erscheinungsbild:",
-		"description": "Headline for configured appearance"
-	},
-	"configBackground": {
-		"message": "Hintergrundfarbe",
-		"description": "Tooltip for text fields with background color"
-	},
-	"configBorder": {
-		"message": "Rahmenfarbe",
-		"description": "Tooltip for text fields with border color"
-	},
-	"configAddColors": {
-		"message": "Farben für hinzugefügten Text",
-		"description": "Label for text fields for background and border color of added text"
-	},
-	"configRemoveColors": {
-		"message": "Farben für entfernten Text",
-		"description": "Label for text fields for background and border color of removed text"
-	},
-	"configMoveColors": {
-		"message": "Farben für verschobenen Text",
-		"description": "Label for text fields for background and border color of removed text"
-	},
-	"configIncludeColors": {
-		"message": "Farbe für überwachte Bereiche",
-		"description": "Label for text field for border color of included regions"
-	},
-	"configExcludeColors": {
-		"message": "Farbe für ignorierte Bereiche",
-		"description": "Label for text field for border color of excluded regions"
-	},
-	"configShowRegions": {
-		"message": "Bereiche hervorheben",
-		"description": "Label for check box to outline include and exclude regions"
-	},
-	"configMakeVisible": {
-		"message": "Versteckte Inhalte sichtbar machen",
-		"description": "Label for check box to make hidden elements visible on highlighted pages"
-	},
-	"configStripStyles": {
-		"message": "Seitengestaltung (CSS) entfernen",
-		"description": "Label for check box to remove CSS from highlighted pages"
-	},
-	"configIsolateRegions": {
-		"message": "Nur überwachte Bereiche anzeigen",
-		"description": "Label for check box to remove elements not scanned by SiteDelta"
-	},
-
-	"configWatch": {
-		"message": "Überwachungseinstellungen:",
-		"description": "Label for text fields concerning watch / delay settings"
-	},
-	"configWatchDelay": {
-		"message": "Häufigkeit (in Minuten)",
-		"description": "Label for scan frequency"
-	}, 
-	"configNotifyChanged": {
-		"message": "Benachrichtigung zeigen, wenn Änderungen gefunden werden",
-		"description": "Label for check box to enable notifications for changed pages"
-	},
-	"configNotifyFailed": {
-		"message": "Benachrichtigung zeigen, wenn Seite nicht geladen werden kann",
-		"description": "Label for check box to enable notifications for failed pages"
-	},	
-
-	"configTransfer": {
-		"message": "Import / Export",
-		"description": "Button to import or export settings / pages"
-	},
-
-	"configAdvancedDisabled" : {
-		"message": "Erweiterte Funktionen (die zusätzliche Berechtigungen benötigen) sind deaktiviert.", 
-		"description": "Text that advanced features are disabled."
-	},
-	"configAdvancedUnsupported" : {
-		"message": "Erweiterte Funktionen sind in Ihrer Browser-Version nicht unterstützt.", 
-		"description": "Text that advanced features are unsupported with the current browser version."
-	},
-	"configEnableAdvanced" : {
-		"message": "Erweiterte Funktionen aktivieren...", 
-		"description": "Button to enable advanced features."
-	}
+  "highlightExtensionName": {
+    "message": "SiteDelta Highlight",
+    "description": "Name of the highlight extension"
+  },
+  "highlightExtensionDescription": {
+    "message": "Hebt Änderungen an Webseiten seit dem letzten Besuch hervor",
+    "description": "Description of the highlight extension"
+  },
+  "highlightDisabled": {
+    "message": "SiteDelta Highlight ist auf dieser Seite nicht aktiv.",
+    "description": "Text that monitoring of the current page is disabled"
+  },
+  "highlightEnabled": {
+    "message": "SiteDelta Highlight ist auf dieser Seite aktiv.",
+    "description": "Text that monitoring of the current page is enabled"
+  },
+  "highlightUnsupported": {
+    "message": "SiteDelta Highlight ist auf dieser Seite nicht verfügbar.",
+    "description": "Title of the page action popup when not available for the current page"
+  },
+  "watchExtensionName": {
+    "message": "SiteDelta Watch",
+    "description": "Name of the watch extension"
+  },
+  "watchExtensionDescription": {
+    "message": "Überwacht Webseiten regelmäßig auf Änderungen",
+    "description": "Description of the watch extension"
+  },
+  "watchUnsupported": {
+    "message": "SiteDelta Watch ist auf dieser Seite nicht verfügbar.",
+    "description": "Text that the current page is unsupported"
+  },
+  "watchDisabled": {
+    "message": "SiteDelta Watch ist auf dieser Seite nicht aktiv.",
+    "description": "Text that watching of the current page is disabled"
+  },
+  "watchEnabled": {
+    "message": "SiteDelta Watch ist auf dieser Seite aktiv.",
+    "description": "Text that watching of the current page is enabled"
+  },
+  "watchFailed": {
+    "message": "SiteDelta Watch konnte die Seite nicht laden.",
+    "description": "Text that downloading the current page failed"
+  },
+  "watchChangedPages": {
+    "message": "Seit dem letzten Besuch geänderte Seiten",
+    "description": "Headline for changed pages"
+  },
+  "watchFailedPages": {
+    "message": "Seiten die nicht geladen werden konnten",
+    "description": "Headline for failed pages"
+  },
+  "watchNextScan": {
+    "message": "Nächste Überprüfung: $TIME$",
+    "description": "Label for the next scan time",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "2017-11-11 11:11"
+      }
+    }
+  },
+  "watchNotificationChanged": {
+    "message": "SiteDelta: Änderung erkannt",
+    "description": "Notification title when a change is detected"
+  },
+  "watchNotificationFailed": {
+    "message": "SiteDelta: Fehler beim Laden",
+    "description": "Notification title when a page cannot be loaded"
+  },
+  "pageFailed": {
+    "message": "Fehler beim Abrufen der Seiteninhalte. Bitte überwachte Bereiche prüfen.",
+    "description": "Title of the page action popup when no contents are found"
+  },
+  "pageRedirected": {
+    "message": "Die Seite wurde umgeleitet.",
+    "description": "Title of the page action popup when the page has been redirected"
+  },
+  "pageUnchanged": {
+    "message": "Keine Änderungen gefunden.",
+    "description": "Title of the page action popup when no changes are found"
+  },
+  "pageChanged": {
+    "message": "Zeige Änderung $CURRENT$ von $COUNT$.",
+    "description": "Title of the page action popup when changes are found",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "1"
+      },
+      "count": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "pageSelectRegion": {
+    "message": "Klicken, um einen Bereich auszuwählen.",
+    "description": "Title of the page action popup while selecting a region"
+  },
+  "pageEnable": {
+    "message": "Überwachen",
+    "description": "Button to enable monitoring the current page"
+  },
+  "pageDisable": {
+    "message": "Überwachung beenden",
+    "description": "Button to disable monitoring of the current page"
+  },
+  "pageShowChanges": {
+    "message": "Änderungen zeigen",
+    "description": "Button to show changes on the current page"
+  },
+  "pageNextChange": {
+    "message": "Nächste Änderung",
+    "description": "Button to show the next change on the current page"
+  },
+  "pageOpen": {
+    "message": "Seite öffnen",
+    "description": "Button to open the selected page"
+  },
+  "pageScan": {
+    "message": "Seite prüfen",
+    "description": "Button to scan the current page"
+  },
+  "pageRequirePermission": {
+    "message": "SiteDelta benötigt Ihre Erlaubnis, um auf diese Seite zugreifen zu dürfen.",
+    "description": "Text that SiteDelta requires permission to access this page"
+  },
+  "pageGrantHost": {
+    "message": "Zugriff auf diese Seite gewähren...",
+    "description": "Button to grant access to a given URL"
+  },
+  "pageGrantAll": {
+    "message": "Zugriff auf alle Seiten gewähren...",
+    "description": "Button to grant access to all addresses"
+  },
+  "pageRedirectedTo": {
+    "message": "Die Seite ist jetzt unter folgender Adresse verfügbar:",
+    "description": "Text describing that the page has been redirected"
+  },  
+  "pageFollowRedirect": {
+    "message": "Neue Seite überwachen",
+    "description": "Button to watch redirect target instead"
+  },
+  "pagesList": {
+    "message": "Überwachte Seiten",
+    "description": "Headline for the list of monitored pages"
+  },
+  "pagesFilter": {
+    "message": "Überwachte Seiten durchsuchen",
+    "description": "Placeholder text for page filter input"
+  },
+  "pagesDeleteOne": {
+    "message": "Seite löschen",
+    "description": "Button to delete the selected page"
+  },
+  "pagesDeleteMultiple": {
+    "message": "Seiten löschen",
+    "description": "Button to delete the selected pages"
+  },
+  "pagesOpenOne": {
+    "message": "Seite öffnen",
+    "description": "Button to open the selected page"
+  },
+  "pagesOpenMultiple": {
+    "message": "Seiten öffnen",
+    "description": "Button to open the selected pages"
+  },
+  "pagesOpenChanged": {
+    "message": "Alle geänderten öffnen",
+    "description": "Button to open the changed pages"
+  },
+  "pagesOpenFailed": {
+    "message": "Alle fehlgeschlagenen öffnen",
+    "description": "Button to open the failed pages"
+  },
+  "pagesScanOne": {
+    "message": "Seite prüfen",
+    "description": "Button to scan the selected page now"
+  },
+  "pagesScanMultiple": {
+    "message": "Seiten prüfen",
+    "description": "Button to scan the selected pages now"
+  },
+  "pagesScanAll": {
+    "message": "Alle Seiten prüfen",
+    "description": "Button to scan all pages now"
+  },
+  "pagesScanFailed": {
+    "message": "Neu prüfen",
+    "description": "Button to scan the failed pages"
+  },
+  "pagesMarkSeenOne": {
+    "message": "Seite als gesehen markieren",
+    "description": "Button to mark the selected page as seen"
+  },
+  "pagesMarkSeenMultiple": {
+    "message": "Seiten als gesehen markieren",
+    "description": "Button to mark the selected pages as seen"
+  },
+  "pagesMarkSeenAll": {
+    "message": "Alle als gesehen markieren",
+    "description": "Button to mark all pages as seen"
+  },
+  "pagesWatchDelay": {
+    "message": "Überprüfungshäufigkeit...",
+    "description": "Button to set scan frequency"
+  },
+  "pagesConfiguration": {
+    "message": "SiteDelta-Konfiguration",
+    "description": "Button to open options dialog"
+  },
+  "pagesSidebar": {
+    "message": "Sidebar",
+    "description": "Button to open the sidebar"
+  },
+  "pagesSort": {
+    "message": "Sortierung:",
+    "description": "Header text for the page sorting options"
+  },
+  "pagesSortUrl": {
+    "message": "nach Adresse",
+    "description": "Button to sort pages by URL"
+  },
+  "pagesSortTitle": {
+    "message": "nach Titel",
+    "description": "Button to sort pages by title"
+  },
+  "pagesSortStatus": {
+    "message": "nach Status",
+    "description": "Button to sort pages by status"
+  },
+  "pagesSortNextScan": {
+    "message": "nach Scanreihenfolge",
+    "description": "Button to sort pages by next scan time"
+  },
+  "configRegionsInclude": {
+    "message": "Überwachte Bereiche",
+    "description": "Headline for included regions"
+  },
+  "configRegionsExclude": {
+    "message": "Ignorierte Bereiche",
+    "description": "Headline for excluded regions"
+  },
+  "configRegionsRemove": {
+    "message": "entfernen",
+    "description": "Button to remove a region"
+  },
+  "configRegionsAdd": {
+    "message": "hinzufügen",
+    "description": "Button to add a new region"
+  },
+  "configRegionXpath": {
+    "message": "XPath-Ausdruck oder CSS-Selektor zur Definition der Region",
+    "description": "Text for manual xpath or css selector entry"
+  },
+  "configBehavior": {
+    "message": "Verhalten",
+    "description": "Headline for extension behavior settings"
+  },
+  "configScanOnLoad": {
+    "message": "Bekannte Seiten beim Besuch automatisch prüfen",
+    "description": "Label for checkbox to enable automatically scanning pages on load"
+  },
+  "configHighlightOnLoad": {
+    "message": "Änderungen auf bekannten Seiten automatisch hervorheben",
+    "description": "Label for checkbox to enable automatically highlighting pages"
+  },
+  "configEnableContextMenu": {
+    "message": "Kontextmenü auf Seiten und Symbol aktivieren",
+    "description": "Label for checkbox to enable SiteDelta context menus"
+  },
+  "configChecks": {
+    "message": "Überprüfte Inhalte",
+    "description": "Headline for configured page checks"
+  },
+  "configCheckDeleted": {
+    "message": "Auf entfernten Text prüfen",
+    "description": "Label for checkbox to enable the check for deletions"
+  },
+  "configCheckImages": {
+    "message": "Bilderadressen prüfen",
+    "description": "Label for checkbox to enable the check for image changes"
+  },
+  "configIgnores": {
+    "message": "Ignorierte Inhalte",
+    "description": "Headline for configured ignores"
+  },
+  "configIgnoreCase": {
+    "message": "Groß/Kleinschreibung ignorieren",
+    "description": "Label for checkbox to ignore case when checking"
+  },
+  "configIgnoreNumbers": {
+    "message": "Geänderte Zahlen ignorieren",
+    "description": "Label for checkbox to ignore numbers when checking"
+  },
+  "configAppearance": {
+    "message": "Erscheinungsbild",
+    "description": "Headline for configured appearance"
+  },
+  "configBackground": {
+    "message": "Hintergrundfarbe",
+    "description": "Tooltip for text fields with background color"
+  },
+  "configBorder": {
+    "message": "Rahmenfarbe",
+    "description": "Tooltip for text fields with border color"
+  },
+  "configAddColors": {
+    "message": "Farben für hinzugefügten Text",
+    "description": "Label for text fields for background and border color of added text"
+  },
+  "configRemoveColors": {
+    "message": "Farben für entfernten Text",
+    "description": "Label for text fields for background and border color of removed text"
+  },
+  "configMoveColors": {
+    "message": "Farben für verschobenen Text",
+    "description": "Label for text fields for background and border color of removed text"
+  },
+  "configIncludeColors": {
+    "message": "Farbe für überwachte Bereiche",
+    "description": "Label for text field for border color of included regions"
+  },
+  "configExcludeColors": {
+    "message": "Farbe für ignorierte Bereiche",
+    "description": "Label for text field for border color of excluded regions"
+  },
+  "configShowRegions": {
+    "message": "Bereiche hervorheben",
+    "description": "Label for check box to outline include and exclude regions"
+  },
+  "configMakeVisible": {
+    "message": "Versteckte Inhalte sichtbar machen",
+    "description": "Label for check box to make hidden elements visible on highlighted pages"
+  },
+  "configStripStyles": {
+    "message": "Seitengestaltung (CSS) entfernen",
+    "description": "Label for check box to remove CSS from highlighted pages"
+  },
+  "configIsolateRegions": {
+    "message": "Nur überwachte Bereiche anzeigen",
+    "description": "Label for check box to remove elements not scanned by SiteDelta"
+  },
+  "configWatch": {
+    "message": "Überwachungseinstellungen",
+    "description": "Label for text fields concerning watch / delay settings"
+  },
+  "configWatchDelay": {
+    "message": "Häufigkeit (in Minuten)",
+    "description": "Label for scan frequency"
+  },
+  "configNotifyChanged": {
+    "message": "Benachrichtigung zeigen, wenn Änderungen gefunden werden",
+    "description": "Label for check box to enable notifications for changed pages"
+  },
+  "configNotifyFailed": {
+    "message": "Benachrichtigung zeigen, wenn Seite nicht geladen werden kann",
+    "description": "Label for check box to enable notifications for failed pages"
+  },
+  "configTransfer": {
+    "message": "Import / Export (online)",
+    "description": "Button to import or export settings / pages"
+  },
+  "configBackupRestore": {
+    "message": "Backup / Wiederherstellung",
+    "description": "Button to backup or restore settings / pages"
+  },
+  "configBackup": {
+    "message": "Backup",
+    "description": "Headline for backup or restore settings / pages"
+  },
+  "configBackupPages": {
+    "message": "Backupdatei der überwachten Seiten erstellen",
+    "description": "Button to backup pages"
+  },
+  "configBackupSettings": {
+    "message": "Backupdatei der Einstellungen erstellen",
+    "description": "Button to backup settings"
+  },
+  "configBackupAll": {
+    "message": "Vollständige Backupdatei erstellen",
+    "description": "Button to backup settings and pages"
+  },
+  "configRestore": {
+    "message": "Wiederherstellung",
+    "description": "Headline for restore settings / pages"
+  },
+  "configRestoreFile": {
+    "message": "Backupdatei wiederherstellen",
+    "description": "Button to restore a backup"
+  },
+  "configRestoredConfig": {
+    "message": "$IMPORTED$ Einstellungen geändert, $SKIPPED$ unveränderte ignoriert. ",
+    "description": "Status text about restored config settings",
+    "placeholders": {
+      "imported": {
+        "content": "$1",
+        "example": "1"
+      },
+      "skipped": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "configRestoredPages": {
+    "message": "$IMPORTED$ Seiten hinzugefügt, $SKIPPED$ existierende übersprungen. ",
+    "description": "Status text about restored pages settings",
+    "placeholders": {
+      "imported": {
+        "content": "$1",
+        "example": "1"
+      },
+      "skipped": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "configAdvancedDisabled": {
+    "message": "Erweiterte Funktionen (die zusätzliche Berechtigungen benötigen) sind deaktiviert.",
+    "description": "Text that advanced features are disabled."
+  },
+  "configAdvancedUnsupported": {
+    "message": "Erweiterte Funktionen sind in Ihrer Browser-Version nicht unterstützt.",
+    "description": "Text that advanced features are unsupported with the current browser version."
+  },
+  "configEnableAdvanced": {
+    "message": "Erweiterte Funktionen aktivieren...",
+    "description": "Button to enable advanced features."
+  }
 }
-

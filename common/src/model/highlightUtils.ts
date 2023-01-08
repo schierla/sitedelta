@@ -20,7 +20,7 @@ export function highlightNext(doc: Document, nr: number): number {
 	return nr;
 }
 
-type ReplaceWithText = { buildNode: (text: string) => Node, text: string };
+type ReplaceWithText = { buildNode: (text: string, extraChild?: Node) => Node, text: string, extraChild?: Node };
 
 export function highlightChanges(doc: Document, config: Config, oldContent: string): number {
 	if (config.stripStyles) stripStyles(doc);
@@ -151,7 +151,7 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 							const nr = assignNumber ? changes++ : changes - 1;
 							const assignNumberCapture = assignNumber;
 							lasti = {
-								buildNode: (text: string) => {
+								buildNode: (text: string, extraChild?: Node) => {
 									const node = doc.createElement("SITEDELTA_INS");
 									if(assignNumberCapture) node.id = "sitedelta-change" + nr;
 									node.className = "sitedelta-change" + nr;
@@ -160,6 +160,7 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 									node.style.background = config.addBackground; 
 									node.style.color = "#000";
 									node.appendChild(doc.createTextNode(text));
+									if(extraChild) node.appendChild(extraChild);
 									return node;
 								}, 
 								text: ""
@@ -167,8 +168,7 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 							replace.push(lasti);
 						}
 						if(words.length == 2 && wpos == 0) { // images
-							const node = cur.cloneNode(true);
-							replace.push({buildNode: () => node, text: ""}); 
+							lasti.extraChild = cur.cloneNode(true);
 						} else {
 							lasti.text += words[wpos];
 						}
@@ -195,7 +195,7 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 				if (replaceRequired) {
 					domactions.push({
 						elem: cur,
-						repl: replace.map(r => r.buildNode(r.text))
+						repl: replace.map(r => r.buildNode(r.text, r.extraChild))
 					});
 				}
 			}

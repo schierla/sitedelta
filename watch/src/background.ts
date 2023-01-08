@@ -42,7 +42,7 @@ export const runBackgroundScript = (
         var title = await pageUtils.getTitle(url);
         chrome.notifications.create(url, {
           type: "basic",
-          iconUrl: chrome.runtime.getURL("icons/changed.svg"),
+          iconUrl: chrome.runtime.getURL("icons/changed.png"),
           title: chrome.i18n.getMessage("watchNotificationChanged"),
           message: title || "",
         });
@@ -53,7 +53,7 @@ export const runBackgroundScript = (
         var title = await pageUtils.getTitle(url);
         chrome.notifications.create(url, {
           type: "basic",
-          iconUrl: chrome.runtime.getURL("icons/inactive.svg"),
+          iconUrl: chrome.runtime.getURL("icons/inactive.png"),
           title: chrome.i18n.getMessage("watchNotificationFailed"),
           message: title || "",
         });

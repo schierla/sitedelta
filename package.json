@@ -13,6 +13,5 @@
   "devDependencies": {
     "@types/chrome": "^0.0.206",
     "typescript": "^4.9.4"
-  },
-  "packageManager": "yarn@3.3.1"
+  }
 }

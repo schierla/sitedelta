@@ -2,7 +2,11 @@ name: Build and package extension
 
 on:
   push:
-    branches: ["manifest-v3"]
+    branches: 
+      - manifest-v3
+      - webextension
+    tags: 
+      - v*
 
 jobs:
   build:

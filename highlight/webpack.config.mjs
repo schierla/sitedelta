@@ -68,9 +68,7 @@ export default (env) => {
       new CopyPlugin({
         patterns: [
           { from: "../common/src/icons/*", to: "icons/[name][ext]" },
-          // { from: "../common/src/styles/*", to: "styles/[name][ext]" },
           { from: "../_locales/**/*", to: "_locales/[path][name][ext]" },
-          // { from: "src/styles/*", to: "styles/[name][ext]" },
           { from: "src/*.htm", to: "[name][ext]" },
           { from: `src/${env.target}.manifest.json`, to: "manifest.json" },
         ],

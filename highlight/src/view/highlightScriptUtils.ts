@@ -174,7 +174,7 @@ async function _callContentScript(
     })
   );
   if (status === undefined) {
-    await tabUtils.executeScript(tabId, "/scripts/highlightScript.js");
+    await tabUtils.executeScript(tabId, "/highlightScript.js");
     var status = await new Promise((resolve) =>
       chrome.tabs.sendMessage(tabId, command, resolve)
     );

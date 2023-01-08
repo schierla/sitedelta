@@ -303,7 +303,7 @@ const tabSubscription: Subscription<State, any> = [
       }
 
       if (url == "https://sitedelta.schierla.de/transfer/") {
-        await executeScript(tabId, "/scripts/transferScript.js");
+        await executeScript(tabId, "/transferScript.js");
         window.close();
         return;
       }

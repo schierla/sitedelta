@@ -227,7 +227,7 @@ const tabSubscription: Subscription<State, any> = [
   (dispatch, _) => {
     getActive().then((tab) => {
       if (tab.id && tab.url == "https://sitedelta.schierla.de/transfer/") {
-        executeScript(tab.id, "/scripts/transferScript.js").then(close);
+        executeScript(tab.id, "/transferScript.js").then(close);
         return;
       }
       requestAnimationFrame(() => {

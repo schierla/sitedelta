@@ -32,6 +32,7 @@ import { ExpandIcon } from "@sitedelta/common/src/view/ExpandIcon";
 import { t } from "@sitedelta/common/src/view/helpers";
 import { Action, app, Dispatchable, Effecter, Subscription } from "hyperapp";
 import { LoadingScreen } from "./LoadingScreen";
+import { RedirectScreen } from "./RedirectScreen";
 import { PageConfigPanel } from "./PageConfigPanel";
 import { PermissionScreen } from "./PermissionScreen";
 
@@ -41,6 +42,7 @@ type Status =
   | "loading"
   | "loaded"
   | "loadfailed"
+  | "redirected"
   | "failed"
   | "changed"
   | "unchanged"
@@ -61,6 +63,7 @@ type State = {
   current: number;
   title: string | null;
   url?: string;
+  newUrl?: string;
   oldContent?: string;
   selectedIncludeRegions?: string[];
   selectedExcludeRegions?: string[];
@@ -143,7 +146,14 @@ const SetConfig: Action<State, Config | undefined> = (state, config) => ({
 
 const SetStatus: Action<State, Status> = (state, status) => ({
   ...state,
+  newUrl: undefined,
   status,
+});
+
+const SetRedirected: Action<State, string> = (state, newUrl) => ({
+  ...state,
+  status: "redirected",
+  newUrl,
 });
 
 const SetCurrent: Action<State, number> = (state, current) => ({
@@ -342,11 +352,15 @@ const fetchUrl: Effecter<State, string> = async (dispatch, url) => {
   if (url) {
     dispatchLater([SetDoc, undefined]);
     dispatchLater([SetStatus, "loading"]);
-    var doc = await watchLoadPage(url, documentParser);
-    if (doc === null) {
+    var loaded = await watchLoadPage(url, documentParser);
+    if (loaded.status === "error") {
       dispatchLater([SetStatus, "failed"]);
       return;
+    } else if (loaded.status === "redirect") {
+      dispatchLater([SetRedirected, loaded.url]);
+      return;
     }
+    const doc = loaded.document;
     var base = doc.createElement("base");
     base.setAttribute("href", url);
     var existingbase = doc.querySelector("base[href]") as HTMLBaseElement;
@@ -478,6 +492,7 @@ const Content = ({
   changes,
   current,
   url,
+  newUrl,
   selectedIncludeRegions,
   selectedExcludeRegions,
   hasPermission,
@@ -493,6 +508,8 @@ const Content = ({
       ? t("watchFailed")
       : status === "failed"
       ? t("pageFailed")
+      : status === "redirected"
+      ? t("pageRedirected")
       : status === "unchanged"
       ? t("pageUnchanged")
       : status === "changed" && current > -1
@@ -536,7 +553,7 @@ const Content = ({
       frameBorder={0}
       width="100%"
       height="100%"
-      class="absolute inset-0"
+      class="absolute inset-0 bg-white"
       style={{
         display:
           status === "loaded" ||
@@ -598,6 +615,9 @@ const Content = ({
         <div class="flex-1 relative">
           {url && hasPermission === false && (
             <PermissionScreen url={url} OnGranted={SetHasPermission} />
+          )}
+          {status === "redirected" && (
+            <RedirectScreen url={url} newUrl={newUrl} />
           )}
           {status === "loading" && <LoadingScreen />}
           {previewPanel}

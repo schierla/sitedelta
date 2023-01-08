@@ -27,17 +27,17 @@ export function PermissionScreen<S>({
 }) {
   return (
     <div
-      class="absolute inset-0 bg-gray-50 flex flex-col items-center justify-center"
+      class="absolute inset-0 bg-gray-50 dark:bg-slate-900 dark:text-slate-200 flex flex-col items-center justify-center"
       id="permissionRequired"
     >
-      <div class="text-center bg-white border-slate-400/20 rounded-lg shadow-lg m-10 max-w-md px-4 py-2">
-        <h1 class="font-semibold text-lg my-2 text-gray-900">
+      <div class="text-center bg-white border-slate-400/20 dark:bg-slate-800 dark:text-slate-200 rounded-lg shadow-lg dark:shadow-black/20 m-10 max-w-md px-4 py-2">
+        <h1 class="font-semibold text-lg my-2 text-gray-900 dark:text-slate-200">
           {new URL(url).origin}
         </h1>
-        <div class="text-sm text-gray-500 my-2">
+        <div class="text-sm text-slate-600 dark:text-slate-400 my-2">
           {t("pageRequirePermission")}
         </div>
-        <div class="my-2">
+        <div class="mb-2 mt-6">
           <Button
             isDefault
             onClick={[RequestPermission, { url: url, OnGranted }]}

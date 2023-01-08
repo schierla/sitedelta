@@ -55,12 +55,13 @@ export function markSeen<S>(
 }
 
 export async function deletePages<S>(
-  _: Dispatch<S>,
-  { pages }: PageEffectProps<S>
+  dispatch: Dispatch<S>,
+  { pages, SetSelection }: PageEffectProps<S>
 ) {
   for (const url of pages) {
     await ioRemove(url);
   }
+  requestAnimationFrame(() => dispatch([SetSelection, []]));
 }
 
 export function setWatchDelay<S>(
@@ -122,10 +123,6 @@ function SetDelay<S>(s: S, props: PageEffectProps<S>): Dispatchable<S> {
 }
 function Open<S>(s: S, props: PageEffectProps<S>): Dispatchable<S> {
   return [s, [openPages, props]];
-}
-
-function asAction<S>(action: Action<S>) {
-  return action;
 }
 
 export function getActions<S>(

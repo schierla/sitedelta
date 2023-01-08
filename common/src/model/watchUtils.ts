@@ -1,14 +1,23 @@
 import * as pageUtils from "./pageUtils";
-import * as watchUtils from "./watchUtils";
 import * as textUtils from "./textUtils";
 
 // watch operations
 export async function loadPage(
   url: string,
   documentParser: (content: string) => Document
-): Promise<Document | null> {
+): Promise<
+  | { status: "success"; document: Document }
+  | { status: "error" }
+  | { status: "redirect"; url: string }
+> {
   var page = await _downloadPage(url);
-  return await _parsePage(url, page.mime, page.content, documentParser);
+  return await _parsePage(
+    url,
+    page.mime,
+    page.content,
+    page.location,
+    documentParser
+  );
 }
 
 export async function adaptDelay(url: string, changes: number): Promise<void> {
@@ -52,26 +61,26 @@ export async function scanPage(
 ): Promise<number> {
   var config = await pageUtils.getEffectiveConfig(url);
   if (config === null) return -1;
-  var doc = await watchUtils.loadPage(url, documentParser);
-  if (doc === null) {
-    await watchUtils.setChanges(url, -1);
+  var doc = await loadPage(url, documentParser);
+  if (doc.status !== "success") {
+    await setChanges(url, -1);
     return -1;
   }
-  var newContent = textUtils.getText(doc, config);
+  var newContent = textUtils.getText(doc.document, config);
   if (newContent === null) {
-    await watchUtils.setChanges(url, -1);
+    await setChanges(url, -1);
     return -1;
   }
   var oldContent = await pageUtils.getContent(url);
   if (oldContent === null) {
-    await watchUtils.setChanges(url, -1);
+    await setChanges(url, -1);
     return -1;
   }
   if (!textUtils.isEqual(oldContent, newContent, config)) {
-    await watchUtils.setChanges(url, 1);
+    await setChanges(url, 1);
     return 1;
   } else {
-    await watchUtils.setChanges(url, 0);
+    await setChanges(url, 0);
     return 0;
   }
 }
@@ -82,31 +91,39 @@ export async function markSeen(
 ): Promise<void> {
   var config = await pageUtils.getEffectiveConfig(url);
   if (config === null) return;
-  var doc = await watchUtils.loadPage(url, documentParser);
-  if (doc === null) {
-    await watchUtils.setChanges(url, -1);
+  var doc = await loadPage(url, documentParser);
+  if (doc.status !== "success") {
+    await setChanges(url, -1);
     return;
   }
-  var newContent = textUtils.getText(doc, config);
+  var newContent = textUtils.getText(doc.document, config);
   if (newContent !== null) await pageUtils.setContent(url, newContent);
-  await watchUtils.setChanges(url, 0);
+  await setChanges(url, 0);
 }
 
-async function _downloadPage(
-  url: string
-): Promise<{ mime: string; content: Uint8Array | null }> {
+async function _downloadPage(url: string): Promise<{
+  mime: string;
+  content: Uint8Array | null;
+  location: string | null;
+}> {
   try {
     const response = await fetch(url, {
-      redirect: "error",
+      redirect: "follow",
       headers: { "Cache-Control": "max-age=0" },
     });
     if (!response.ok || !response.body || !response.headers)
-      return { mime: `error/${response.status}`, content: null };
+      return {
+        mime: `error/${response.status}`,
+        content: null,
+        location: null,
+      };
+    if (response.redirected)
+      return { mime: `error/302`, content: null, location: response.url };
 
     const content = new Uint8Array(await response.arrayBuffer());
-    return { mime: response.type, content: content };
+    return { mime: response.type, content: content, location: null };
   } catch (e) {
-    return { mime: `error/0`, content: null };
+    return { mime: `error/0`, content: null, location: null };
   }
 }
 
@@ -114,11 +131,20 @@ async function _parsePage(
   url: string,
   mime: string,
   content: Uint8Array | null,
+  location: string | null,
   documentParser: (content: string) => Document
-): Promise<Document | null> {
+): Promise<
+  | { status: "success"; document: Document }
+  | { status: "error" }
+  | { status: "redirect"; url: string }
+> {
+  if (location !== null) {
+    console.log(`Redirected ${url} to ${location}`);
+    return { status: "redirect", url: location };
+  }
   if (content === null) {
-    console.log("Error loading " + url + ": " + mime);
-    return null;
+    console.log(`Error loading ${url}: ${mime}`);
+    return { status: "error" };
   }
 
   if (mime.toLowerCase().indexOf("charset=") > 0) {
@@ -126,7 +152,7 @@ async function _parsePage(
       .toLowerCase()
       .substring(mime.toLowerCase().indexOf("charset=") + "charset=".length);
     const text = new TextDecoder(charset).decode(content);
-    return documentParser(text);
+    return { status: "success", document: documentParser(text) };
   } else {
     const tempText = new TextDecoder("utf-8").decode(content);
     const tempDoc = documentParser(tempText);
@@ -137,7 +163,7 @@ async function _parsePage(
         const text = new TextDecoder(
           meta.getAttribute("charset") ?? "utf-8"
         ).decode(content);
-        return documentParser(text);
+        return { status: "success", document: documentParser(text) };
       }
       const httpEquiv = meta?.getAttribute("http-equiv");
       const metaContent = meta?.getAttribute("content");
@@ -153,10 +179,10 @@ async function _parsePage(
               metaContent.toLowerCase().indexOf("charset=") + "charset=".length
             );
           const text = new TextDecoder(charset).decode(content);
-          return documentParser(text);
+          return { status: "success", document: documentParser(text) };
         }
       }
     }
-    return tempDoc;
+    return { status: "success", document: tempDoc };
   }
 }

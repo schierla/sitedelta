@@ -107,7 +107,7 @@ function PageList(index: Index, icon: VNode<any>, urls: string[]) {
     <select
       size={urls.length > 5 ? 5 : urls.length}
       multiple
-      class="p-0 w-full block text-sm border-gray-300"
+      class="p-0 w-full block text-sm border-gray-300 dark:bg-slate-800 dark:border-gray-600"
     >
       {urls.map((url) => (
         <option

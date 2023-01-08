@@ -73,6 +73,10 @@
     "message": "Error getting page contents. Check the included regions.",
     "description": "Title of the page action popup when no contents are found"
   },
+  "pageRedirected": {
+    "message": "Page has been redirected.",
+    "description": "Title of the page action popup when the page has been redirected"
+  },
   "pageUnchanged": {
     "message": "No changes found.",
     "description": "Title of the page action popup when no changes are found"
@@ -130,6 +134,14 @@
   "pageGrantAll": {
     "message": "Grant access to all pages...",
     "description": "Button to grant access to all addresses"
+  },
+  "pageRedirectedTo": {
+    "message": "The page is now available at a new address:",
+    "description": "Text describing that the page has been redirected"
+  },
+  "pageFollowRedirect": {
+    "message": "Watch new page",
+    "description": "Button to watch redirect target instead"
   },
   "pagesList": {
     "message": "Monitored pages",

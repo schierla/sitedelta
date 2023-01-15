@@ -590,7 +590,7 @@ const Content = ({
                 ? nextChangeButton
                 : false
               : highlightChangesButton)}
-          {!expanded && hasPermission && expandButton}
+          {!expanded && hasPermission && known && expandButton}
         </div>
         <div class="flex-1 text-center">{statusMessage}</div>
       </div>

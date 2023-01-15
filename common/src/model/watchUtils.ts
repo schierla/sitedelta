@@ -121,16 +121,26 @@ async function _downloadPage(url: string): Promise<{
       return { mime: `error/302`, content: null, location: response.url };
 
     const content = new Uint8Array(await response.arrayBuffer());
-    return { mime: response.type, content: content, location: null };
+    return { mime: response.headers.get("content-type") ?? "text/html", content: content, location: null };
   } catch (e) {
     return { mime: `error/0`, content: null, location: null };
   }
 }
 
+function _getCharsetFromContentType(contentType: string): string | undefined {
+  for (const part of contentType.toLowerCase().split(";")) {
+    const [key, value] = part.split("=");
+    if (key.trim() === "charset") {
+      return value?.trim().replace(/^\"(.*)\"$/, "$1");
+    }
+  }
+  return undefined;
+}
+
 async function _parsePage(
   url: string,
-  mime: string,
-  content: Uint8Array | null,
+  contentType: string,
+  data: Uint8Array | null,
   location: string | null,
   documentParser: (content: string) => Document
 ): Promise<
@@ -142,28 +152,38 @@ async function _parsePage(
     console.log(`Redirected ${url} to ${location}`);
     return { status: "redirect", url: location };
   }
-  if (content === null) {
-    console.log(`Error loading ${url}: ${mime}`);
+  if (data === null) {
+    console.log(`Error loading ${url}: ${contentType}`);
     return { status: "error" };
   }
 
-  if (mime.toLowerCase().indexOf("charset=") > 0) {
-    const charset = mime
-      .toLowerCase()
-      .substring(mime.toLowerCase().indexOf("charset=") + "charset=".length);
-    const text = new TextDecoder(charset).decode(content);
+  const charset = _getCharsetFromContentType(contentType);
+  if (charset) {
+    try {
+      const text = new TextDecoder(charset, { ignoreBOM: true }).decode(data);
+      return { status: "success", document: documentParser(text) };
+    } catch (e) {}
+  } else if (data[0] == 0xef && data[1] == 0xbb && data[2] == 0xbf) {
+    const text = new TextDecoder("utf-8", { ignoreBOM: true }).decode(data);
+    return { status: "success", document: documentParser(text) };
+  } else if (data[0] == 0xfe && data[1] == 0xff) {
+    const text = new TextDecoder("utf-16be", { ignoreBOM: true }).decode(data);
+    return { status: "success", document: documentParser(text) };
+  } else if (data[0] == 0xff && data[1] == 0xfe) {
+    const text = new TextDecoder("utf-16le", { ignoreBOM: true }).decode(data);
     return { status: "success", document: documentParser(text) };
   } else {
-    const tempText = new TextDecoder("utf-8").decode(content);
-    const tempDoc = documentParser(tempText);
-    const metas = tempDoc.getElementsByTagName("meta");
+    const sniffText = new TextDecoder("ascii").decode(data.slice(0, 1024));
+    const sniffDoc = documentParser(sniffText);
+    const metas = sniffDoc.getElementsByTagName("meta");
     for (let i = 0; i < metas.length; i++) {
       const meta = metas.item(i);
-      if (meta?.getAttribute("charset")) {
-        const text = new TextDecoder(
-          meta.getAttribute("charset") ?? "utf-8"
-        ).decode(content);
-        return { status: "success", document: documentParser(text) };
+      const charset = meta?.getAttribute("charset");
+      if (charset) {
+        try {
+          const text = new TextDecoder(charset).decode(data);
+          return { status: "success", document: documentParser(text) };
+        } catch (e) {}
       }
       const httpEquiv = meta?.getAttribute("http-equiv");
       const metaContent = meta?.getAttribute("content");
@@ -172,17 +192,22 @@ async function _parsePage(
         httpEquiv.toLowerCase() == "content-type" &&
         metaContent
       ) {
-        if (metaContent.toLowerCase().indexOf("charset=") > 0) {
-          const charset = metaContent
-            .toLowerCase()
-            .substring(
-              metaContent.toLowerCase().indexOf("charset=") + "charset=".length
-            );
-          const text = new TextDecoder(charset).decode(content);
-          return { status: "success", document: documentParser(text) };
+        const metaCharset = _getCharsetFromContentType(metaContent);
+        if (metaCharset) {
+          try {
+            const text = new TextDecoder(metaCharset).decode(data);
+            return { status: "success", document: documentParser(text) };
+          } catch (e) {}
         }
       }
     }
-    return { status: "success", document: tempDoc };
+  }
+
+  try {
+    const text = new TextDecoder("utf-8", { fatal: true }).decode(data);
+    return { status: "success", document: documentParser(text) };
+  } catch (e) {
+    const text = new TextDecoder("ascii").decode(data);
+    return { status: "success", document: documentParser(text) };
   }
 }

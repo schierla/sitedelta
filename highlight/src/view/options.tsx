@@ -36,7 +36,7 @@ const indexSubscription: Subscription<State, any> = [
 ];
 
 const Content = ({ selectedPages, index }: State) => (
-  <body class="font-sans text-sm bg-slate-50 dark:bg-slate-900 dark:text-slate-200 flex flex-col gap-2 my-4 mx-4">
+  <body class="font-sans text-sm bg-[#ffffff] dark:bg-[#23222b] dark:text-slate-200 flex flex-col gap-2 my-4 mx-4">
     <div class="font-semibold">{t("pagesList")}:</div>
     <PageList
       sortOrder="title"

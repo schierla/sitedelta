@@ -18,11 +18,13 @@ async function changePageUrl<S>(
   const title = await pageUtils.getTitle(url);
   const status = await pageUtils.getStatus(url);
   const content = await pageUtils.getContent(url);
-  await pageUtils.create(newUrl, title);
-  await pageUtils.setConfig(newUrl, config);
-  await pageUtils.setStatus(newUrl, status);
-  await pageUtils.setContent(newUrl, content);
-  await pageUtils.remove(url);
+  if (config && status) {
+    await pageUtils.create(newUrl, title);
+    await pageUtils.setConfig(newUrl, config);
+    await pageUtils.setStatus(newUrl, status);
+    await pageUtils.setContent(newUrl, content);
+    await pageUtils.remove(url);
+  }
   window.location.search = newUrl;
 }
 

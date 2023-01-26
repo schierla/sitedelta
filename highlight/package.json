@@ -1,9 +1,9 @@
 {
     "name": "@sitedelta/highlight",
-    "version": "0.30.2",
+    "version": "0.30.3",
     "private": true,
     "dependencies": {
-        "@sitedelta/common": "0.30.2"
+        "@sitedelta/common": "0.30.3"
     },
     "scripts": {
         "dev:ff": "webpack -w --env target=firefox",

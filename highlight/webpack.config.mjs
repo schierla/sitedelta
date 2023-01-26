@@ -2,7 +2,6 @@ import { resolve } from "path";
 import WebExtPlugin from "web-ext-plugin";
 import CopyPlugin from "copy-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import { ESBuildMinifyPlugin } from "esbuild-loader";
 import webpack from "webpack";
 import path from "path";
 import { dirname } from "path";
@@ -57,8 +56,7 @@ export default (env) => {
     },
 
     optimization: {
-      minimize: env.package === "true",
-      minimizer: [new ESBuildMinifyPlugin()],
+      minimize: false
     },
 
     plugins: [

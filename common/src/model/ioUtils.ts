@@ -21,9 +21,24 @@ export async function setConfig(config: Partial<Config>): Promise<void> {
 	await _set("config", config);
 }
 
+async function _cleanIndex(index: Index): Promise<Index> {
+	const broken = Object.entries(index).filter(([_, value]) => !value).map(([key]) => key);
+	if(broken.length > 0) {
+		for(const key of broken) {
+			delete index[key];
+		}
+		await _set("index", index);
+	}
+	return index;
+}
+
 export async function listIndex(): Promise<Index> {
 	var index = await _get("index");
-	if(index) return index as Index; else return {};
+	if(index) {
+		return await _cleanIndex(index);
+	 } else {
+		return {};
+	 }
 }
 
 export function observeIndex(observer: (index: Index) => void) {

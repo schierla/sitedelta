@@ -25,7 +25,7 @@ async function _cleanIndex(index: Index): Promise<Index> {
 	const broken = Object.entries(index).filter(([_, value]) => !value).map(([key]) => key);
 	if(broken.length > 0) {
 		for(const key of broken) {
-			delete index[key];
+			index[key] = {title: key};
 		}
 		await _set("index", index);
 	}

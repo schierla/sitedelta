@@ -1,6 +1,6 @@
 {
     "name": "@sitedelta/common",
-    "version": "0.30.3",
+    "version": "0.30.4",
     "private": true,
     "dependencies": {
         "@popperjs/core": "^2.11.6",

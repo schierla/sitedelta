@@ -1,9 +1,9 @@
 {
     "name": "@sitedelta/watch",
-    "version": "0.30.4",
+    "version": "0.30.5",
     "private": true,
     "dependencies": {
-        "@sitedelta/common": "0.30.4",
+        "@sitedelta/common": "0.30.5",
         "@xmldom/xmldom": "^0.8.6",
         "parse5": "^7.1.2",
         "query-selector": "^2.0.0",

@@ -124,7 +124,7 @@ function Content({
               <SearchIcon />
             </div>
             <input
-              class="block w-full h-full rounded-md border-gray-300 dark:bg-slate-800 dark:border-gray-600 pl-7 focus:border-indigo-500 focus:ring-indigo-500"
+              class="block w-full h-full rounded-md border-gray-300 dark:bg-slate-800 dark:text-slate-200 dark:border-gray-600 pl-7 focus:border-indigo-500 focus:ring-indigo-500"
               value={filter}
               oninput={(_, event: Event) => [
                 SetFilter,

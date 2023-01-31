@@ -62,8 +62,9 @@ export function highlightChanges(doc: Document, config: Config, oldContent: stri
 		var last = "", action = "", text = "";
 		if(excludes.indexOf(regions[i]) !== -1) continue;
 		for (var cur of textUtils.walkTree(regions[i], config, excludes)) {
-			if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {
-				if (cur.nodeName == 'IMG' && (cur as Element).hasAttribute("src")) 
+			const nodeName = cur.nodeName.toLowerCase();
+			if (cur.nodeType == 3 || (config.scanImages && nodeName == 'img')) {
+				if (nodeName == 'img' && (cur as Element).hasAttribute("src")) 
 					text = "[" + (cur as Element).getAttribute("src") + "]";
 				else 
 					text = (cur as CharacterData).data.replace(/\[/g, "[ ");

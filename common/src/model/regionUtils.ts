@@ -266,7 +266,7 @@ function _buildXPath(t: HTMLElement, allowId: boolean): string {
   var path = "";
   if (allowId && t.id != "" && t.id.indexOf("sitedelta") == -1)
     return 'id("' + t.id + '")';
-  while (t.nodeName != "HTML" && t.parentNode) {
+  while (t.nodeName.toLowerCase() != "html" && t.parentNode) {
     var c = t.parentNode.firstChild;
     var num = 1;
     while (c && c != t) {

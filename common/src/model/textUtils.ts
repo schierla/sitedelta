@@ -50,11 +50,12 @@ export function findElements(doc: Document, xpaths: string[]): Element[] {
 
 export function* walkTree(node: Node, config: Config, excludes: Node[]) {
 	for(var cur = node.firstChild; cur; cur = cur.nextSibling) {
+		const nodeName = cur.nodeName.toLowerCase();
 		if(excludes.indexOf(cur) !== -1) continue;
-		if (cur.nodeName == 'SCRIPT' || cur.nodeName == 'STYLE') continue;
+		if (nodeName == 'script' || nodeName == 'style') continue;
 		if (cur.nodeType == 3) 
 			yield cur;
-		if (config.scanImages && cur.nodeName == 'IMG') {
+		if (config.scanImages && nodeName == 'img') {
 			var src = (cur as HTMLElement).getAttribute("src");
 			if(src && src.indexOf("chrome:") != 0) yield cur;
 		}
@@ -67,8 +68,9 @@ function _getTextForNode(node: Node, config: Config, excludes: Node[]): string {
 	if(!doc) return "";
 	if(excludes.indexOf(node) !== -1) return ret;
 	for(var cur of walkTree(node, config, excludes)) {
-		if (cur.nodeType == 3 || (config.scanImages && cur.nodeName == 'IMG')) {
-			if (cur.nodeName == 'IMG' && (cur as Element).hasAttribute("src")) 
+		const nodeName = cur.nodeName.toLowerCase();
+		if (cur.nodeType == 3 || (config.scanImages && nodeName == 'img')) {
+			if (nodeName == 'img' && (cur as Element).hasAttribute("src")) 
 				text = "[" + (cur as Element).getAttribute("src") + "]";
 			else 
 				text = (cur as CharacterData).data.replace(/\[/g, "[ ");

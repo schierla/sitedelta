@@ -44,6 +44,7 @@ export default (env) => {
           test: /\.tsx?$/,
           loader: "esbuild-loader",
           options: {
+            loader: "tsx", 
             target: "es2015",
           },
         },

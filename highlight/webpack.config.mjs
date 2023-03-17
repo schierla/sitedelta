@@ -40,8 +40,9 @@ export default (env) => {
           test: /\.tsx?$/,
           loader: "esbuild-loader",
           options: {
-            loader: "tsx", 
-            target: "es2015"
+            target: "es2015",
+            jsx: "automatic",
+            jsxImportSource: "@sitedelta/common/src/view",
           },
         },
         {

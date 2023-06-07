@@ -9,34 +9,46 @@ function regionAddHandler<S>(
   UpdateConfig: Action<S, Partial<Config>>
 ) {
   return (region?: string) => {
-    if (region !== undefined && region !== "" && regions.indexOf(region) === -1)
-      return [UpdateConfig, addRegionUpdate(configKey, regions, region)];
+    if (region && regions.indexOf(region) === -1)
+      return [
+        UpdateConfig,
+        {
+          [configKey]: [...regions, region],
+        },
+      ];
     else return (state: S) => state;
   };
 }
 
-function addRegionUpdate(configKey: string, existing: string[], toAdd: string) {
-  return {
-    [configKey]: [...existing, toAdd],
-  };
-}
 
-function deleteRegionUpdate(
+function regionEditHandler<S>(
+  regions: string[],
+  index: number,
   configKey: string,
-  existing: string[],
-  toDelete: string[]
+  UpdateConfig: Action<S, Partial<Config>>
 ) {
-  return {
-    [configKey]: existing.filter((r) => toDelete.indexOf(r) === -1),
+  return (region?: string) => {
+    if (region)
+      return [
+        UpdateConfig,
+        {
+          [configKey]: [
+            ...regions.slice(0, index),
+            region,
+            ...regions.slice(index + 1),
+          ],
+        },
+      ];
+    else return (state: S) => state;
   };
 }
-
 export function ConfigRegionList<S>({
   config,
   configKey,
   selectedRegions,
   SelectRegions,
   PickRegion,
+  EditRegion,
   UpdateConfig,
 }: {
   config: Config;
@@ -44,6 +56,10 @@ export function ConfigRegionList<S>({
   selectedRegions: string[] | undefined;
   SelectRegions: Action<S, string[] | undefined>;
   PickRegion: Action<S, (region?: string) => Dispatchable<S>>;
+  EditRegion: Action<
+    S,
+    { region: string; callback: (region?: string) => Dispatchable<S> }
+  >;
   UpdateConfig: Action<S, Partial<Config>>;
 }) {
   const regions: string[] = config[configKey] ?? [];
@@ -51,7 +67,7 @@ export function ConfigRegionList<S>({
     <select
       size={3}
       multiple
-      class="p-0 border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
+      class="p-0 border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 max-w-sm"
       onchange={(_, e: Event) => [
         SelectRegions,
         Array.from((e.target as HTMLSelectElement).selectedOptions).map(
@@ -59,10 +75,23 @@ export function ConfigRegionList<S>({
         ),
       ]}
     >
-      {regions.map((region) => (
+      {regions.map((region, index) => (
         <option
           value={region}
+          title={region}
           selected={selectedRegions && selectedRegions?.indexOf(region) !== -1}
+          ondblclick={[
+            EditRegion,
+            {
+              region,
+              callback: regionEditHandler(
+                regions,
+                index,
+                configKey,
+                UpdateConfig
+              ),
+            },
+          ]}
         >
           {region}
         </option>
@@ -81,7 +110,11 @@ export function ConfigRegionList<S>({
         <Button
           onClick={[
             UpdateConfig,
-            deleteRegionUpdate(configKey, regions, selectedRegions),
+            {
+              [configKey]: regions.filter(
+                (r) => selectedRegions.indexOf(r) === -1
+              ),
+            },
           ]}
         >
           {t("configRegionsRemove")}

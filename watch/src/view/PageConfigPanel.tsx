@@ -12,6 +12,7 @@ export function PageConfigPanel<S>({
   title,
   SetTitle,
   UpdateTitle,
+  EditRegion,
   PickRegion,
   selectedIncludeRegions,
   SelectIncludeRegions,
@@ -25,6 +26,10 @@ export function PageConfigPanel<S>({
   SetTitle: Action<S, string>;
   UpdateTitle: Action<S, string>;
   PickRegion: Action<S, (region?: string) => Dispatchable<S>>;
+  EditRegion: Action<
+    S,
+    { region: string; callback: (region?: string) => Dispatchable<S> }
+  >;
   selectedIncludeRegions: string[] | undefined;
   SelectIncludeRegions: Action<S, string[] | undefined>;
   selectedExcludeRegions: string[] | undefined;
@@ -105,6 +110,7 @@ export function PageConfigPanel<S>({
           selectedRegions={selectedIncludeRegions}
           SelectRegions={SelectIncludeRegions}
           PickRegion={PickRegion}
+          EditRegion={EditRegion}
           UpdateConfig={UpdateConfig}
         />
       </ConfigSection>,
@@ -116,6 +122,7 @@ export function PageConfigPanel<S>({
           selectedRegions={selectedExcludeRegions}
           SelectRegions={SelectExcludeRegions}
           PickRegion={PickRegion}
+          EditRegion={EditRegion}
           UpdateConfig={UpdateConfig}
         />
       </ConfigSection>,

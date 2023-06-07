@@ -70,23 +70,21 @@ if (contentscript === undefined) {
             current: contentscript.currentChange,
           });
         }
+      } else if(request.command == "abortRegion") {
+        regionAbortSelect();
+        contentscript.state = PageState.LOADED;
+        contentscript.regionResult(null);
+        contentscript.regionResult = null;
+        sendResponse(null);
       } else if (request.command == "selectRegion") {
-        if (contentscript.state == PageState.SELECTREGION) {
-          regionAbortSelect();
+        contentscript.state = PageState.SELECTREGION;
+        contentscript.regionResult = sendResponse;
+        selectRegion(document).then(function (xpath) {
           contentscript.state = PageState.LOADED;
-          contentscript.regionResult(null);
           contentscript.regionResult = null;
-          sendResponse(prompt(chrome.i18n.getMessage("configRegionXpath"), ""));
-        } else {
-          contentscript.state = PageState.SELECTREGION;
-          contentscript.regionResult = sendResponse;
-          selectRegion(document).then(function (xpath) {
-            contentscript.state = PageState.LOADED;
-            contentscript.regionResult = null;
-            sendResponse(xpath);
-          });
-          return true;
-        }
+          sendResponse(xpath);
+        });
+        return true;
       } else if (request.command == "showOutline") {
         regionShowOutline(document, request.xpath, request.color);
         sendResponse(null);

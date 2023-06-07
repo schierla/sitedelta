@@ -68,6 +68,12 @@ export async function removeOutline(tabId: number): Promise<void> {
   await _csRemoveOutline(tabId);
 }
 
+export async function abortSelect(
+  tabId: number,
+): Promise<string> {
+  return await _bsAbortRegion(tabId);
+}
+
 export async function selectInclude(
   tabId: number,
   url: string
@@ -84,6 +90,10 @@ export async function selectExclude(
 
 export async function selectRegion(tabId: number) {
   return await _csSelectRegion(tabId);
+}
+
+export async function abortRegion(tabId: number) {
+  return await _csAbortRegion(tabId);
 }
 
 export async function scanAll() {
@@ -108,6 +118,9 @@ function _csRemoveOutline(tab: number): Promise<void> {
 }
 function _csSelectRegion(tab: number): Promise<string> {
   return _callContentScript(tab, { command: "selectRegion" });
+}
+function _csAbortRegion(tab: number): Promise<string> {
+  return _callContentScript(tab, { command: "abortRegion" });
 }
 function _csGetContent(tab: number, config: Config): Promise<string> {
   return _callContentScript(tab, { command: "getContent", config: config });
@@ -141,6 +154,12 @@ function _bsAddIncludeRegion(tab: number, url: string): Promise<string> {
     command: "addIncludeRegion",
     tab: tab,
     url: url,
+  });
+}
+function _bsAbortRegion(tab: number): Promise<string> {
+  return _callBackgroundScript({
+    command: "abortRegion",
+    tab: tab,
   });
 }
 function _bsScanAll(): Promise<void> {

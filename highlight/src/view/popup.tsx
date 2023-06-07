@@ -32,6 +32,7 @@ import {
   scanAll as utilScanAll,
   selectExclude as utilSelectExclude,
   selectInclude as utilSelectInclude,
+  abortSelect as utilAbortSelect,
   showOutline as utilShowOutline,
 } from "./highlightScriptUtils";
 import { HighlightState, PageState } from "./highlightState";
@@ -150,6 +151,15 @@ const SelectIncludeRegions: Action<State, string[] | undefined> = (
   ];
 };
 
+const EditRegion: Action<
+State,
+{ region: string; callback: (region?: string) => Dispatchable<State> }
+> = (state, {region, callback}) => (
+  [
+    state, [editRegion, {region, callback}]
+  ]
+);
+
 const PickIncludeRegion: Action<
   State,
   (region?: string) => Dispatchable<State>
@@ -196,6 +206,19 @@ const updateTitle: Effecter<State, { url: string; title: string }> = async (
   await pageSetTitle(url, title);
 };
 
+const editRegion: Effecter<
+  State,
+  {
+    region: string;
+    callback: (region?: string) => Dispatchable<State>;
+  }
+> = async (dispatch, { region, callback }) => {
+  const dispatchLater = (event: Dispatchable<State>) =>
+    requestAnimationFrame(() => dispatch(event));
+  const newRegion = prompt(chrome.i18n.getMessage("configRegionXpath"), region);
+  dispatchLater(callback(newRegion));
+};
+
 const pickRegion: Effecter<
   State,
   {
@@ -208,10 +231,18 @@ const pickRegion: Effecter<
 > = async (dispatch, { status, tabId, url, isInclude, callback }) => {
   const dispatchLater = (event: Dispatchable<State>) =>
     requestAnimationFrame(() => dispatch(event));
-  dispatchLater(callback(undefined));
-  if (isInclude) await utilSelectInclude(tabId, url);
-  else await utilSelectExclude(tabId, url);
-  dispatchLater([SetStatus, { state: PageState.SELECTREGION }]);
+
+  if(status.state === PageState.SELECTREGION) {
+    utilAbortSelect(tabId);
+    dispatchLater([SetStatus, { state: PageState.LOADED }]);
+    const newRegion = prompt(chrome.i18n.getMessage("configRegionXpath"), "");
+    dispatchLater(callback(newRegion));
+  } else {
+    dispatchLater(callback(undefined));
+    if (isInclude) await utilSelectInclude(tabId, url);
+    else await utilSelectExclude(tabId, url);
+    dispatchLater([SetStatus, { state: PageState.SELECTREGION }]);
+  }
 };
 
 const applyConfigUpdate: Effecter<
@@ -508,6 +539,7 @@ const Content = ({
               selectedRegions={selectedIncludeRegions}
               SelectRegions={SelectIncludeRegions}
               PickRegion={PickIncludeRegion}
+              EditRegion={EditRegion}
               UpdateConfig={UpdateConfig}
             />
           </ConfigSection>
@@ -518,6 +550,7 @@ const Content = ({
               selectedRegions={selectedExcludeRegions}
               SelectRegions={SelectExcludeRegions}
               PickRegion={PickExcludeRegion}
+              EditRegion={EditRegion}
               UpdateConfig={UpdateConfig}
             />
           </ConfigSection>

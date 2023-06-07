@@ -244,6 +244,14 @@ const PickRegion: Action<State, (region?: string) => Dispatchable<State>> = (
   [pickRegion, { status: state.status, idoc: state.idoc, callback }],
 ];
 
+const EditRegion: Action<
+  State,
+  { region: string; callback: (region?: string) => Dispatchable<State> }
+> = (state, { region, callback }) => [
+  state,
+  [editRegion, { region, callback }],
+];
+
 const updateTitle: Effecter<State, { url: string; title: string }> = (
   dispatch,
   { url, title }
@@ -387,6 +395,19 @@ const updateUrlDetails: Effecter<State, string> = (dispatch, url) => {
   pageGetEffectiveConfig(url).then((config) =>
     dispatchLater([SetConfig, config ?? undefined])
   );
+};
+
+const editRegion: Effecter<
+  State,
+  {
+    region: string;
+    callback: (region?: string) => Dispatchable<State>;
+  }
+> = async (dispatch, { region, callback }) => {
+  const dispatchLater = (event: Dispatchable<State>) =>
+    requestAnimationFrame(() => dispatch(event));
+  const newRegion = prompt(chrome.i18n.getMessage("configRegionXpath"), region);
+  dispatchLater(callback(newRegion));
 };
 
 const pickRegion: Effecter<
@@ -601,6 +622,7 @@ const Content = ({
               url={url}
               config={config}
               PickRegion={PickRegion}
+              EditRegion={EditRegion}
               selectedExcludeRegions={selectedExcludeRegions}
               SelectExcludeRegions={SelectExcludeRegions}
               selectedIncludeRegions={selectedIncludeRegions}

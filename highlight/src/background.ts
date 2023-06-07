@@ -148,6 +148,8 @@ var messageListener = function (
     highlightScriptUtils
       .selectRegion(request.tab)
       .then((xpath) => pageUtils.addExclude(request.url, xpath));
+  } else if(request.command == "abortRegion") {
+    highlightScriptUtils.abortRegion(request.tab);
   } else if (request.command == "reinitialize") {
     reinitialize();
   } else if (request.command == "scanAll") {

@@ -11,7 +11,7 @@
     "lint": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.231",
-    "typescript": "^5.0.4"
+    "@types/chrome": "^0.0.237",
+    "typescript": "^5.1.3"
   }
 }

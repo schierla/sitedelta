@@ -14,7 +14,11 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "sitedelta-highlight@schierla.de"
+      "id": "sitedelta-highlight@schierla.de",
+      "strict_min_version": "102.0"
+    },
+    "gecko_android": {
+      "strict_min_version": "120.0"
     }
   },
   "permissions": [

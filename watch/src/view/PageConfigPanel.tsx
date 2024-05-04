@@ -1,6 +1,6 @@
 import { Config } from "@sitedelta/common/src/model/config";
 import { ConfigCheckbox } from "@sitedelta/common/src/view/ConfigCheckbox";
-import { ConfigNumber } from "@sitedelta/common/src/view/ConfigNumber";
+import { ConfigFrequency } from "@sitedelta/common/src/view/ConfigFrequency";
 import { ConfigRegionList } from "@sitedelta/common/src/view/ConfigRegionList";
 import { ConfigSection } from "@sitedelta/common/src/view/ConfigSection";
 import { t } from "@sitedelta/common/src/view/helpers";
@@ -19,6 +19,8 @@ export function PageConfigPanel<S>({
   selectedExcludeRegions,
   SelectExcludeRegions,
   UpdateConfig,
+  timeUnit, 
+  UpdateTimeUnit
 }: {
   config?: Config;
   url?: string;
@@ -35,6 +37,8 @@ export function PageConfigPanel<S>({
   selectedExcludeRegions: string[] | undefined;
   SelectExcludeRegions: Action<S, string[] | undefined>;
   UpdateConfig: Action<S, Partial<Config>>;
+  timeUnit: number | undefined; 
+  UpdateTimeUnit: Action<S, number>;
 }) {
   return (
     config &&
@@ -128,11 +132,13 @@ export function PageConfigPanel<S>({
       </ConfigSection>,
 
       <ConfigSection label={t("configWatch")}>
-        <ConfigNumber
+        <ConfigFrequency
           config={config}
           configKey="watchDelay"
-          label={t("configWatchDelay")}
+          label={t("configWatchDelay") + ":"}
           UpdateConfig={UpdateConfig}
+          timeUnit={timeUnit}
+          UpdateTimeUnit={UpdateTimeUnit}
         />{" "}
       </ConfigSection>,
     ]

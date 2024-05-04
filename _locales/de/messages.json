@@ -348,7 +348,7 @@
     "description": "Label for text fields concerning watch / delay settings"
   },
   "configWatchDelay": {
-    "message": "Häufigkeit (in Minuten)",
+    "message": "Überprüfungshäufigkeit",
     "description": "Label for scan frequency"
   },
   "configNotifyChanged": {
@@ -430,5 +430,21 @@
   "configEnableAdvanced": {
     "message": "Erweiterte Funktionen aktivieren...",
     "description": "Button to enable advanced features."
+  },
+  "configTimeUnit1": {
+    "message": "Minuten(n)",
+    "description": "Label for time unit minutes"
+  },
+  "configTimeUnit60": {
+    "message": "Stunde(n)",
+    "description": "Label for time unit hours"
+  },
+  "configTimeUnit1440": {
+    "message": "Tag(e)",
+    "description": "Label for time unit days"
+  },
+  "configTimeUnit10080": {
+    "message": "Woche(n)",
+    "description": "Label for time unit weeks"
   }
 }

@@ -35,6 +35,7 @@ import { LoadingScreen } from "./LoadingScreen";
 import { RedirectScreen } from "./RedirectScreen";
 import { PageConfigPanel } from "./PageConfigPanel";
 import { PermissionScreen } from "./PermissionScreen";
+import { chooseTimeUnit } from "@sitedelta/common/src/view/ConfigFrequency";
 
 type Status =
   | "unknown"
@@ -71,6 +72,7 @@ type State = {
   config?: Config;
   doc?: Document;
   idoc?: Document;
+  timeUnit?: number;
 };
 
 function UpdateConfig(
@@ -93,6 +95,10 @@ function UpdateConfig(
     state.url && [updatePreview, newState],
   ];
 }
+
+const UpdateTimeUnit: Action<State, number> = (state, update) => [
+  {...state, timeUnit: update}
+];
 
 const SetHasPermission: Action<State, boolean> = (state, hasPermission) => [
   {
@@ -142,6 +148,7 @@ const SelectIncludeRegions: Action<State, string[] | undefined> = (
 const SetConfig: Action<State, Config | undefined> = (state, config) => ({
   ...state,
   config,
+  timeUnit: state.timeUnit ?? chooseTimeUnit(config["watchDelay"])
 });
 
 const SetStatus: Action<State, Status> = (state, status) => ({
@@ -519,6 +526,7 @@ const Content = ({
   hasPermission,
   title,
   config,
+  timeUnit
 }: State) => {
   const known = title !== null;
 
@@ -615,12 +623,14 @@ const Content = ({
         </div>
         <div class="flex-1 text-center">{statusMessage}</div>
       </div>
-      <div class="flex-1 flex flex-row-reverse">
+      <div class="flex-1 flex flex-col sm:flex-row-reverse ">
         {expanded && (
-          <div class="basis-80 border-l-2 border-indigo-600 p-2 flex flex-col items-stretch">
+          <div class="basis-80 border-b-2 max-h-[35vh] sm:max-h-screen sm:border-l-2 sm:border-b-0 overflow-y-auto border-indigo-600 p-2 flex flex-col items-stretch ">
             <PageConfigPanel
               url={url}
               config={config}
+              timeUnit={timeUnit}
+              UpdateTimeUnit={UpdateTimeUnit}
               PickRegion={PickRegion}
               EditRegion={EditRegion}
               selectedExcludeRegions={selectedExcludeRegions}

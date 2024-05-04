@@ -80,7 +80,7 @@ export function setWatchDelay<S>(
     if (oldValue === null) {
       oldValue = (await getDefaultConfig()).watchDelay + "";
     }
-    var delay = prompt(chrome.i18n.getMessage("configWatchDelay"), oldValue);
+    var delay = prompt(chrome.i18n.getMessage("configWatchDelay") + " (" + chrome.i18n.getMessage("configTimeUnit1") + ")", oldValue);
     if (delay !== null)
       for (var key of pages) {
         await pageSetConfigProperty(key, "watchDelay", parseInt(delay || "0"));

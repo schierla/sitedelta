@@ -65,9 +65,9 @@ export function ConfigRegionList<S>({
   const regions: string[] = config[configKey] ?? [];
   return [
     <select
-      size={3}
+      size={Math.min(3, regions.length + 1)}
       multiple
-      class="p-0 border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 max-w-sm"
+      class="p-0 border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 max-w-sm flex-shrink-0"
       onchange={(_, e: Event) => [
         SelectRegions,
         Array.from((e.target as HTMLSelectElement).selectedOptions).map(

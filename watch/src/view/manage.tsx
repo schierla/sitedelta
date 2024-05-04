@@ -14,13 +14,13 @@ import {
 import { Button } from "@sitedelta/common/src/view/Button";
 import { ConfigCheckbox } from "@sitedelta/common/src/view/ConfigCheckbox";
 import { ConfigColors } from "@sitedelta/common/src/view/ConfigColors";
-import { ConfigNumber } from "@sitedelta/common/src/view/ConfigNumber";
 import { t } from "@sitedelta/common/src/view/helpers";
 import { SidebarPage } from "@sitedelta/common/src/view/SidebarPage";
 import { SidebarPages } from "@sitedelta/common/src/view/SidebarPages";
 import { Action, app, Effecter, Subscription } from "hyperapp";
 import { PageList } from "./PageList";
 import { getActions, openPages } from "./PageListActions";
+import { ConfigFrequency, chooseTimeUnit } from "@sitedelta/common/src/view/ConfigFrequency";
 
 type State = {
   index: Index;
@@ -28,11 +28,13 @@ type State = {
   config: Config | undefined;
   selectedTab: string;
   importResult: string;
+  timeUnit?: number;
 };
 
 const SetConfig: Action<State, Config> = (state, config) => ({
   ...state,
   config,
+  timeUnit: state.timeUnit ?? chooseTimeUnit(config["watchDelay"])
 });
 
 const SetIndex: Action<State, Index> = (state, index) => ({ ...state, index });
@@ -60,9 +62,13 @@ const OpenPages: Action<State, string[]> = (state, pages) => [
 const UpdateConfig: Action<State, Partial<Config>> = (state, update) => [
   {
     ...state,
-    config: state.config ? { ...state.config, ...update } : undefined,
+    config: state.config ? { ...state.config, ...update } : undefined
   },
   [applyConfigUpdate, update],
+];
+
+const UpdateTimeUnit: Action<State, number> = (state, update) => [
+  {...state, timeUnit: update}
 ];
 
 const applyConfigUpdate: Effecter<State, Partial<Config>> = (
@@ -122,6 +128,7 @@ const Content = ({
   selectedPages,
   config,
   importResult,
+  timeUnit
 }: State) => {
   if (!config) return <body></body>;
 
@@ -230,11 +237,13 @@ const Content = ({
         </SidebarPage>
 
         <SidebarPage key="watch" label={t("configWatch")}>
-          <ConfigNumber
+          <ConfigFrequency
             config={config}
             configKey="watchDelay"
-            label={t("configWatchDelay")}
+            timeUnit={timeUnit}
+            label={t("configWatchDelay") + ":"}
             UpdateConfig={UpdateConfig}
+            UpdateTimeUnit={UpdateTimeUnit}
           />
           <ConfigCheckbox
             config={config}

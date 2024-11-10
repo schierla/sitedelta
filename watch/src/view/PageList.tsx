@@ -21,7 +21,7 @@ export const PageList = ({
   filter?: string;
 }) => {
   const filterTitle = (key: string) =>
-    filter === "" || index[key].title?.indexOf(filter ?? "") !== -1;
+    filter === "" || index[key].title?.toLowerCase().indexOf((filter ?? "").toLowerCase()) !== -1;
 
   const compare: Record<PageSortOrder, (ka: string, kb: string) => 1 | -1> = {
     nextScan: (ka, kb) =>

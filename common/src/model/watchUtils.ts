@@ -1,12 +1,14 @@
+import { Config } from "./config";
 import * as pageUtils from "./pageUtils";
 import * as textUtils from "./textUtils";
 
 // watch operations
-export async function loadPage(
+export async function loadPage<T>(
   url: string,
-  documentParser: (content: string) => Document
+  contentExtractor: (content: string) => Promise<T | null> | T | null,
+  charsetSniffer: (content: string) => Promise<string[]> | string[]
 ): Promise<
-  | { status: "success"; document: Document }
+  | { status: "success"; content: T | null }
   | { status: "error" }
   | { status: "redirect"; url: string }
 > {
@@ -16,7 +18,8 @@ export async function loadPage(
     page.mime,
     page.content,
     page.location,
-    documentParser
+    contentExtractor,
+    charsetSniffer
   );
 }
 
@@ -57,16 +60,19 @@ export async function setChanges(url: string, changes: number): Promise<void> {
 
 export async function scanPage(
   url: string,
-  documentParser: (content: string) => Document
+  textExtractor: (content: string, config: Config) => Promise<string | null> | string | null,
+  charsetSniffer: (content: string) => Promise<string[]> | string[]
 ): Promise<number> {
-  var config = await pageUtils.getEffectiveConfig(url);
-  if (config === null) return -1;
-  var doc = await loadPage(url, documentParser);
+  const potentialConfig = await pageUtils.getEffectiveConfig(url);
+  if (potentialConfig === null) return -1;
+  const config = potentialConfig;
+  const contentExtractor = (content: string) => textExtractor(content, config);
+  var doc = await loadPage(url, contentExtractor, charsetSniffer);
   if (doc.status !== "success") {
     await setChanges(url, -1);
     return -1;
   }
-  var newContent = textUtils.getText(doc.document, config);
+  var newContent = doc.content;
   if (newContent === null) {
     await setChanges(url, -1);
     return -1;
@@ -87,16 +93,19 @@ export async function scanPage(
 
 export async function markSeen(
   url: string,
-  documentParser: (content: string) => Document
+  textExtractor: (content: string, config: Config) => Promise<string | null> | string | null,
+  charsetSniffer: (content: string) => Promise<string[]> | string[] 
 ): Promise<void> {
-  var config = await pageUtils.getEffectiveConfig(url);
-  if (config === null) return;
-  var doc = await loadPage(url, documentParser);
+  const potentialConfig = await pageUtils.getEffectiveConfig(url);
+  if (potentialConfig === null) return;
+  const config = potentialConfig;
+  var contentExtractor = (content: string) => textExtractor(content, config);
+  var doc = await loadPage(url, contentExtractor, charsetSniffer);
   if (doc.status !== "success") {
     await setChanges(url, -1);
     return;
   }
-  var newContent = textUtils.getText(doc.document, config);
+  var newContent = doc.content;
   if (newContent !== null) await pageUtils.setContent(url, newContent);
   await setChanges(url, 0);
 }
@@ -127,24 +136,15 @@ async function _downloadPage(url: string): Promise<{
   }
 }
 
-function _getCharsetFromContentType(contentType: string): string | undefined {
-  for (const part of contentType.toLowerCase().split(";")) {
-    const [key, value] = part.split("=");
-    if (key.trim() === "charset") {
-      return value?.trim().replace(/^\"(.*)\"$/, "$1");
-    }
-  }
-  return undefined;
-}
-
-async function _parsePage(
+async function _parsePage<T>(
   url: string,
   contentType: string,
   data: Uint8Array | null,
   location: string | null,
-  documentParser: (content: string) => Document
+  contentExtractor: (content: string) => Promise<T | null> | T | null,
+  charsetSniffer: (content: string) => Promise<string[]> | string[]
 ): Promise<
-  | { status: "success"; document: Document }
+  | { status: "success"; content: T | null }
   | { status: "error" }
   | { status: "redirect"; url: string }
 > {
@@ -157,57 +157,37 @@ async function _parsePage(
     return { status: "error" };
   }
 
-  const charset = _getCharsetFromContentType(contentType);
+  const charset = textUtils.getCharsetFromContentType(contentType);
   if (charset) {
     try {
       const text = new TextDecoder(charset, { ignoreBOM: true }).decode(data);
-      return { status: "success", document: documentParser(text) };
+      return { status: "success", content: await contentExtractor(text) };
     } catch (e) {}
   } else if (data[0] == 0xef && data[1] == 0xbb && data[2] == 0xbf) {
     const text = new TextDecoder("utf-8", { ignoreBOM: true }).decode(data);
-    return { status: "success", document: documentParser(text) };
+    return { status: "success", content: await contentExtractor(text) };
   } else if (data[0] == 0xfe && data[1] == 0xff) {
     const text = new TextDecoder("utf-16be", { ignoreBOM: true }).decode(data);
-    return { status: "success", document: documentParser(text) };
+    return { status: "success", content: await contentExtractor(text) };
   } else if (data[0] == 0xff && data[1] == 0xfe) {
     const text = new TextDecoder("utf-16le", { ignoreBOM: true }).decode(data);
-    return { status: "success", document: documentParser(text) };
+    return { status: "success", content: await contentExtractor(text) };
   } else {
     const sniffText = new TextDecoder("ascii").decode(data.slice(0, 1024));
-    const sniffDoc = documentParser(sniffText);
-    const metas = sniffDoc.getElementsByTagName("meta");
-    for (let i = 0; i < metas.length; i++) {
-      const meta = metas.item(i);
-      const charset = meta?.getAttribute("charset");
-      if (charset) {
-        try {
-          const text = new TextDecoder(charset).decode(data);
-          return { status: "success", document: documentParser(text) };
-        } catch (e) {}
-      }
-      const httpEquiv = meta?.getAttribute("http-equiv");
-      const metaContent = meta?.getAttribute("content");
-      if (
-        httpEquiv &&
-        httpEquiv.toLowerCase() == "content-type" &&
-        metaContent
-      ) {
-        const metaCharset = _getCharsetFromContentType(metaContent);
-        if (metaCharset) {
-          try {
-            const text = new TextDecoder(metaCharset).decode(data);
-            return { status: "success", document: documentParser(text) };
-          } catch (e) {}
-        }
-      }
+    const charsets = await charsetSniffer(sniffText);
+    for(const charset of charsets) {
+      try {
+        const text = new TextDecoder(charset).decode(data);
+        return { status: "success", content: await contentExtractor(text) };
+      } catch (e) {}
     }
   }
 
   try {
     const text = new TextDecoder("utf-8", { fatal: true }).decode(data);
-    return { status: "success", document: documentParser(text) };
+    return { status: "success", content: await contentExtractor(text) };
   } catch (e) {
     const text = new TextDecoder("ascii").decode(data);
-    return { status: "success", document: documentParser(text) };
+    return { status: "success", content: await contentExtractor(text) };
   }
 }

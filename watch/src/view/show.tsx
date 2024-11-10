@@ -36,6 +36,7 @@ import { RedirectScreen } from "./RedirectScreen";
 import { PageConfigPanel } from "./PageConfigPanel";
 import { PermissionScreen } from "./PermissionScreen";
 import { chooseTimeUnit } from "@sitedelta/common/src/view/ConfigFrequency";
+import { sniffCharset } from "@sitedelta/common/src/model/domParseUtils";
 
 type Status =
   | "unknown"
@@ -52,7 +53,7 @@ type Status =
 
 export type LoadStatus = "loading" | "loaded" | "failed";
 
-export function documentParser(content: string): Document {
+export async function parseDocument(content: string): Promise<Document> {
   return new DOMParser().parseFromString(content, "text/html");
 }
 
@@ -367,7 +368,7 @@ const fetchUrl: Effecter<State, string> = async (dispatch, url) => {
   if (url) {
     dispatchLater([SetDoc, undefined]);
     dispatchLater([SetStatus, "loading"]);
-    var loaded = await watchLoadPage(url, documentParser);
+    var loaded = await watchLoadPage(url, parseDocument, sniffCharset);
     if (loaded.status === "error") {
       dispatchLater([SetStatus, "failed"]);
       return;
@@ -375,7 +376,7 @@ const fetchUrl: Effecter<State, string> = async (dispatch, url) => {
       dispatchLater([SetRedirected, loaded.url]);
       return;
     }
-    const doc = loaded.document;
+    const doc = loaded.content;
     var base = doc.createElement("base");
     base.setAttribute("href", url);
     var existingbase = doc.querySelector("base[href]") as HTMLBaseElement;

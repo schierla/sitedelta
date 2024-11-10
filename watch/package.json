@@ -3,12 +3,7 @@
     "version": "0.30.7",
     "private": true,
     "dependencies": {
-        "@sitedelta/common": "0.30.7",
-        "@xmldom/xmldom": "^0.8.10",
-        "parse5": "^7.1.2",
-        "query-selector": "^2.0.0",
-        "xmlserializer": "^0.6.1",
-        "xpath": "^0.0.34"
+        "@sitedelta/common": "0.30.7"
     },
     "scripts": {
         "dev:ff": "webpack -w --env target=firefox",

@@ -20,6 +20,7 @@ export default (env) => {
         env.target == "chrome"
           ? "./src/backgroundWorker.ts"
           : "./src/backgroundScript.ts",
+      offscreen: "./src/offscreen.ts",
       pages: "./src/view/pages.tsx",
       manage: "./src/view/manage.tsx",
       options: "./src/view/options.tsx",

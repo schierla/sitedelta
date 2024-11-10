@@ -14,6 +14,7 @@ import {
 } from "@sitedelta/common/src/model/watchUtils";
 import { t } from "@sitedelta/common/src/view/helpers";
 import { Action, Dispatch, Dispatchable } from "hyperapp";
+import { extractText, sniffCharset } from "@sitedelta/common/src/model/domParseUtils";
 
 export function documentParser(content: string): Document {
   return new DOMParser().parseFromString(content, "text/html");
@@ -32,7 +33,7 @@ export function scanPages<S>(
     let remainingPages = [...pages];
     dispatch([SetSelection, remainingPages]);
     for (const url of pages) {
-      await watchScanPage(url, documentParser);
+      await watchScanPage(url, extractText, sniffCharset);
       remainingPages = remainingPages.filter((page) => page != url);
       dispatch([SetSelection, remainingPages]);
     }
@@ -47,7 +48,7 @@ export function markSeen<S>(
     let remainingPages = [...pages];
     dispatch([SetSelection, remainingPages]);
     for (const url of pages) {
-      await watchMarkSeen(url, documentParser);
+      await watchMarkSeen(url, extractText, sniffCharset);
       remainingPages = remainingPages.filter((page) => page != url);
       dispatch([SetSelection, remainingPages]);
     }
@@ -84,7 +85,7 @@ export function setWatchDelay<S>(
     if (delay !== null)
       for (var key of pages) {
         await pageSetConfigProperty(key, "watchDelay", parseInt(delay || "0"));
-        await watchScanPage(key, documentParser);
+        await watchScanPage(key, extractText, sniffCharset);
       }
   })();
 }

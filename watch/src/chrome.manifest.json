@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_watchExtensionName__",
-  "version": "0.30.8",
+  "version": "0.31.0",
   "default_locale": "en",
   "description": "__MSG_watchExtensionDescription__",
   "icons": {
@@ -17,7 +17,8 @@
     "storage",
     "unlimitedStorage",
     "alarms",
-    "scripting"
+    "scripting",
+    "offscreen"
   ],
   "host_permissions": [
     "<all_urls>"

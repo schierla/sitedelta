@@ -4,9 +4,11 @@ import * as watchUtils from "@sitedelta/common/src/model/watchUtils";
 import * as tabUtils from "@sitedelta/common/src/model/tabUtils";
 import * as transferUtils from "@sitedelta/common/src/model/transferUtils";
 import * as ioUtils from "@sitedelta/common/src/model/ioUtils";
+import { Config } from "@sitedelta/common/src/model/config";
 
 export const runBackgroundScript = (
-  documentParser: (content: string) => Document
+  textExtractor: (content: string, config: Config) => Promise<string | null> | string | null, 
+  charsetSniffer: (content: string) => Promise<string[]> | string[],
 ) => {
   async function handlePageLoad(tabId: number, url: string) {
     var config = await pageUtils.getEffectiveConfig(url);
@@ -34,7 +36,7 @@ export const runBackgroundScript = (
     console.log("SiteDelta: Scanning " + url);
     lastScan = Date.now();
 
-    var changes = await watchUtils.scanPage(url, documentParser);
+    var changes = await watchUtils.scanPage(url, textExtractor, charsetSniffer);
     if (changes == 0) {
       await watchUtils.adaptDelay(url, 0);
     } else if (changes == 1) {

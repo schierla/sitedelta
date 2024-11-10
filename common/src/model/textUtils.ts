@@ -63,6 +63,16 @@ export function* walkTree(node: Node, config: Config, excludes: Node[]) {
 	}
 }
 
+export function getCharsetFromContentType(contentType: string): string | undefined {
+	for (const part of contentType.toLowerCase().split(";")) {
+		const [key, value] = part.split("=");
+		if (key.trim() === "charset") {
+			return value?.trim().replace(/^\"(.*)\"$/, "$1");
+		}
+	}
+	return undefined;
+}
+  
 function _getTextForNode(node: Node, config: Config, excludes: Node[]): string {
 	var doc = node.ownerDocument, text = "", ret = "";
 	if(!doc) return "";

@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout project
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with: 
-        node-version: 20.x
+        node-version: 22.x
         cache: 'yarn'
     - name: Install dependencies
       run: |
@@ -30,13 +30,13 @@ jobs:
         yarn workspace @sitedelta/highlight package:ff
         yarn workspace @sitedelta/watch package:ff
     - name: Upload Chrome artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with: 
         name: Chrome
         path: |
           build/chrome/*.zip
     - name: Upload Firefox artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with: 
         name: Firefox
         path: |

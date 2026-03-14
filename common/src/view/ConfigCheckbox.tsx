@@ -21,7 +21,7 @@ export function ConfigCheckbox<S>({
       ) : (
         <input
           type="checkbox"
-          class="h-4 w-4 rounded border-gray-300 text-indigo-600 accent-indigo-600 focus:ring-indigo-500 mr-1"
+          class="h-4 w-4 rounded-xs border-gray-300 text-indigo-600 accent-indigo-600 focus:ring-indigo-500 mr-1"
           checked={config[configKey] === true}
           oninput={[UpdateConfig, { [configKey]: !config[configKey] }]}
         />

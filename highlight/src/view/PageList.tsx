@@ -70,7 +70,7 @@ export const PageList = ({
               value={key}
               title={formatTooltip(key, data)}
               class={
-                statusClass(data.changes) + " bg-no-repeat bg-[0.25rem] pl-7"
+                statusClass(data.changes) + " bg-no-repeat bg-position-[0.25rem] pl-7"
               }
               selected={selectedPages.indexOf(key) !== -1}
               oncontextmenu={() =>

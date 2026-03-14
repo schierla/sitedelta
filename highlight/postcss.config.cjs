@@ -1,7 +1,7 @@
-const tailwindcss = require("tailwindcss");
+const tailwindcss = require("@tailwindcss/postcss");
 const autoprefixer = require("autoprefixer");
 const cssnano = require("cssnano");
 
 module.exports = {
-  plugins: [tailwindcss("./tailwind.config.cjs"), autoprefixer, cssnano],
+  plugins: [tailwindcss(), autoprefixer, cssnano],
 };

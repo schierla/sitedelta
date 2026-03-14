@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_watchExtensionName__",
-  "version": "0.31.1",
+  "version": "0.31.2",
   "default_locale": "en",
   "description": "__MSG_watchExtensionDescription__",
   "icons": {
@@ -15,11 +15,14 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "sitedelta-watch@schierla.de",
-      "strict_min_version": "102.0"
+      "data_collection_permissions": {
+        "required": ["none"]
+      },      
+      "strict_min_version": "140.0"
     },
     "gecko_android": {
       "id": "sitedelta-watch@schierla.de",      
-      "strict_min_version": "120.0"
+      "strict_min_version": "142.0"
     }
   },
   "permissions": [

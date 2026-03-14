@@ -117,9 +117,9 @@ function Content({
   );
   return (
     <body class="font-sans text-sm flex flex-row h-screen dark:bg-slate-900">
-      <div class="flex flex-col gap-1 p-1 border-r border-r-gray-300 dark:border-r-gray-600 border-r-1 flex-1">
+      <div class="flex flex-col gap-1 p-1 border-r border-r-gray-300 dark:border-r-gray-600 border-r flex-1">
         <div class="flex flex-row flex-0 gap-1">
-          <div class="relative rounded-sm shadow-sm flex-1">
+          <div class="relative rounded-xs shadow-xs flex-1">
             <div class="pointer-events-none absolute inset-y-0 left-0 pl-1 flex items-center">
               <SearchIcon />
             </div>

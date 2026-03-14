@@ -45,6 +45,7 @@ export async function adaptDelay(url: string, changes: number): Promise<void> {
 }
 
 export async function setChanges(url: string, changes: number): Promise<void> {
+  await pageUtils.setNextScan(url, 0);  
   await pageUtils.setChanges(url, changes);
   var config = await pageUtils.getEffectiveConfig(url);
   if (config === null) return;
@@ -53,8 +54,6 @@ export async function setChanges(url: string, changes: number): Promise<void> {
     var next = Date.now() + Math.abs(config.watchDelay) * 60 * 1000;
     if (config.watchDelay == 0) next = 0;
     await pageUtils.setNextScan(url, next);
-  } else {
-    await pageUtils.setNextScan(url, 0);
   }
 }
 

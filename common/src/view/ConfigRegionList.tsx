@@ -67,7 +67,7 @@ export function ConfigRegionList<S>({
     <select
       size={Math.min(3, regions.length + 1)}
       multiple
-      class="p-0 border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 max-w-sm flex-shrink-0"
+      class="p-0 border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 max-w-sm shrink-0"
       onchange={(_, e: Event) => [
         SelectRegions,
         Array.from((e.target as HTMLSelectElement).selectedOptions).map(

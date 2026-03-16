@@ -105,7 +105,7 @@ const sendCommandBusy = function (dispatch: Dispatch<State>, command: string) {
 function PageList(index: Index, icon: VNode<any>, urls: string[]) {
   return (
     <select
-      size={urls.length > 5 ? 5 : urls.length}
+      size={urls.length > 5 ? 5 : urls.length == 1 ? 2 : urls.length}
       multiple
       class="p-0 w-full block text-sm border-gray-300 dark:bg-slate-800 dark:border-gray-600"
     >

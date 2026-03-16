@@ -163,8 +163,10 @@ export const runBackgroundScript = (
   var index = {};
   var lastScan = 0;
   var badgeText = "";
+  var scanTimeout: number | null = null;
 
   function scheduleWatch(): void {
+    if(scanTimeout !== null) { clearTimeout(scanTimeout); scanTimeout = null; }
     var nextUrl = "";
     var changed = 0,
       failed = 0;
@@ -187,7 +189,7 @@ export const runBackgroundScript = (
           new Date(nextScan).toLocaleString()
       );
       if (nextScan <= Date.now() + minDelay) {
-        setTimeout(() => scanPage(nextUrl), minDelay);
+        scanTimeout = setTimeout(() => scanPage(nextUrl), minDelay);
       } else {
         chrome.alarms.create({ when: nextScan });
       }

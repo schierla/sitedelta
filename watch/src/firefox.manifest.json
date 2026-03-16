@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_watchExtensionName__",
-  "version": "0.31.2",
+  "version": "0.31.3",
   "default_locale": "en",
   "description": "__MSG_watchExtensionDescription__",
   "icons": {
@@ -21,7 +21,6 @@
       "strict_min_version": "140.0"
     },
     "gecko_android": {
-      "id": "sitedelta-watch@schierla.de",      
       "strict_min_version": "142.0"
     }
   },
